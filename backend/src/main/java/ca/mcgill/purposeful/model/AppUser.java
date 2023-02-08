@@ -67,7 +67,7 @@ public class AppUser {
     this.password = password;
   }
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.EAGER) // TODO: replace with enum
   public Set<Authority> getAuthorities() {
     return authorities;
   }
