@@ -2,6 +2,10 @@ package ca.mcgill.purposeful.exception;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * @author Shidan Javaheri
+ * This class is the exception class that we will use for all exceptions
+ */
 @SuppressWarnings("serial")
 public class GlobalException extends RuntimeException {
         // this exception has an HTTP status in addition to a method
@@ -9,7 +13,7 @@ public class GlobalException extends RuntimeException {
 
     /**
      * @author Shidan Javaheri
-     * This class will be used to handle exceptions globally in our project
+     * This constructor creates the a Global Exception
      * All exceptions thrown will be Global Exceptions
      * @param status the http status of the failure
      * @param message the error message
