@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 public class Technology {
 
   // ------------------------
-  // Idea Attributes
+  // Technology Attributes
   // ------------------------
 
   private String id;
@@ -20,7 +20,7 @@ public class Technology {
   private String name;
 
   // ------------------------
-  // Idea Constructor
+  // Technology Constructor
   // ------------------------
 
   public Technology() {

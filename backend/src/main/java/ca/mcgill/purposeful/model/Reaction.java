@@ -21,7 +21,7 @@ public class Reaction {
   public enum ReactionType {HighFive}
 
   // ------------------------
-  // Idea Attributes
+  // Reaction Attributes
   // ------------------------
 
   private String id;
@@ -35,7 +35,7 @@ public class Reaction {
   private String name;
 
   // ------------------------
-  // Idea Constructor
+  // Reaction Constructor
   // ------------------------
 
   public Reaction() {

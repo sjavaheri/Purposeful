@@ -10,13 +10,13 @@ import jakarta.persistence.Id;
 public class URL {
 
   // ------------------------
-  // Idea Attributes
+  // URL Attributes
   // ------------------------
 
   private String URL;
 
   // ------------------------
-  // Idea Constructor
+  // URL Constructor
   // ------------------------
 
   public URL() {
