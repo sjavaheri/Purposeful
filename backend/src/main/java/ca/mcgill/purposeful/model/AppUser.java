@@ -51,7 +51,7 @@ public class AppUser {
   @ElementCollection(targetClass = Authority.class)
   @CollectionTable(name = "appuser_authority", joinColumns = @JoinColumn(name = "appuser_id"))
   @Enumerated(EnumType.STRING)
-  @Column(name = "authorities")
+  @Column(name = "authorities", nullable = false)
   private Set<Authority> authorities = new HashSet<Authority>();
 
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -62,6 +62,7 @@ public class AppUser {
   @JoinTable(name = "appuser_domain", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "domain_id"))
   private Set<Domain> domains = new HashSet<Domain>();
 
+  // Interests are minimum 2 (2..*). This is enforced in the controller
   @ManyToMany
   @JoinTable(name = "appuser_topic", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> interests = new HashSet<Topic>();

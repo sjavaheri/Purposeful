@@ -2,6 +2,8 @@ package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 /**
  * The RegularUser class, the model for accounts with regular user authority in the database
@@ -15,6 +17,14 @@ public class RegularUser extends Role {
 
   @Column(nullable = false)
   private boolean verifiedCompany;
+
+  // ------------------------
+  // AppUser Associations
+  // ------------------------
+
+  @OneToOne
+  @JoinColumn(name = "verificationrequest_id", nullable = true, unique = true)
+  private VerificationRequest verificationRequest;
 
   // ------------------------
   // RegularUser Constructor
@@ -35,4 +45,11 @@ public class RegularUser extends Role {
     this.verifiedCompany = verifiedCompany;
   }
 
+  public VerificationRequest getVerificationRequest() {
+    return verificationRequest;
+  }
+
+  public void setVerificationRequest(VerificationRequest verificationRequest) {
+    this.verificationRequest = verificationRequest;
+  }
 }
