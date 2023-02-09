@@ -18,6 +18,8 @@ public abstract class Role {
   // Role Attributes
   // ------------------------
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
   // ------------------------
@@ -31,8 +33,6 @@ public abstract class Role {
   // Getter/Setter Methods
   // ------------------------
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public String getId() {
     return id;
   }

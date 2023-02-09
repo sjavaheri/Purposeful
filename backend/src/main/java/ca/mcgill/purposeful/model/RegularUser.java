@@ -13,6 +13,7 @@ public class RegularUser extends Role {
   // RegularUser Attributes
   // ------------------------
 
+  @Column(nullable = false)
   private boolean verifiedCompany;
 
   // ------------------------
@@ -26,7 +27,6 @@ public class RegularUser extends Role {
   // Getter/Setter Methods
   // ------------------------
 
-  @Column(nullable = false)
   public boolean isVerifiedCompany() {
     return verifiedCompany;
   }

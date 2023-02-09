@@ -16,8 +16,11 @@ public class Topic {
   // Topic Attributes
   // ------------------------
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
+  @Column(nullable = false, unique = true)
   private String name;
 
   // ------------------------
@@ -31,8 +34,6 @@ public class Topic {
   // Getter/Setter Methods
   // ------------------------
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public String getId() {
     return id;
   }
@@ -41,7 +42,6 @@ public class Topic {
     this.id = id;
   }
 
-  @Column(nullable = false, unique = true)
   public String getName() {
     return name;
   }

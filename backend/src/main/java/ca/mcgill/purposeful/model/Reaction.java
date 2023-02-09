@@ -18,29 +18,24 @@ public class Reaction {
   // Enumerations
   // ------------------------
 
-  public enum ReactionType {HighFive}
+  private String id;
 
   // ------------------------
   // Idea Attributes
   // ------------------------
-
-  private String id;
-
   private ReactionType reactionType;
-
   private Date date;
-
-  //private Time time;
-
   private String name;
 
-  // ------------------------
-  // Idea Constructor
-  // ------------------------
+  //private Time time;
 
   public Reaction() {
 
   }
+
+  // ------------------------
+  // Idea Constructor
+  // ------------------------
 
   // ------------------------
   // Getter/Setter Methods
@@ -78,4 +73,6 @@ public class Reaction {
   public void setName(String name) {
     this.name = name;
   }
+
+  public enum ReactionType {HighFive}
 }

@@ -13,29 +13,23 @@ public class VerificationRequest {
   // Enumerations
   // ------------------------
 
-  public enum Status {Pending, Approved, Refused}
+  private String companyOuiNumber;
 
   // ------------------------
   // VerificationRequest Attributes
   // ------------------------
-
-  private String companyOuiNumber;
-
   private String companyName;
-
   private String explanation;
-
   private String supportingDocumentUrl;
-
   private Status status;
-
-  // ------------------------
-  // VerificationRequest Constructor
-  // ------------------------
 
   public VerificationRequest() {
 
   }
+
+  // ------------------------
+  // VerificationRequest Constructor
+  // ------------------------
 
   // ------------------------
   // Getter/Setter Methods
@@ -81,4 +75,6 @@ public class VerificationRequest {
   public void setStatus(Status status) {
     this.status = status;
   }
+
+  public enum Status {Pending, Approved, Refused}
 }

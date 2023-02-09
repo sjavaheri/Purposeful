@@ -1,26 +1,26 @@
-Feature: Create Admin
-  As the owner, I want to create an admin account so that I can moniter the use of the Purposeful application
+Feature: Create Moderator
+  As the owner, I want to create an moderator account so that I can moniter the use of the Purposeful application
 
   Background:
-    Given the database contains the following admin account:
+    Given the database contains the following moderator account:
       | firstName | lastName | email                  | password         |
       | Owner     | Steve    | owner.steve@gmaill.com | OwnerIsAwesome01 |
 
 
-  Scenario Outline: Successfully create a new admin account
-    When a new admin account is created with "<firstName>", "<lastName>", "<email>" and "<password>"
-    Then a new admin account exists in the database with "<firstName>", "<lastName>", "<email>" and "<password>"
-    Then the number of admin accounts in the database is 2
+  Scenario Outline: Successfully create a new moderator account
+    When a new moderator account is created with "<firstName>", "<lastName>", "<email>" and "<password>"
+    Then a new moderator account exists in the database with "<firstName>", "<lastName>", "<email>" and "<password>"
+    Then the number of moderator accounts in the database is 2
 
     Examples:
       | firstName | lastName | email                | password       |
       | Mo        | Salah    | mo.salah@gmail.com   | MoIsAwesome01  |
       | Bob       | Marley   | bob.marley@gmail.com | BobIsAwesome01 |
 
-  Scenario Outline: Unsuccessfully create a new admin account
-    When a new admin account is created with "<firstName>", "<lastName>", "<email>" and "<password>"
+  Scenario Outline: Unsuccessfully create a new moderator account
+    When a new moderator account is created with "<firstName>", "<lastName>", "<email>" and "<password>"
     Then the following "<error>" shall be raised
-    Then the number of admin accounts in the database is 1
+    Then the number of moderator accounts in the database is 1
 
     Examples:
       | firstName | lastName | email                    | password         | error                                                                                                                                   |

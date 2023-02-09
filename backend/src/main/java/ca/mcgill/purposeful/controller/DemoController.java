@@ -13,7 +13,7 @@ import ca.mcgill.purposeful.exception.GlobalException;
  */
 
 @RestController
-@RequestMapping({"/demo", "/demo/"})
+@RequestMapping({ "/demo", "/demo/" })
 public class DemoController {
 
   /**
@@ -22,7 +22,7 @@ public class DemoController {
    * @return a demo string
    */
   @GetMapping
-  @PreAuthorize("hasAuthority('Admin')")
+  @PreAuthorize("hasAuthority('Moderator')")
   public String createIdea() {
     // Concept #1 - controllers don't need to take usernames as parameters - you get
     // them with the .getName() method of the token
