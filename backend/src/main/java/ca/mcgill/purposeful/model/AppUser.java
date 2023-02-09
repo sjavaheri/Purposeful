@@ -7,6 +7,8 @@ import ca.mcgill.purposeful.configuration.Authority;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
@@ -19,6 +21,8 @@ public class AppUser {
   // ------------------------
   // AppUser Attributes
   // ------------------------
+
+  private String id;
 
   private String email;
 
@@ -41,6 +45,16 @@ public class AppUser {
   // ------------------------
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  @Column(unique = true, nullable = false)
   public String getEmail() {
     return email;
   }
