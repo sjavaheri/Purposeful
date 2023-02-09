@@ -1,10 +1,14 @@
 package ca.mcgill.purposeful.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 /**
  * The Domain class, the model for domains in the database
@@ -22,6 +26,16 @@ public class Domain {
 
   @Column(nullable = false, unique = true)
   private String name;
+
+  // ------------------------
+  // AppUser Associations
+  // ------------------------
+
+  @ManyToMany
+  private Set<AppUser> appUsers = new HashSet<AppUser>();
+
+  @ManyToMany
+  private Set<Idea> ideas = new HashSet<Idea>();
 
   // ------------------------
   // Domain Constructor
@@ -48,5 +62,21 @@ public class Domain {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Set<AppUser> getAppUsers() {
+    return appUsers;
+  }
+
+  public void setAppUsers(Set<AppUser> appUsers) {
+    this.appUsers = appUsers;
+  }
+
+  public Set<Idea> getIdeas() {
+    return ideas;
+  }
+
+  public void setIdeas(Set<Idea> ideas) {
+    this.ideas = ideas;
   }
 }
