@@ -1,9 +1,11 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.util.Date;
 //import java.sql.Date;
 //import java.sql.Time;
@@ -15,33 +17,49 @@ import java.util.Date;
 public class Reaction {
 
   // ------------------------
+  // Reaction Associations
+  // ------------------------
+
+  @ManyToOne(optional = true)
+  private Idea idea;
+
+  // ------------------------
   // Enumerations
   // ------------------------
 
+  public enum ReactionType {
+    HighFive
+  }
+
+  // ------------------------
+  // Reaction Attributes
+  // ------------------------
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
-  // ------------------------
-  // Idea Attributes
-  // ------------------------
+  @Column(nullable = false)
   private ReactionType reactionType;
+
   private Date date;
+
+  // private Time time;
+
   private String name;
 
-  //private Time time;
+  // ------------------------
+  // Reaction Constructor
+  // ------------------------
 
   public Reaction() {
 
   }
 
   // ------------------------
-  // Idea Constructor
-  // ------------------------
-
-  // ------------------------
   // Getter/Setter Methods
   // ------------------------
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+
   public String getId() {
     return id;
   }
@@ -73,6 +91,4 @@ public class Reaction {
   public void setName(String name) {
     this.name = name;
   }
-
-  public enum ReactionType {HighFive}
 }

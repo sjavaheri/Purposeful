@@ -1,5 +1,6 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -13,28 +14,37 @@ public class VerificationRequest {
   // Enumerations
   // ------------------------
 
-  private String companyOuiNumber;
+  public enum Status {
+    Pending, Approved, Refused
+  }
 
   // ------------------------
   // VerificationRequest Attributes
   // ------------------------
+
+  @Id
+  private String companyOuiNumber;
+
   private String companyName;
+
   private String explanation;
+
   private String supportingDocumentUrl;
+
+  @Column(nullable = false)
   private Status status;
+
+  // ------------------------
+  // VerificationRequest Constructor
+  // ------------------------
 
   public VerificationRequest() {
 
   }
 
   // ------------------------
-  // VerificationRequest Constructor
-  // ------------------------
-
-  // ------------------------
   // Getter/Setter Methods
   // ------------------------
-  @Id
 
   public String getCompanyOuiNumber() {
     return companyOuiNumber;
@@ -75,6 +85,4 @@ public class VerificationRequest {
   public void setStatus(Status status) {
     this.status = status;
   }
-
-  public enum Status {Pending, Approved, Refused}
 }
