@@ -85,7 +85,7 @@ public class Idea {
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
-  
+
   public String getId() {
     return id;
   }

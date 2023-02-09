@@ -14,41 +14,33 @@ public class VerificationRequest {
   // Enumerations
   // ------------------------
 
-  public enum Status {
-    Pending, Approved, Refused
-  }
+  @Id
+  private String companyOuiNumber;
 
   // ------------------------
   // VerificationRequest Attributes
   // ------------------------
-
-  @Id
-  private String companyOuiNumber;
-
   private String companyName;
-
   private String explanation;
-
   private String supportingDocumentUrl;
-
   @Column(nullable = false)
   private Status status;
-
-  // ------------------------
-  // VerificationRequest Constructor
-  // ------------------------
 
   public VerificationRequest() {
 
   }
 
   // ------------------------
-  // Getter/Setter Methods
+  // VerificationRequest Constructor
   // ------------------------
 
   public String getCompanyOuiNumber() {
     return companyOuiNumber;
   }
+
+  // ------------------------
+  // Getter/Setter Methods
+  // ------------------------
 
   public void setCompanyOuiNumber(String companyOuiNumber) {
     this.companyOuiNumber = companyOuiNumber;
@@ -84,5 +76,9 @@ public class VerificationRequest {
 
   public void setStatus(Status status) {
     this.status = status;
+  }
+
+  public enum Status {
+    Pending, Approved, Refused
   }
 }

@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;

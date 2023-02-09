@@ -26,43 +26,35 @@ public class Reaction {
   // ------------------------
   // Enumerations
   // ------------------------
-
-  public enum ReactionType {
-    HighFive
-  }
-
-  // ------------------------
-  // Reaction Attributes
-  // ------------------------
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
+  // ------------------------
+  // Reaction Attributes
+  // ------------------------
   @Column(nullable = false)
   private ReactionType reactionType;
-
   private Date date;
-
-  // private Time time;
-
   private String name;
 
-  // ------------------------
-  // Reaction Constructor
-  // ------------------------
+  // private Time time;
 
   public Reaction() {
 
   }
 
   // ------------------------
-  // Getter/Setter Methods
+  // Reaction Constructor
   // ------------------------
 
   public String getId() {
     return id;
   }
+
+  // ------------------------
+  // Getter/Setter Methods
+  // ------------------------
 
   public void setId(String id) {
     this.id = id;
@@ -90,5 +82,9 @@ public class Reaction {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public enum ReactionType {
+    HighFive
   }
 }
