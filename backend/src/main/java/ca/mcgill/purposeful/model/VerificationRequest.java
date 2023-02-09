@@ -1,5 +1,6 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -19,6 +20,7 @@ public class VerificationRequest {
   // VerificationRequest Attributes
   // ------------------------
 
+  @Id
   private String companyOuiNumber;
 
   private String companyName;
@@ -27,6 +29,7 @@ public class VerificationRequest {
 
   private String supportingDocumentUrl;
 
+  @Column(nullable = false)
   private Status status;
 
   // ------------------------
@@ -40,7 +43,6 @@ public class VerificationRequest {
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
-  @Id
 
   public String getCompanyOuiNumber() {
     return companyOuiNumber;

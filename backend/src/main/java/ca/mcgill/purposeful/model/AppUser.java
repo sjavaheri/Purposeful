@@ -1,8 +1,5 @@
 package ca.mcgill.purposeful.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The AppUser class, the model for all accounts in the database

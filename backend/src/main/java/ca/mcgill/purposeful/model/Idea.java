@@ -4,7 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import java.util.Date;
+import java.util.Set;
 //import java.sql.Date;
 //import java.sql.Time;
 
@@ -15,9 +20,42 @@ import java.util.Date;
 public class Idea {
 
   // ------------------------
+  // Idea Associations
+  // ------------------------
+
+  @ManyToMany
+  @JoinTable(
+      name = "idea_domain",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "url_id"))
+  private Set<Domain> domains;
+
+  @ManyToMany
+  @JoinTable(
+      name = "idea_topic",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  private Set<Topic> topics;
+
+  @ManyToMany
+  @JoinTable(
+      name = "idea_technology",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "technology_id"))
+  private Set<Technology> techs;
+
+  @ManyToOne(optional = false)
+  private URL iconUrl;
+
+  @ManyToOne(optional = false)
+  private RegularUser user;
+
+  // ------------------------
   // Idea Attributes
   // ------------------------
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
   private Date date;
@@ -47,8 +85,7 @@ public class Idea {
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  
   public String getId() {
     return id;
   }
@@ -119,5 +156,45 @@ public class Idea {
 
   public void setPrivate(boolean aPrivate) {
     isPrivate = aPrivate;
+  }
+
+  public Set<Domain> getDomains() {
+    return domains;
+  }
+
+  public void setDomains(Set<Domain> domains) {
+    this.domains = domains;
+  }
+
+  public Set<Topic> getTopics() {
+    return topics;
+  }
+
+  public void setTopics(Set<Topic> topics) {
+    this.topics = topics;
+  }
+
+  public Set<Technology> getTechs() {
+    return techs;
+  }
+
+  public void setTechs(Set<Technology> techs) {
+    this.techs = techs;
+  }
+
+  public URL getIconUrl() {
+    return iconUrl;
+  }
+
+  public void setIconUrl(URL iconUrl) {
+    this.iconUrl = iconUrl;
+  }
+
+  public RegularUser getUser() {
+    return user;
+  }
+
+  public void setUser(RegularUser user) {
+    this.user = user;
   }
 }
