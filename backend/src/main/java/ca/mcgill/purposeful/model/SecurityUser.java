@@ -8,7 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Secure User class that Spring can read, which wraps the AppUser class Makes AppUser compatible
+ * Secure User class that Spring can read, which wraps the AppUser class Makes
+ * AppUser compatible
  * with Spring Security
  */
 public class SecurityUser implements UserDetails {
@@ -22,7 +23,8 @@ public class SecurityUser implements UserDetails {
 
   /**
    * Method that converts the authorities of the AppUser into an arraylist of
-   * SimpleGrantedAuthoritys SimpleGrantedAuthorities is an class that Implements the
+   * SimpleGrantedAuthoritys SimpleGrantedAuthorities is an class that Implements
+   * the
    * GrantedAuthority interface
    *
    * @return the authorities the user has as an array list of strings
@@ -50,7 +52,8 @@ public class SecurityUser implements UserDetails {
     return appUser.getUsername();
   }
 
-  // Spring security methods that are required to be true for a user to be authenticated
+  // Spring security methods that are required to be true for a user to be
+  // authenticated
   // For now we can leave them blank
 
   @Override
@@ -72,6 +75,4 @@ public class SecurityUser implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-
-
 }

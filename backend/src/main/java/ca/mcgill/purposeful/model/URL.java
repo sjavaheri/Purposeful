@@ -1,7 +1,11 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 /**
@@ -11,30 +15,44 @@ import jakarta.persistence.ManyToOne;
 public class URL {
 
   // ------------------------
-  // URL Associations
-  // ------------------------
-
-  @ManyToOne(optional = true)
-  private Idea idea;
-
-  // ------------------------
   // URL Attributes
   // ------------------------
 
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private String id;
+
+  @Column(nullable = false, unique = false)
   private String URL;
+
+  // ------------------------
+  // URL Associations
+  // ------------------------
+
+  // Null when URL is an icon of an idea
+  @ManyToOne(optional = true)
+  @JoinColumn(name = "idea_id", nullable = true)
+  private Idea idea;
 
   // ------------------------
   // URL Constructor
   // ------------------------
 
   public URL() {
-
   }
 
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
   public String getURL() {
     return URL;
   }

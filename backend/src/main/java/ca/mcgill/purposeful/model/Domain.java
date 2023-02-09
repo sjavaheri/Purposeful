@@ -1,6 +1,5 @@
 package ca.mcgill.purposeful.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -28,14 +27,14 @@ public class Domain {
   private String name;
 
   // ------------------------
-  // AppUser Associations
+  // Domain Associations
   // ------------------------
 
   @ManyToMany
-  private Set<AppUser> appUsers = new HashSet<AppUser>();
+  private Set<AppUser> appUsers;
 
   @ManyToMany
-  private Set<Idea> ideas = new HashSet<Idea>();
+  private Set<Idea> ideas;
 
   // ------------------------
   // Domain Constructor

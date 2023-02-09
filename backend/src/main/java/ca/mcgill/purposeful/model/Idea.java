@@ -1,5 +1,6 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,37 +21,6 @@ import java.util.Set;
 public class Idea {
 
   // ------------------------
-  // Idea Associations
-  // ------------------------
-
-  @ManyToMany
-  @JoinTable(
-      name = "idea_domain",
-      joinColumns = @JoinColumn(name = "idea_id"),
-      inverseJoinColumns = @JoinColumn(name = "url_id"))
-  private Set<Domain> domains;
-
-  @ManyToMany
-  @JoinTable(
-      name = "idea_topic",
-      joinColumns = @JoinColumn(name = "idea_id"),
-      inverseJoinColumns = @JoinColumn(name = "topic_id"))
-  private Set<Topic> topics;
-
-  @ManyToMany
-  @JoinTable(
-      name = "idea_technology",
-      joinColumns = @JoinColumn(name = "idea_id"),
-      inverseJoinColumns = @JoinColumn(name = "technology_id"))
-  private Set<Technology> techs;
-
-  @ManyToOne(optional = false)
-  private URL iconUrl;
-
-  @ManyToOne(optional = false)
-  private RegularUser user;
-
-  // ------------------------
   // Idea Attributes
   // ------------------------
 
@@ -58,28 +28,58 @@ public class Idea {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
+  @Column(nullable = false)
   private Date date;
 
-  //private Time time;
+  // private Time time;
 
+  @Column(nullable = false)
   private String title;
 
+  @Column(nullable = false)
   private String purpose;
 
+  @Column(nullable = false)
   private String description;
 
+  @Column(nullable = false)
   private boolean isPaid;
 
+  @Column(nullable = false)
   private boolean isInProgress;
 
+  @Column(nullable = false)
   private boolean isPrivate;
+
+  // ------------------------
+  // Idea Associations
+  // ------------------------
+
+  @ManyToMany
+  @JoinTable(name = "idea_domain", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "url_id"))
+  private Set<Domain> domains;
+
+  @ManyToMany
+  @JoinTable(name = "idea_topic", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  private Set<Topic> topics;
+
+  @ManyToMany
+  @JoinTable(name = "idea_technology", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "technology_id"))
+  private Set<Technology> techs;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "icon_url_id", nullable = false)
+  private URL iconUrl;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id", nullable = false)
+  private RegularUser user;
 
   // ------------------------
   // Idea Constructor
   // ------------------------
 
   public Idea() {
-
   }
 
   // ------------------------
@@ -102,13 +102,13 @@ public class Idea {
     this.date = date;
   }
 
-//  public Time getTime() {
-//    return time;
-//  }
-//
-//  public void setTime(Time time) {
-//    this.time = time;
-//  }
+  // public Time getTime() {
+  // return time;
+  // }
+  //
+  // public void setTime(Time time) {
+  // this.time = time;
+  // }
 
   public String getTitle() {
     return title;

@@ -1,6 +1,5 @@
 package ca.mcgill.purposeful.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -32,10 +31,10 @@ public class Topic {
   // ------------------------
 
   @ManyToMany
-  private Set<AppUser> appUsers = new HashSet<AppUser>();
+  private Set<AppUser> appUsers;
 
   @ManyToMany
-  private Set<Idea> ideas = new HashSet<Idea>();
+  private Set<Idea> ideas;
 
   // ------------------------
   // Topic Constructor

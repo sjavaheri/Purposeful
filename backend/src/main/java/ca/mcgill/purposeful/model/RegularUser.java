@@ -19,10 +19,10 @@ public class RegularUser extends Role {
   private boolean verifiedCompany;
 
   // ------------------------
-  // AppUser Associations
+  // RegularUser Associations
   // ------------------------
 
-  @OneToOne
+  @OneToOne(optional = true)
   @JoinColumn(name = "verificationrequest_id", nullable = true, unique = true)
   private VerificationRequest verificationRequest;
 

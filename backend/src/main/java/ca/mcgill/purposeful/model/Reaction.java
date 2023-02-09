@@ -5,56 +5,68 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.Date;
 //import java.sql.Date;
 //import java.sql.Time;
 
 /**
- * The Technology class, the model for all Technologies in the database
+ * The Reaction class, the model for all reactions in the database
  */
 @Entity
 public class Reaction {
 
   // ------------------------
-  // Reaction Associations
-  // ------------------------
-
-  @ManyToOne(optional = true)
-  private Idea idea;
-
-  // ------------------------
   // Enumerations
   // ------------------------
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String id;
+
+  public enum ReactionType {
+    HighFive
+  }
 
   // ------------------------
   // Reaction Attributes
   // ------------------------
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private String id;
+
   @Column(nullable = false)
   private ReactionType reactionType;
+
+  @Column(nullable = false)
   private Date date;
-  private String name;
 
   // private Time time;
 
-  public Reaction() {
+  // ------------------------
+  // Reaction Associations
+  // ------------------------
 
-  }
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "idea_id", nullable = false)
+  private Idea idea;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id", nullable = false)
+  private RegularUser regularUser;
 
   // ------------------------
   // Reaction Constructor
   // ------------------------
 
-  public String getId() {
-    return id;
+  public Reaction() {
   }
 
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
+
+  public String getId() {
+    return id;
+  }
 
   public void setId(String id) {
     this.id = id;
@@ -76,15 +88,19 @@ public class Reaction {
     this.date = date;
   }
 
-  public String getName() {
-    return name;
+  public Idea getIdea() {
+    return idea;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setIdea(Idea idea) {
+    this.idea = idea;
   }
 
-  public enum ReactionType {
-    HighFive
+  public RegularUser getRegularUser() {
+    return regularUser;
+  }
+
+  public void setRegularUser(RegularUser regularUser) {
+    this.regularUser = regularUser;
   }
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 /**
- * The Technology class, the model for all Technologies in the database
+ * The VerificationRequest class, the model for all verification requests in the database
  */
 @Entity
 public class VerificationRequest {
@@ -14,33 +14,43 @@ public class VerificationRequest {
   // Enumerations
   // ------------------------
 
-  @Id
-  private String companyOuiNumber;
+  public enum Status {
+    Pending, Approved, Refused
+  }
 
   // ------------------------
   // VerificationRequest Attributes
   // ------------------------
+
+  @Id
+  private String companyOuiNumber;
+
+  @Column(nullable = false)
   private String companyName;
+
+  @Column(nullable = false)
   private String explanation;
+
+  @Column(nullable = false)
   private String supportingDocumentUrl;
+
   @Column(nullable = false)
   private Status status;
-
-  public VerificationRequest() {
-
-  }
 
   // ------------------------
   // VerificationRequest Constructor
   // ------------------------
 
-  public String getCompanyOuiNumber() {
-    return companyOuiNumber;
+  public VerificationRequest() {
   }
 
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
+
+  public String getCompanyOuiNumber() {
+    return companyOuiNumber;
+  }
 
   public void setCompanyOuiNumber(String companyOuiNumber) {
     this.companyOuiNumber = companyOuiNumber;
@@ -76,9 +86,5 @@ public class VerificationRequest {
 
   public void setStatus(Status status) {
     this.status = status;
-  }
-
-  public enum Status {
-    Pending, Approved, Refused
   }
 }

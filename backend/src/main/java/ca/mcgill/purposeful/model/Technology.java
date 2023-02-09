@@ -1,5 +1,6 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,17 +9,10 @@ import jakarta.persistence.ManyToMany;
 import java.util.Set;
 
 /**
- * The Technology class, the model for all Technologies in the database
+ * The Technology class, the model for all technologies in the database
  */
 @Entity
 public class Technology {
-
-  // ------------------------
-  // Technology Associations
-  // ------------------------
-
-  @ManyToMany(mappedBy = "techs")
-  Set<Idea> ideas;
 
   // ------------------------
   // Technology Attributes
@@ -28,14 +22,21 @@ public class Technology {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
+  @Column(nullable = false, unique = true)
   private String name;
+
+  // ------------------------
+  // Technology Associations
+  // ------------------------
+
+  @ManyToMany
+  Set<Idea> ideas;
 
   // ------------------------
   // Technology Constructor
   // ------------------------
 
   public Technology() {
-
   }
 
   // ------------------------
