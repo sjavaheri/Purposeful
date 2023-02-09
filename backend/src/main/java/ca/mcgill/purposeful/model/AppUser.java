@@ -4,10 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ca.mcgill.purposeful.configuration.Authority;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 /**
  * The AppUser class, the model for all accounts in the database
@@ -15,52 +18,76 @@ import jakarta.persistence.Id;
 @Entity
 public class AppUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  // ------------------------
+  // AppUser Attributes
+  // ------------------------
 
-    private String username;
+  private String id;
 
-    private String password;
+  private String email;
 
-    // Every AppUser has a set of Authorities that they can be granted
-    private Set < Authority > authorities = new HashSet <Authority> ();
+  private String username;
 
-    public AppUser() {
-    }
+  private String password;
 
-    public Integer getId() {
-        return id;
-    }
+  // Every AppUser has a set of Authorities that they can be granted
+  private Set<Authority> authorities = new HashSet<Authority>();
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  // ------------------------
+  // AppUser Constructor
+  // ------------------------
 
-    public String getUsername() {
-        return username;
-    }
+  public AppUser() {
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  // ------------------------
+  // Getter/Setter Methods
+  // ------------------------
 
-    public String getPassword() {
-        return password;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public String getId() {
+    return id;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+  @Column(unique = true, nullable = false)
+  public String getEmail() {
+    return email;
+  }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    
-    
+  @Column(unique = true, nullable = false)
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  @Column(nullable = false)
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  @OneToMany(fetch = FetchType.EAGER) // TODO: replace with enum
+  public Set<Authority> getAuthorities() {
+    return authorities;
+  }
+
+  public void setAuthorities(Set<Authority> authorities) {
+    this.authorities = authorities;
+  }
+
 }
