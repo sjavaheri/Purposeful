@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import java.util.Set;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -26,13 +25,6 @@ public class Technology {
 
   @Column(nullable = false, unique = true)
   private String name;
-
-  // ------------------------
-  // Technology Associations
-  // ------------------------
-
-  @ManyToMany
-  Set<Idea> ideas;
 
   // ------------------------
   // Technology Constructor
@@ -58,13 +50,5 @@ public class Technology {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Set<Idea> getIdeas() {
-    return ideas;
-  }
-
-  public void setIdeas(Set<Idea> ideas) {
-    this.ideas = ideas;
   }
 }
