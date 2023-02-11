@@ -3,10 +3,11 @@ package ca.mcgill.purposeful.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import java.util.Set;
+
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * The Technology class, the model for all technologies in the database
@@ -19,7 +20,8 @@ public class Technology {
   // ------------------------
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String id;
 
   @Column(nullable = false, unique = true)

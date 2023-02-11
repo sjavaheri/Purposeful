@@ -1,9 +1,10 @@
 package ca.mcgill.purposeful.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import ca.mcgill.purposeful.configuration.Authority;
+import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -13,12 +14,13 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
+
+import ca.mcgill.purposeful.configuration.Authority;
 
 /**
  * The AppUser class, the model for all accounts in the database
@@ -31,7 +33,8 @@ public class AppUser {
   // ------------------------
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String id;
 
   @Column(unique = true, nullable = false)
@@ -49,22 +52,21 @@ public class AppUser {
 
   // Every AppUser has a set of Authorities that they can be granted
   @ElementCollection(targetClass = Authority.class)
-  @CollectionTable(name = "appuser_authority", joinColumns = @JoinColumn(name = "appuser_id"))
+  @CollectionTable(name = "app_user_authority", joinColumns = @JoinColumn(name = "app_user_id"))
   @Enumerated(EnumType.STRING)
   @Column(name = "authorities", nullable = false)
   private Set<Authority> authorities = new HashSet<Authority>();
 
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "role_id", nullable = false, unique = true)
-  private Role role;
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUser")
+  private List<Role> roles;
 
   @ManyToMany
-  @JoinTable(name = "appuser_domain", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "domain_id"))
+  @JoinTable(name = "app_user_domain", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "domain_id"))
   private Set<Domain> domains;
 
   // Interests are minimum 2 (2..*). This is enforced in the controller
   @ManyToMany
-  @JoinTable(name = "appuser_topic", joinColumns = @JoinColumn(name = "appuser_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  @JoinTable(name = "app_user_topic", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> interests;
 
   // ------------------------
@@ -118,12 +120,12 @@ public class AppUser {
     this.authorities = authorities;
   }
 
-  public Role getRole() {
-    return role;
+  public List<Role> getRole() {
+    return roles;
   }
 
-  public void setRole(Role role) {
-    this.role = role;
+  public void setRole(List<Role> roles) {
+    this.roles = roles;
   }
 
   public Set<Domain> getDomains() {

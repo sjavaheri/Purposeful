@@ -1,15 +1,15 @@
 package ca.mcgill.purposeful.model;
 
-import ca.mcgill.purposeful.configuration.Authority;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import ca.mcgill.purposeful.configuration.Authority;
+
 /**
- * Secure User class that Spring can read, which wraps the AppUser class Makes
- * AppUser compatible
+ * Secure User class that Spring can read, which wraps the AppUser class Makes AppUser compatible
  * with Spring Security
  */
 public class SecurityUser implements UserDetails {
@@ -23,8 +23,7 @@ public class SecurityUser implements UserDetails {
 
   /**
    * Method that converts the authorities of the AppUser into an arraylist of
-   * SimpleGrantedAuthoritys SimpleGrantedAuthorities is an class that Implements
-   * the
+   * SimpleGrantedAuthoritys SimpleGrantedAuthorities is an class that Implements the
    * GrantedAuthority interface
    *
    * @return the authorities the user has as an array list of strings

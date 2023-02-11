@@ -24,9 +24,9 @@ public class AppUserService implements UserDetailsService {
     if (appUser == null) {
       throw new UsernameNotFoundException("User not found");
     }
-    // security user is an implementation of UserDetails which already knows how to check the password and whether it matches the given username
+    // security user is an implementation of UserDetails which already knows how to
+    // check the password and whether it matches the given username
     return new SecurityUser(appUser);
   }
-
 
 }

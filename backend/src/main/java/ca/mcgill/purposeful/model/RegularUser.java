@@ -23,7 +23,7 @@ public class RegularUser extends Role {
   // ------------------------
 
   @OneToOne(optional = true)
-  @JoinColumn(name = "verificationrequest_id", nullable = true, unique = true)
+  @JoinColumn(name = "verification_request_id", nullable = true, unique = true)
   private VerificationRequest verificationRequest;
 
   // ------------------------

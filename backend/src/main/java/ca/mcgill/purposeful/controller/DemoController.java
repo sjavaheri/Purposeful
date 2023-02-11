@@ -13,7 +13,7 @@ import ca.mcgill.purposeful.exception.GlobalException;
  */
 
 @RestController
-@RequestMapping({ "/demo", "/demo/" })
+@RequestMapping({"/demo", "/demo/"})
 public class DemoController {
 
   /**

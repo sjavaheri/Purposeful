@@ -36,6 +36,7 @@ public class PurposefulApplication {
       // create an moderator user
       AppUser appUser = new AppUser();
       appUser.setUsername("moderator");
+      appUser.setEmail("moderator@email.com");
       // encode the password
       String encoded = passwordEncoder.encode("moderator");
       appUser.setPassword(encoded);
@@ -45,6 +46,7 @@ public class PurposefulApplication {
       // create a user user
       AppUser appUser2 = new AppUser();
       appUser2.setUsername("user");
+      appUser2.setEmail("user@email.com");
       // encode the password
       String encoded2 = passwordEncoder.encode("user");
       appUser2.setPassword(encoded2);

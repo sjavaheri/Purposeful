@@ -1,11 +1,14 @@
 package ca.mcgill.purposeful.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 /**
  * The abstract Role class, the abstract model for all account roles in the database
@@ -19,8 +22,13 @@ public abstract class Role {
   // ------------------------
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String id;
+
+  @ManyToOne
+  @JoinColumn(name = "app_user_id", nullable = false)
+  private AppUser appUser;
 
   // ------------------------
   // Role Constructor
@@ -41,4 +49,11 @@ public abstract class Role {
     this.id = id;
   }
 
+  public AppUser getAppUser() {
+    return appUser;
+  }
+
+  public void setAppUser(AppUser appUser) {
+    this.appUser = appUser;
+  }
 }
