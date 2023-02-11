@@ -27,6 +27,9 @@ public class URL {
   @Column(nullable = false, unique = false)
   private String URL;
 
+  @Column(nullable = false)
+  private boolean presetIcon;
+
   // ------------------------
   // URL Associations
   // ------------------------
@@ -61,6 +64,14 @@ public class URL {
 
   public void setURL(String URL) {
     this.URL = URL;
+  }
+
+  public boolean isPresetIcon() {
+    return presetIcon;
+  }
+
+  public void setPresetIcon(boolean presetIcon) {
+    this.presetIcon = presetIcon;
   }
 
   public Idea getIdea() {
