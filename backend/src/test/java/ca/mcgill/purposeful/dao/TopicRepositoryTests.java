@@ -1,10 +1,12 @@
-package ca.mcgill.ecse321.GSSS.dao;
+package ca.mcgill.purposeful.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ca.mcgill.ecse321.GSSS.model.Address;
 import java.util.UUID;
+
+import ca.mcgill.purposeful.configuration.Authority;
+import ca.mcgill.purposeful.model.Domain;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,106 +14,67 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import ca.mcgill.purposeful.model.Topic;
+
 /**
- * To test the Address CRUD repository methods.
+ * To test the Topic CRUD repository methods.
  *
- * @author Wassim Jabbour
+ * @author  Enzo Benoit-Jeannin
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class TestAddressPersistence {
+public class TopicRepositoryTests {
 
+  // Create the repository we are testing
   @Autowired
-  private AddressRepository addressRepository;
-
-  @Autowired
-  private BusinessHourRepository businessHourRepository;
-
-  @Autowired
-  private CustomerRepository customerRepository;
-
-  @Autowired
-  private EmployeeRepository employeeRepository;
-
-  @Autowired
-  private ItemCategoryRepository itemCategoryRepository;
-
-  @Autowired
-  private ItemRepository itemRepository;
-
-  @Autowired
-  private OwnerRepository ownerRepository;
-
-  @Autowired
-  private PurchaseRepository purchaseRepository;
-
-  @Autowired
-  private ShiftRepository shiftRepository;
+  private Topic topicRepository;
 
   /**
-   * Deletes all the database contents. Goes from the independent to the dependent classes to avoid
-   * exceptions being thrown when deleting
-   *
-   * @author Wassim Jabbour
+   * Clear the database before all tests
+   * @author Enzo Benoit-Jeannin
    */
   @AfterEach
   public void clearDatabase() {
-    customerRepository.deleteAll();
-    purchaseRepository.deleteAll();
-    employeeRepository.deleteAll();
-    shiftRepository.deleteAll();
-    ownerRepository.deleteAll();
-    addressRepository.deleteAll();
-    itemRepository.deleteAll();
-    itemCategoryRepository.deleteAll();
-    businessHourRepository.deleteAll();
+    topicRepository.deleteAll();
   }
 
   /**
-   * To test the method findAddressById() for the address
-   *
-   * @author Wassim Jabbour
+   * Topic testing method which creates, populates the attributes and saves a topic in the database. Then checks that the same topic is 
+   * correctly retrieved by the repository.
+   * 
+   * It tests the findTopicById(String id) for the topic 
+   * 
+   * @author Enzo Benoit-Jeannin
    */
   @Test
-  public void testPersistAndLoadAddressById() {
+  public void testPersistAndLoadTopicById() {
 
-    // Initializing the address to test
-    String fullName = "Enzo Ferrari";
-    String streetName = "Crescent";
-    int streetNumber = 43;
-    String city = "Montreal";
-    String postalCode = "W4S 5I3";
+	// Initializing the topic to test
+	String name = "Conv Nets"
     String id = UUID.randomUUID().toString();
 
-    // Creating the address and setting the fields
-    Address address = new Address();
-    address.setFullName(fullName);
-    address.setStreetName(streetName);
-    address.setStreetNumber(streetNumber);
-    address.setCity(city);
-    address.setPostalCode(postalCode);
-    address.setId(id);
+    // Creating the topic and setting the fields
+    Topic topic = new Topic() ;
+    topic.setName(name);
+    topic.setId (id)
 
-    // Saving the address in memory
-    addressRepository.save(address);
+    // Save the topic in memory
+    topicRepository.save(topic);
 
     // Setting the address to null
     address = null;
 
-    // Finding the address by ID
-    address = addressRepository.findAddressById(id);
+    // Finding the topic by ID
+    topic = topicRepository.findTopicById(id);
 
-    // Checking that this is the same address we saved earlier
-    assertNotNull(address);
-    assertEquals(address.getFullName(), fullName);
-    assertEquals(address.getStreetName(), streetName);
-    assertEquals(address.getStreetNumber(), streetNumber);
-    assertEquals(address.getCity(), city);
-    assertEquals(address.getPostalCode(), postalCode);
-    assertEquals(address.getId(), id);
+    // Make sure topic is not null
+    assertNotNull(topic);
 
+    // Checking that this is the same topic we saved earlier
+    assertEquals(name, topic.getName());
+    assertEquals(id, topic.getId());
   }
-  
+}
   
   
   
