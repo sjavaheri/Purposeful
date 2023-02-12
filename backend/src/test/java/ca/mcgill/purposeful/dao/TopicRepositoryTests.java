@@ -54,19 +54,21 @@ public class TopicRepositoryTests {
 
     // Save the topic in memory
     topicRepository.save(topic);
+    
+    String topidId = topic.getId();
 
     // Setting the address to null
-    address = null;
-
+    topic = null;
+    
     // Finding the topic by ID
-    topic = topicRepository.findTopicById(id);
+    topic = topicRepository.findTopicById(topidId);
 
     // Make sure topic is not null
     assertNotNull(topic);
 
     // Checking that this is the same topic we saved earlier
     assertEquals(name, topic.getName());
-    assertEquals(id, topic.getId());
+    assertEquals(topidId, topic.getId());
   }
 }
   
