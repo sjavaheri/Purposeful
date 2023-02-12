@@ -3,10 +3,6 @@ package ca.mcgill.purposeful.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.UUID;
-
-import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.model.Domain;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,12 +47,10 @@ public class TopicRepositoryTests {
 
 	// Initializing the topic to test
 	String name = "Conv Nets"
-    String id = UUID.randomUUID().toString();
 
     // Creating the topic and setting the fields
     Topic topic = new Topic() ;
     topic.setName(name);
-    topic.setId (id)
 
     // Save the topic in memory
     topicRepository.save(topic);
