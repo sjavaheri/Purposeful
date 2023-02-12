@@ -8,10 +8,8 @@ import java.util.Date;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.RegularUser;
@@ -19,7 +17,6 @@ import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.model.AppUser;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class IdeaRepositoryTests {
 	
