@@ -43,14 +43,14 @@ public class TestAppUserService {
   private static final String VALID_PASSWORD = "Password1";
 
   private static final String INVALID_EMAIL = "invalid.email";
-  private static final String INVALID_PASSQORD_ONE = "invalid";
-  private static final String INVALID_PASSQORD_TWO = "invalidPassword";
-  private static final String INVALID_PASSQORD_THREE = "invalidpassword1";
-  private static final String INVALID_PASSQORD_FOUR = "INVALIDPASSWORD1";
+  private static final String INVALID_PASSWORD_ONE = "invalid";
+  private static final String INVALID_PASSWORD_TWO = "invalidPassword";
+  private static final String INVALID_PASSWORD_THREE = "invalidpassword1";
+  private static final String INVALID_PASSWORD_FOUR = "INVALIDPASSWORD1";
 
   /**
    * Mocking the repositories
-   * 
+   *
    * @author Siger Ma
    */
   @BeforeEach
@@ -88,12 +88,13 @@ public class TestAppUserService {
         });
 
     lenient().when(appUserRepository.save(any(AppUser.class))).thenAnswer(returnParameterAsAnswer);
-    lenient().when(regularUserRepository.save(any(RegularUser.class))).thenAnswer(returnParameterAsAnswer);
+    lenient().when(regularUserRepository.save(any(RegularUser.class)))
+        .thenAnswer(returnParameterAsAnswer);
   }
 
   /**
    * Test the method that creates a new regular user
-   * 
+   *
    * @author Siger Ma
    */
   @Test
@@ -116,7 +117,7 @@ public class TestAppUserService {
 
   /**
    * Test the method that creates a new regular user with an empty email
-   * 
+   *
    * @author Siger Ma
    */
   @Test
@@ -134,7 +135,7 @@ public class TestAppUserService {
 
   /**
    * Test the method that creates a new regular user with an empty username
-   * 
+   *
    * @author Siger Ma
    */
   @Test
@@ -152,7 +153,7 @@ public class TestAppUserService {
 
   /**
    * Test the method that creates a new regular user with an empty password
-   * 
+   *
    * @author Siger Ma
    */
   @Test
@@ -165,6 +166,143 @@ public class TestAppUserService {
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid password. Password cannot be left empty", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid email
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidEmail() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(INVALID_EMAIL, VALID_REGULARUSER_USERNAME_ONE,
+          VALID_PASSWORD);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("Please enter a valid email. The email address you entered is not valid",
+          e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid password too short
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidPasswordTooShort() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
+          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_ONE);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals(
+          "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character",
+          e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid password no number
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidPasswordNoNumber() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
+          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_TWO);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals(
+          "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character",
+          e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid password no uppercase
+   * character
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidPasswordNoUppercase() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
+          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_THREE);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals(
+          "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character",
+          e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid password no lowercase
+   * character
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidPasswordNoLowercase() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
+          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_FOUR);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals(
+          "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character",
+          e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid email that already exists
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidEmailAlreadyExists() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_TWO,
+          VALID_REGULARUSER_USERNAME_ONE, VALID_PASSWORD);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("An account with this email address already exists", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an invalid username that already exists
+   *
+   * @author Siger Ma
+   */
+  @Test
+  public void testCreateRegularUserWithInvalidUsernameAlreadyExists() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
+          VALID_REGULARUSER_USERNAME_TWO, VALID_PASSWORD);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("An account with this username already exists", e.getMessage());
     }
   }
 }
