@@ -29,4 +29,5 @@ tasks.named('test') {
 	testLogging {
 		exceptionFormat "full"
 	}
+
 }
