@@ -19,7 +19,7 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// cucumber dependancies
+	//cucumber dependancies
 	testImplementation 'io.cucumber:cucumber-java:6.10.4'
 	testImplementation 'io.cucumber:cucumber-junit:6.10.4'
 	testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'

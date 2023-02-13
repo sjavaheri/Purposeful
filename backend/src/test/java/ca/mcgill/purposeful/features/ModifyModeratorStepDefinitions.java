@@ -13,7 +13,8 @@ public class ModifyModeratorStepDefinitions {
     }
 
     @Given("^that the user is logged with the email \"([^\"]*)\" and the password \"([^\"]*)\"$")
-    public void that_the_user_is_logged_with_the_email_something_and_the_password_something(String strArg1, String strArg2) throws Throwable {
+    public void that_the_user_is_logged_with_the_email_something_and_the_password_something(String strArg1,
+            String strArg2) throws Throwable {
         throw new PendingException();
     }
 
@@ -22,13 +23,15 @@ public class ModifyModeratorStepDefinitions {
         throw new PendingException();
     }
 
-    @When("^the user request to update the account with email \"([^\"]*)\" using the old password \"([^\"]*)\" with new password \"([^\"]*)\" :$")
-    public void the_user_request_to_update_the_account_with_email_something_using_the_old_password_something_with_new_password_something_(String email, String oldpassword, String newpassword, String strArg1, String strArg2, String strArg3) throws Throwable {
+    @When("^the user request to update their account using the old password (.+) with new password (.+)$")
+    public void the_user_request_to_update_their_account_using_the_old_password_with_new_password(String oldpassword,
+            String newpassword) throws Throwable {
         throw new PendingException();
     }
 
     @Then("^account with email \"([^\"]*)\" should be updated with the following details:$")
-    public void account_with_email_something_should_be_updated_with_the_following_details(String strArg1) throws Throwable {
+    public void account_with_email_something_should_be_updated_with_the_following_details(String strArg1)
+            throws Throwable {
         throw new PendingException();
     }
 
@@ -38,12 +41,13 @@ public class ModifyModeratorStepDefinitions {
     }
 
     @Then("^the user should be denied permission to the requested resource with an HTTP status code of \"([^\"]*)\"$")
-    public void the_user_should_be_denied_permission_to_the_requested_resource_with_an_http_status_code_of_something(String strArg1) throws Throwable {
+    public void the_user_should_be_denied_permission_to_the_requested_resource_with_an_http_status_code_of_something(
+            String strArg1) throws Throwable {
         throw new PendingException();
     }
 
-    @Then("^the following \"([^\"]*)\" should be raised$")
-    public void the_following_something_should_be_raised(String error, String strArg1) throws Throwable {
+    @Then("^the following error (.+) should be raised$")
+    public void the_following_error_should_be_raised(String error) throws Throwable {
         throw new PendingException();
     }
 
