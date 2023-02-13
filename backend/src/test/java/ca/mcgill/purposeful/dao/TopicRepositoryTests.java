@@ -23,7 +23,7 @@ public class TopicRepositoryTests {
 
   // Create the repository we are testing
   @Autowired
-  private Topic topicRepository;
+  private TopicRepository topicRepository;
 
   /**
    * Clear the database before all tests
@@ -46,7 +46,7 @@ public class TopicRepositoryTests {
   public void testPersistAndLoadTopicById() {
 
 	// Initializing the topic to test
-	String name = "Conv Nets"
+	String name = "Conv Nets";
 
     // Creating the topic and setting the fields
     Topic topic = new Topic() ;
