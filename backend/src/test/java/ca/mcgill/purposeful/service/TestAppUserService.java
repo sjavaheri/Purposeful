@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
@@ -31,6 +32,9 @@ public class TestAppUserService {
 
   @Mock
   private RegularUserRepository regularUserRepository;
+
+  @Mock
+  private PasswordEncoder passwordEncoder;
 
   @InjectMocks
   private AppUserService appUserService;
@@ -90,6 +94,7 @@ public class TestAppUserService {
     lenient().when(appUserRepository.save(any(AppUser.class))).thenAnswer(returnParameterAsAnswer);
     lenient().when(regularUserRepository.save(any(RegularUser.class)))
         .thenAnswer(returnParameterAsAnswer);
+    lenient().when(passwordEncoder.encode(anyString())).thenAnswer(returnParameterAsAnswer);
   }
 
   /**

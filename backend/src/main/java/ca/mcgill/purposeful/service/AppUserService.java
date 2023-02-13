@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.purposeful.configuration.Authority;
@@ -28,6 +29,9 @@ public class AppUserService implements UserDetailsService {
   @Autowired
   RegularUserRepository regularUserRepository;
 
+  @Autowired
+  PasswordEncoder passwordEncoder;
+
   /**
    * Register a new regular user
    *
@@ -42,13 +46,16 @@ public class AppUserService implements UserDetailsService {
 
     // Error validation
     if (email == null || email.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "Please enter a valid email. Email cannot be left empty");
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "Please enter a valid email. Email cannot be left empty");
     }
     if (username == null || username.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "Please enter a valid username. Username cannot be left empty");
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "Please enter a valid username. Username cannot be left empty");
     }
     if (password == null || password.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "Please enter a valid password. Password cannot be left empty");
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "Please enter a valid password. Password cannot be left empty");
     }
     if (!email.matches("^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
@@ -60,10 +67,12 @@ public class AppUserService implements UserDetailsService {
           "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character");
     }
     if (appUserRepository.findAppUserByEmail(email) != null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "An account with this email address already exists");
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "An account with this email address already exists");
     }
     if (appUserRepository.findAppUserByUsername(username) != null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "An account with this username already exists");
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "An account with this username already exists");
     }
 
     AppUser appUser = null;
@@ -73,7 +82,7 @@ public class AppUserService implements UserDetailsService {
       appUser = new AppUser();
       appUser.setEmail(email);
       appUser.setUsername(username);
-      appUser.setPassword(password);
+      appUser.setPassword(passwordEncoder.encode(password));
       appUser.getAuthorities().add(Authority.User);
       appUserRepository.save(appUser);
 
@@ -83,8 +92,7 @@ public class AppUserService implements UserDetailsService {
       regularUser.setVerifiedCompany(false);
       regularUserRepository.save(regularUser);
     } catch (Exception e) {
-      throw new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR,
-          "An error occurred while creating your account. Please try again later");
+      throw new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     return appUser;
