@@ -57,15 +57,15 @@ public class AppUser {
   @Column(name = "authorities", nullable = false)
   private Set<Authority> authorities = new HashSet<Authority>();
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUser")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appUser")
   private List<Role> roles;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "app_user_domain", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "domain_id"))
   private Set<Domain> domains;
 
   // Interests are minimum 2 (2..*). This is enforced in the controller
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "app_user_topic", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> interests;
 
