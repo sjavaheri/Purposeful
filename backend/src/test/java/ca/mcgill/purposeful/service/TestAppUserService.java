@@ -45,6 +45,7 @@ public class TestAppUserService {
   private static final String VALID_REGULARUSER_USERNAME_TWO = "regularUserTwo";
 
   private static final String VALID_PASSWORD = "Password1";
+  private static final String VALID_PASSWORD_ENCODED = "Password1Encoded";
 
   private static final String INVALID_EMAIL = "invalid.email";
   private static final String INVALID_PASSWORD_ONE = "invalid";
@@ -91,10 +92,14 @@ public class TestAppUserService {
           }
         });
 
+    lenient().when(passwordEncoder.encode(anyString()))
+        .thenAnswer((InvocationOnMock invocation) -> {
+          return invocation.getArgument(0) + "Encoded";
+        });
+
     lenient().when(appUserRepository.save(any(AppUser.class))).thenAnswer(returnParameterAsAnswer);
     lenient().when(regularUserRepository.save(any(RegularUser.class)))
         .thenAnswer(returnParameterAsAnswer);
-    lenient().when(passwordEncoder.encode(anyString())).thenAnswer(returnParameterAsAnswer);
   }
 
   /**
@@ -117,7 +122,7 @@ public class TestAppUserService {
     assertNotNull(appUser);
     assertEquals(VALID_REGULARUSER_EMAIL_ONE, appUser.getEmail());
     assertEquals(VALID_REGULARUSER_USERNAME_ONE, appUser.getUsername());
-    assertEquals(VALID_PASSWORD, appUser.getPassword());
+    assertEquals(VALID_PASSWORD_ENCODED, appUser.getPassword());
   }
 
   /**
