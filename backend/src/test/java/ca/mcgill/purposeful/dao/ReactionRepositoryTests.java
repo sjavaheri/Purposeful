@@ -34,23 +34,35 @@ public class ReactionRepositoryTests {
 	@Autowired
 	private RegularUserRepository regularUserRepository;
 
+	@Autowired
+	private URLRepository urlRepository;
+
 	@AfterEach
     public void clearDatabase() {
         // clean up db after each test execution
-        ideaRepository.deleteAll();
+		// clean up needs to happen in right order
         reactionRepository.deleteAll();
+        ideaRepository.deleteAll();
+		urlRepository.deleteAll();
         regularUserRepository.deleteAll();
         appUserRepository.deleteAll();
     }
 
 	@Test 
 	  public void testPersistAndLoadReaction() { 
+		
+		// create basic URL 
+		URL url = new URL();
+		url.setURL("www.url.com");
+
         // Create basic idea
 		Idea idea = new Idea();
 		idea.setDate(Date.from(Instant.now()));
 		idea.setTitle("Brilliant Idea");
         idea.setPurpose("huge learning experience");
 		idea.setDescription("It's a good idea");
+		idea.setIconUrl(url);;
+
         
         // Create reaction
         Reaction reaction = new Reaction();
@@ -69,11 +81,18 @@ public class ReactionRepositoryTests {
 		regUser.setAppUser(user);
 		regUser.setVerifiedCompany(false);
 
-        // Save objects in database
-        ideaRepository.save(idea); 
-		reactionRepository.save(reaction);
+		// set user for idea
+		idea.setUser(regUser);
+
+		// set user for reaction
+		reaction.setRegularUser(regUser);
+
+        // Save objects in database in the right order
+		urlRepository.save(url);
 		appUserRepository.save(user);
 		regularUserRepository.save(regUser);
+        ideaRepository.save(idea); 
+		reactionRepository.save(reaction);
 
         // Retrieve reaction from database
         String reactId = reaction.getId();
