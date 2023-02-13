@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +15,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.util.Util;
 
 /**
  * Domain Repository testing class which initiates a domain, executes the tests,
@@ -28,12 +30,18 @@ public class DomainRepositoryTests {
   private DomainRepository domainRepository;
 
   /**
-   * Clear the database before all and after each test
+   * Clear the database before all tests
    */
-  @BeforeEach
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired Util util) {
+    util.clearDatabase();
+  }
+  /**
+   * Clear the database after each test
+   */
   @AfterEach
-  public void clearDatabase() {
-    domainRepository.deleteAll();
+  public void clearDatabaseAfter(@Autowired Util util) {
+    util.clearDatabase();
   }
 
   /**
