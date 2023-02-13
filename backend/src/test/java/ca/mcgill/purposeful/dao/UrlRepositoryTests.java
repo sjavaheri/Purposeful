@@ -1,13 +1,15 @@
 package ca.mcgill.purposeful.dao;
 
-
 import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.util.Util;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,13 +29,23 @@ public class UrlRepositoryTests {
 
   /**
    * Clear the database before all tests
-   * @author Wassim Jabbour
    */
-  @AfterEach
-  public void clearDatabase() {urlRepository.deleteAll();}
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired Util util) {
+    util.clearDatabase();
+  }
 
   /**
-   * Creates a url, saves it in the database and then retrieves it by id and checks that works
+   * Clear the database after each test
+   */
+  @AfterEach
+  public void clearDatabaseAfter(@Autowired Util util) {
+    util.clearDatabase();
+  }
+
+  /**
+   * Creates a url, saves it in the database and then retrieves it by id and
+   * checks that works
    *
    * @author Wassim Jabbour
    */

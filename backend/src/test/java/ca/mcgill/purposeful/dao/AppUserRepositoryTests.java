@@ -9,12 +9,15 @@ import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.util.Util;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +25,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
 /**
- * AppUser Repository testing class which initiates an appUser with all its attributes, executes the tests, then clears each instance from the database.
+ * AppUser Repository testing class which initiates an appUser with all its
+ * attributes, executes the tests, then clears each instance from the database.
+ * 
  * @author Sasha Denouvilliez-Pech
  */
 @ExtendWith(SpringExtension.class)
@@ -46,14 +50,19 @@ public class AppUserRepositoryTests {
   PasswordEncoder passwordEncoder;
 
   /**
-   * Method to clear the database after each test
+   * Clear the database before all tests
+   */
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired Util util) {
+    util.clearDatabase();
+  }
+
+  /**
+   * Clear the database after each test
    */
   @AfterEach
-  public void clearDatabase() {
-    appUserRepository.deleteAll();
-    domainRepository.deleteAll();
-    topicRepository.deleteAll();
-    regularUserRepository.deleteAll();
+  public void clearDatabaseAfter(@Autowired Util util) {
+    util.clearDatabase();
   }
 
   /**
@@ -64,7 +73,7 @@ public class AppUserRepositoryTests {
   public void testPersistAndLoadAppUser() {
 
     // create the appUser and fill its properties
-    AppUser appUser = new AppUser() ;
+    AppUser appUser = new AppUser();
     Set<Authority> authorities = new HashSet<Authority>();
     authorities.add(Authority.Owner);
     appUser.setAuthorities(authorities);
@@ -84,7 +93,7 @@ public class AppUserRepositoryTests {
 
     // Create and persist multiple domains
     var domainSet = new HashSet<Domain>();
-    var domainNames = new String[]{"hello", "world", "science"};
+    var domainNames = new String[] { "hello", "world", "science" };
     for (String name : domainNames) {
       var domain = new Domain();
       domain.setName(name);
@@ -96,7 +105,7 @@ public class AppUserRepositoryTests {
 
     // Create and persist multiple topics
     var topicSet = new HashSet<Topic>();
-    var topicNames = new String[]{"hello", "world", "science"};
+    var topicNames = new String[] { "hello", "world", "science" };
     for (String name : topicNames) {
       var topic = new Topic();
       topic.setName(name);
