@@ -16,7 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
- * Moderator Repository testing class which initiates an moderator and an AppUser repository, executes the tests, then clears each instance from the database.
+ * Moderator Repository testing class which initiates an moderator and an AppUser repository,
+ * executes the tests, then clears each instance from the database.
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -29,8 +30,10 @@ public class ModeratorRepositoryTests {
   // also create an appUser
   @Autowired
   private AppUserRepository appUserRepository;
+
   /**
    * Clear the database before all tests
+   *
    * @author Athmane Benarous
    */
   @AfterEach
@@ -40,9 +43,10 @@ public class ModeratorRepositoryTests {
   }
 
   /**
-   * Moderator testing method which creates, populates the attributes, sets associations, and saves each moderator and appUser object and identifier.
-   * It can then test to make sure each object reached from the moderator found in the repository is not null and that each initially saved Id corresponds to the one
-   * reached from the repository.
+   * Moderator testing method which creates, populates the attributes, sets associations, and saves
+   * each moderator and appUser object and identifier. It can then test to make sure each object
+   * reached from the moderator found in the repository is not null and that each initially saved Id
+   * corresponds to the one reached from the repository.
    */
   @Test
   public void testPersistAndLoadModerator() {
@@ -50,7 +54,7 @@ public class ModeratorRepositoryTests {
 // MANDATORY CLASS TESTS
 
     // create the appUser and fill its properties
-    AppUser appUser = new AppUser() ;
+    AppUser appUser = new AppUser();
 
     Set<Authority> authorities = new HashSet<Authority>();
     authorities.add(Authority.Owner);
@@ -64,7 +68,7 @@ public class ModeratorRepositoryTests {
     appUserRepository.save(appUser);
 
     // create the moderator
-    Moderator moderator = new Moderator() ;
+    Moderator moderator = new Moderator();
     moderator.setAppUser(appUser);
 
     // save the moderator
