@@ -31,15 +31,6 @@ public class URL {
   private boolean presetIcon;
 
   // ------------------------
-  // URL Associations
-  // ------------------------
-
-  // Null when URL is an icon of an idea
-  @ManyToOne(optional = true)
-  @JoinColumn(name = "idea_id", nullable = true)
-  private Idea idea;
-
-  // ------------------------
   // URL Constructor
   // ------------------------
 
@@ -72,13 +63,5 @@ public class URL {
 
   public void setPresetIcon(boolean presetIcon) {
     this.presetIcon = presetIcon;
-  }
-
-  public Idea getIdea() {
-    return idea;
-  }
-
-  public void setIdea(Idea idea) {
-    this.idea = idea;
   }
 }

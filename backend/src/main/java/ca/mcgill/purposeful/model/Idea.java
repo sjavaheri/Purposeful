@@ -78,7 +78,8 @@ public class Idea {
   @JoinColumn(name = "icon_url_id", nullable = false)
   private URL iconUrl;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "idea")
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @JoinColumn(name = "supported_idea_id", nullable = true)
   private List<URL> supportingImageUrls;
 
   @ManyToOne(optional = false)
