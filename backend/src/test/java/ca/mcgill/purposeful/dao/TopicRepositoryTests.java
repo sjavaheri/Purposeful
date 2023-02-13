@@ -45,8 +45,8 @@ public class TopicRepositoryTests {
   @Test
   public void testPersistAndLoadTopicById() {
 
-	// Initializing the topic to test
-	String name = "Conv Nets";
+	  // Initializing the topic to test
+	  String name = "Conv Nets";
 
     // Creating the topic and setting the fields
     Topic topic = new Topic() ;
@@ -55,20 +55,20 @@ public class TopicRepositoryTests {
     // Save the topic in memory
     topicRepository.save(topic);
     
-    String topidId = topic.getId();
+    String topicId = topic.getId();
 
     // Setting the address to null
     topic = null;
     
     // Finding the topic by ID
-    topic = topicRepository.findTopicById(topidId);
+    topic = topicRepository.findTopicById(topicId);
 
     // Make sure topic is not null
     assertNotNull(topic);
 
     // Checking that this is the same topic we saved earlier
     assertEquals(name, topic.getName());
-    assertEquals(topidId, topic.getId());
+    assertEquals(topicId, topic.getId());
   }
 }
   
