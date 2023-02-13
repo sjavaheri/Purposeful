@@ -14,6 +14,9 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.SecurityUser;
 
+/**
+ * The AppUserService class, the business logic for managing AppUsers
+ */
 @Service
 public class AppUserService implements UserDetailsService {
 
