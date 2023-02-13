@@ -25,7 +25,7 @@ public class AppUserService implements UserDetailsService {
 
   /**
    * Register a new regular user
-   * 
+   *
    * @param email    - email of the user
    * @param username - username of the user
    * @param password - password of the user
@@ -40,13 +40,16 @@ public class AppUserService implements UserDetailsService {
       throw new IllegalArgumentException("Please enter a valid email. Email cannot be left empty");
     }
     if (username == null || username.isEmpty()) {
-      throw new IllegalArgumentException("Please enter a valid username. Username cannot be left empty");
+      throw new IllegalArgumentException(
+          "Please enter a valid username. Username cannot be left empty");
     }
     if (password == null || password.isEmpty()) {
-      throw new IllegalArgumentException("Please enter a valid password. Password cannot be left empty");
+      throw new IllegalArgumentException(
+          "Please enter a valid password. Password cannot be left empty");
     }
     if (!email.matches("^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")) {
-      throw new IllegalArgumentException("Please enter a valid email. The email address you entered is not valid");
+      throw new IllegalArgumentException(
+          "Please enter a valid email. The email address you entered is not valid");
     }
     if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
@@ -77,7 +80,8 @@ public class AppUserService implements UserDetailsService {
       regularUser.setVerifiedCompany(false);
       regularUserRepository.save(regularUser);
     } catch (Exception e) {
-      throw new RuntimeException("An error occurred while creating your account. Please try again later");
+      throw new RuntimeException(
+          "An error occurred while creating your account. Please try again later");
     }
 
     return appUser;

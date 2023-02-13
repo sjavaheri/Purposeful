@@ -18,7 +18,8 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Owner;
 
 /**
- * Owner Repository testing class which initiates an owner and an AppUser repository, executes the tests, then clears each instance from the database.
+ * Owner Repository testing class which initiates an owner and an AppUser repository, executes the
+ * tests, then clears each instance from the database.
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -31,8 +32,10 @@ public class OwnerRepositoryTests {
   // also create an appUser
   @Autowired
   private AppUserRepository appUserRepository;
+
   /**
    * Clear the database before all tests
+   *
    * @author Athmane Benarous
    */
   @AfterEach
@@ -42,9 +45,10 @@ public class OwnerRepositoryTests {
   }
 
   /**
-   * Owner testing method which creates, populates the attributes, sets associations, and saves each owner and appUser object and identifier.
-   * It can then test to make sure each object reached from the owner found in the repository is not null and that each initially saved Id corresponds to the one
-   * reached from the repository.
+   * Owner testing method which creates, populates the attributes, sets associations, and saves each
+   * owner and appUser object and identifier. It can then test to make sure each object reached from
+   * the owner found in the repository is not null and that each initially saved Id corresponds to
+   * the one reached from the repository.
    */
   @Test
   public void testPersistAndLoadOwner() {
@@ -52,7 +56,7 @@ public class OwnerRepositoryTests {
 // MANDATORY CLASS TESTS
 
     // create the appUser and fill its properties
-    AppUser appUser = new AppUser() ;
+    AppUser appUser = new AppUser();
 
     Set<Authority> authorities = new HashSet<Authority>();
     authorities.add(Authority.Owner);
@@ -67,7 +71,7 @@ public class OwnerRepositoryTests {
     appUserRepository.save(appUser);
 
     // create the owner
-    Owner owner = new Owner() ;
+    Owner owner = new Owner();
     owner.setAppUser(appUser);
 
     // save the owner
