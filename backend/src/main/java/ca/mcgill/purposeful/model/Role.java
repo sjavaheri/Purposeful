@@ -26,6 +26,10 @@ public abstract class Role {
   @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String id;
 
+  // ------------------------
+  // Role Associations
+  // ------------------------
+
   @ManyToOne(optional = false)
   @JoinColumn(name = "app_user_id", nullable = false)
   private AppUser appUser;
