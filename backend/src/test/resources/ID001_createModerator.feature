@@ -8,9 +8,8 @@ Feature: Create Moderator
 
 
   Scenario Outline: Successfully create a new moderator account
-    When a new moderator account is created with "<firstName>", "<lastName>", "<email>" and "<password>"
-    Then a new moderator account exists in the database with "<firstName>", "<lastName>", "<email>" and "<password>"
-    Then the number of moderator accounts in the database is 2
+    When a new moderator account is created with firstname <firstName>, lastname <lastName>, email <email> and password <password>
+    Then a new moderator account exists in the database with firstname <firstName>, lastname <lastName>, email <email> and password <password>
 
     Examples:
       | firstName | lastName | email                | password       |
@@ -18,9 +17,9 @@ Feature: Create Moderator
       | Bob       | Marley   | bob.marley@gmail.com | BobIsAwesome01 |
 
   Scenario Outline: Unsuccessfully create a new moderator account
-    When a new moderator account is created with "<firstName>", "<lastName>", "<email>" and "<password>"
-    Then the following "<error>" shall be raised
-    Then the number of moderator accounts in the database is 1
+    When a new moderator account is created with firstname <firstName>, lastname <lastName>, email <email> and password <password>
+    Then the following error <error> shall be raised
+    Then the number of moderator accounts in the database is "1"
 
     Examples:
       | firstName | lastName | email                    | password         | error                                                                                                                                   |
