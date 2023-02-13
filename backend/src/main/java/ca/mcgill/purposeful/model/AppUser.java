@@ -1,13 +1,26 @@
 package ca.mcgill.purposeful.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import ca.mcgill.purposeful.configuration.Authority;
+import org.hibernate.annotations.GenericGenerator;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+
+import ca.mcgill.purposeful.configuration.Authority;
 
 /**
  * The AppUser class, the model for all accounts in the database
@@ -15,52 +28,119 @@ import jakarta.persistence.Id;
 @Entity
 public class AppUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  // ------------------------
+  // AppUser Attributes
+  // ------------------------
 
-    private String username;
+  @Id
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
+  private String id;
 
-    private String password;
+  @Column(unique = true, nullable = false)
+  private String email;
 
-    // Every AppUser has a set of Authorities that they can be granted
-    private Set < Authority > authorities = new HashSet <Authority> ();
+  @Column(unique = true, nullable = false)
+  private String username;
 
-    public AppUser() {
-    }
+  @Column(nullable = false)
+  private String password;
 
-    public Integer getId() {
-        return id;
-    }
+  // ------------------------
+  // AppUser Associations
+  // ------------------------
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  // Every AppUser has a set of Authorities that they can be granted
+  @ElementCollection(targetClass = Authority.class)
+  @CollectionTable(name = "app_user_authority", joinColumns = @JoinColumn(name = "app_user_id"))
+  @Enumerated(EnumType.STRING)
+  @Column(name = "authorities", nullable = false)
+  private Set<Authority> authorities = new HashSet<Authority>();
 
-    public String getUsername() {
-        return username;
-    }
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appUser")
+  private List<Role> roles;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "app_user_domain", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "domain_id"))
+  private Set<Domain> domains;
 
-    public String getPassword() {
-        return password;
-    }
+  // Interests are minimum 2 (2..*). This is enforced in the controller
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "app_user_topic", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  private Set<Topic> interests;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  // ------------------------
+  // AppUser Constructor
+  // ------------------------
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+  public AppUser() {
+  }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
+  // ------------------------
+  // Getter/Setter Methods
+  // ------------------------
 
-    
-    
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public Set<Authority> getAuthorities() {
+    return authorities;
+  }
+
+  public void setAuthorities(Set<Authority> authorities) {
+    this.authorities = authorities;
+  }
+
+  public List<Role> getRole() {
+    return roles;
+  }
+
+  public void setRole(List<Role> roles) {
+    this.roles = roles;
+  }
+
+  public Set<Domain> getDomains() {
+    return domains;
+  }
+
+  public void setDomains(Set<Domain> domains) {
+    this.domains = domains;
+  }
+
+  public Set<Topic> getInterests() {
+    return interests;
+  }
+
+  public void setInterests(Set<Topic> interests) {
+    this.interests = interests;
+  }
 }
