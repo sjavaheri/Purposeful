@@ -44,7 +44,7 @@ public class TestExampleService {
     }
 
     /**
-     * A postive outcome test method
+     * A postive outcome example test method
      * @Author Shidan Javaheri
      */
     @Test 
@@ -55,7 +55,8 @@ public class TestExampleService {
         // when this repository calls this method on this argument
         // then answer with this value
         // to return the same value use invocation.getArgument(0)
-        when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+        
+        // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
 
         // call the service method you are testing
         
@@ -72,7 +73,7 @@ public class TestExampleService {
     }
 
     /**
-     * A negative outcome test method
+     * A negative outcome example test method
      * @Author Shidan Javaheri
      */
     @Test
@@ -83,7 +84,8 @@ public class TestExampleService {
         // when this repository calls this method on this argument
         // then answer with this value
         // to return the same value use invocation.getArgument(0)
-        when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+        
+        // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
 
         // call the service method you are testing, and get the exception
         // service method is called within assert throws
