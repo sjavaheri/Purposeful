@@ -6,7 +6,7 @@ Feature: Create Moderator
       | username    | email                 | password         | authorities |
       | owner.steve | owner.steve@gmail.com | OwnerIsAwesome01 | [Moderator] |
 
-  Normal Flow
+  # Normal Flow
 
   Scenario Outline: Successfully create a new moderator account
     When a new moderator account is created with first name <firstName>, last name <lastName>, email <email> and password <password>
@@ -18,7 +18,7 @@ Feature: Create Moderator
       | Bob       | Marley   | bob.marley   | bob.marley@gmail.com   | BobIsAwesome01 | [Moderator] |
       | Bob       | Marley   | bob.marley.1 | bob.marley.1@gmail.com | BobIsAwesome01 | [Moderator] |
 
-  Error Flows
+  # Error Flows
 
   Scenario Outline: Unsuccessfully create a new moderator account
     When a new moderator account is created with first name <firstName>, last name <lastName>, email <email> and password <password>

@@ -7,7 +7,7 @@ Feature: Modify Moderator
       | Owner     | Steve    | owner.steve@gmail.com   | OwnerIsAwesome01     |
       | Moderator | Bob      | moderator.bob@gmail.com | ModeratorIsAwesome01 |
 
-  Normal Flow
+  # Normal Flow
 
   Scenario: Successfully update an moderator account
     Given that the user is logged with the email "owner.steve@gmail.com" and the password "OwnerIsAwesome01"
@@ -19,7 +19,7 @@ Feature: Modify Moderator
       | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
     Then the number of moderator accounts in the datavase shall be "2"
 
-  Error Flows
+  # Error Flows
 
   Scenario: Unsuccessfully update an moderator account because you are not logged in
     When the user requests to update their account information with the following details:
