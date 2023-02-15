@@ -10,7 +10,7 @@ Feature: Create Regular User
 
   Scenario Outline: Successfully create a new regular user account
     When a new regular user account is created with username <username>, email <email> and password <password>
-    Then a new regulat user account exists in the database with username <username>, email <email>, password <password> and authorities <authorities>
+    Then a new regular user account exists in the database with username <username>, email <email>, password <password> and authorities <authorities>
 
     Examples:
       | username   | email                | password       | authorities |
@@ -22,7 +22,7 @@ Feature: Create Regular User
   Scenario Outline: Unsuccessfully create a new regular user account
     When a new regular user account is created with username <username>, email <email> and password <password>
     Then the following error <error> shall be raised
-    Then the number of regulat user accounts in the database is "1"
+    Then the number of regular user accounts in the database is "1"
 
     Examples:
       | username       | email                    | password              | error                                                                                                                                                            |
