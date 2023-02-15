@@ -6,7 +6,7 @@ Feature: Create Moderator
       | firstName | lastName | email                  | password         |
       | Owner     | Steve    | owner.steve@gmaill.com | OwnerIsAwesome01 |
 
-  Normal Flow
+  # Normal Flow
 
   Scenario Outline: Successfully create a new moderator account
     When a new moderator account is created with firstname <firstName>, lastname <lastName>, email <email> and password <password>
@@ -17,7 +17,7 @@ Feature: Create Moderator
       | Mo        | Salah    | mo.salah@gmail.com   | MoIsAwesome01  |
       | Bob       | Marley   | bob.marley@gmail.com | BobIsAwesome01 |
 
-  Error Flows
+  # Error Flows
 
   Scenario Outline: Unsuccessfully create a new moderator account
     When a new moderator account is created with firstname <firstName>, lastname <lastName>, email <email> and password <password>
@@ -33,7 +33,7 @@ Feature: Create Moderator
       | Henry     | McMillan |                          | HenryIsAwesome01 | Please enter a valid email. Emails cannot be left empty                                                                                                          |
       | Henry     | McMillan | henry.mcmillan@gmail.com | henrymcmillan01  | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
       | Henry     | McMillan | henry.mcmillan@gmail.com |                  | Please enter a valid password. Passwords cannot be left empty                                                                                                    |
-      | Henry     | McMillan | henry.mcmillan@gmail.com | henryMcMillan    | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |  |
+      | Henry     | McMillan | henry.mcmillan@gmail.com | henryMcMillan    | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
       | Henry     | McMillan | henry.mcmillan@gmail.com | Henry01          | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
       | Henry     | McMillan | henry.mcmillan@gmail.com | henryisapassword | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
       | Henry     | McMillan | henry.mcmillan@gmail.com | henry            | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
