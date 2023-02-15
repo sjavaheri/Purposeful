@@ -3,7 +3,10 @@ package ca.mcgill.purposeful.dao;
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.util.Util;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Test the persistence layer for the RegularUserRepository. Testing reading and writing of objects,
+ * Test the persistence layer for the RegularUserRepository. Testing reading and
+ * writing of objects,
  * attributes and references to the database.
  *
  * @author Siger Ma
@@ -26,10 +30,20 @@ public class RegularUserRepositoryTests {
   @Autowired
   private AppUserRepository appUserRepository;
 
+  /**
+   * Clear the database before all tests
+   */
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired Util util) {
+    util.clearDatabase();
+  }
+
+  /**
+   * Clear the database after each test
+   */
   @AfterEach
-  public void clearDatabase() {
-    appUserRepository.deleteAll();
-    regularUserRepository.deleteAll();
+  public void clearDatabaseAfter(@Autowired Util util) {
+    util.clearDatabase();
   }
 
   @Test

@@ -1,37 +1,45 @@
 package ca.mcgill.purposeful.dao;
 
-
 import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.util.Util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TechnologyRepositoryTests {
 
-  @Autowired private TechnologyRepository technologyRepository;
+  @Autowired
+  private TechnologyRepository technologyRepository;
 
   /**
    * Clear the database before all tests
-   *
-   * @author Wassim Jabbour
    */
-  @AfterEach
-  public void clearDatabase() {
-    technologyRepository.deleteAll();
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired Util util) {
+    util.clearDatabase();
   }
 
   /**
-   * Creates a technology, saves it in the database and then retrieves it by id and checks that
+   * Clear the database after each test
+   */
+  @AfterEach
+  public void clearDatabaseAfter(@Autowired Util util) {
+    util.clearDatabase();
+  }
+
+  /**
+   * Creates a technology, saves it in the database and then retrieves it by id
+   * and checks that
    * works
    *
    * @author Wassim Jabbour
