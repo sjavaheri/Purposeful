@@ -19,6 +19,7 @@ Feature: Modify Moderator
       | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
     Then the number of moderator accounts in the datavase shall be "2"
 
+  Error Flows
 
   Scenario: Unsuccessfully update an moderator account because you are not logged in
     When the user requests to update their account information with the following details:
@@ -40,10 +41,13 @@ Feature: Modify Moderator
     Then the number of moderator accounts in the database is still "2"
 
     Examples:
-      | oldPassword      | newPassword    | error                                                                                                                                       |
-      | OwnerIsAwesome0  | owner          | The password you entered is incorrect                                                                                                       |
-      | OwnerIsAwesome01 | owner          | Please enter a valid new password. Passwords must be at least 8 characters long and contain at least one number and one uppercase character |
-      | OwnerIsAwesome01 | Own1           | Please enter a valid new password. Passwords must be at least 8 characters long and contain at least one number and one uppercase character |
-      | OwnerIsAwesome01 | thisistheowner | Please enter a valid new password. Passwords must be at least 8 characters long and contain at least one number and one uppercase character |
-      | OwnerIsAwesome01 | 111111111      | Please enter a valid new password. Passwords must be at least 8 characters long and contain at least one number and one uppercase character |
+      | oldPassword      | newPassword    | error                                                                                                                                                            |
+      | OwnerIsAwesome0  | owner          | The password you entered is incorrect                                                                                                                            |
+      | OwnerIsAwesome01 | owner          | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | Own1           | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | thisistheowner | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | 111111111      | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | thispassword1  | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | FFFFFFFFFFFFF8 | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 |                | Please enter a valid password. Passwords cannot be left empty                                                                                                    |
 
