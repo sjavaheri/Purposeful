@@ -1,7 +1,5 @@
 package ca.mcgill.purposeful.model;
 
-import java.util.Set;
-
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.Column;
