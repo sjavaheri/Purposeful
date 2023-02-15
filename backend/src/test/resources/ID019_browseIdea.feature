@@ -31,7 +31,7 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
       | 6  | Circuit           | 3       | 5      | 5       |
 
 
-  Normal/alternate flows
+  # Normal/alternate flows
 
   Scenario Outline: Successfully browse ideas by domain, topic, and tech
     When the user requests to browse ideas by domains <domain_ids>, topics <topic_ids>, and techs <techs_ids>
@@ -61,7 +61,7 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
       | 1          | 2         | 1         | null             |
       | 3          | null      | 1         | 3                |
 
-  Error flows
+  # Error flows
 
   Scenario Outline: Browse ideas by domain, topic, or tech that does not exist
     When the user requests to browse ideas by domains <domain_ids>, topics <topic_ids>, and techs <techs_ids>
