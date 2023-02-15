@@ -3,42 +3,51 @@ Feature: Modify Moderator
 
   Background:
     Given the database contains the following moderator accounts:
-      | firstName | lastName | email                 | password         |
-      | Owner     | Steve    | owner.steve@gmail.com | OwnerIsAwesome01 |
-      | User      | Bob      | user.bob@gmail.com    | UserIsAwesome01  |
+      | firstName | lastName | email                   | password             |
+      | Owner     | Steve    | owner.steve@gmail.com   | OwnerIsAwesome01     |
+      | Moderator | Bob      | moderator.bob@gmail.com | ModeratorIsAwesome01 |
 
+  Normal Flow
 
-  Scenario Outline: Successfully update an moderator account
+  Scenario: Successfully update an moderator account
     Given that the user is logged with the email "owner.steve@gmail.com" and the password "OwnerIsAwesome01"
     When the user requests to update their account information with the following details:
-      | firstName | lastName | password            |
-      | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
+      | firstName | lastName | oldPassword | newPassword         |
+      | NewOwner  | Steve2   | oldPassword | NewOwnerIsAwesome01 |
     Then account with email "owner.steve@gmail.com" should be updated with the following details:
       | firstName | lastName | password            |
       | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
     Then the number of moderator accounts in the datavase shall be "2"
 
-  Scenario Outline: Unsuccessfully update an moderator account because you are not logged in
+  Error Flows
+
+  Scenario: Unsuccessfully update an moderator account because you are not logged in
     When the user requests to update their account information with the following details:
-      | firstName | lastName | password            |
-      | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
+      | email                 | firstName | lastName | oldPassword | newPassword         |
+      | owner.steve@gmail.com | NewOwner  | Steve2   | oldPassword | NewOwnerIsAwesome01 |
     Then the user should be denied permission to the requested resource with an HTTP status code of "401"
 
-  Scenario Outline: Unsuccessfully update an moderator account because you are not logged in with the correct account
-    Given that the user is logged with the email "user.bob@gmail.com" and the password "UserIsAwesome01"
+  Scenario: Unsuccessfully update an moderator account because you are not logged in with the correct account
+    Given that the user is logged with the email "moderator.bob@gmail.com" and the password "ModeratorIsAwesome01"
     When the user requests to update their account information with the following details:
-      | firstName | lastName | password            |
-      | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
+      | email                 | firstName | lastName | oldPassword | newPassword         |
+      | owner.steve@gmail.com | NewOwner  | Steve2   | oldPassword | NewOwnerIsAwesome01 |
     Then the user should be denied permission to the requested resource with an HTTP status code of "403"
 
   Scenario Outline: Unsuccessfully update an moderator account
     Given that the user is logged with the email "owner.steve@gmail.com" and the password "OwnerIsAwesome01"
-    When the user request to update the account with email "<email>" using the old password "<oldPassword>" with new password "<newPassword>" :
-    Then the following "<error>" should be raised
+    When the user request to update their account using the old password <oldPassword> with new password <newPassword>
+    Then the following error <error> should be raised
     Then the number of moderator accounts in the database is still "2"
 
     Examples:
-      | email                 | oldPassword      | newPassword | error                                                                                                                                       |
-      | owner.steve@gmail.com | OwnerIsAwesome0  | owner       | The password you entered is incorrect                                                                                                       |
-      | owner.steve@gmail.com | OwnerIsAwesome01 | owner       | Please enter a valid new password. Passwords must be at least 8 characters long and contain at least one number and one uppercase character |
+      | oldPassword      | newPassword    | error                                                                                                                                                            |
+      | OwnerIsAwesome0  | owner          | The password you entered is incorrect                                                                                                                            |
+      | OwnerIsAwesome01 | owner          | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | Own1           | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | thisistheowner | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | 111111111      | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | thispassword1  | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 | FFFFFFFFFFFFF8 | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
+      | OwnerIsAwesome01 |                | Please enter a valid password. Passwords cannot be left empty                                                                                                    |
 
