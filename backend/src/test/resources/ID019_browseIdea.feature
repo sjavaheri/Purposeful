@@ -2,7 +2,10 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
   As a user, I want to be able to browse public ideas that are linked to a specific domain, so that I can find and learn about new and innovative ideas in my area of interest.
 
   Background:
-    Given the database contains the following domains:
+    Given the database contains the following RegularUser accounts:
+      | id | name          | email                  | password     |
+      | 1  | John Goblikon | john.goblikon@mail.com | P@ssWord1234 |
+    And the database contains the following domains:
       | id | name       |
       | 1  | Software   |
       | 2  | English    |
@@ -29,6 +32,7 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
       | 4  | Command-Line tool | 1       | 4      | 1       |
       | 5  | Novel             | 2       | 5      | 5       |
       | 6  | Circuit           | 3       | 5      | 5       |
+    And I am logged in as the user with email "john.goblikon@mail.com" and password "P@ssWord1234"
 
 
   # Normal/alternate flows
