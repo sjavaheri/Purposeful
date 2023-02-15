@@ -1,42 +1,78 @@
-#Author: your.email@your.domain.com
-#Keywords Summary :
-#Feature: List of scenarios.
-#Scenario: Business rule through list of steps with arguments.
-#Given: Some precondition step
-#When: Some key actions
-#Then: To observe outcomes or validation
-#And,But: To enumerate more Given,When,Then steps
-#Scenario Outline: List of steps for data-driven as an Examples and <placeholder>
-#Examples: Container for s table
-#Background: List of steps run before each of the scenarios
-#""" (Doc Strings)
-#| (Data Tables)
-#@ (Tags/Labels):To group Scenarios
-#<> (placeholder)
-#""
-## (Comments)
-#Sample Feature Definition Template
-@tag
-Feature: Title of your feature
-  I want to use this template for my feature file
+Feature: Browse ideas by domain by Domain, Topic, or Tech
+  As a user, I want to be able to browse public ideas that are linked to a specific domain, so that I can find and learn about new and innovative ideas in my area of interest.
 
-  @tag1
-  Scenario: Title of your scenario
-    Given I want to write a step with precondition
-    And some other precondition
-    When I complete action
-    And some other action
-    And yet another action
-    Then I validate the outcomes
-    And check more outcomes
+  Background:
+    Given the database contains the following domains:
+      | id | name       |
+      | 1  | Software   |
+      | 2  | English    |
+      | 3  | Electrical |
+    And the database contains the following topics:
+      | id | name              |
+      | 1  | Web Dev           |
+      | 2  | Game Dev          |
+      | 3  | Embedded Software |
+      | 4  | CLI Tool          |
+      | 5  | Other             |
+    And the database contains the following techs:
+      | id | name       |
+      | 1  | Rust       |
+      | 2  | TypeScript |
+      | 3  | Go         |
+      | 4  | C++        |
+      | 5  | Other      |
+    And the database contains the following ideas:
+      | id | title             | domains | topics | techs   |
+      | 1  | Website Idea      | 1       | 1      | 1, 2, 3 |
+      | 2  | Video Game        | 1       | 2      | 4       |
+      | 3  | Microcontroller   | 1, 3    | 3      | 1, 4    |
+      | 4  | Command-Line tool | 1       | 4      | 1       |
+      | 5  | Novel             | 2       | 5      | 5       |
+      | 6  | Circuit           | 3       | 5      | 5       |
 
-  @tag2
-  Scenario Outline: Title of your scenario outline
-    Given I want to write a step with <name>
-    When I check for the <value> in step
-    Then I verify the <status> in step
 
-    Examples:
-      | name  | value | status  |
-      | name1 | 5     | success |
-      | name2 | 7     | Fail    |
+  Normal/alternate flows
+
+  Scenario Outline: Successfully browse ideas by domain
+    When the user requests to browse ideas by the following domains:
+      | id |
+      | 1  |
+      | 2  |
+      | 3  |
+    Then the user shall have access to the following ideas:
+      | ids_list   |
+      | 1, 2, 3, 4 |
+      | 5          |
+      | 3, 6       |
+
+  Scenario Outline: Successfully browse ideas by topic
+    When the user requests to browse ideas by the following topic:
+      | id |
+      | 1  |
+      | 2  |
+      | 3  |
+      | 4  |
+      | 5  |
+    Then the user shall have access to the following ideas:
+      | ids_list |
+      | 1        |
+      | 2        |
+      | 3        |
+      | 4        |
+      | 5, 6     |
+
+  Scenario Outline: Successfully browse ideas by technology
+    When the user requests to browse ideas by the following technologies:
+      | id |
+      | 1  |
+      | 2  |
+      | 3  |
+      | 4  |
+      | 5  |
+    Then the user shall have access to the following ideas:
+      | ids_list |
+      | 1, 3, 4  |
+      | 1        |
+      | 1        |
+      | 2, 3     |
+      | 5, 6     |
