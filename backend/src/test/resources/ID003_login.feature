@@ -8,19 +8,19 @@ Feature: Login User
             | Moderator | John     | moderator.john@gmail.com | moderatorIsAwesome02 | Authority.MODERATOR |
             | User      | Jack     | user.jack@gmail.com      | userIsAwesome03      | Authority.USER      |
 
-    Normal flow
+    # Normal flow
 
-    Scenario: Login with valid credentials
-        Given I am on the login page
-        When I fill in the following:
-            | email                    | password             |
-            | owner.steve@gmail.com    | OwnerIsAwesome01     |
-            | moderator.john@gmail.com | moderatorIsAwesome02 |
-            | user.jack@gmail.com      | userIsAwesome03      |
-        And I click on the login button
-        Then I should be redirected to the home page
+    Scenario Outline: Login with valid credentials
+        When I request to login with the email <email> and password <password>:
+        Then I should receive a valid JWT token that conains the email <email> and the authority <authority>
 
-    Error flow
+        Examples:
+            | email                    | password             | authorities         |
+            | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.ADMIN     |
+            | moderator.john@gmail.com | moderatorIsAwesome02 | Authority.MODERATOR |
+            | user.jack@gmail.com      | userIsAwesome03      | Authority.USER      |
+
+    # Error flow
 
     Scenario: Login with invalid password
         Given I am on the login page
@@ -31,7 +31,7 @@ Feature: Login User
             | user.jack@gmail.com      | userIsAwesome01      |
         And I click on the login button
         Then I should be redirected to the login page
-        And I should see the following error message "The password you entered is incorrect" on the login page":
+        And I should see the following error message "The password you entered is incorrect" on the login page:
 
     Scenario: Login with invalid email
         Given I am on the login page
