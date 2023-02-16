@@ -41,8 +41,8 @@ Feature: Modify Idea
 	# Normal Flow
 
 	Scenario Outline: Successfully modify an idea
-		When the user requests to modify the field <field> to become <new_value> instead of <old_value> for idea with id <idea_id>
-		Then the idea with id <idea_id> will have value <new_value> for the field <field>
+		When the user requests to modify the field <field> to become <new_value> instead of <old_value> for idea with title <title>
+		Then the idea with title <title> will have value <new_value> for the field <field>
 
 		Examples:
 			| idea_id | field        | old_value     | new_value    |
@@ -62,48 +62,48 @@ Feature: Modify Idea
 	# Alternate Flow
 
 	Scenario Outline: Successfully modify the idea with an empty field that can be empty
-		When the user requests to modify the field <field> to become empty for idea with id <idea_id>
-		Then the idea with id <idea_id> will have empty for the field <field>
+		When the user requests to modify the field <field> to become empty for idea with title <title>
+		Then the idea with title <title> will have empty for the field <field>
 
 		Examples:
-			| idea_id | field      |
-			| 4       | domains    |
-			| 1       | topics     |
-			| 2       | techs      |
-			| 3       | image URLs |
-			| 4       | icon URL   |
+			| idea_id | title             | field      |
+			| 4       | Circuit Design    | domains    |
+			| 1       | Home Care App     | topics     |
+			| 2       | Football Game     | techs      |
+			| 3       | Car Detection App | image URLs |
+			| 4       | Circuit Design    | icon URL   |
 
 	# Error Flow
 
 	Scenario Outline: Unsuccessfully modify the idea with an empty field that cannot be empty
-		When the user requests to modify the field <field> to become empty for idea with id <idea_id>
-		Then the idea with id <idea_id> will have value <old_value> for the field <field>
+		When the user requests to modify the field <field> to become empty for idea with title <title>
+		Then the idea with title <title> will have value <old_value> for the field <field>
 		Then the error message <error> will be thrown with status code <Http_status>
 
 		Examples:
-			| idea_id | field        | old_value     | error                          | Http_status |
-			| 1       | title        | Home Care App | title cannot be empty          | 400         |
-			| 1       | date         | 2022-02-15    | date cannot be empty           | 400         |
-			| 2       | purpose      | Entertain     | purpose cannot be empty        | 400         |
-			| 2       | descriptions | For fun       | descriptions cannot be empty   | 400         |
-			| 3       | isPaid       | True          | paid field cannot be empty     | 400         |
-			| 3       | inProgress   | False         | progress field cannot be empty | 400         |
-			| 4       | isPrivate    | True          | private field cannot be empty  | 400         |
+			| idea_id | title             | field        | old_value     | error                                    | Http_status |
+			| 1       | Home Care App     | title        | Home Care App | Necessary fields have been left empty    | 400         |
+			| 1       | Home Care App     | date         | 2022-02-15    | Necessary fields have been left empty    | 400         |
+			| 2       | Football Game     | purpose      | Entertain     | Necessary fields have been left empty    | 400         |
+			| 2       | Football Game     | descriptions | For fun       | Necessary fields have been left empty    | 400         |
+			| 3       | Car Detection App | isPaid       | True          | Necessary fields have been left empty    | 400         |
+			| 3       | Car Detection App | inProgress   | False         | Necessary fields have been left empty    | 400         |
+			| 4       | Circuit Design    | isPrivate    | True          | Necessary fields have been left empty    | 400         |
 
 	# Error Flow
 
 	Scenario Outline: (Error Flow) Unsuccessfully modify an idea with a non-existing object
-		When the user requests to modify the field <field> to become new value <new value> for idea with id <idea_id>
-		Then the idea with id <idea_id> will have value <old_value> for the field <field>
+		When the user requests to modify the field <field> to become new value <new value> for idea with title <title>
+		Then the idea with title <title> will have value <old_value> for the field <field>
 		Then the error message <error> will be thrown with status code <Http_status>
 
 		Examples:
-			| idea_id | field      | old_value | new_value | error                     | Http_status |
-			| 4       | domains    | 3         | 11        | domain does not exist     | 400         |
-			| 1       | topics     | 1, 2      | 12        | topic does not exist      | 400         |
-			| 2       | techs      | 1, 3      | 13        | technology does not exist | 400         |
-			| 3       | image URLs | 3, 4      | 14        | URL(s) does not exist     | 400         |
-			| 4       | icon URL   | 6         | 15        | URL does not exist        | 400         |
+			| idea_id | title             | field      | old_value | new_value | error                                                                    | Http_status |
+			| 4       | Circuit Design    | domains    | 3         | 11        | You are attempting to link your idea to an object that does not exist    | 400         |
+			| 1       | Home Care App     | topics     | 1, 2      | 12        | You are attempting to link your idea to an object that does not exist    | 400         |
+			| 2       | Football Game     | techs      | 1, 3      | 13        | You are attempting to link your idea to an object that does not exist    | 400         |
+			| 3       | Car Detection App | image URLs | 3, 4      | 14        | You are attempting to link your idea to an object that does not exist    | 400         |
+			| 4       | Circuit Design    | icon URL   | 6         | 15        | You are attempting to link your idea to an object that does not exist    | 400         |
 
 
 
