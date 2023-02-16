@@ -3,20 +3,19 @@ Feature: Create Moderator
 
   Background:
     Given the database contains the following moderator account:
-      | username    | firstName | lastName | email                 | password         | authorities |
-      | owner.steve | Owner     | Steve    | owner.steve@gmail.com | OwnerIsAwesome01 | [Moderator] |
+      | firstName | lastName | email                 | password         | authorities |
+      | Owner     | Steve    | owner.steve@gmail.com | OwnerIsAwesome01 | [Moderator] |
 
   # Normal Flow
 
   Scenario Outline: Successfully create a new moderator account
     When a new moderator account is created with first name <firstName>, last name <lastName>, email <email> and password <password>
-    Then a new moderator account exists in the database with first name <firstName>, last name <lastName>, username <username>, email <email>, password <password> and authorities <authorities>
+    Then a new moderator account exists in the database with first name <firstName>, last name <lastName>, email <email>, password <password> and authorities <authorities>
 
     Examples:
-      | firstName | lastName | username     | email                  | password       | authorities |
-      | Mo        | Salah    | mo.salah     | mo.salah@gmail.com     | MoIsAwesome01  | [Moderator] |
-      | Bob       | Marley   | bob.marley   | bob.marley@gmail.com   | BobIsAwesome01 | [Moderator] |
-      | Bob       | Marley   | bob.marley.1 | bob.marley.1@gmail.com | BobIsAwesome01 | [Moderator] |
+      | firstName | lastName | email                | password       | authorities |
+      | Mo        | Salah    | mo.salah@gmail.com   | MoIsAwesome01  | [Moderator] |
+      | Bob       | Marley   | bob.marley@gmail.com | BobIsAwesome01 | [Moderator] |
 
   # Error Flows
 
