@@ -3,14 +3,14 @@ Feature: Create Moderator
 
   Background:
     Given the database contains the following moderator account:
-      | username    | email                 | password         | authorities |
-      | owner.steve | owner.steve@gmail.com | OwnerIsAwesome01 | [Moderator] |
+      | username    | firstName | lastName | email                 | password         | authorities |
+      | owner.steve | Owner     | Steve    | owner.steve@gmail.com | OwnerIsAwesome01 | [Moderator] |
 
   # Normal Flow
 
   Scenario Outline: Successfully create a new moderator account
     When a new moderator account is created with first name <firstName>, last name <lastName>, email <email> and password <password>
-    Then a new moderator account exists in the database with username <username>, email <email>, password <password> and authorities <authorities>
+    Then a new moderator account exists in the database with first name <firstName>, last name <lastName>, username <username>, email <email>, password <password> and authorities <authorities>
 
     Examples:
       | firstName | lastName | username     | email                  | password       | authorities |
