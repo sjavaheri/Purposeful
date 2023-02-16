@@ -11,7 +11,7 @@ Feature: Login User
     # Normal flow
 
     Scenario Outline: Login with valid credentials
-        When I request to login with the email <email> and password <password>:
+        When I request to login with the email <email> and password <password>
         Then I should receive a valid JWT token that conains the email <email> and the authority <authority>
 
         Examples:
