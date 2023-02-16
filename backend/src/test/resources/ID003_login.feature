@@ -12,7 +12,7 @@ Feature: Login User
 
     Scenario Outline: Login with valid credentials
         When I request to login with the email <email> and password <password>
-        Then I should receive a valid JWT token that conains the email <email> and the authority <authority>
+        Then I should receive a valid JWT token that contains the email <email> and the authority <authority>
 
         Examples:
             | email                    | password             | authorities         |
@@ -22,27 +22,25 @@ Feature: Login User
 
     # Error flow
 
-    Scenario: Login with invalid password
-        Given I am on the login page
-        When I fill in the following:
+    Scenario Outline: Login with invalid password
+        When I request to login with the email <email> and password <password>
+        Then I should receive an error message "The password you entered is incorrect"
+
+        Examples:
             | email                    | password             |
             | owner.steve@gmail.com    | OwnerIsAwesome02     |
             | moderator.john@gmail.com | moderatorIsAwesome03 |
             | user.jack@gmail.com      | userIsAwesome01      |
-        And I click on the login button
-        Then I should be redirected to the login page
-        And I should see the following error message "The password you entered is incorrect" on the login page:
 
     Scenario: Login with invalid email
-        Given I am on the login page
-        When I fill in the following:
+        When I request to login with the email <email> and password <password>
+        Then I should receive an error message "No account with this email address exists"
+
+        Examples:
             | email                    | password                |
             | owner.steve.gmail.com    | OwnerIsAwesome01        |
             | moderator.john.gmail.com | moderatorIsNotAwesome02 |
             | user.jack.gmail.com      | userIsAwesome03         |
-        And I click on the login button
-        Then I should be redirected to the login page
-        And I should see the following error message "No account with this email address exists" on the login page":
 
 
 
