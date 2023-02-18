@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service;
 
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dao.ModeratorRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.SecurityUser;
 

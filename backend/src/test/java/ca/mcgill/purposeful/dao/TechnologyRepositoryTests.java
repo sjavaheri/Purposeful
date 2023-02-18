@@ -9,12 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TechnologyRepositoryTests {
 
@@ -38,8 +35,7 @@ public class TechnologyRepositoryTests {
   }
 
   /**
-   * Creates a technology, saves it in the database and then retrieves it by id
-   * and checks that
+   * Creates a technology, saves it in the database and then retrieves it by id and checks that
    * works
    *
    * @author Wassim Jabbour

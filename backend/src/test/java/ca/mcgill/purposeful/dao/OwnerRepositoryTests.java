@@ -9,21 +9,17 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Owner;
 import ca.mcgill.purposeful.util.Util;
 
 /**
- * Owner Repository testing class which initiates an owner and an AppUser
- * repository, executes the
+ * Owner Repository testing class which initiates an owner and an AppUser repository, executes the
  * tests, then clears each instance from the database.
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class OwnerRepositoryTests {
 
@@ -52,12 +48,9 @@ public class OwnerRepositoryTests {
   }
 
   /**
-   * Owner testing method which creates, populates the attributes, sets
-   * associations, and saves each
-   * owner and appUser object and identifier. It can then test to make sure each
-   * object reached from
-   * the owner found in the repository is not null and that each initially saved
-   * Id corresponds to
+   * Owner testing method which creates, populates the attributes, sets associations, and saves each
+   * owner and appUser object and identifier. It can then test to make sure each object reached from
+   * the owner found in the repository is not null and that each initially saved Id corresponds to
    * the one reached from the repository.
    */
   @Test
