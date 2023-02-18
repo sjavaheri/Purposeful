@@ -36,22 +36,27 @@ public class AppUserService implements UserDetailsService {
    * Register a new regular user
    *
    * @param email    - email of the user
-   * @param username - username of the user
    * @param password - password of the user
+   * @param firstname - first name of the user
+   * @param lastname - last name of the user
    * @return AppUser - the newly created user
    * @author Siger Ma
    */
   @Transactional
-  public AppUser registerRegularUser(String email, String username, String password) {
+  public AppUser registerRegularUser(String email, String password, String firstname, String lastname) {
 
     // Error validation
     if (email == null || email.isEmpty()) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
           "Please enter a valid email. Email cannot be left empty");
     }
-    if (username == null || username.isEmpty()) {
+    if (firstname == null || firstname.isEmpty()) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid username. Username cannot be left empty");
+          "Please enter a valid first name. First name cannot be left empty");
+    }
+    if (lastname == null || lastname.isEmpty()) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "Please enter a valid last name. Last name cannot be left empty");
     }
     if (password == null || password.isEmpty()) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
@@ -70,18 +75,14 @@ public class AppUserService implements UserDetailsService {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
           "An account with this email address already exists");
     }
-    if (appUserRepository.findAppUserByUsername(username) != null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "An account with this username already exists");
-    }
-
     AppUser appUser = null;
 
     try {
       // Create app user
       appUser = new AppUser();
       appUser.setEmail(email);
-      appUser.setUsername(username);
+      appUser.setFirstname(firstname);
+      appUser.setLastname(lastname);
       appUser.setPassword(passwordEncoder.encode(password));
       appUser.getAuthorities().add(Authority.User);
       appUserRepository.save(appUser);
@@ -99,10 +100,10 @@ public class AppUserService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
     // look for user in database. Tell spring how to get the user
-    AppUser appUser = appUserRepository.findAppUserByUsername(username);
+    AppUser appUser = appUserRepository.findAppUserByEmail(email);
     if (appUser == null) {
       throw new UsernameNotFoundException("User not found");
     }

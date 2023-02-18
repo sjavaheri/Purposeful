@@ -1,7 +1,6 @@
 package ca.mcgill.purposeful.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
@@ -10,11 +9,8 @@ import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.Util;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -78,18 +74,17 @@ public class AppUserRepositoryTests {
     authorities.add(Authority.Owner);
     appUser.setAuthorities(authorities);
     appUser.setEmail("peter.griffin@mcgill.ca");
-    appUser.setUsername("peterGriffin123");
+    appUser.setFirstname("peter");
+    appUser.setLastname("Griffin");
     appUser.setPassword(passwordEncoder.encode("moderator"));
 
     // Create a regular user
     var regularUser = new RegularUser();
     regularUser.setVerifiedCompany(false);
-    regularUser.setAppUser(appUser);
     var regularUserList = new ArrayList<Role>();
     regularUserList.add(regularUser);
-    appUser.setRole(regularUserList);
-    appUser = appUserRepository.save(appUser);
-    regularUser = regularUserRepository.save(regularUser);
+
+
 
     // Create and persist multiple domains
     var domainSet = new HashSet<Domain>();
@@ -101,7 +96,7 @@ public class AppUserRepositoryTests {
       domain = domainRepository.save(domain);
       domainSet.add(domain);
     }
-    appUser.setDomains(domainSet);
+    regularUser.setDomains(domainSet);
 
     // Create and persist multiple topics
     var topicSet = new HashSet<Topic>();
@@ -113,17 +108,22 @@ public class AppUserRepositoryTests {
       topic = topicRepository.save(topic);
       topicSet.add(topic);
     }
-    appUser.setInterests(topicSet);
+    regularUser.setInterests(topicSet);
 
+    regularUser.setAppUser(appUser);
+    appUser.setRole(regularUserList);
     // save the appUser
     appUser = appUserRepository.save(appUser);
+    regularUser = regularUserRepository.save(regularUser);
 
     // Assertions
     var appUserFromDB = appUserRepository.findAppUserById(appUser.getId());
+    var regularUserFromDB = regularUserRepository.findRegularUserById(appUserFromDB.getRole().get(0).getId());
     assertEquals(appUser.getId(), appUserFromDB.getId());
-    assertEquals("peterGriffin123", appUserFromDB.getUsername());
-    assertEquals(regularUser.getId(), appUser.getRole().get(0).getId());
-    assertEquals(domainSet.size(), appUserFromDB.getDomains().size());
-    assertEquals(topicSet.size(), appUserFromDB.getInterests().size());
+    assertEquals("peter", appUserFromDB.getFirstname());
+    assertEquals("Griffin", appUserFromDB.getLastname());
+    assertEquals(regularUser.getId(), regularUserFromDB.getId());
+    assertEquals(domainSet.size(), regularUserFromDB.getDomains().size());
+    assertEquals(topicSet.size(), regularUserFromDB.getInterests().size());
   }
 }

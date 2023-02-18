@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.model.Domain;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
@@ -74,7 +73,8 @@ public class OwnerRepositoryTests {
 
     appUser.setAuthorities(authorities);
     appUser.setEmail("peter.griffin@mcgill.ca");
-    appUser.setUsername("peterGriffin123");
+    appUser.setFirstname("Peter");
+    appUser.setLastname("Griffin");
     appUser.setPassword("verySecurePassword123");
     appUser.setAuthorities(authorities);
 

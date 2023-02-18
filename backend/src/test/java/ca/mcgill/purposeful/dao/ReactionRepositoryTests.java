@@ -78,7 +78,8 @@ public class ReactionRepositoryTests {
 		// Create app user
 		AppUser user = new AppUser();
 		user.setEmail("friend@gmail.com");
-		user.setUsername("friendly");
+		user.setFirstname("Rob");
+		user.setLastname("Sab");
 		user.setPassword("person");
 
 		// Create corresponding regular user
