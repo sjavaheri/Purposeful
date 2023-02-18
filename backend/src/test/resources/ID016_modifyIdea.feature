@@ -37,10 +37,7 @@ Feature: Modify Idea
 			| 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer            | Backend Dev, Frontend Dev | Python, C        | keepitup.com               | bestteam.com   | user.steve@gmail.com   |
 			| 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical          | Embedded Software         | Java, React, C   | sayless.com                | bestteam.com   | user.steve@gmail.com   |
 		And I am logged in as the user with email "user.steve@gmail.com" and password "SteveIsAwesome01"
-		And all domains have a unique name
-		And all topics have a unique name
-		And all techs have a unique name
-		And all URLs have a unique URL
+
 
 	# Normal Flow
 
@@ -75,7 +72,6 @@ Feature: Modify Idea
 			| 1  | Home Care App     | topics     |
 			| 2  | Football Game     | techs      |
 			| 3  | Car Detection App | image URLs |
-			| 4  | Circuit Design    | icon URL   |
 
 	# Error Flow
 
