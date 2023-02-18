@@ -4,7 +4,7 @@ Feature: Login User
     Background:
         Given the database contains the following appUser accounts:
             | firstName | lastName | email                    | password             | authorities         |
-            | Owner     | Steve    | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.ADMIN     |
+            | Owner     | Steve    | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.OWNER     |
             | Moderator | John     | moderator.john@gmail.com | moderatorIsAwesome02 | Authority.MODERATOR |
             | User      | Jack     | user.jack@gmail.com      | userIsAwesome03      | Authority.USER      |
 
@@ -16,7 +16,7 @@ Feature: Login User
 
         Examples:
             | email                    | password             | authorities         |
-            | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.ADMIN     |
+            | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.OWNER     |
             | moderator.john@gmail.com | moderatorIsAwesome02 | Authority.MODERATOR |
             | user.jack@gmail.com      | userIsAwesome03      | Authority.USER      |
 
@@ -24,7 +24,7 @@ Feature: Login User
 
     Scenario Outline: Login with invalid password
         When I request to login with the email <email> and password <password>
-        Then I should receive an error message "The password you entered is incorrect"
+        Then I should receive an error message "The password you entered is incorrect" with HTTP status code 400
 
         Examples:
             | email                    | password             |
@@ -34,7 +34,7 @@ Feature: Login User
 
     Scenario: Login with invalid email
         When I request to login with the email <email> and password <password>
-        Then I should receive an error message "No account with this email address exists"
+        Then I should receive an error message "No account with this email address exists" with HTTP status code 404
 
         Examples:
             | email                    | password                |
