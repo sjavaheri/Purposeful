@@ -7,31 +7,31 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
       | 1  | John Goblikon | john.goblikon@mail.com | P@ssWord1234 |
     And the database contains the following domains:
       | id | name       |
-      | 1  | Software   |
-      | 2  | English    |
-      | 3  | Electrical |
+      | 2  | Software   |
+      | 3  | English    |
+      | 4  | Electrical |
     And the database contains the following topics:
       | id | name              |
-      | 1  | Web Dev           |
-      | 2  | Game Dev          |
-      | 3  | Embedded Software |
-      | 4  | CLI Tool          |
-      | 5  | Other             |
+      | 5  | Web Dev           |
+      | 6  | Game Dev          |
+      | 7  | Embedded Software |
+      | 8  | CLI Tool          |
+      | 9  | Other             |
     And the database contains the following techs:
       | id | name       |
-      | 1  | Rust       |
-      | 2  | TypeScript |
-      | 3  | Go         |
-      | 4  | C++        |
-      | 5  | Other      |
+      | 10 | Rust       |
+      | 11 | TypeScript |
+      | 12 | Go         |
+      | 13 | C++        |
+      | 14 | Other      |
     And the database contains the following ideas:
-      | id | title             | domains | topics | techs   |
-      | 1  | Website Idea      | 1       | 1      | 1, 2, 3 |
-      | 2  | Video Game        | 1       | 2      | 4       |
-      | 3  | Microcontroller   | 1, 3    | 3      | 1, 4    |
-      | 4  | Command-Line tool | 1       | 4      | 1       |
-      | 5  | Novel             | 2       | 5      | 5       |
-      | 6  | Circuit           | 3       | 5      | 5       |
+      | id | title             | domains | topics | techs      |
+      | 15 | Website Idea      | 2       | 5      | 10, 11, 12 |
+      | 16 | Video Game        | 2       | 6      | 13         |
+      | 17 | Microcontroller   | 2, 4    | 7      | 10, 13     |
+      | 18 | Command-Line tool | 2       | 8      | 10         |
+      | 19 | Novel             | 3       | 9      | 14         |
+      | 20 | Circuit           | 4       | 9      | 14         |
     And I am logged in as the user with email "john.goblikon@mail.com" and password "P@ssWord1234"
 
 
@@ -42,37 +42,37 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
     Then the user shall have access to the ideas with ids <idea_ids>
 
     Examples:
-      | domain_ids | topic_ids | techs_ids | idea_ids         |
-      | null       | null      | null      | 1, 2, 3, 4, 5, 6 |
-      | 1          | null      | null      | 1, 2, 3, 4       |
-      | 2          | null      | null      | 5                |
-      | 3          | null      | null      | 3, 6             |
-      | null       | 1         | null      | 1                |
-      | null       | 2         | null      | 2                |
-      | null       | 3         | null      | 3                |
-      | null       | 4         | null      | 4                |
-      | null       | 5         | null      | 5, 6             |
-      | null       | null      | 1         | 1, 3, 4          |
-      | null       | null      | 2         | 1                |
-      | null       | null      | 3         | 1                |
-      | null       | null      | 4         | 2, 3             |
-      | null       | null      | 5         | 5, 6             |
-      | 1, 2       | null      | null      | 1, 2, 3, 4, 5    |
-      | 2, 3       | null      | null      | 3, 5, 6          |
-      | 1, 3       | null      | null      | 1, 2, 3, 4, 6    |
-      | 1, 2, 3    | null      | null      | 1, 2, 3, 4, 5, 6 |
-      | 1          | 1         | null      | 1                |
-      | 1          | 2         | 1         | null             |
-      | 3          | null      | 1         | 3                |
+      | domain_ids | topic_ids | techs_ids | idea_ids               |
+      | null       | null      | null      | 15, 16, 17, 18, 19, 20 |
+      | 2          | null      | null      | 15, 16, 17, 18         |
+      | 3          | null      | null      | 19                     |
+      | 4          | null      | null      | 17, 20                 |
+      | null       | 5         | null      | 15                     |
+      | null       | 6         | null      | 16                     |
+      | null       | 7         | null      | 17                     |
+      | null       | 8         | null      | 18                     |
+      | null       | 9         | null      | 19, 20                 |
+      | null       | null      | 10        | 15, 17, 18             |
+      | null       | null      | 11        | 15                     |
+      | null       | null      | 12        | 15                     |
+      | null       | null      | 13        | 16, 17                 |
+      | null       | null      | 14        | 19, 20                 |
+      | 2, 3       | null      | null      | 15, 16, 17, 18, 19     |
+      | 3, 4       | null      | null      | 17, 19, 20             |
+      | 2, 4       | null      | null      | 15, 16, 17, 18, 20     |
+      | 2, 3, 4    | null      | null      | 15, 16, 17, 18, 19, 20 |
+      | 2          | 5         | null      | 15                     |
+      | 2          | 6         | 10        | null                   |
+      | 4          | null      | 10        | 17                     |
 
   # Error flows
 
   Scenario Outline: Browse ideas by domain, topic, or tech that does not exist
-    When the user requests to browse ideas by domains <domain_ids>, topics <topic_ids>, and techs <techs_ids>
+    When the user requests to browse ideas by domains <domain_uuids>, topics <topic_uuids>, and techs <techs_uuids>
     Then the user shall recieve the error message <error_message> with status <HTTP_status>
 
     Examples:
-      | domain_ids | topic_ids | techs_ids | error_message                                     | HTTP_status |
-      | 4          | null      | null      | The requested domain does not exist.              | 400         |
-      | null       | 6         | null      | The requested topic does not exist.               | 400         |
-      | null       | null      | 6         | The requested tech does not exist.                | 400         |
+      | domain_uuids                         | topic_uuids                          | techs_uuids                          | error_message                        | HTTP_status |
+      | 00000000-0000-0000-0000-000000000000 | null                                 | null                                 | The requested domain does not exist. | 400         |
+      | null                                 | 00000000-0000-0000-0000-000000000001 | null                                 | The requested topic does not exist.  | 400         |
+      | null                                 | null                                 | 00000000-0000-0000-0000-000000000002 | The requested tech does not exist.   | 400         |
