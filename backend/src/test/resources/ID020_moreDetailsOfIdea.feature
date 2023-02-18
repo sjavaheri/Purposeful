@@ -46,6 +46,7 @@ Feature: View more details for a feature
       | https://www.flaticon.com/free-icon/music_3844724 |
 
   # Alternate flow: No supporting images
+
   Scenario: View the details of an idea that does not include supporting images
     Given I am logged in as a student
     When I request to view the details of idea with id 9
@@ -64,11 +65,9 @@ Feature: View more details for a feature
     But no supporting images should be displayed
 
   # Error flow
-  Scenario Outline: Title of your scenario outline
+  
+  Scenario: Title of your scenario outline
     Given I am logged in as a student
     When I request to view the details of idea with id 1020
-    Then the user shall recieve the error message <error_message> with status <HTTP_status>
+    Then the user shall recieve the error message "The requested idea does not exist" with status "400"
 
-    Examples:
-      | error_message                     | HTTP_status |
-      | The requested idea does not exist | 400         |
