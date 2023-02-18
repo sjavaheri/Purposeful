@@ -33,9 +33,10 @@ public class PurposefulApplication {
       PasswordEncoder passwordEncoder) {
     return args -> {
 
-      // create an moderator user
+      // create a moderator user
       AppUser appUser = new AppUser();
-      appUser.setUsername("moderator");
+      appUser.setFirstname("Marwan");
+      appUser.setLastname("Kanaan");
       appUser.setEmail("moderator@email.com");
       // encode the password
       String encoded = passwordEncoder.encode("moderator");
@@ -45,7 +46,8 @@ public class PurposefulApplication {
 
       // create a user user
       AppUser appUser2 = new AppUser();
-      appUser2.setUsername("user");
+      appUser2.setFirstname("Rob");
+      appUser2.setLastname("Sab");
       appUser2.setEmail("user@email.com");
       // encode the password
       String encoded2 = passwordEncoder.encode("user");

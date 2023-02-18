@@ -60,7 +60,8 @@ public class IdeaRepositoryTests {
 
 		AppUser user = new AppUser();
 		user.setEmail("test@mail.purposeful.com");
-		user.setUsername("user0");
+		user.setFirstname("Rob");
+		user.setLastname("Sab");
 		user.setPassword("1234");
 
 		RegularUser regUser = new RegularUser();

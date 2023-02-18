@@ -73,7 +73,8 @@ public class OwnerRepositoryTests {
 
     appUser.setAuthorities(authorities);
     appUser.setEmail("peter.griffin@mcgill.ca");
-    appUser.setUsername("peterGriffin123");
+    appUser.setFirstname("Peter");
+    appUser.setLastname("Griffin");
     appUser.setPassword("verySecurePassword123");
     appUser.setAuthorities(authorities);
 

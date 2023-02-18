@@ -51,7 +51,8 @@ public class RegularUserRepositoryTests {
     // Create a mew AppUser
     AppUser appUser = new AppUser();
     appUser.setEmail("regular.user@email.com");
-    appUser.setUsername("RegularUser");
+    appUser.setFirstname("Rob");
+    appUser.setLastname("Sab");
     appUser.setPassword("password");
     appUser.getAuthorities().add(Authority.User);
     appUserRepository.save(appUser);

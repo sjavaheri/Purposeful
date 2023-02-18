@@ -43,6 +43,10 @@ public class TestAppUserService {
   private static final String VALID_REGULARUSER_EMAIL_TWO = "regular.user.two@email.com";
   private static final String VALID_REGULARUSER_USERNAME_ONE = "regularUserOne";
   private static final String VALID_REGULARUSER_USERNAME_TWO = "regularUserTwo";
+  private static final String VALID_REGULARUSER_FIRSTNAME_ONE = "Rob";
+  private static final String VALID_REGULARUSER_FIRSTNAME_TWO = "Marwan";
+  private static final String VALID_REGULARUSER_LASTNAME_ONE = "Sab";
+  private static final String VALID_REGULARUSER_LASTNAME_TWO = "Kanaan";
 
   private static final String VALID_PASSWORD = "Password1";
   private static final String VALID_PASSWORD_ENCODED = "Password1Encoded";
@@ -69,21 +73,8 @@ public class TestAppUserService {
           if (invocation.getArgument(0).equals(VALID_REGULARUSER_EMAIL_TWO)) {
             AppUser appUser = new AppUser();
             appUser.setEmail(VALID_REGULARUSER_EMAIL_TWO);
-            appUser.setUsername(VALID_REGULARUSER_USERNAME_TWO);
-            appUser.setPassword(VALID_PASSWORD);
-            appUser.getAuthorities().add(Authority.User);
-            return appUser;
-          } else {
-            return null;
-          }
-        });
-
-    lenient().when(appUserRepository.findAppUserByUsername(anyString()))
-        .thenAnswer((InvocationOnMock invocation) -> {
-          if (invocation.getArgument(0).equals(VALID_REGULARUSER_USERNAME_TWO)) {
-            AppUser appUser = new AppUser();
-            appUser.setEmail(VALID_REGULARUSER_EMAIL_TWO);
-            appUser.setUsername(VALID_REGULARUSER_USERNAME_TWO);
+            appUser.setFirstname(VALID_REGULARUSER_FIRSTNAME_TWO);
+            appUser.setLastname(VALID_REGULARUSER_LASTNAME_TWO);
             appUser.setPassword(VALID_PASSWORD);
             appUser.getAuthorities().add(Authority.User);
             return appUser;
@@ -113,7 +104,7 @@ public class TestAppUserService {
     AppUser appUser = null;
     try {
       appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_ONE, VALID_PASSWORD);
+          VALID_PASSWORD, VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -121,7 +112,8 @@ public class TestAppUserService {
     // Check the regular user
     assertNotNull(appUser);
     assertEquals(VALID_REGULARUSER_EMAIL_ONE, appUser.getEmail());
-    assertEquals(VALID_REGULARUSER_USERNAME_ONE, appUser.getUsername());
+    assertEquals(VALID_REGULARUSER_FIRSTNAME_ONE, appUser.getFirstname());
+    assertEquals(VALID_REGULARUSER_LASTNAME_ONE, appUser.getLastname());
     assertEquals(VALID_PASSWORD_ENCODED, appUser.getPassword());
   }
 
@@ -135,8 +127,8 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser("", VALID_REGULARUSER_USERNAME_ONE,
-          VALID_PASSWORD);
+      appUser = appUserService.registerRegularUser("",
+          VALID_PASSWORD, VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid email. Email cannot be left empty", e.getMessage());
@@ -144,20 +136,40 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an empty username
+   * Test the method that creates a new regular user with an empty first name
    *
    * @author Siger Ma
    */
   @Test
-  public void testCreateRegularUserWithEmptyUsername() {
+  public void testCreateRegularUserWithEmptyFirstname() {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, "",
-          VALID_PASSWORD);
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, VALID_PASSWORD, "",
+          VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid username. Username cannot be left empty", e.getMessage());
+      assertEquals("Please enter a valid first name. First name cannot be left empty",
+          e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that creates a new regular user with an empty last name
+   *
+   * @author Sasha Denouvilliez-Pech
+   */
+  @Test
+  public void testCreateRegularUserWithEmptyLastname() {
+    // Create the regular user
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, VALID_PASSWORD,
+          VALID_REGULARUSER_LASTNAME_ONE, "");
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("Please enter a valid last name. Last name cannot be left empty",
+          e.getMessage());
     }
   }
 
@@ -171,8 +183,8 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_ONE, "");
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, "",
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid password. Password cannot be left empty", e.getMessage());
@@ -189,8 +201,8 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(INVALID_EMAIL, VALID_REGULARUSER_USERNAME_ONE,
-          VALID_PASSWORD);
+      appUser = appUserService.registerRegularUser(INVALID_EMAIL, VALID_PASSWORD,
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid email. The email address you entered is not valid",
@@ -209,7 +221,8 @@ public class TestAppUserService {
     AppUser appUser = null;
     try {
       appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_ONE);
+          INVALID_PASSWORD_ONE,
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -229,7 +242,8 @@ public class TestAppUserService {
     AppUser appUser = null;
     try {
       appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_TWO);
+          INVALID_PASSWORD_TWO,
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -250,7 +264,8 @@ public class TestAppUserService {
     AppUser appUser = null;
     try {
       appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_THREE);
+          INVALID_PASSWORD_THREE,
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -271,7 +286,8 @@ public class TestAppUserService {
     AppUser appUser = null;
     try {
       appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_ONE, INVALID_PASSWORD_FOUR);
+          INVALID_PASSWORD_FOUR,
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -290,29 +306,11 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_TWO,
-          VALID_REGULARUSER_USERNAME_ONE, VALID_PASSWORD);
+      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_TWO, VALID_PASSWORD,
+          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("An account with this email address already exists", e.getMessage());
-    }
-  }
-
-  /**
-   * Test the method that creates a new regular user with an invalid username that already exists
-   *
-   * @author Siger Ma
-   */
-  @Test
-  public void testCreateRegularUserWithInvalidUsernameAlreadyExists() {
-    // Create the regular user
-    AppUser appUser = null;
-    try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_REGULARUSER_USERNAME_TWO, VALID_PASSWORD);
-    } catch (Exception e) {
-      assertNull(appUser);
-      assertEquals("An account with this username already exists", e.getMessage());
     }
   }
 }
