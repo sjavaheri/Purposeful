@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
-/** The Technology class, the model for all technologies in the database */
+/**
+ * The Technology class, the model for all technologies in the database
+ */
 @Entity
 public class Technology {
 
@@ -26,7 +28,8 @@ public class Technology {
   // Technology Constructor
   // ------------------------
 
-  public Technology() {}
+  public Technology() {
+  }
 
   // ------------------------
   // Getter/Setter Methods
