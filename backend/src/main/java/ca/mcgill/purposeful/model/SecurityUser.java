@@ -48,7 +48,7 @@ public class SecurityUser implements UserDetails {
   @Override
   public String getUsername() {
 
-    return appUser.getUsername();
+    return appUser.getEmail();
   }
 
   // Spring security methods that are required to be true for a user to be

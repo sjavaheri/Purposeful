@@ -72,7 +72,8 @@ public class ModeratorRepositoryTests {
     authorities.add(Authority.Owner);
 
     appUser.setEmail("stewie.griffin@mcgill.ca");
-    appUser.setUsername("stewieGriffin456");
+    appUser.setFirstname("Stewie");
+    appUser.setLastname("Griffin");
     appUser.setPassword("verySecurePassword456");
     appUser.setAuthorities(authorities);
 
