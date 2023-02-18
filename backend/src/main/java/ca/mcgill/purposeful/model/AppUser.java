@@ -6,18 +6,11 @@ import java.util.Set;
 
 import org.hibernate.annotations.GenericGenerator;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
 import ca.mcgill.purposeful.configuration.Authority;
@@ -92,13 +85,21 @@ public class AppUser {
     this.email = email;
   }
 
-  public String getFirstname() { return firstname; }
+  public String getFirstname() {
+    return firstname;
+  }
 
-  public void setFirstname(String firstname) { this.firstname = firstname; }
+  public void setFirstname(String firstname) {
+    this.firstname = firstname;
+  }
 
-  public String getLastname() { return lastname; }
+  public String getLastname() {
+    return lastname;
+  }
 
-  public void setLastname(String lastname) { this.lastname = lastname; }
+  public void setLastname(String lastname) {
+    this.lastname = lastname;
+  }
 
   public String getPassword() {
     return password;
