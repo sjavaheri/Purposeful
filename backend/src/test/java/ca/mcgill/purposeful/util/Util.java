@@ -60,6 +60,17 @@ public class Util {
      * @Author Shidan Javaheri
      */
     public void clearDatabase() {
+//        reactionRepository.deleteAll();
+//        ideaRepository.deleteAll();
+//        appUserRepository.deleteAll();
+//        domainRepository.deleteAll();
+//        moderatorRepository.deleteAll();
+//        ownerRepository.deleteAll();
+//        regularUserRepository.deleteAll();
+//        technologyRepository.deleteAll();
+//        topicRepository.deleteAll();
+//        urlRepository.deleteAll();
+//        verificationRequestRepository.deleteAll();
         reactionRepository.deleteAll();
         ideaRepository.deleteAll();
         appUserRepository.deleteAll();
