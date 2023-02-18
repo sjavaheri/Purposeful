@@ -41,8 +41,6 @@ public class TestAppUserService {
 
   private static final String VALID_REGULARUSER_EMAIL_ONE = "regular.user.one@email.com";
   private static final String VALID_REGULARUSER_EMAIL_TWO = "regular.user.two@email.com";
-  private static final String VALID_REGULARUSER_USERNAME_ONE = "regularUserOne";
-  private static final String VALID_REGULARUSER_USERNAME_TWO = "regularUserTwo";
   private static final String VALID_REGULARUSER_FIRSTNAME_ONE = "Rob";
   private static final String VALID_REGULARUSER_FIRSTNAME_TWO = "Marwan";
   private static final String VALID_REGULARUSER_LASTNAME_ONE = "Sab";
@@ -138,7 +136,7 @@ public class TestAppUserService {
   /**
    * Test the method that creates a new regular user with an empty first name
    *
-   * @author Siger Ma
+   * @author Sasha Denouvilliez-Pech
    */
   @Test
   public void testCreateRegularUserWithEmptyFirstname() {
