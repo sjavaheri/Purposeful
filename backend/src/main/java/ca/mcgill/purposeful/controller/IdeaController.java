@@ -1,9 +1,12 @@
 package ca.mcgill.purposeful.controller;
 
+<<<<<<< HEAD
 import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.service.IdeaService;
 import java.util.List;
+=======
+>>>>>>> b8005d1 (Service method changes)
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /** API for demonstrating how permissions work for access to endpoints */
 @RestController
