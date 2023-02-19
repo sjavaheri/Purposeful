@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.Util;
@@ -19,7 +17,6 @@ import ca.mcgill.purposeful.util.Util;
  *
  * @author Enzo Benoit-Jeannin
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class TopicRepositoryTests {
 
@@ -44,12 +41,11 @@ public class TopicRepositoryTests {
   }
 
   /**
-   * Topic testing method which creates, populates the attributes and saves a
-   * topic in the database. Then checks that the same topic is
-   * correctly retrieved by the repository.
-   * 
+   * Topic testing method which creates, populates the attributes and saves a topic in the database.
+   * Then checks that the same topic is correctly retrieved by the repository.
+   * <p>
    * It tests the findTopicById(String id) for the topic
-   * 
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
