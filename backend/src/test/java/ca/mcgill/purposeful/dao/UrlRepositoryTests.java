@@ -41,7 +41,8 @@ public class UrlRepositoryTests {
   }
 
   /**
-   * Creates a url, saves it in the database and then retrieves it by id and checks that works
+   * Creates a url, saves it in the database and then retrieves it by id and
+   * checks that works
    *
    * @author Wassim Jabbour
    */
