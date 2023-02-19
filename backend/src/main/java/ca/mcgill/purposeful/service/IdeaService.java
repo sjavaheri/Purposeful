@@ -3,6 +3,7 @@ package ca.mcgill.purposeful.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
@@ -113,11 +114,13 @@ public class IdeaService {
       idea.setIconUrl(iconUrl);
     }
 
+    // Save updated idea in the repository
     ideaRepository.save(idea);
 
     return idea;
   }
 
+  // Responsible for checking if the new domains exist
   public void checkEmptyAttributeViolation(String newValue){
     if(newValue != null){
       if (newValue.isEmpty()){
@@ -127,6 +130,7 @@ public class IdeaService {
     }
   }
 
+  // Responsible for checking if the new domains exist
   public void checkDomains(Set<Domain> domains){
     if (domains != null){
       for (Domain domain : domains){
@@ -140,6 +144,7 @@ public class IdeaService {
     }
   }
 
+  // Responsible for checking if the new technologies exist
   public void checkTechs(Set<Technology> techs){
     if (techs != null){
       for (Technology tech : techs){
@@ -153,6 +158,7 @@ public class IdeaService {
     }
   }
 
+  // Responsible for checking if the new topics exist
   public void checkTopics(Set<Topic> topics){
     if (topics != null){
       for (Topic topic : topics){
@@ -166,6 +172,7 @@ public class IdeaService {
     }
   }
 
+  // Responsible for checking if the new URLs exist
   public void checkURLS(List<URL> imgUrls, URL iconUrl){
     if (iconUrl != null){
       imgUrls.add(iconUrl);
