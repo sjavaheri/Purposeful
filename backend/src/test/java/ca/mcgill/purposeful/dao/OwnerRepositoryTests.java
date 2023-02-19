@@ -9,10 +9,8 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Owner;
@@ -23,7 +21,6 @@ import ca.mcgill.purposeful.util.Util;
  * repository, executes the
  * tests, then clears each instance from the database.
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class OwnerRepositoryTests {
 
