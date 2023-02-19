@@ -1,3 +1,4 @@
+@ignore
 Feature: Modify Idea
 	As a user, I want to be able to modify the details of any idea that I have posted it so that my idea can be changed over time
 

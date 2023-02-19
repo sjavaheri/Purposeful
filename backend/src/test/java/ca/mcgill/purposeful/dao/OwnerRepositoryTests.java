@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import ca.mcgill.purposeful.configuration.Authority;
 import java.util.HashSet;
 import java.util.Set;
+
+import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Owner;
-import ca.mcgill.purposeful.util.Util;
 
 /**
  * Owner Repository testing class which initiates an owner and an AppUser repository, executes the
@@ -35,7 +36,7 @@ public class OwnerRepositoryTests {
    * Clear the database before all tests
    */
   @BeforeAll
-  public static void clearDatabaseBefore(@Autowired Util util) {
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
@@ -43,7 +44,7 @@ public class OwnerRepositoryTests {
    * Clear the database after each test
    */
   @AfterEach
-  public void clearDatabaseAfter(@Autowired Util util) {
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 

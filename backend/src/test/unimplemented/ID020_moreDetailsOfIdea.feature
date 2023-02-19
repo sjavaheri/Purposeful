@@ -1,5 +1,5 @@
 #Author: Wassim Jabbour
-
+@ignore
 Feature: View more details for a feature
   As a user, I want to be able to view the details of an idea in a structured manner, so that I can grasp the essence of the idea and make informed decisions about its value and potential impact.
 

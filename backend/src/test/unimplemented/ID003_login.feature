@@ -1,3 +1,4 @@
+@ignore
 Feature: Login User
     As any type of user, I want to be able to login to the purposeful application with my account so that I can access the services available to me.
 

@@ -27,6 +27,7 @@ public class DtoUtility {
     appUserDto.setEmail(appUser.getEmail());
     appUserDto.setFirstname(appUser.getFirstname());
     appUserDto.setLastname(appUser.getLastname());
+    appUserDto.setPassword("");
     return appUserDto;
   }
 }
