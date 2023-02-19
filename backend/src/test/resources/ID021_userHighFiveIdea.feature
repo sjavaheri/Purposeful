@@ -4,48 +4,78 @@ Feature: Modify Moderator
     # reaction database (date is omitted for brevity)
 
     Background:
-        Given the reaction database contains the following ideas and regularUsers:
-            | id  | idea_id | user_id | reaction_type |
-            | 001 | 021     | 457     | HighFive      |
-            | 002 | 543     | 223     | HighFive      |
-        And the user with user_id "223" is logged in with email "user.steve@gmail.com" and password "SteveIsAwesome01"
-        And the user with user_id "223" is viewing the idea with id "021"
+        Given the database contains the following user accounts:
+            | firstName | lastName | email                | password         |
+            | User      | Steve    | user.steve@gmail.com | SteveIsAwesome01 |
+        And the database contains the following domains:
+            | name       |
+            | Software   |
+            | Computer   |
+            | Electrical |
+        And the database contains the following topics:
+            | name              |
+            | Frontend Dev      |
+            | Backend Dev       |
+            | Embedded Software |
+        And the database contains the following techs:
+            | name   |
+            | Python |
+            | Java   |
+            | React  |
+            | C      |
+        And the database contains the following URLs:
+            | URL           |
+            | something.com |
+            | another.com   |
+            | sayless.com   |
+            | keepitup.com  |
+            | interest.com  |
+            | bestteam.com  |
+        And the database contains the following ideas:
+            | id | title             | date       | purpose   | descriptions     | isPaid | inProgress | isPrivate | domains             | topics                    | techs            | image_urls                 | icon_url       | user_email             |
+            | 1  | Home Care App     | 2022-02-15 | Health    | Quality app      | True   | True       | False     | Software            | Frontend Dev              | Python           | something.com              | interest.com   | user.steve@gmail.com   |
+            | 2  | Football Game     | 2022-02-16 | Entertain | For fun          | False  | True       | False     | Software, Computer  | Frontend Dev              | Python           | something.com, another.com | interest.com   | user.steve@gmail.com   |
+            | 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer            | Backend Dev, Frontend Dev | Python, C        | keepitup.com               | bestteam.com   | user.steve@gmail.com   |
+            | 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical          | Embedded Software         | Java, React, C   | sayless.com                | bestteam.com   | user.steve@gmail.com   |
+        And the database contains the following reactions:
+            | id | idea_id | user_id               | reaction_type |
+            | 1  | 1       | user.steve@gmail.com  | HighFive      |
+            | 2  | 3       | user.steve@gmail.com  | HighFive      |
+        And I am logged in as the user with email "user.steve@gmail.com" and password "SteveIsAwesome01"
 
     # Normal Flow
 
-    Scenario: Successfully high five an idea
-        Given that the user with id "223" high fives an idea with id "021"
-        Then a new entry of type "HighFive" shall be added to the reaction database with the following details:
-            | id  | idea_id | user_id | reaction_type |
-            | 001 | 021     | 457     | HighFive      |
-            | 002 | 543     | 223     | HighFive      |
-            | 003 | 021     | 223     | HighFive      |
+    Scenario Outline: Successfully high five an idea
+        When the user with email <user_id> reacts with a reaction <reaction_type> to an idea with id <idea_id>
+        Then a new entry of type <reaction_type> shall be added to the reaction database
+
+        Examples:
+            | id | idea_id | user_id               | reaction_type |
+            | 1  | 1       | user.steve@gmail.com  | HighFive      |
+            | 2  | 3       | user.steve@gmail.com  | HighFive      |
+            | 3  | 4       | user.steve@gmail.com  | HighFive      |
 
     # Alternate Flow
 
-    Scenario: Successfully high five an idea which I already high fived to remove the high five
-        Given that the user with id "223" high fives an idea with id "021"
-        And a new entry of type "HighFive" is added to the reaction database with the following details:
-            | id  | idea_id | user_id | reaction_type |
-            | 001 | 021     | 457     | HighFive      |
-            | 002 | 543     | 223     | HighFive      |
-            | 003 | 021     | 223     | HighFive      |
-        When the user with id "223" once again high fives the idea with id "021"
-        Then a the reaction entry of id "003" shall be removed from the reaction database
-            | id  | idea_id | user_id | reaction_type |
-            | 001 | 021     | 457     | HighFive      |
-            | 002 | 543     | 223     | HighFive      |
+    Scenario Outline: Successfully high five an idea which I already high fived to remove the high five
+        When the user with email <user_id> reacts with a reaction <reaction_type> to an idea with id <idea_id>
+        And a reaction with my email <user_id> and the idea id <idea_id> already exists in the reaction database
+        Then the reaction entry of id <id> shall be removed from the reaction database
+
+        Examples:
+            | id | idea_id | user_id               | reaction_type |
+            | 2  | 3       | user.steve@gmail.com  | HighFive      |
 
     # Error Flow
 
-    Scenario: Unsuccessfully high five an idea that does not exist in the idea database
-        Given the idea database only contains the following entries:
-            | id  | title         | date       | purpose   | descriptions | isPaid | inProgress | isPrivate | domains | topics | techs | image URLs | icon URL | user |
-            | 001 | Home Care App | 2022-02-15 | Health    | Quality app  | True   | True       | False     | 1       | 1, 2   | 2, 3  | 1, 3       | 2        | 1    |
-            | 002 | Football Game | 2022-02-16 | Entertain | For fun      | False  | True       | False     | 1, 2    | 1      | 1, 3  | 1, 3       | 3        | 1    |
-        When the user with id "223" high fives an idea with id "021"
+    Scenario Outline: Unsuccessfully high five an idea that does not exist in the idea database
+        When the user with email <user_id> reacts with a reaction <reaction_type> to an idea with id <idea_id>
+        And no idea in the idea database contains the id <idea_id>
         Then the error message <error> will be thrown with status code <Http_status>
 
         Examples:
-            | error                             | Http_status |
-            | Idea with id "021" does not exist | 404         |
+            | id | idea_id | user_id               | reaction_type | error                            | Http_status |
+            | 3  | 32      | user.steve@gmail.com  | HighFive      | Idea with id "32" does not exist | 404         |
+            | 4  | 42      | user.steve@gmail.com  | HighFive      | Idea with id "42" does not exist | 404         |
+            | 5  | 54      | user.steve@gmail.com  | HighFive      | Idea with id "54" does not exist | 404         |
+            | 6  | 9       | user.steve@gmail.com  | HighFive      | Idea with id "9" does not exist  | 404         |
