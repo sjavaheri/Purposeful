@@ -68,14 +68,6 @@ Feature: Modify Moderator
 
     # Error Flow
 
-    Scenario Outline: Unsuccessfully high five an idea that does not exist in the idea database
-        When the user with email <user_id> reacts with a reaction <reaction_type> to an idea with id <idea_id>
-        And no idea in the idea database contains the id <idea_id>
-        Then the error message <error> will be thrown with status code <Http_status>
-
-        Examples:
-            | id | idea_id | user_id               | reaction_type | error                            | Http_status |
-            | 3  | 32      | user.steve@gmail.com  | HighFive      | Idea with id "32" does not exist | 404         |
-            | 4  | 42      | user.steve@gmail.com  | HighFive      | Idea with id "42" does not exist | 404         |
-            | 5  | 54      | user.steve@gmail.com  | HighFive      | Idea with id "54" does not exist | 404         |
-            | 6  | 9       | user.steve@gmail.com  | HighFive      | Idea with id "9" does not exist  | 404         |
+    Scenario : Unsuccessfully high five an idea that does not exist in the idea database
+        Given I request to react with the reaction "HighFive" to the idea with UUID "00000000-0000-0000-000000000000"
+        Then the error message "The requested idea does not exist" will be thrown with status code "400"
