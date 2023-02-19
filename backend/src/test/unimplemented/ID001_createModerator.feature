@@ -1,4 +1,3 @@
-@ignore
 Feature: Create Moderator
   As the owner, I want to create an moderator account so that I can monitor the use of the Purposeful application
 

@@ -1,4 +1,3 @@
-@ignore
 Feature: Modify Moderator
   As a user, I want to modify the details of my account so that they contain my updated information
 

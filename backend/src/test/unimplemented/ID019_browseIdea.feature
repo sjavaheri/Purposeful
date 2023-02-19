@@ -1,4 +1,3 @@
-@ignore
 Feature: Browse ideas by domain by Domain, Topic, or Tech
   As a user, I want to be able to browse public ideas that are linked to a specific domain, so that I can find and learn about new and innovative ideas in my area of interest.
 

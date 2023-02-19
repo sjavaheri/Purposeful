@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // annotation to let us autowire objects into cucumber step definitions
 @CucumberContextConfiguration
-public class ID004_CreateUserStepDefinitions {
+public class ID004_createUserStepDefinitions {
 
   @Autowired AppUserService appUserService;
 
