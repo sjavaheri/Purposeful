@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
-
+import ca.mcgill.purposeful.dao.ModeratorRepository;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.Role;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * The services of the Moderator class
@@ -28,6 +30,12 @@ public class ModeratorService {
   // CRUD Repositories
   @Autowired
   private AppUserRepository appUserRepository;
+
+  @Autowired
+  private ModeratorRepository moderatorRepository;
+
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   /**
    * This service method modifies an exisiting moderator based on the given inputs
@@ -122,7 +130,8 @@ public class ModeratorService {
       error += "Email cannot be left empty! ";
     }
     // Check that string is at least 8 characters long and contain at least one number, one lowercase character and one uppercase character
-    if (password == null || password.trim().length() == 0 || !password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$")) {
+    if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
+    || !password.matches(".*[a-z].*")) {
       error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
     }
     if (error.length() > 0) {
@@ -142,7 +151,7 @@ public class ModeratorService {
 
     for (int i = 0; i<roles.size(); i++){
       if (roles.get(i) instanceof Moderator){
-          moderator.setPassword(password);
+          moderator.setPassword(passwordEncoder.encode(password));
           appUserRepository.save(moderator);
           modified = true;
       }

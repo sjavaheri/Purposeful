@@ -12,17 +12,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Before;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -33,7 +29,6 @@ import ca.mcgill.purposeful.dao.ModeratorRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
-import ca.mcgill.purposeful.model.Owner;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Role;
 
@@ -60,91 +55,26 @@ public class TestModeratorService {
   @InjectMocks
   private ModeratorService moderatorService;
 
-  @Before
-  public void setup(){
-    MockitoAnnotations.openMocks(this);
-  }
-
-  // @BeforeEach
-  // public void setMockOutput() {
-  //   // Set each CRUD method to its mock
-  //   lenient().when(appUserRepository.findAppUserByEmail(any()))
-  //       .thenAnswer(MockRepository::findUserByEmail);
-
-  //   lenient().when(passwordEncoder.encode(anyString()))
-  //   .thenAnswer((InvocationOnMock invocation) -> {
-  //     return invocation.getArgument(0) + "Encoded";
-  //   });
-  
-  //   lenient().when(appUserRepository.save(any(AppUser.class)))
-  //       .thenAnswer(MockRepository::saveAppUser);
-  //   lenient().when(moderatorRepository.save(any(Moderator.class)))
-  //       .thenAnswer(MockRepository::saveModerator);
+  // @Before
+  // public void setup(){
+  //   MockitoAnnotations.openMocks(this);
   // }
-  private static final String VALID_REGULARUSER_EMAIL_ONE = "regular.user.one@email.com";
-  private static final String VALID_REGULARUSER_EMAIL_TWO = "regular.user.two@email.com";
-  private static final String VALID_REGULARUSER_FIRSTNAME_ONE = "Rob";
-  private static final String VALID_REGULARUSER_FIRSTNAME_TWO = "Marwan";
-  private static final String VALID_REGULARUSER_LASTNAME_ONE = "Sab";
-  private static final String VALID_REGULARUSER_LASTNAME_TWO = "Kanaan";
 
-  private static final String VALID_MODERATOR_EMAIL_ONE = "moderator.user.one@email.com";
-  private static final String VALID_MODERATOR_EMAIL_TWO = "moderator.user.two@email.com";
-  private static final String VALID_MODERATOR_FIRSTNAME_ONE = "Rob";
-  private static final String VALID_MODERATOR_FIRSTNAME_TWO = "Marwan";
-  private static final String VALID_MODERATOR_LASTNAME_ONE = "Kanaan";
-  private static final String VALID_MODERATOR_LASTNAME_TWO = "Sab";
-
-  private static final String VALID_PASSWORD = "Password1";
-  private static final String VALID_PASSWORD_ENCODED = "Password1Encoded";
-
-  private static final String INVALID_EMAIL = "invalid.email";
-  private static final String INVALID_PASSWORD_ONE = "invalid";
-  private static final String INVALID_PASSWORD_TWO = "invalidPassword";
-  private static final String INVALID_PASSWORD_THREE = "invalidpassword1";
-  private static final String INVALID_PASSWORD_FOUR = "INVALIDPASSWORD1";
-  /**
-   * Mocking the repositories
-   *
-   * @author Siger Ma
-   */
   @BeforeEach
   public void setMockOutput() {
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
-
-    lenient().when(appUserRepository.findAppUserByEmail(anyString()))
-        .thenAnswer((InvocationOnMock invocation) -> {
-          if (invocation.getArgument(0).equals(VALID_REGULARUSER_EMAIL_TWO)) {
-            AppUser appUser = new AppUser();
-            appUser.setEmail(VALID_REGULARUSER_EMAIL_TWO);
-            appUser.setFirstname(VALID_REGULARUSER_FIRSTNAME_TWO);
-            appUser.setLastname(VALID_REGULARUSER_LASTNAME_TWO);
-            appUser.setPassword(VALID_PASSWORD);
-            appUser.getAuthorities().add(Authority.User);
-            return appUser;
-          } else if (invocation.getArgument(0).equals(VALID_MODERATOR_EMAIL_TWO)) {
-            AppUser appUser = new AppUser();
-            appUser.setEmail(VALID_MODERATOR_EMAIL_TWO);
-            appUser.setFirstname(VALID_MODERATOR_FIRSTNAME_TWO);
-            appUser.setLastname(VALID_MODERATOR_LASTNAME_TWO);
-            appUser.setPassword(VALID_PASSWORD);
-            appUser.getAuthorities().add(Authority.Moderator);
-            return appUser;
-          } else {
-            return null;
-          }
-        });
+    // Set each CRUD method to its mock
+    lenient().when(appUserRepository.findAppUserByEmail(any()))
+        .thenAnswer(MockRepository::findUserByEmail);
 
     lenient().when(passwordEncoder.encode(anyString()))
-        .thenAnswer((InvocationOnMock invocation) -> {
-          return invocation.getArgument(0) + "Encoded";
-        });
-
-    lenient().when(appUserRepository.save(any(AppUser.class))).thenAnswer(returnParameterAsAnswer);
+    .thenAnswer((InvocationOnMock invocation) -> {
+      return invocation.getArgument(0) + "Encoded";
+    });
+  
+    lenient().when(appUserRepository.save(any(AppUser.class)))
+        .thenAnswer(MockRepository::saveAppUser);
     lenient().when(moderatorRepository.save(any(Moderator.class)))
-        .thenAnswer(returnParameterAsAnswer);
+        .thenAnswer(MockRepository::saveModerator);
   }
 
   /**
@@ -155,7 +85,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_Success() {
     AppUser modified = null;
-    modified = moderatorService.modifyModerator(VALID_REGULARUSER_EMAIL_ONE, "Jabbour", "Wassim", MockDatabase.authorities1);
+    modified = moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim", MockDatabase.authorities1);
     assertNotNull(modified);
     assertEquals(MockDatabase.appUser1.getEmail(), modified.getEmail());
     assertEquals("Jabbour", modified.getLastname());
@@ -312,6 +242,129 @@ public class TestModeratorService {
   }
 
   /**
+   * Method to check that an error is thrown when we try to modify an appUser that is not a moderator
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyModerator_NotModerator() {
+    try {
+      moderatorService.modifyModerator(MockDatabase.appUser2.getEmail(), "Jabbour", "Wassim", MockDatabase.authorities1);
+    } catch (GlobalException e) {
+      assertEquals("User is not a moderator!", e.getMessage());
+      return;
+    }
+    fail();
+  }
+
+  /**
+   * Method to check that a moderator's password is modified successfully
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_Success() {
+    AppUser modified = null;
+    modified = moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.VALID_PASSWORD);
+    assertNotNull(modified);
+    assertEquals(MockDatabase.appUser1.getEmail(), modified.getEmail());
+    assertEquals(MockDatabase.appUser1.getLastname(), modified.getLastname());
+    assertEquals(MockDatabase.appUser1.getFirstname(), modified.getFirstname());
+    assertEquals(MockDatabase.VALID_PASSWORD_ENCODED, modified.getPassword());
+    assertEquals(MockDatabase.authorities1, modified.getAuthorities());
+    assertEquals(MockDatabase.roles1, modified.getRole());
+    }
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's password that is incorrect
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_TooShort() {
+    try {
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_ONE);
+    } catch (GlobalException e) {
+      assertEquals("Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ", e.getMessage());
+      return;
+    }
+    fail();
+  } 
+  
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's password that is incorrect
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NoNumber() {
+    try {
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_TWO);
+    } catch (GlobalException e) {
+      assertEquals("Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ", e.getMessage());
+      return;
+    }
+    fail();
+  } 
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's password that is incorrect
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NoUpperCase() {
+    try {
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_THREE);
+    } catch (GlobalException e) {
+      assertEquals("Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ", e.getMessage());
+      return;
+    }
+    fail();
+  } 
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's password that is incorrect
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NoLowerCase() {
+    try {
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_FOUR);
+    } catch (GlobalException e) {
+      assertEquals("Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ", e.getMessage());
+      return;
+    }
+    fail();
+  } 
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's password but the moderator does not exist
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NotInDB() {
+    try {
+      moderatorService.modifyPassword("unregisteredemail@gmail.com", MockDatabase.VALID_PASSWORD);
+    } catch (GlobalException e) {
+      assertEquals("This account does not exist.", e.getMessage());
+      return;
+    }
+    fail();
+  } 
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's password but the account is not a moderator
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NotModerator() {
+    try {
+      moderatorService.modifyPassword(MockDatabase.appUser2.getEmail(), MockDatabase.VALID_PASSWORD);
+    } catch (GlobalException e) {
+      assertEquals("User is not a moderator!", e.getMessage());
+      return;
+    }
+    fail();
+  } 
+
+  /**
    * This class holds all of the mock methods of the CRUD repository.
    */
   class MockRepository{
@@ -322,9 +375,6 @@ public class TestModeratorService {
         }
         if (email.equals(MockDatabase.appUser2.getEmail())) {
           return MockDatabase.appUser2;
-        }
-        if (email.equals(MockDatabase.appUser3.getEmail())) {
-          return MockDatabase.appUser3;
         }
         return null;
     }
@@ -345,24 +395,25 @@ public class TestModeratorService {
   final static class MockDatabase {
     static AppUser appUser1 = new AppUser();
     static AppUser appUser2 = new AppUser();
-    static AppUser appUser3 = new AppUser();
 
     static Role role1 = new Moderator();
-    static Role role2 = new Owner();
-    static Role role3 = new RegularUser();
+    static Role role2 = new RegularUser();
 
     static List<Role> roles1 = new ArrayList<Role>();
     static List<Role> roles2 = new ArrayList<Role>();
-    static List<Role> roles3 = new ArrayList<Role>();
 
     static Authority authority1 = Authority.Moderator;
-    static Authority authority2 = Authority.Owner; 
-    static Authority authority3 = Authority.User; 
+    static Authority authority2 = Authority.User; 
 
     static Set<Authority> authorities1 = new HashSet<Authority>();
     static Set<Authority> authorities2 = new HashSet<Authority>();
-    static Set<Authority> authorities3 = new HashSet<Authority>();
 
+    static  String VALID_PASSWORD = "Password1";
+    static  String VALID_PASSWORD_ENCODED = "Password1Encoded";
+    static  String INVALID_PASSWORD_ONE = "invalid";
+    static  String INVALID_PASSWORD_TWO = "invalidPassword";
+    static  String INVALID_PASSWORD_THREE = "invalidpassword1";
+    static  String INVALID_PASSWORD_FOUR = "INVALIDPASSWORD1";
 
     static {
         // Set the roles to all appUsers
@@ -373,17 +424,12 @@ public class TestModeratorService {
         appUser1.setRole(roles1);
         appUser1.setAuthorities(authorities1);
 
-        // Initlaize appUser that is just an owner
+        // Initlaize appUser that is just a regular user
         roles2.add(role2);
         authorities2.add(authority2);
         appUser2.setRole(roles2);
         appUser2.setAuthorities(authorities2);
 
-        // Initialize appUser that is just a regularUser
-        roles3.add(role3);
-        authorities3.add(authority3);
-        appUser3.setRole(roles3);
-        appUser3.setAuthorities(authorities3);
 
         // appUser1 Information
         appUser1.setEmail("example@gmail.com");
@@ -396,13 +442,6 @@ public class TestModeratorService {
         appUser2.setFirstname("Jane");
         appUser2.setLastname("Doe");
         appUser2.setPassword("password2");
-
-        // appUser3 Information
-        appUser3.setEmail("example3@gmail.com");
-        appUser3.setFirstname("Adrien");
-        appUser3.setLastname("Schaal");
-        appUser3.setPassword("password3");
-
     }
   }
 }
