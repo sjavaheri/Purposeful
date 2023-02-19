@@ -1,12 +1,11 @@
 package ca.mcgill.purposeful.controller;
 
+import ca.mcgill.purposeful.exception.GlobalException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import ca.mcgill.purposeful.exception.GlobalException;
 
 /**
  * API for demonstrating how permissions work for access to endpoints
@@ -22,7 +21,7 @@ public class DemoController {
    * @return a demo string
    */
   @GetMapping
-  @PreAuthorize("hasAuthority('Moderator')")
+  @PreAuthorize("hasAuthority('Owner')")
   public String createIdea() {
     // Concept #1 - controllers don't need to take usernames as parameters - you get
     // them with the .getName() method of the token
