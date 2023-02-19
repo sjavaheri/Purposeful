@@ -3,13 +3,13 @@ package ca.mcgill.purposeful.dto;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import java.util.Date;
 
-public class ReactionDto {
+public class ReactionDTO {
 
   private String id;
   private ReactionType reactionType;
   private Date date;
 
-  public ReactionDto() {
+  public ReactionDTO() {
   }
 
   public String getId() {
