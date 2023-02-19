@@ -1,4 +1,4 @@
-package ca.mcgill.purposeful.controller.util;
+package ca.mcgill.purposeful.util;
 
 import org.springframework.http.HttpStatus;
 
