@@ -25,7 +25,7 @@ import ca.mcgill.purposeful.model.RegularUser;
 /**
  * This is an example class to provide a template for all service tests
  * 
- * @Author Shidan Javaheri
+ * @Author Ramin Akhavan
  */
 @ExtendWith(MockitoExtension.class)
 public class TestModifyIdeaService {
