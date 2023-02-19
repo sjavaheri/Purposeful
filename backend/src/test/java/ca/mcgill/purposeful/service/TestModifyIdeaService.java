@@ -16,6 +16,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ca.mcgill.purposeful.configuration.Authority;
+import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
@@ -27,7 +28,7 @@ import ca.mcgill.purposeful.model.RegularUser;
  * @Author Shidan Javaheri
  */
 @ExtendWith(MockitoExtension.class)
-public class TestExampleService {
+public class TestModifyIdeaService {
 
     @Mock
     private AppUserRepository appUserRepository;
