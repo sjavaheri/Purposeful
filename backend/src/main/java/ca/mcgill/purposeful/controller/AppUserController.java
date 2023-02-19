@@ -53,4 +53,32 @@ public class AppUserController {
     return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
   }
 
+  /**
+   * POST method to register a new moderator
+   *
+   * @param appUserDto - the user to be registered
+   * @return the newly created user
+   * @author Siger Ma
+   */
+
+  @PostMapping(value = {"/moderator",
+      "/moderator/"}, consumes = "application/json", produces = "application/json")
+  @PreAuthorize("hasAuthority('Owner')")
+  public ResponseEntity<AppUserDto> registerModerator(@RequestBody AppUserDto appUserDto) {
+    // Unpack the DTO
+    if (appUserDto == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");
+    }
+    String email = appUserDto.getEmail();
+    String password = appUserDto.getPassword();
+    String firstname = appUserDto.getFirstname();
+    String lastname = appUserDto.getLastname();
+
+    // Register the user
+    AppUserDto registeredUser = DtoUtility.convertToDto(
+        appUserService.registerModerator(email, password, firstname, lastname));
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
+  }
+
 }
