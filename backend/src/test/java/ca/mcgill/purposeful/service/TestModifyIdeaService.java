@@ -24,135 +24,137 @@ import ca.mcgill.purposeful.model.RegularUser;
 
 /**
  * This is an example class to provide a template for all service tests
- * 
- * @Author Shidan Javaheri
+ *
+ * @Author Ramin Akhavan
  */
 @ExtendWith(MockitoExtension.class)
 public class TestModifyIdeaService {
 
-    @Mock
-    private AppUserRepository appUserRepository;
-  
-    @Mock
-    private RegularUserRepository regularUserRepository;
+  @Mock
+  private AppUserRepository appUserRepository;
 
-    // create objects you will use in your test
-    private AppUser user;
+  @Mock
+  private RegularUserRepository regularUserRepository;
 
-    // set the feilds in a before each
-    @BeforeEach
-    public void setup() {
-        this.user = new AppUser();
-        this.user.setEmail("regular.user.one@email.com");
-    }
+  // create objects you will use in your test
+  private AppUser user;
 
-    /**
-     * A postive outcome example test method
-     * @Author Ramin Akhavan
-     */
-    @Test 
-    public void testModifyAllFieldsOfIdea() { 
+  // set the feilds in a before each
+  @BeforeEach
+  public void setup() {
+    this.user = new AppUser();
+    this.user.setEmail("regular.user.one@email.com");
+  }
 
-        // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+  /**
+   * A postive outcome example test method
+   *
+   * @Author Ramin Akhavan
+   */
+  @Test
+  public void testModifyAllFieldsOfIdea() {
 
-        // when this repository calls this method on this argument
-        // then answer with this value
-        // to return the same value use invocation.getArgument(0)
-        
-        // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+    // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
 
-        // call the service method you are testing
-        
-        // Token result = exampleService.generateToken(this.user);
+    // when this repository calls this method on this argument
+    // then answer with this value
+    // to return the same value use invocation.getArgument(0)
 
-        // make assertions on the result
-        assertEquals(1, 1);
+    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
 
-        // make verifications that each repository was called the correct number of times
-        // # of verifications matches # of mocks
+    // call the service method you are testing
 
-        // verify(exampleRepository, times(1)).save(any(AppUser.class));
-        
-    }
+    // Token result = exampleService.generateToken(this.user);
 
-    /**
-     * A postive outcome example test method
-     * @Author Ramin Akhavan
-     */
-    @Test 
-    public void testModifySomeFieldsOfIdea() { 
+    // make assertions on the result
+    assertEquals(1, 1);
 
-        // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+    // make verifications that each repository was called the correct number of times
+    // # of verifications matches # of mocks
 
-        // when this repository calls this method on this argument
-        // then answer with this value
-        // to return the same value use invocation.getArgument(0)
-        
-        // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+    // verify(exampleRepository, times(1)).save(any(AppUser.class));
 
-        // call the service method you are testing
-        
-        // Token result = exampleService.generateToken(this.user);
+  }
 
-        // make assertions on the result
-        assertEquals(1, 1);
+  /**
+   * A postive outcome example test method
+   *
+   * @Author Ramin Akhavan
+   */
+  @Test
+  public void testModifySomeFieldsOfIdea() {
 
-        // make verifications that each repository was called the correct number of times
-        // # of verifications matches # of mocks
+    // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
 
-        // verify(exampleRepository, times(1)).save(any(AppUser.class));
-        
-    }
+    // when this repository calls this method on this argument
+    // then answer with this value
+    // to return the same value use invocation.getArgument(0)
 
-    /**
-     * A negative outcome example test method
-     * @Author Ramin Akhavan
-     */
-    @Test
-    public void testModifyIdeaWithInvalidEmptyVariableTest() {
+    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
 
-        // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+    // call the service method you are testing
 
-        // when this repository calls this method on this argument
-        // then answer with this value
-        // to return the same value use invocation.getArgument(0)
-        
-        // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+    // Token result = exampleService.generateToken(this.user);
 
-        // call the service method you are testing, and get the exception
-        // service method is called within assert throws
-       
-        // GlobalException exception = assertThrows(GlobalException.class, () -> exampleService.generateToken(this.user));
+    // make assertions on the result
+    assertEquals(1, 1);
 
+    // make verifications that each repository was called the correct number of times
+    // # of verifications matches # of mocks
 
-        // make assertiosn on the exception
-        // check the 1) Message and 2) status 
-        assertEquals (1,1);     
-    }
+    // verify(exampleRepository, times(1)).save(any(AppUser.class));
 
-    /**
-     * A negative outcome example test method
-     * @Author Ramin Akhavan
-     */
-    @Test
-    public void testModifyIdeaWithValidEmptyVariableTest() {
+  }
 
-        // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+  /**
+   * A negative outcome example test method
+   *
+   * @Author Ramin Akhavan
+   */
+  @Test
+  public void testModifyIdeaWithInvalidEmptyVariableTest() {
 
-        // when this repository calls this method on this argument
-        // then answer with this value
-        // to return the same value use invocation.getArgument(0)
-        
-        // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+    // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
 
-        // call the service method you are testing, and get the exception
-        // service method is called within assert throws
-       
-        // GlobalException exception = assertThrows(GlobalException.class, () -> exampleService.generateToken(this.user));
+    // when this repository calls this method on this argument
+    // then answer with this value
+    // to return the same value use invocation.getArgument(0)
 
+    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
 
-        // make assertiosn on the exception
-        // check the 1) Message and 2) status 
-        assertEquals (1,1);     
-    }
+    // call the service method you are testing, and get the exception
+    // service method is called within assert throws
+
+    // GlobalException exception = assertThrows(GlobalException.class, () -> exampleService.generateToken(this.user));
+
+    // make assertiosn on the exception
+    // check the 1) Message and 2) status
+    assertEquals(1, 1);
+  }
+
+  /**
+   * A negative outcome example test method
+   *
+   * @Author Ramin Akhavan
+   */
+  @Test
+  public void testModifyIdeaWithValidEmptyVariableTest() {
+
+    // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+
+    // when this repository calls this method on this argument
+    // then answer with this value
+    // to return the same value use invocation.getArgument(0)
+
+    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+
+    // call the service method you are testing, and get the exception
+    // service method is called within assert throws
+
+    // GlobalException exception = assertThrows(GlobalException.class, () -> exampleService.generateToken(this.user));
+
+    // make assertiosn on the exception
+    // check the 1) Message and 2) status
+    assertEquals(1, 1);
+  }
 }

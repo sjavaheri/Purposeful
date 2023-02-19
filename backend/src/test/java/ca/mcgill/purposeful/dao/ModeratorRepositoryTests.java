@@ -17,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * Moderator Repository testing class which initiates an moderator and an
- * AppUser repository,
+ * Moderator Repository testing class which initiates an moderator and an AppUser repository,
  * executes the tests, then clears each instance from the database.
  */
 @SpringBootTest
@@ -49,12 +48,9 @@ public class ModeratorRepositoryTests {
   }
 
   /**
-   * Moderator testing method which creates, populates the attributes, sets
-   * associations, and saves
-   * each moderator and appUser object and identifier. It can then test to make
-   * sure each object
-   * reached from the moderator found in the repository is not null and that each
-   * initially saved Id
+   * Moderator testing method which creates, populates the attributes, sets associations, and saves
+   * each moderator and appUser object and identifier. It can then test to make sure each object
+   * reached from the moderator found in the repository is not null and that each initially saved Id
    * corresponds to the one reached from the repository.
    */
   @Test

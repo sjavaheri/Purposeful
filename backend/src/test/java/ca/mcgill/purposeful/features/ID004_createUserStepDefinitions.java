@@ -25,6 +25,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * Step definitions for the ID004_CreateUser.feature file
  *
@@ -37,15 +38,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @CucumberContextConfiguration
 public class ID004_createUserStepDefinitions {
 
-  @Autowired AppUserService appUserService;
+  @Autowired
+  AppUserService appUserService;
 
-  @Autowired AppUserRepository appUserRepository;
+  @Autowired
+  AppUserRepository appUserRepository;
 
   // client that will send requests
-  @Autowired private TestRestTemplate client;
+  @Autowired
+  private TestRestTemplate client;
 
   // util class for clearing the database
-  @Autowired private DatabaseUtil databaseUtil;
+  @Autowired
+  private DatabaseUtil databaseUtil;
 
   // fields for catching the response of the http request
   private ResponseEntity<?> response;

@@ -11,5 +11,4 @@ public interface RegularUserRepository extends CrudRepository<RegularUser, Integ
 
   RegularUser findRegularUserById(String id);
 
-
 }

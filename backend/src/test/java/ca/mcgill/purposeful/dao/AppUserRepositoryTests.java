@@ -84,7 +84,7 @@ public class AppUserRepositoryTests {
 
     // Create and persist multiple domains
     var domainSet = new HashSet<Domain>();
-    var domainNames = new String[] { "hello", "world", "science" };
+    var domainNames = new String[]{"hello", "world", "science"};
     for (String name : domainNames) {
       var domain = new Domain();
       domain.setName(name);
@@ -96,7 +96,7 @@ public class AppUserRepositoryTests {
 
     // Create and persist multiple topics
     var topicSet = new HashSet<Topic>();
-    var topicNames = new String[] { "hello", "world", "science" };
+    var topicNames = new String[]{"hello", "world", "science"};
     for (String name : topicNames) {
       var topic = new Topic();
       topic.setName(name);

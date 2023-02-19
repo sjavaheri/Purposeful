@@ -9,33 +9,48 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.*;
 
-/** Class for resuable methods needed across other classes */
+/**
+ * Class for resuable methods needed across other classes
+ */
 @Configuration
 public class DatabaseUtil {
 
-  @Autowired private AppUserRepository appUserRepository;
+  @Autowired
+  private AppUserRepository appUserRepository;
 
-  @Autowired private DomainRepository domainRepository;
+  @Autowired
+  private DomainRepository domainRepository;
 
-  @Autowired private IdeaRepository ideaRepository;
+  @Autowired
+  private IdeaRepository ideaRepository;
 
-  @Autowired private ModeratorRepository moderatorRepository;
+  @Autowired
+  private ModeratorRepository moderatorRepository;
 
-  @Autowired private OwnerRepository ownerRepository;
+  @Autowired
+  private OwnerRepository ownerRepository;
 
-  @Autowired private ReactionRepository reactionRepository;
+  @Autowired
+  private ReactionRepository reactionRepository;
 
-  @Autowired private RegularUserRepository regularUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
-  @Autowired private TechnologyRepository technologyRepository;
+  @Autowired
+  private TechnologyRepository technologyRepository;
 
-  @Autowired private TopicRepository topicRepository;
+  @Autowired
+  private TopicRepository topicRepository;
 
-  @Autowired private URLRepository urlRepository;
+  @Autowired
+  private URLRepository urlRepository;
 
-  @Autowired private VerificationRequestRepository verificationRequestRepository;
+  @Autowired
+  private VerificationRequestRepository verificationRequestRepository;
 
-  /** Method to clear the database completely @Author Shidan Javaheri */
+  /**
+   * Method to clear the database completely @Author Shidan Javaheri
+   */
   public void clearDatabase() {
     reactionRepository.deleteAll();
     ideaRepository.deleteAll();

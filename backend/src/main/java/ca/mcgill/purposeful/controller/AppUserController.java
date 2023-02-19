@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** API for accessing the endpoints of AppUser */
+/**
+ * API for accessing the endpoints of AppUser
+ */
 @RestController
 @RequestMapping({"/api/appuser", "/api/appuser/"})
 public class AppUserController {
 
-  @Autowired private AppUserService appUserService;
+  @Autowired
+  private AppUserService appUserService;
 
   /**
    * POST method to register a new regular user
@@ -40,10 +43,37 @@ public class AppUserController {
     String lastname = appUserDto.getLastname();
 
     // Register the user
-    AppUserDto registeredUser =
-        DtoUtility.convertToDto(
-            appUserService.registerRegularUser(email, password, firstname, lastname));
+    AppUserDto registeredUser = DtoUtility.convertToDto(
+        appUserService.registerRegularUser(email, password, firstname, lastname));
 
     return new ResponseEntity<AppUserDto>(registeredUser, HttpStatus.OK);
   }
+
+  /**
+   * POST method to register a new moderator
+   *
+   * @param appUserDto - the user to be registered
+   * @return the newly created user
+   * @author Siger Ma
+   */
+
+  @PostMapping(value = {"/moderator", "/moderator/"})
+  @PreAuthorize("hasAuthority('Owner')")
+  public ResponseEntity<AppUserDto> registerModerator(@RequestBody AppUserDto appUserDto) {
+    // Unpack the DTO
+    if (appUserDto == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");
+    }
+    String email = appUserDto.getEmail();
+    String password = appUserDto.getPassword();
+    String firstname = appUserDto.getFirstname();
+    String lastname = appUserDto.getLastname();
+
+    // Register the user
+    AppUserDto registeredUser = DtoUtility.convertToDto(
+        appUserService.registerModerator(email, password, firstname, lastname));
+
+    return new ResponseEntity<AppUserDto>(registeredUser, HttpStatus.OK);
+  }
+
 }
