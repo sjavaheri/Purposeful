@@ -84,12 +84,8 @@ Feature: Modify Idea
 		Examples:
 			| id | title             | field        | old_value     | error                                    | Http_status |
 			| 1  | Home Care App     | title        | Home Care App | Necessary fields have been left empty    | 400         |
-			| 1  | Home Care App     | date         | 2022-02-15    | Necessary fields have been left empty    | 400         |
 			| 2  | Football Game     | purpose      | Entertain     | Necessary fields have been left empty    | 400         |
 			| 2  | Football Game     | descriptions | For fun       | Necessary fields have been left empty    | 400         |
-			| 3  | Car Detection App | isPaid       | True          | Necessary fields have been left empty    | 400         |
-			| 3  | Car Detection App | inProgress   | False         | Necessary fields have been left empty    | 400         |
-			| 4  | Circuit Design    | isPrivate    | True          | Necessary fields have been left empty    | 400         |
 
 	# Error Flow
 

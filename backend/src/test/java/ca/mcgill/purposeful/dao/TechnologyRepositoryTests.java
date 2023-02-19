@@ -35,7 +35,8 @@ public class TechnologyRepositoryTests {
   }
 
   /**
-   * Creates a technology, saves it in the database and then retrieves it by id and checks that
+   * Creates a technology, saves it in the database and then retrieves it by id
+   * and checks that
    * works
    *
    * @author Wassim Jabbour

@@ -15,7 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Test the persistence layer for the RegularUserRepository. Testing reading and writing of objects,
+ * Test the persistence layer for the RegularUserRepository. Testing reading and
+ * writing of objects,
  * attributes and references to the database.
  *
  * @author Siger Ma
