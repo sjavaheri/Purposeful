@@ -23,7 +23,6 @@ import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
 import ca.mcgill.purposeful.dao.TopicRepository;
 import ca.mcgill.purposeful.dao.URLRepository;
-import ca.mcgill.purposeful.model.Technology;
 
 /**
  * The IdeaService class, the business logic for managing Ideas
@@ -63,6 +62,12 @@ public class IdeaService {
   }
 
   @Transactional
+  /**
+   * Modify an idea based on id
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if necessary field are left empty or if an object does not exist
+   */
   public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions, boolean isPaid, boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds, List<String> topicIds, List<String> imgUrlIds, String iconUrlId){
     // Retrieve idea (we assume that no user can access an idea they don't own because of frontend)
     Idea idea = getIdeaById(id);
@@ -117,7 +122,12 @@ public class IdeaService {
     return idea;
   }
 
-  // Responsible for checking if the new domains exist
+  /**
+   * Check to make sure a necessary field is not empty
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if necessary field is left empty
+   */
   public void checkEmptyAttributeViolation(String newValue){
     if(newValue != null){
       if (newValue.isEmpty()){
@@ -127,7 +137,12 @@ public class IdeaService {
     }
   }
 
-  // Responsible for checking if the new domains exist
+  /**
+   * Check to make sure all domains of an idea exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public Set<Domain> checkDomains(List<String> domainIds){
     Domain domain = null;
     Set<Domain> domains = new HashSet<Domain>();
@@ -145,7 +160,12 @@ public class IdeaService {
     return domains;
   }
 
-  // Responsible for checking if the new technologies exist
+  /**
+   * Check to make sure all technologies of an idea exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public Set<Technology> checkTechs(List<String> techIds){
     Technology tech = null;
     Set<Technology> techs = new HashSet<Technology>();
@@ -163,7 +183,12 @@ public class IdeaService {
     return techs;
   }
 
-  // Responsible for checking if the new topics exist
+  /**
+   * Check to make sure all topics of an idea exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public Set<Topic> checkTopics(List<String> topicIds){
     Topic topic = null;
     Set<Topic> topics = new HashSet<Topic>();
@@ -181,7 +206,12 @@ public class IdeaService {
     return topics;
   }
 
-  // Responsible for checking if the new image URLs exist
+  /**
+   * Check to make sure all image urls exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public List<URL> checkImgURLS(List<String> imgUrlIds){
     List<URL> urls = new ArrayList<URL>();
     if(imgUrlIds != null){
@@ -192,6 +222,12 @@ public class IdeaService {
     return urls;
   }
 
+  /**
+   * Check to make sure a url exists
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public URL checkURL(String urlId){
     URL url = null;
     try {
