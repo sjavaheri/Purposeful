@@ -1,15 +1,25 @@
 package ca.mcgill.purposeful.dto;
 
+import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class ReactionDTO {
-
   private String id;
   private ReactionType reactionType;
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date;
 
-  public ReactionDTO() {
+  public ReactionDTO(Reaction reaction) {
+    this.reactionType = reaction.getReactionType();
+    this.date = reaction.getDate();
+  }
+
+  public ReactionDTO(String id, ReactionType reactionType, Date date) {
+    this.id = id;
+    this.reactionType = reactionType;
+    this.date = date;
   }
 
   public String getId() {
