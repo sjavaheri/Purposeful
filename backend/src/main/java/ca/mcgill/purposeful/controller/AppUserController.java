@@ -36,7 +36,7 @@ public class AppUserController {
   @PostMapping(value = {"/regular",
       "/regular/"}, consumes = "application/json", produces = "application/json")
   @PreAuthorize("hasRole('ROLE_ANONYMOUS')")
-  public ResponseEntity<?> registerRegularUser(@RequestBody AppUserDto appUserDto) {
+  public ResponseEntity<AppUserDto> registerRegularUser(@RequestBody AppUserDto appUserDto) {
     // Unpack the DTO
     if (appUserDto == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");

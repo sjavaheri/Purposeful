@@ -44,7 +44,7 @@ public class SecurityConfiguration {
         .and() // configuring your project to accept jwt tokens as a method of authentication.
         // Jwt (Json Web Token) tokens are json objects as strings, with no spaces,
         // base64 encoded: headers, payhold, signature
-        .authorizeHttpRequests().requestMatchers("/api/appuser/regular/registration")
+        .authorizeHttpRequests().requestMatchers("/api/appuser/regular")
         .permitAll() // Exclude this endpoint from authentication
         .anyRequest().authenticated() // by default, all endpoints are authenticated
         .and()
