@@ -29,83 +29,82 @@ public class ModeratorService {
   @Autowired
   private AppUserRepository appUserRepository;
 
-    /**
-     * This service method modifies an exisiting moderator based on the given inputs
-     * 
-     * Note we do not modify the role of that app user, because we consider it to stay a moderator.
-     * We can use the modifyUser in the appUser service to change its role
-     * 
-     * @param email new email of the moderator (must be unique)
-     * @param lastname new last name of the moderator
-     * @param firstname new first name of the moderator
-     * @param authorities new authorities of the moderator
-     * @return  the modified moderator
-     */
-    @Transactional
-    public AppUser modifyModerator(String email, String lastname, String firstname, Set<Authority> authorities){
+  /**
+   * This service method modifies an exisiting moderator based on the given inputs
+   * 
+   * Note we do not modify the role of that app user, because we consider it to stay a moderator.
+   * We can use the modifyUser in the appUser service to change its role
+   * 
+   * @param email new email of the moderator (must be unique)
+   * @param lastname new last name of the moderator
+   * @param firstname new first name of the moderator
+   * @param authorities new authorities of the moderator
+   * @return  the modified moderator
+   */
+  @Transactional
+  public AppUser modifyModerator(String email, String lastname, String firstname, Set<Authority> authorities){
 
-        // Input Validation
-        String error = "";
-        if (email == null || email.isEmpty()) {
-          error += "Email cannot be left empty! ";
-        }
-        if (firstname == null || firstname.isEmpty()) {
-          error += "First name cannot be left empty! ";
-        }
-        if (lastname == null || lastname.isEmpty()) {
-          error += "Last name cannot be left empty! ";
-        }
-        if (authorities == null) {
-          error += "Authorities cannot be null! ";
-        }
-        if (error.length() > 0){
-          throw new GlobalException(HttpStatus.BAD_REQUEST,
-          error);
-        }
+      // Input Validation
+      String error = "";
+      if (email == null || email.isEmpty()) {
+        error += "Email cannot be left empty! ";
+      }
+      if (firstname == null || firstname.isEmpty()) {
+        error += "First name cannot be left empty! ";
+      }
+      if (lastname == null || lastname.isEmpty()) {
+        error += "Last name cannot be left empty! ";
+      }
+      if (authorities == null) {
+        error += "Authorities cannot be null! ";
+      }
+      if (error.length() > 0){
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+        error);
+      }
 
-        // Check if the oderator we are trying to modify does indeed exist
-        AppUser moderator = appUserRepository.findAppUserByEmail(email);
-        if (moderator == null){
-          throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "This account does not exist.");
+      // Check if the oderator we are trying to modify does indeed exist
+      AppUser moderator = appUserRepository.findAppUserByEmail(email);
+      if (moderator == null){
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+        "This account does not exist.");
+      }
+
+      // Check that the new auhtorities of that user still include a moderator
+      Iterator<Authority> itr = authorities.iterator();
+      boolean isModerator = false;
+      while (itr.hasNext()){
+        if (itr.next().equals(Authority.Moderator)){
+          isModerator = true;
         }
+      }
+      if (!isModerator){
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+        "New authorities do not include the moderator authority!");
+      }
 
-        // Check that the new auhtorities of that user still include a moderator
-        Iterator<Authority> itr = authorities.iterator();
-        boolean isModerator = false;
-        while (itr.hasNext()){
-          if (itr.next().equals(Authority.Moderator)){
-            isModerator = true;
-          }
+      List<Role> roles = moderator.getRole();
+
+      boolean modified = false; 
+
+      for (int i = 0; i<roles.size(); i++){
+        if (roles.get(i) instanceof Moderator){
+            moderator.setFirstname(firstname);
+            moderator.setLastname(lastname);
+            moderator.setEmail(email);
+            moderator.setAuthorities(authorities);
+            appUserRepository.save(moderator);
+            modified = true;
         }
-        if (!isModerator){
-          throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "New authorities do not include the moderator authority!");
-        }
+      }
+      if (!modified){
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+        "User is not a moderator!");
+      }
+      return moderator;
+  }
 
-        List<Role> roles = moderator.getRole();
-
-        boolean modified = false; 
-
-        for (int i = 0; i<roles.size(); i++){
-          if (roles.get(i) instanceof Moderator){
-              moderator.setFirstname(firstname);
-              moderator.setLastname(lastname);
-              moderator.setEmail(email);
-              moderator.setAuthorities(authorities);
-              appUserRepository.save(moderator);
-              modified = true;
-          }
-        }
-        if (!modified){
-          throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "User is not a moderator!");
-        }
-        return moderator;
-
-    }
-
-      /**
+  /**
    * This service method updates the moderator's password based on the givenm inputs
    *  asswords must be at least 8 characters long and contain at least one number, 
    *  one lowercase character and one uppercase character

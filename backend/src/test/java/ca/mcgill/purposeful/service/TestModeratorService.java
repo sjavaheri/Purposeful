@@ -3,7 +3,7 @@ package ca.mcgill.purposeful.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
-
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
@@ -14,14 +14,22 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.Before;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.ModeratorRepository;
+
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
@@ -42,15 +50,101 @@ public class TestModeratorService {
   @Mock
   private AppUserRepository appUserRepository;
 
+  @Mock
+  private ModeratorRepository moderatorRepository;
+
+  @Mock
+  private PasswordEncoder passwordEncoder;
+
   // inject mocks into the service you are testing
   @InjectMocks
   private ModeratorService moderatorService;
 
+  @Before
+  public void setup(){
+    MockitoAnnotations.openMocks(this);
+  }
+
+  // @BeforeEach
+  // public void setMockOutput() {
+  //   // Set each CRUD method to its mock
+  //   lenient().when(appUserRepository.findAppUserByEmail(any()))
+  //       .thenAnswer(MockRepository::findUserByEmail);
+
+  //   lenient().when(passwordEncoder.encode(anyString()))
+  //   .thenAnswer((InvocationOnMock invocation) -> {
+  //     return invocation.getArgument(0) + "Encoded";
+  //   });
+  
+  //   lenient().when(appUserRepository.save(any(AppUser.class)))
+  //       .thenAnswer(MockRepository::saveAppUser);
+  //   lenient().when(moderatorRepository.save(any(Moderator.class)))
+  //       .thenAnswer(MockRepository::saveModerator);
+  // }
+  private static final String VALID_REGULARUSER_EMAIL_ONE = "regular.user.one@email.com";
+  private static final String VALID_REGULARUSER_EMAIL_TWO = "regular.user.two@email.com";
+  private static final String VALID_REGULARUSER_FIRSTNAME_ONE = "Rob";
+  private static final String VALID_REGULARUSER_FIRSTNAME_TWO = "Marwan";
+  private static final String VALID_REGULARUSER_LASTNAME_ONE = "Sab";
+  private static final String VALID_REGULARUSER_LASTNAME_TWO = "Kanaan";
+
+  private static final String VALID_MODERATOR_EMAIL_ONE = "moderator.user.one@email.com";
+  private static final String VALID_MODERATOR_EMAIL_TWO = "moderator.user.two@email.com";
+  private static final String VALID_MODERATOR_FIRSTNAME_ONE = "Rob";
+  private static final String VALID_MODERATOR_FIRSTNAME_TWO = "Marwan";
+  private static final String VALID_MODERATOR_LASTNAME_ONE = "Kanaan";
+  private static final String VALID_MODERATOR_LASTNAME_TWO = "Sab";
+
+  private static final String VALID_PASSWORD = "Password1";
+  private static final String VALID_PASSWORD_ENCODED = "Password1Encoded";
+
+  private static final String INVALID_EMAIL = "invalid.email";
+  private static final String INVALID_PASSWORD_ONE = "invalid";
+  private static final String INVALID_PASSWORD_TWO = "invalidPassword";
+  private static final String INVALID_PASSWORD_THREE = "invalidpassword1";
+  private static final String INVALID_PASSWORD_FOUR = "INVALIDPASSWORD1";
+  /**
+   * Mocking the repositories
+   *
+   * @author Siger Ma
+   */
   @BeforeEach
   public void setMockOutput() {
-    // Set each CRUD method to its mock
+    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
+      return invocation.getArgument(0);
+    };
+
     lenient().when(appUserRepository.findAppUserByEmail(anyString()))
-        .thenAnswer(MockRepository::findAppUserByEmail);
+        .thenAnswer((InvocationOnMock invocation) -> {
+          if (invocation.getArgument(0).equals(VALID_REGULARUSER_EMAIL_TWO)) {
+            AppUser appUser = new AppUser();
+            appUser.setEmail(VALID_REGULARUSER_EMAIL_TWO);
+            appUser.setFirstname(VALID_REGULARUSER_FIRSTNAME_TWO);
+            appUser.setLastname(VALID_REGULARUSER_LASTNAME_TWO);
+            appUser.setPassword(VALID_PASSWORD);
+            appUser.getAuthorities().add(Authority.User);
+            return appUser;
+          } else if (invocation.getArgument(0).equals(VALID_MODERATOR_EMAIL_TWO)) {
+            AppUser appUser = new AppUser();
+            appUser.setEmail(VALID_MODERATOR_EMAIL_TWO);
+            appUser.setFirstname(VALID_MODERATOR_FIRSTNAME_TWO);
+            appUser.setLastname(VALID_MODERATOR_LASTNAME_TWO);
+            appUser.setPassword(VALID_PASSWORD);
+            appUser.getAuthorities().add(Authority.Moderator);
+            return appUser;
+          } else {
+            return null;
+          }
+        });
+
+    lenient().when(passwordEncoder.encode(anyString()))
+        .thenAnswer((InvocationOnMock invocation) -> {
+          return invocation.getArgument(0) + "Encoded";
+        });
+
+    lenient().when(appUserRepository.save(any(AppUser.class))).thenAnswer(returnParameterAsAnswer);
+    lenient().when(moderatorRepository.save(any(Moderator.class)))
+        .thenAnswer(returnParameterAsAnswer);
   }
 
   /**
@@ -60,7 +154,8 @@ public class TestModeratorService {
    */
   @Test
   public void testModifyModerator_Success() {
-    AppUser modified = moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim", MockDatabase.authorities1);
+    AppUser modified = null;
+    modified = moderatorService.modifyModerator(VALID_REGULARUSER_EMAIL_ONE, "Jabbour", "Wassim", MockDatabase.authorities1);
     assertNotNull(modified);
     assertEquals(MockDatabase.appUser1.getEmail(), modified.getEmail());
     assertEquals("Jabbour", modified.getLastname());
@@ -220,7 +315,7 @@ public class TestModeratorService {
    * This class holds all of the mock methods of the CRUD repository.
    */
   class MockRepository{
-    static AppUser findAppUserByEmail(InvocationOnMock invocation) {
+    static AppUser findUserByEmail(InvocationOnMock invocation) {
         String email = (String) invocation.getArgument(0);
         if (email.equals(MockDatabase.appUser1.getEmail())) {
           return MockDatabase.appUser1;
@@ -233,6 +328,15 @@ public class TestModeratorService {
         }
         return null;
     }
+
+    static Moderator saveModerator(InvocationOnMock invocation) {
+      return (Moderator) invocation.getArgument(0);
+    }
+
+    static AppUser saveAppUser(InvocationOnMock invocation) {
+      return (AppUser) invocation.getArgument(0);
+    }
+
   }
 
   /**
