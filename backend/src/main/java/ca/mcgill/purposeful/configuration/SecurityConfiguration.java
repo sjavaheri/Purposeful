@@ -37,16 +37,25 @@ public class SecurityConfiguration {
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
         .csrf()
-        .disable() // csrf protection is an extra security layer - prevent cross site request forgery. Adds extra complexity. For post requests, you need extra actions
+        .disable() // csrf protection is an extra security layer - prevent cross site request
+        // forgery. Adds extra complexity. For post requests, you need extra actions
         .oauth2ResourceServer().jwt().jwtAuthenticationConverter(new AuthenticationConverter())
         .and()
-        .and() // configuring your project to accept jwt tokens as a method of authentication. Jwt (Json Web Token) tokens are json objects as strings, with no spaces, base64 encoded: headers, payhold, signature
-        .authorizeHttpRequests().anyRequest().authenticated()
-        .and() // by default, all endpoints are authenticated
+        .and() // configuring your project to accept jwt tokens as a method of authentication.
+        // Jwt (Json Web Token) tokens are json objects as strings, with no spaces,
+        // base64 encoded: headers, payhold, signature
+        .authorizeHttpRequests().requestMatchers("/api/appuser/regular/registration")
+        .permitAll() // Exclude this endpoint from authentication
+        .anyRequest().authenticated() // by default, all endpoints are authenticated
+        .and()
         // .oauth2Login().loginPage("/login")
-        // .formLogin().and() // two ways to provide authentication to users. Users have username and password - way they provide is either through a form or ( see next )
+        // .formLogin().and() // two ways to provide authentication to users. Users have
+        // username and password - way they provide is either through a form or ( see
+        // next )
         .httpBasic()
-        .and() // another way - in hhtp request that the backend sends, in headers there is "Authorization":"Basic encodeBase64(username:password)" ( encodebase64 is a method in javascript method that does base 64 encoding )
+        .and() // another way - in hhtp request that the backend sends, in headers there is
+        // "Authorization":"Basic encodeBase64(username:password)" ( encodebase64 is a
+        // method in javascript method that does base 64 encoding )
         .build(); // you build the object and return a securityFilterChain object
   }
 
@@ -108,31 +117,32 @@ public class SecurityConfiguration {
     return NimbusJwtDecoder.withPublicKey(rsaKeys().getPublicKey()).build();
   }
 
-     /*
-
-If we use javascript, this is the code for the frontend to encode the username and password upon sending to get the token
-
-    import * as crypto from 'crypto-js';
-    import Base64 from 'crypto-js/enc-base64';
-
-    const base64Url = (str) => {
-    return str.toString(Base64).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
-
-const encodeBase64 = (str) => {
-    let encodedWord = crypto.enc.Utf8.parse(str)
-    return base64Url(crypto.enc.Base64.stringify(encodedWord));
-}
-
-
-      
-
-
-
-
-
-      
-      */
-
+  /*
+   *
+   * If we use javascript, this is the code for the frontend to encode the
+   * username and password upon sending to get the token
+   *
+   * import * as crypto from 'crypto-js';
+   * import Base64 from 'crypto-js/enc-base64';
+   *
+   * const base64Url = (str) => {
+   * return str.toString(Base64).replace(/=/g, '').replace(/\+/g,
+   * '-').replace(/\//g, '_');
+   * }
+   *
+   * const encodeBase64 = (str) => {
+   * let encodedWord = crypto.enc.Utf8.parse(str)
+   * return base64Url(crypto.enc.Base64.stringify(encodedWord));
+   * }
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   */
 
 }
