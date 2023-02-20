@@ -36,8 +36,9 @@ public class ID003_loginStepDefinitions {
   @Autowired
   private CucumberUtil cucumberUtil;
 
-//  private ArrayList<String> jwtTokens;
+  // token to store once user is logged in
   private String jwtToken;
+  // field for catching the response of the http request
   private ResponseEntity<?> response;
 
 

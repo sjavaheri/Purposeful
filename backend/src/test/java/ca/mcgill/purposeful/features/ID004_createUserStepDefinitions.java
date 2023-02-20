@@ -28,8 +28,6 @@ import org.springframework.http.ResponseEntity;
  * @author Shidan Javaheri
  */
 
-// annotation to tell spring we are running integration tests, i.e. making API call
-// annotation to let us autowire objects into cucumber step definitions
 public class ID004_createUserStepDefinitions {
 
   @Autowired

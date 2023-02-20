@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
     features = {"src/test/resources"},
     extraGlue = "io.tpd.springbootcucumber.bagcommons"
 )
+// annotations to configure spring boot tests with a fake client, and to let us autowire objects into the cucumber class
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @CucumberContextConfiguration
 public class RunCucumberTest {
