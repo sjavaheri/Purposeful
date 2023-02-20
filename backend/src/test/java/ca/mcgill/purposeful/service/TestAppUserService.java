@@ -231,7 +231,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password too short
+   * Test the method that creates a new regular user with an invalid password too
+   * short
    *
    * @author Siger Ma
    */
@@ -252,7 +253,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password no number
+   * Test the method that creates a new regular user with an invalid password no
+   * number
    *
    * @author Siger Ma
    */
@@ -273,7 +275,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password no uppercase
+   * Test the method that creates a new regular user with an invalid password no
+   * uppercase
    * character
    *
    * @author Siger Ma
@@ -295,7 +298,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password no lowercase
+   * Test the method that creates a new regular user with an invalid password no
+   * lowercase
    * character
    *
    * @author Siger Ma
@@ -317,7 +321,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid email that already exists
+   * Test the method that creates a new regular user with an invalid email that
+   * already exists
    *
    * @author Siger Ma
    */
@@ -452,7 +457,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password too short
+   * Test the method that creates a new moderator with an invalid password too
+   * short
    *
    * @author Siger Ma
    */
@@ -472,7 +478,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password no number
+   * Test the method that creates a new moderator with an invalid password no
+   * number
    *
    * @author Siger Ma
    */
@@ -492,7 +499,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password no uppercase character
+   * Test the method that creates a new moderator with an invalid password no
+   * uppercase character
    *
    * @author Siger Ma
    */
@@ -512,7 +520,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password no lowercase character
+   * Test the method that creates a new moderator with an invalid password no
+   * lowercase character
    *
    * @author Siger Ma
    */
@@ -532,7 +541,8 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid email that already exists
+   * Test the method that creates a new moderator with an invalid email that
+   * already exists
    *
    * @author Siger Ma
    */
@@ -547,6 +557,255 @@ public class TestAppUserService {
       assertNull(appUser);
       assertEquals("An account with this email address already exists", e.getMessage());
     }
+  }
+
+  /**
+   * Test the method to modify the AppUser last and first names
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_success() {
+    AppUser appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_TWO,
+        VALID_MODERATOR_LASTNAME_TWO);
+    assertEquals(VALID_MODERATOR_FIRSTNAME_TWO, appUser.getFirstname());
+    assertEquals(VALID_MODERATOR_LASTNAME_TWO, appUser.getLastname());
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an empty email
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_EmptyEmail() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames("", VALID_MODERATOR_FIRSTNAME_ONE,
+          VALID_MODERATOR_LASTNAME_ONE);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("Email cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an null email
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_NullEmail() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames(null, VALID_MODERATOR_FIRSTNAME_ONE,
+          VALID_MODERATOR_LASTNAME_ONE);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("Email cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an empty first name
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_EmptyFirstName() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, "",
+          VALID_MODERATOR_LASTNAME_ONE);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("First name cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an null first name
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_NullFirstName() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, "",
+          VALID_MODERATOR_LASTNAME_ONE);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("First name cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an empty last name
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_EmptyLastName() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_ONE,
+          "");
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("Last name cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an null last name
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_NullLastName() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_ONE,
+          null);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("Last name cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test the method that modifies a new moderator with an invalid email, not
+   * existing int he database
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyUserNames_NotInDB() {
+    // Modify the moderator
+    AppUser appUser = null;
+    try {
+      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_ONE, VALID_MODERATOR_FIRSTNAME_TWO,
+          VALID_MODERATOR_LASTNAME_TWO);
+    } catch (Exception e) {
+      assertNull(appUser);
+      assertEquals("This account does not exist.", e.getMessage());
+    }
+  }
+
+  /**
+   * Method to check that a moderator's password is modified successfully
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_Success() {
+    AppUser modified = null;
+    modified = appUserService.modifyPassword(VALID_REGULARUSER_EMAIL_TWO, VALID_PASSWORD);
+    assertNotNull(modified);
+    assertEquals(VALID_REGULARUSER_EMAIL_TWO, modified.getEmail());
+    assertEquals(VALID_REGULARUSER_LASTNAME_TWO, modified.getLastname());
+    assertEquals(VALID_REGULARUSER_FIRSTNAME_TWO, modified.getFirstname());
+    assertEquals(VALID_PASSWORD_ENCODED, modified.getPassword());
+  }
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's
+   * password that is incorrect
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_TooShort() {
+    try {
+      appUserService.modifyPassword(VALID_REGULARUSER_EMAIL_TWO, INVALID_PASSWORD_ONE);
+    } catch (Exception e) {
+      assertEquals(
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
+          e.getMessage());
+      return;
+    }
+    fail();
+  }
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's
+   * password that is incorrect
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NoNumber() {
+    try {
+      appUserService.modifyPassword(VALID_REGULARUSER_EMAIL_TWO, INVALID_PASSWORD_TWO);
+    } catch (Exception e) {
+      assertEquals(
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
+          e.getMessage());
+      return;
+    }
+    fail();
+  }
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's
+   * password that is incorrect
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NoUpperCase() {
+    try {
+      appUserService.modifyPassword(VALID_REGULARUSER_EMAIL_TWO, INVALID_PASSWORD_THREE);
+    } catch (Exception e) {
+      assertEquals(
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
+          e.getMessage());
+      return;
+    }
+    fail();
+  }
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's
+   * password that is incorrect
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NoLowerCase() {
+    try {
+      appUserService.modifyPassword(VALID_REGULARUSER_EMAIL_TWO, INVALID_PASSWORD_FOUR);
+    } catch (Exception e) {
+      assertEquals(
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
+          e.getMessage());
+      return;
+    }
+    fail();
+  }
+
+  /**
+   * Method to check that an error is thrown when we try to modify a moderator's
+   * password but the moderator does not exist
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testModifyPassword_NotInDB() {
+    try {
+      appUserService.modifyPassword("unregisteredemail@gmail.com", VALID_PASSWORD);
+    } catch (Exception e) {
+      assertEquals("This account does not exist.", e.getMessage());
+      return;
+    }
+    fail();
   }
 
 }
