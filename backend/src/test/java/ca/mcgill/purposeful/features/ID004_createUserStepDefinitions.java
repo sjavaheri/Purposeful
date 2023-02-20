@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dto.AppUserDto;
@@ -11,20 +14,13 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.spring.CucumberContextConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 /**
  * Step definitions for the ID004_CreateUser.feature file
@@ -32,10 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author Shidan Javaheri
  */
 
-// annotation to tell spring we are running integration tests, i.e. making API calls
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+// annotation to tell spring we are running integration tests, i.e. making API call
 // annotation to let us autowire objects into cucumber step definitions
-@CucumberContextConfiguration
 public class ID004_createUserStepDefinitions {
 
   @Autowired

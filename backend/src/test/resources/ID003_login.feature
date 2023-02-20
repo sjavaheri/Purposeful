@@ -3,10 +3,10 @@ Feature: Login User
 
   Background:
     Given the database contains the following appUser accounts:
-      | firstName | lastName | email                    | password             | authorities         |
-      | Owner     | Steve    | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.Owner     |
-      | Moderator | John     | moderator.john@gmail.com | moderatorIsAwesome02 | Authority.Moderator |
-      | User      | Jack     | user.jack@gmail.com      | userIsAwesome03      | Authority.User      |
+      | firstname | lastname | email                    | password             | authorities |
+      | Owner     | Steve    | owner.steve@gmail.com    | OwnerIsAwesome01     | Owner       |
+      | Moderator | John     | moderator.john@gmail.com | moderatorIsAwesome02 | Moderator   |
+      | User      | Jack     | user.jack@gmail.com      | userIsAwesome03      | User        |
 
     # Normal flow
 
