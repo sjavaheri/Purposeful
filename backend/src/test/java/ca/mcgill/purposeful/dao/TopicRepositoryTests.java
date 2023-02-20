@@ -3,6 +3,7 @@ package ca.mcgill.purposeful.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.util.Util;
 
 /**
  * To test the Topic CRUD repository methods.
@@ -28,7 +28,7 @@ public class TopicRepositoryTests {
    * Clear the database before all tests
    */
   @BeforeAll
-  public static void clearDatabaseBefore(@Autowired Util util) {
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
@@ -36,7 +36,7 @@ public class TopicRepositoryTests {
    * Clear the database after each test
    */
   @AfterEach
-  public void clearDatabaseAfter(@Autowired Util util) {
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 

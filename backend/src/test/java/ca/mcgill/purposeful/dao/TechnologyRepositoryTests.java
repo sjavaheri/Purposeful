@@ -1,7 +1,7 @@
 package ca.mcgill.purposeful.dao;
 
 import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.util.Util;
+import ca.mcgill.purposeful.util.DatabaseUtil;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,7 +22,7 @@ public class TechnologyRepositoryTests {
    * Clear the database before all tests
    */
   @BeforeAll
-  public static void clearDatabaseBefore(@Autowired Util util) {
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
@@ -30,13 +30,12 @@ public class TechnologyRepositoryTests {
    * Clear the database after each test
    */
   @AfterEach
-  public void clearDatabaseAfter(@Autowired Util util) {
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
   /**
-   * Creates a technology, saves it in the database and then retrieves it by id
-   * and checks that
+   * Creates a technology, saves it in the database and then retrieves it by id and checks that
    * works
    *
    * @author Wassim Jabbour

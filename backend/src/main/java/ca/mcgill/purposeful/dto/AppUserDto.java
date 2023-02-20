@@ -11,6 +11,22 @@ public class AppUserDto {
   public AppUserDto() {
   }
 
+  /**
+   * Constructor for AppUserDto.
+   *
+   * @param email     - the email of the user
+   * @param password  - the password of the user
+   * @param firstname - the firstname of the user
+   * @param lastname  - the lastname of the user
+   * @author: Shidan Javaheri
+   */
+  public AppUserDto(String email, String password, String firstname, String lastname) {
+    this.email = email;
+    this.password = password;
+    this.firstname = firstname;
+    this.lastname = lastname;
+  }
+
   public String getId() {
     return id;
   }
