@@ -36,18 +36,18 @@ Feature: Modify Moderator
 
   Scenario Outline: Unsuccessfully update an moderator account
     Given that the user is logged with the email "owner.steve@gmail.com" and the password "OwnerIsAwesome01"
-    When the user request to update their account using the old password <oldPassword> with new password <newPassword>
-    Then the following error <error> should be raised
+    When the user request to update their account using the old password "<oldPassword>" with new password "<newPassword>"
+    Then the following error "<error>" should be raised
     Then the number of moderator accounts in the database is still "2"
 
     Examples:
-      | oldPassword      | newPassword    | error                                                                                                                                                            |
-      | OwnerIsAwesome0  | owner          | The password you entered is incorrect                                                                                                                            |
-      | OwnerIsAwesome01 | owner          | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | OwnerIsAwesome01 | Own1           | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | OwnerIsAwesome01 | thisistheowner | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | OwnerIsAwesome01 | 111111111      | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | OwnerIsAwesome01 | thispassword1  | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | OwnerIsAwesome01 | FFFFFFFFFFFFF8 | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | OwnerIsAwesome01 |                | Please enter a valid password. Passwords cannot be left empty                                                                                                    |
+      | oldPassword      | newPassword    | error                                                                                                                                                            | httpstatus |
+      | OwnerIsAwesome0  | owner          | The password you entered is incorrect                                                                                                                            | 400        |
+      | OwnerIsAwesome01 | owner          | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character | 400        |
+      | OwnerIsAwesome01 | Own1           | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character | 400        |
+      | OwnerIsAwesome01 | thisistheowner | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character | 400        |
+      | OwnerIsAwesome01 | 111111111      | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character | 400        |
+      | OwnerIsAwesome01 | thispassword1  | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character | 400        |
+      | OwnerIsAwesome01 | FFFFFFFFFFFFF8 | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character | 400        |
+      | OwnerIsAwesome01 |                | Please enter a valid password. Passwords cannot be left empty                                                                                                    | 400        |
 

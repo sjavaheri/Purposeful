@@ -8,7 +8,8 @@ import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.util.Util;
+import ca.mcgill.purposeful.util.DatabaseUtil;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class AppUserRepositoryTests {
    * Clear the database before all tests
    */
   @BeforeAll
-  public static void clearDatabaseBefore(@Autowired Util util) {
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
@@ -54,7 +55,7 @@ public class AppUserRepositoryTests {
    * Clear the database after each test
    */
   @AfterEach
-  public void clearDatabaseAfter(@Autowired Util util) {
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
