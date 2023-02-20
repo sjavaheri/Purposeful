@@ -1,22 +1,28 @@
 package ca.mcgill.purposeful.service;
 
+import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.URL;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
  * Service functions of the Idea class
- *
- * @author Wassim Jabbour
  */
 @Service
 public class IdeaService {
@@ -25,10 +31,23 @@ public class IdeaService {
    CRUD repos
   */
 
-  @Autowired IdeaRepository ideaRepository;
+  @Autowired
+  IdeaRepository ideaRepository;
+
+  @Autowired
+  DomainRepository domainRepository;
+
+  @Autowired
+  TechnologyRepository technologyRepository;
+
+  @Autowired
+  TopicRepository topicRepository;
+
+  @Autowired
+  URLRepository urlRepository;
 
   /*
-   GET functions
+   Service functions
   */
 
   /**
@@ -148,19 +167,144 @@ public class IdeaService {
     return filteredIdeas;
   }
 
-  /*
-   CREATE functions
-  */
+  @Transactional
+  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions, boolean isPaid, boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds, List<String> topicIds, List<String> imgUrlIds, String iconUrlId){
+    // Retrieve idea (we assume that no user can access an idea they don't own because of frontend)
+    Idea idea = getIdeaById(id);
 
-  /*
-   DELETE functions
-  */
+    // Check to make sure essential fields are not empty
+    checkEmptyAttributeViolation(title);
+    checkEmptyAttributeViolation(purpose);
+    checkEmptyAttributeViolation(descriptions);
 
-  /*
-   UPDATE functions
-  */
+    // Check to see if all objects exists
+    Set<Domain> domains = checkDomains(domainIds);
+    Set<Technology> techs = checkTechs(techIds);
+    Set<Topic> topics = checkTopics(topicIds);
+    List<URL> imgUrls = checkImgURLS(imgUrlIds);
+    URL iconUrl = checkURL(iconUrlId);
 
-  /*
-   DELETE functions
-  */
+    // Check to see if it is necessary to change boolean fields
+    if (idea.isPaid() != isPaid){
+      idea.setPaid(isPaid);
+    }
+    if (idea.isInProgress() != inProgress){
+      idea.setInProgress(inProgress);
+    }
+    if (idea.isPrivate() != isPrivate){
+      idea.setPrivate(isPrivate);
+    }
+
+    // Change all remaining attributes
+    if (title != null){
+      idea.setTitle(title);
+    }
+    if (descriptions != null){
+      idea.setTitle(descriptions);
+    }
+    if (purpose != null){
+      idea.setPurpose(purpose);
+    }
+
+    // See if date changed
+    if (date.compareTo(idea.getDate()) != 0){
+      idea.setDate(date);
+    }
+    idea.setDomains(domains);
+    idea.setTechs(techs);
+    idea.setTopics(topics);
+    idea.setSupportingImageUrls(imgUrls);
+    idea.setIconUrl(iconUrl);
+
+    // Save updated idea in the repository
+    ideaRepository.save(idea);
+
+    return idea;
+  }
+
+  // Responsible for checking if the new domains exist
+  public void checkEmptyAttributeViolation(String newValue){
+    if(newValue != null){
+      if (newValue.isEmpty()){
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+            "Necessary fields have been left empty");
+      }
+    }
+  }
+
+  // Responsible for checking if the new domains exist
+  public Set<Domain> checkDomains(List<String> domainIds){
+    Domain domain = null;
+    Set<Domain> domains = new HashSet<Domain>();
+    if (domainIds != null){
+      for (String id : domainIds){
+        try {
+          domain = domainRepository.findDomainById(id);
+          domains.add(domain);
+        } catch (Exception e) {
+          throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "You are attempting to link your idea to an object that does not exist");
+        }
+      }
+    }
+    return domains;
+  }
+
+  // Responsible for checking if the new technologies exist
+  public Set<Technology> checkTechs(List<String> techIds){
+    Technology tech = null;
+    Set<Technology> techs = new HashSet<Technology>();
+    if (techIds != null){
+      for (String id : techIds){
+        try {
+          tech = technologyRepository.findTechnologyById(id);
+          techs.add(tech);
+        } catch (Exception e) {
+          throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "You are attempting to link your idea to an object that does not exist");
+        }
+      }
+    }
+    return techs;
+  }
+
+  // Responsible for checking if the new topics exist
+  public Set<Topic> checkTopics(List<String> topicIds){
+    Topic topic = null;
+    Set<Topic> topics = new HashSet<Topic>();
+    if (topics != null){
+      for (String id : topicIds){
+        try {
+          topic = topicRepository.findTopicById(id);
+          topics.add(topic);
+        } catch (Exception e) {
+          throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "You are attempting to link your idea to an object that does not exist");
+        }
+      }
+    }
+    return topics;
+  }
+
+  // Responsible for checking if the new image URLs exist
+  public List<URL> checkImgURLS(List<String> imgUrlIds){
+    List<URL> urls = new ArrayList<URL>();
+    if(imgUrlIds != null){
+      for (String id : imgUrlIds){
+        urls.add(checkURL(id));
+      }
+    }
+    return urls;
+  }
+
+  public URL checkURL(String urlId){
+    URL url = null;
+    try {
+      url = urlRepository.findURLById(urlId);
+    } catch (Exception e) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      "You are attempting to link your idea to an object that does not exist");
+    }
+    return url;
+  }
 }
