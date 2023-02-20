@@ -81,4 +81,24 @@ public class AppUserController {
     return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
   }
 
+    @PutMapping(value = {"/regular",
+      "/regular/"}, consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasAnyAuthority('Owner', 'Moderator', 'User')")
+    public ResponseEntity<AppUserDto> updateRegularUser(@RequestBody AppUserDto appUserDto) {
+      // Unpack the DTO
+      if (appUserDto == null) {
+        throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");
+      }
+      String email = appUserDto.getEmail();
+      String password = appUserDto.getPassword();
+      String firstname = appUserDto.getFirstname();
+      String lastname = appUserDto.getLastname();
+  
+      // Register the user
+      AppUserDto registeredUser = DtoUtility.convertToDto(
+          appUserService.modifyUserNames(email, firstname, lastname));
+  
+      return ResponseEntity.status(HttpStatus.OK).body(registeredUser);
+    }
+
 }
