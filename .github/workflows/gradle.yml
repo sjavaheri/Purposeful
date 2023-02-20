@@ -30,7 +30,7 @@ jobs:
         distribution: 'adopt'
         cache: gradle
     - name: Validate Gradle wrapper
-      uses: gradle/wrapper-validation-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       working-directory: backend
