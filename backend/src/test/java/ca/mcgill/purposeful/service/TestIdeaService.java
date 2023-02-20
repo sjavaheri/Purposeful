@@ -3,6 +3,8 @@ package ca.mcgill.purposeful.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -19,13 +21,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -42,11 +42,6 @@ public class TestIdeaService {
 
   // Inject mocks
   @InjectMocks private IdeaService ideaService;
-
-  @Before
-  public void setup() {
-    MockitoAnnotations.openMocks(this);
-  }
 
   // Set the mock output of each function in the repository
   @BeforeEach
@@ -87,10 +82,16 @@ public class TestIdeaService {
       Idea fetchedIdea = ideaService.getIdeaById(null);
     } catch (Exception e) {
       assertEquals("Please enter a valid UUID. UUID cannot be empty.", e.getMessage());
+      return;
     }
+    fail();
   }
 
-  /** Test getting ideas by all criteria (Success case 1) */
+  /**
+   * Test getting ideas by all criteria (Success case 1)
+   *
+   * @author Wassim Jabbour
+   */
   @Test
   public void testGetIdeasByAllCriteria_Success1() {
 
@@ -124,10 +125,16 @@ public class TestIdeaService {
     // Check that the ideas are from most recent to oldest
     Iterator<Idea> iterator = fetchedIdeas.iterator();
     assertEquals(MockDatabase.idea2, iterator.next());
+    assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea1, iterator.next());
+    assertFalse(iterator.hasNext()); // Check only the 2 ideas are in the list
   }
 
-  /** Test getting ideas by all criteria (Success case 2) */
+  /**
+   * Test getting ideas by all criteria (Success case 2)
+   *
+   * @author Wassim Jabbour
+   */
   @Test
   public void testGetIdeasByAllCriteria_Success2() {
 
@@ -149,11 +156,57 @@ public class TestIdeaService {
     // Try to get the ideas by all criteria
     Iterable<Idea> fetchedIdeas =
         ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterator<Idea> iterator = fetchedIdeas.iterator();
 
     // Check that the ideas list fetched has only 1 idea, that is idea 1
     assertNotNull(fetchedIdeas);
-    assertEquals(MockDatabase.idea1, fetchedIdeas.iterator().next());
-    assertFalse(fetchedIdeas.iterator().hasNext());
+    assertEquals(MockDatabase.idea1, iterator.next());
+    assertFalse(iterator.hasNext());
+  }
+
+  /**
+   * Test getting ideas by all criteria (Success case 3)
+   *
+   * @author Wassim Jabbour
+   */
+  @Test
+  public void testGetIdeasByAllCriteria_Success3() {
+
+    // Try to get the ideas by date (All criteria are null)
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(null, null, null);
+    Iterator<Idea> iterator = fetchedIdeas.iterator();
+
+    // Check that the ideas list fetched has only 1 idea, that is idea 1
+    assertEquals(MockDatabase.idea2, iterator.next());
+    assertTrue(iterator.hasNext());
+    assertEquals(MockDatabase.idea1, iterator.next());
+    assertFalse(iterator.hasNext());
+  }
+
+  /**
+   * Test getting ideas by all criteria (Failure case 1)
+   *
+   * @author Wassim Jabbour
+   */
+  @Test
+  public void testGetIdeasByAllCriteria_NoMatch() {
+
+    // Convert topic group 3 to a list (No one has topic 4 which is in topic group 3)
+    List<String> search_topics = new ArrayList<>();
+    for (Topic topic : MockDatabase.topicGroup3) {
+      search_topics.add(topic.getName());
+    }
+
+    // Try to get the ideas by date (All criteria are null)
+    try {
+      Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(null, search_topics, null);
+    } catch (Exception e) {
+      assertEquals(
+          "No ideas match the given criteria. Please try again with different criteria.",
+          e.getMessage());
+      return;
+    }
+    fail();
   }
 
   /**
@@ -177,15 +230,19 @@ public class TestIdeaService {
       return invocation.getArgument(0);
     }
 
-    static Iterator<Idea> findAll(InvocationOnMock invocation) {
+    static Iterable<Idea> findAll(InvocationOnMock invocation) {
       HashSet<Idea> ideas = new HashSet<>();
       ideas.add(MockDatabase.idea1);
       ideas.add(MockDatabase.idea2);
-      return ideas.iterator();
+      return ideas;
     }
   }
 
-  /** This class holds all of the mock objects of the database */
+  /**
+   * This class holds all of the mock objects of the database *
+   *
+   * @author Wassim Jabbour
+   */
   static final class MockDatabase {
 
     /** Create mock objects here * */
@@ -210,10 +267,12 @@ public class TestIdeaService {
     static Topic topic1 = new Topic();
     static Topic topic2 = new Topic();
     static Topic topic3 = new Topic();
+    static Topic topic4 = new Topic();
 
     // Topic groups (A set of multiple of the above topics)
     static HashSet<Topic> topicGroup1 = new HashSet<>();
     static HashSet<Topic> topicGroup2 = new HashSet<>();
+    static HashSet<Topic> topicGroup3 = new HashSet<>();
 
     // Techs
     static Technology tech1 = new Technology();
@@ -240,12 +299,17 @@ public class TestIdeaService {
       topic3.setId(UUID.randomUUID().toString());
       topic3.setName("Sports");
 
+      topic4.setId(UUID.randomUUID().toString());
+      topic4.setName("Business");
+
       // Initialize topic groups by merging topics
       topicGroup1.add(topic1);
       topicGroup1.add(topic2);
       topicGroup1.add(topic3);
 
       topicGroup2.add(topic1);
+
+      topicGroup3.add(topic4);
 
       // Initialize domains
       domain1.setId(UUID.randomUUID().toString());

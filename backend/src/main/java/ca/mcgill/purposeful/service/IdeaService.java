@@ -2,7 +2,10 @@ package ca.mcgill.purposeful.service;
 
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
+import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,40 +80,61 @@ public class IdeaService {
     if (allIdeas == null) {
       throw new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not retrieve ideas.");
     }
+
     // Convert the iterable object to a list
     List<Idea> allIdeasList = new ArrayList<>();
     allIdeas.forEach(allIdeasList::add);
 
+    // Create a list to hold the filtered ideas
+    List<Idea> filteredIdeas = new ArrayList<>();
+
     // Filter by all criteria
     for (Idea idea : allIdeasList) {
 
-      // Check whether the idea contains 1 of the required domains
-      for (String domainName : domainNames) {
-        if (!idea.getDomains().contains(domainName)) {
-          allIdeasList.remove(idea);
-          continue;
+      // 1) Check whether the idea contains 1 of the required domains
+      // We do this by checking if the required domain list contains at least 1 of the idea's
+      // domains
+      // The following boolean will be set to true if the required domain list contains at least 1
+      // domain of our idea
+      boolean contains = false;
+      for (Domain ideaDomain : idea.getDomains()) {
+        // If null, no requirement on domain, so we skip this check
+        if (domainNames == null || domainNames.contains(ideaDomain.getName())) {
+          contains = true;
+          break;
         }
       }
+      if (!contains)
+        continue; // Skip the other checks if the idea does not contain the required domain
 
-      // Check whether the idea contains 1 of the required topics
-      for (String topicName : topicNames) {
-        if (!idea.getTopics().contains(topicName)) {
-          allIdeasList.remove(idea);
-          continue;
+      // 2) Check whether the idea contains 1 of the required topics
+      contains = false; // Variable reuse
+      for (Topic ideaTopic : idea.getTopics()) {
+        if (topicNames == null || topicNames.contains(ideaTopic.getName())) {
+          contains = true;
+          break;
         }
       }
+      if (!contains)
+        continue; // Skip the other checks if the idea does not contain the required topic
 
-      // Check whether the idea contains 1 of the required technologies
-      for (String techName : techNames) {
-        if (!idea.getTechs().contains(techName)) {
-          allIdeasList.remove(idea);
-          continue;
+      // 3) Check whether the idea contains 1 of the required technologies
+      contains = false; // Variable reuse
+      for (Technology ideaTech : idea.getTechs()) {
+        if (techNames == null || techNames.contains(ideaTech.getName())) {
+          contains = true;
+          break;
         }
       }
+      if (!contains)
+        continue; // Skip the other checks if the idea does not contain the required technology
+
+      // If we reach this point, the idea matches all the criteria
+      filteredIdeas.add(idea);
     }
 
     // Check whether any ideas match the criteria
-    if (allIdeasList.isEmpty()) {
+    if (filteredIdeas.isEmpty()) {
       throw new GlobalException(
           HttpStatus.NOT_FOUND,
           "No ideas match the given criteria. Please try again with different criteria.");
@@ -118,10 +142,10 @@ public class IdeaService {
 
     // Sort the ideas from newest to oldest
     // We flip the order so that the newest (bigger date) comes first
-    allIdeasList.sort((idea1, idea2) -> idea2.getDate().compareTo(idea1.getDate()));
+    filteredIdeas.sort((idea1, idea2) -> idea2.getDate().compareTo(idea1.getDate()));
 
     // Return the list of ideas otherwise
-    return allIdeasList;
+    return filteredIdeas;
   }
 
   /*
