@@ -19,7 +19,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: purposeful
         ports:
           - 5432:5432
@@ -40,6 +40,9 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Make the application.properties from application.properties.example
+        run: cp backend/src/main/resources/application.properties.example backend/src/main/resources/application.properties
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
