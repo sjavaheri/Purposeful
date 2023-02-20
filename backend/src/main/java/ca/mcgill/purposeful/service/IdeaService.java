@@ -78,19 +78,15 @@ public class IdeaService {
 
   // TODO: For the second sprint, we will implement a recommendations engine to
   // sort the ideas!
+
   /**
-   * Get all ideas with a set of domain names, topic names, and technology names.
-   * For now, we can
-   * just return all ideas upon a (null, null, null) call. Currently just sorts
-   * from newest to
+   * Get all ideas with a set of domain names, topic names, and technology names. For now, we can
+   * just return all ideas upon a (null, null, null) call. Currently just sorts from newest to
    * oldest.
    *
-   * @param domainNames The list of domain names that the idea must have one of
-   *                    (null if no filter)
-   * @param topicNames  The list of topic names that the idea must have one of
-   *                    (null if no filter)
-   * @param techNames   The list of technology names that the idea must have one
-   *                    of (null if no
+   * @param domainNames The list of domain names that the idea must have one of (null if no filter)
+   * @param topicNames  The list of topic names that the idea must have one of (null if no filter)
+   * @param techNames   The list of technology names that the idea must have one of (null if no
    *                    filter)
    * @return The set of ideas that match all the criteria
    * @author Wassim Jabbour
@@ -132,8 +128,9 @@ public class IdeaService {
           break;
         }
       }
-      if (!contains)
+      if (!contains) {
         continue; // Skip the other checks if the idea does not contain the required domain
+      }
 
       // 2) Check whether the idea contains 1 of the required topics
       contains = false; // Variable reuse
@@ -143,8 +140,9 @@ public class IdeaService {
           break;
         }
       }
-      if (!contains)
+      if (!contains) {
         continue; // Skip the other checks if the idea does not contain the required topic
+      }
 
       // 3) Check whether the idea contains 1 of the required technologies
       contains = false; // Variable reuse
@@ -154,8 +152,9 @@ public class IdeaService {
           break;
         }
       }
-      if (!contains)
+      if (!contains) {
         continue; // Skip the other checks if the idea does not contain the required technology
+      }
 
       // If we reach this point, the idea matches all the criteria
       filteredIdeas.add(idea);
@@ -179,13 +178,15 @@ public class IdeaService {
   @Transactional
   /**
    * Modify an idea based on id
-   * 
+   *
    * @author Ramin Akhavan
    * @throws GlobalException if necessary field are left empty or if an object
    *                         does not exist
    */
-  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions, boolean isPaid,
-      boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds, List<String> topicIds,
+  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions,
+      boolean isPaid,
+      boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds,
+      List<String> topicIds,
       List<String> imgUrlIds, String iconUrlId) {
     // Retrieve idea (we assume that no user can access an idea they don't own
     // because of frontend)
@@ -243,9 +244,9 @@ public class IdeaService {
 
   /**
    * Check to make sure a necessary field is not empty
-   * 
-   * @author Ramin Akhavan
+   *
    * @throws GlobalException if necessary field is left empty
+   * @author Ramin Akhavan
    */
   public void checkEmptyAttributeViolation(String newValue) {
     if (newValue != null) {
@@ -258,9 +259,9 @@ public class IdeaService {
 
   /**
    * Check to make sure all domains of an idea exist
-   * 
-   * @author Ramin Akhavan
+   *
    * @throws GlobalException if an object does not exist
+   * @author Ramin Akhavan
    */
   public Set<Domain> checkDomains(List<String> domainIds) {
     Domain domain = null;
@@ -280,9 +281,9 @@ public class IdeaService {
 
   /**
    * Check to make sure all technologies of an idea exist
-   * 
-   * @author Ramin Akhavan
+   *
    * @throws GlobalException if an object does not exist
+   * @author Ramin Akhavan
    */
   public Set<Technology> checkTechs(List<String> techIds) {
     Technology tech = null;
@@ -302,9 +303,9 @@ public class IdeaService {
 
   /**
    * Check to make sure all topics of an idea exist
-   * 
-   * @author Ramin Akhavan
+   *
    * @throws GlobalException if an object does not exist
+   * @author Ramin Akhavan
    */
   public Set<Topic> checkTopics(List<String> topicIds) {
     Topic topic = null;
@@ -324,9 +325,9 @@ public class IdeaService {
 
   /**
    * Check to make sure all image urls exist
-   * 
-   * @author Ramin Akhavan
+   *
    * @throws GlobalException if an object does not exist
+   * @author Ramin Akhavan
    */
   public List<URL> checkImgURLS(List<String> imgUrlIds) {
     List<URL> urls = new ArrayList<URL>();
@@ -340,9 +341,9 @@ public class IdeaService {
 
   /**
    * Check to make sure a url exists
-   * 
-   * @author Ramin Akhavan
+   *
    * @throws GlobalException if an object does not exist
+   * @author Ramin Akhavan
    */
   public URL checkURL(String urlId) {
     URL url = null;

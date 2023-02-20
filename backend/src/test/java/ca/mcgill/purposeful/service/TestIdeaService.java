@@ -154,7 +154,8 @@ public class TestIdeaService {
     }
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics,
+        search_techs);
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -191,7 +192,8 @@ public class TestIdeaService {
     search_techs.add(MockDatabase.tech2.getName());
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics,
+        search_techs);
     Iterator<Idea> iterator = fetchedIdeas.iterator();
 
     // Check that the ideas list fetched has only 1 idea, that is idea 1
@@ -247,8 +249,7 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Ramin Akhavan
-   *         Test all attributes changing
+   * @author Ramin Akhavan Test all attributes changing
    */
   @Test
   public void testModifyAllAttributesOfIdea() {
@@ -273,8 +274,10 @@ public class TestIdeaService {
     // Modify all attributes of idea
     Idea updatedIdea = null;
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE, NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
           MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       String message = e.getMessage();
@@ -309,8 +312,7 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Ramin Akhavan
-   *         Test empty attribute violation
+   * @author Ramin Akhavan Test empty attribute violation
    */
   @Test
   public void testModifyIdeaWithInvalidEmptyFieldFailure() {
@@ -323,8 +325,10 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_DATE, NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_DATE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
           MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
@@ -336,8 +340,7 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Ramin Akhavan
-   *         Test non-exsting object violation
+   * @author Ramin Akhavan Test non-exsting object violation
    */
   @Test
   public void testModifyIdeaWithNonExistingObjectFailure() {
@@ -353,8 +356,10 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE, NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
           MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
@@ -370,6 +375,7 @@ public class TestIdeaService {
    * @author Wassim Jabbour
    */
   class MockRepository {
+
     static Idea findIdeaById(InvocationOnMock invocation) {
       String id = invocation.getArgument(0);
       if (id.equals(MockDatabase.idea1.getId())) {
@@ -461,10 +467,14 @@ public class TestIdeaService {
     }
   }
 
-  /** This class holds all of the mock objects of the database */
+  /**
+   * This class holds all of the mock objects of the database
+   */
   static final class MockDatabase {
 
-    /** Create mock objects here * */
+    /**
+     * Create mock objects here *
+     */
 
     // Ideas
     static Idea idea1 = new Idea();
