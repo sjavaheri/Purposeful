@@ -6,8 +6,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 /**
  * The URL class, the model for all URLs in the database
@@ -29,15 +27,6 @@ public class URL {
 
   @Column(nullable = false)
   private boolean presetIcon;
-
-  // ------------------------
-  // URL Associations
-  // ------------------------
-
-  // Null when URL is an icon of an idea
-  @ManyToOne(optional = true)
-  @JoinColumn(name = "idea_id", nullable = true)
-  private Idea idea;
 
   // ------------------------
   // URL Constructor
@@ -72,13 +61,5 @@ public class URL {
 
   public void setPresetIcon(boolean presetIcon) {
     this.presetIcon = presetIcon;
-  }
-
-  public Idea getIdea() {
-    return idea;
-  }
-
-  public void setIdea(Idea idea) {
-    this.idea = idea;
   }
 }
