@@ -2,7 +2,8 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
   As a user, I want to be able to browse public ideas that are linked to a specific domain, so that I can find and learn about new and innovative ideas in my area of interest.
 
   Background:
-    Given the database contains the following RegularUser accounts:
+    Given the id map is initialized
+    And the database contains the following RegularUser accounts:
       | id | name          | email                  | password     |
       | 1  | John Goblikon | john.goblikon@mail.com | P@ssWord1234 |
     And the database contains the following domains:
@@ -38,8 +39,8 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
   # Normal/alternate flows
 
   Scenario Outline: Successfully browse ideas by domain, topic, and tech
-    When the user requests to browse ideas by domains <domain_ids>, topics <topic_ids>, and techs <techs_ids>
-    Then the user shall have access to the ideas with ids <idea_ids>
+    When the user requests to browse ideas by domains "<domain_ids>", topics "<topic_ids>", and techs "<techs_ids>"
+    Then the user shall have access to the ideas with ids "<idea_ids>"
 
     Examples:
       | domain_ids | topic_ids | techs_ids | idea_ids               |
@@ -68,8 +69,8 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
   # Error flows
 
   Scenario Outline: Browse ideas by domain, topic, or tech that does not exist
-    When the user requests to browse ideas by domains <domain_uuids>, topics <topic_uuids>, and techs <techs_uuids>
-    Then the user shall recieve the error message <error_message> with status <HTTP_status>
+    When the user erroneously requests to browse ideas by domains "<domain_uuids>", topics "<topic_uuids>", and techs "<techs_uuids>"
+    Then the user shall receive the error message "<error_message>" with status "<HTTP_status>"
 
     Examples:
       | domain_uuids                         | topic_uuids                          | techs_uuids                          | error_message                        | HTTP_status |
