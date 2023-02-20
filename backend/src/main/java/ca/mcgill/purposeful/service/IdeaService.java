@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,9 +177,16 @@ public class IdeaService {
   }
 
   @Transactional
-  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions,
-      boolean isPaid, boolean inProgress, boolean isPrivate, List<String> domainIds,
-      List<String> techIds, List<String> topicIds, List<String> imgUrlIds, String iconUrlId) {
+  /**
+   * Modify an idea based on id
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if necessary field are left empty or if an object
+   *                         does not exist
+   */
+  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions, boolean isPaid,
+      boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds, List<String> topicIds,
+      List<String> imgUrlIds, String iconUrlId) {
     // Retrieve idea (we assume that no user can access an idea they don't own
     // because of frontend)
     Idea idea = getIdeaById(id);
@@ -211,7 +219,7 @@ public class IdeaService {
       idea.setTitle(title);
     }
     if (descriptions != null) {
-      idea.setTitle(descriptions);
+      idea.setDescription(descriptions);
     }
     if (purpose != null) {
       idea.setPurpose(purpose);
@@ -233,7 +241,12 @@ public class IdeaService {
     return idea;
   }
 
-  // Responsible for checking if the new domains exist
+  /**
+   * Check to make sure a necessary field is not empty
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if necessary field is left empty
+   */
   public void checkEmptyAttributeViolation(String newValue) {
     if (newValue != null) {
       if (newValue.isEmpty()) {
@@ -243,61 +256,78 @@ public class IdeaService {
     }
   }
 
-  // Responsible for checking if the new domains exist
+  /**
+   * Check to make sure all domains of an idea exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public Set<Domain> checkDomains(List<String> domainIds) {
     Domain domain = null;
     Set<Domain> domains = new HashSet<Domain>();
     if (domainIds != null) {
       for (String id : domainIds) {
-        try {
-          domain = domainRepository.findDomainById(id);
-          domains.add(domain);
-        } catch (Exception e) {
+        domain = domainRepository.findDomainById(id);
+        if (domain == null) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
               "You are attempting to link your idea to an object that does not exist");
         }
+        domains.add(domain);
       }
     }
     return domains;
   }
 
-  // Responsible for checking if the new technologies exist
+  /**
+   * Check to make sure all technologies of an idea exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public Set<Technology> checkTechs(List<String> techIds) {
     Technology tech = null;
     Set<Technology> techs = new HashSet<Technology>();
     if (techIds != null) {
       for (String id : techIds) {
-        try {
-          tech = technologyRepository.findTechnologyById(id);
-          techs.add(tech);
-        } catch (Exception e) {
+        tech = technologyRepository.findTechnologyById(id);
+        if (tech == null) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
               "You are attempting to link your idea to an object that does not exist");
         }
+        techs.add(tech);
       }
     }
     return techs;
   }
 
-  // Responsible for checking if the new topics exist
+  /**
+   * Check to make sure all topics of an idea exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public Set<Topic> checkTopics(List<String> topicIds) {
     Topic topic = null;
     Set<Topic> topics = new HashSet<Topic>();
-    if (topics != null) {
+    if (topicIds != null) {
       for (String id : topicIds) {
-        try {
-          topic = topicRepository.findTopicById(id);
-          topics.add(topic);
-        } catch (Exception e) {
+        topic = topicRepository.findTopicById(id);
+        if (topic == null) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
               "You are attempting to link your idea to an object that does not exist");
         }
+        topics.add(topic);
       }
     }
     return topics;
   }
 
-  // Responsible for checking if the new image URLs exist
+  /**
+   * Check to make sure all image urls exist
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public List<URL> checkImgURLS(List<String> imgUrlIds) {
     List<URL> urls = new ArrayList<URL>();
     if (imgUrlIds != null) {
@@ -308,13 +338,20 @@ public class IdeaService {
     return urls;
   }
 
+  /**
+   * Check to make sure a url exists
+   * 
+   * @author Ramin Akhavan
+   * @throws GlobalException if an object does not exist
+   */
   public URL checkURL(String urlId) {
     URL url = null;
-    try {
+    if (urlId != null) {
       url = urlRepository.findURLById(urlId);
-    } catch (Exception e) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "You are attempting to link your idea to an object that does not exist");
+      if (url == null) {
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+            "You are attempting to link your idea to an object that does not exist");
+      }
     }
     return url;
   }

@@ -1,16 +1,14 @@
 package ca.mcgill.purposeful.dto;
 
+import ca.mcgill.purposeful.model.Idea;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import ca.mcgill.purposeful.model.Idea;
-
-public class DetailedIdeaDTO {
-
+public class IdeaDTO {
   private String id;
   private boolean isPaid;
   private boolean isPrivate;
@@ -18,15 +16,17 @@ public class DetailedIdeaDTO {
   private String title;
   private String purpose;
   private String description;
+
   @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date;
+
   private Set<DomainDTO> domains;
   private Set<TechDTO> techs;
   private Set<TopicDTO> topics;
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
-  public DetailedIdeaDTO(Idea idea) {
+  public IdeaDTO(Idea idea) {
     this.isPaid = idea.isPaid();
     this.isPrivate = idea.isPrivate();
     this.inProgress = idea.isInProgress();
@@ -37,16 +37,24 @@ public class DetailedIdeaDTO {
     this.domains = idea.getDomains().stream().map(DomainDTO::new).collect(Collectors.toSet());
     this.techs = idea.getTechs().stream().map(TechDTO::new).collect(Collectors.toSet());
     this.topics = idea.getTopics().stream().map(TopicDTO::new).collect(Collectors.toSet());
-    this.imgUrls = idea.getSupportingImageUrls().stream().map(URLDTO::new)
-        .collect(Collectors.toList());
+    this.imgUrls = idea.getSupportingImageUrls().stream().map(URLDTO::new).collect(Collectors.toList());
     this.iconUrl = new URLDTO(idea.getIconUrl());
   }
 
-  public DetailedIdeaDTO(String id, String title, String purpose, String descriptions, Date date,
+  public IdeaDTO(
+      String id,
+      String title,
+      String purpose,
+      String descriptions,
+      Date date,
       boolean isPaid,
-      boolean inProgress, boolean isPrivate, Set<DomainDTO> domains, Set<TechDTO> techs,
+      boolean inProgress,
+      boolean isPrivate,
+      Set<DomainDTO> domains,
+      Set<TechDTO> techs,
       Set<TopicDTO> topics,
-      List<URLDTO> imgUrls, URLDTO iconUrl) {
+      List<URLDTO> imgUrls,
+      URLDTO iconUrl) {
     this.id = id;
     this.isPaid = isPaid;
     this.isPrivate = isPrivate;
@@ -114,4 +122,21 @@ public class DetailedIdeaDTO {
     return iconUrl;
   }
 
+  /**
+   * Converts a list of Idea objects to a list of IdeaDTO objects
+   *
+   * @param ideas The ideas to convert
+   * @return The converted list
+   * @author Wassim Jabbour
+   */
+  public static List<IdeaDTO> convertToDto(List<Idea> ideas) {
+
+    List<IdeaDTO> dtoList = new ArrayList<>();
+
+    for (Idea idea : ideas) {
+      dtoList.add(new IdeaDTO(idea));
+    }
+
+    return dtoList;
+  }
 }
