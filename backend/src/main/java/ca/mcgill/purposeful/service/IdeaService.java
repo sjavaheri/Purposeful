@@ -206,7 +206,7 @@ public class IdeaService {
       idea.setTitle(title);
     }
     if (descriptions != null){
-      idea.setTitle(descriptions);
+      idea.setDescription(descriptions);
     }
     if (purpose != null){
       idea.setPurpose(purpose);
@@ -254,13 +254,12 @@ public class IdeaService {
     Set<Domain> domains = new HashSet<Domain>();
     if (domainIds != null){
       for (String id : domainIds){
-        try {
           domain = domainRepository.findDomainById(id);
+          if (domain == null) {
+            throw new GlobalException(HttpStatus.BAD_REQUEST,
+            "You are attempting to link your idea to an object that does not exist");
+          }
           domains.add(domain);
-        } catch (Exception e) {
-          throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "You are attempting to link your idea to an object that does not exist");
-        }
       }
     }
     return domains;
@@ -277,13 +276,12 @@ public class IdeaService {
     Set<Technology> techs = new HashSet<Technology>();
     if (techIds != null){
       for (String id : techIds){
-        try {
-          tech = technologyRepository.findTechnologyById(id);
-          techs.add(tech);
-        } catch (Exception e) {
+        tech = technologyRepository.findTechnologyById(id);
+        if (tech == null) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
           "You are attempting to link your idea to an object that does not exist");
         }
+        techs.add(tech);
       }
     }
     return techs;
@@ -298,15 +296,14 @@ public class IdeaService {
   public Set<Topic> checkTopics(List<String> topicIds){
     Topic topic = null;
     Set<Topic> topics = new HashSet<Topic>();
-    if (topics != null){
+    if (topicIds != null){
       for (String id : topicIds){
-        try {
-          topic = topicRepository.findTopicById(id);
-          topics.add(topic);
-        } catch (Exception e) {
+        topic = topicRepository.findTopicById(id);
+        if (topic == null) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
           "You are attempting to link your idea to an object that does not exist");
         }
+        topics.add(topic);
       }
     }
     return topics;
@@ -336,11 +333,12 @@ public class IdeaService {
    */
   public URL checkURL(String urlId){
     URL url = null;
-    try {
+    if (urlId != null){
       url = urlRepository.findURLById(urlId);
-    } catch (Exception e) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-      "You are attempting to link your idea to an object that does not exist");
+      if (url == null) {
+        throw new GlobalException(HttpStatus.BAD_REQUEST,
+        "You are attempting to link your idea to an object that does not exist");
+      }
     }
     return url;
   }
