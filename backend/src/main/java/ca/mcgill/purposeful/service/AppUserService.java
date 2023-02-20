@@ -2,6 +2,8 @@ package ca.mcgill.purposeful.service;
 
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,4 +261,21 @@ public class AppUserService implements UserDetailsService {
     appUserRepository.save(user);
     return user;
   }
+
+  /**
+   * This service method returns all the users in the database
+   * @return List<AppUser> - the list of all the users in the database
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @Transactional
+  public List<AppUser> getAllUsers() {
+    Iterable<AppUser> iterable = appUserRepository.findAll();
+    List<AppUser> resultList = new ArrayList<AppUser>();
+    for (AppUser t : iterable) {
+      resultList.add(t);
+    }
+    return resultList;
+  }
+
 }
