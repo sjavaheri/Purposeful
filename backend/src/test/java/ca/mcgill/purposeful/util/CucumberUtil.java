@@ -27,12 +27,12 @@ public class CucumberUtil {
 
   @Autowired PasswordEncoder passwordEncoder;
 
-  public static ArrayList<AppUser> unpackTableIntoUser(DataTable dataTable) {
+  public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
     // create an empty list of app users
-    ArrayList<AppUser> appUsers = new ArrayList<AppUser>();
+    ArrayList<AppUser> appUsers = new ArrayList<>();
 
     for (var row : rows) {
       // get the values from the data table

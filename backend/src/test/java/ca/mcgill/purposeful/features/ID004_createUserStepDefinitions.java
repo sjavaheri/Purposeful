@@ -27,33 +27,26 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Shidan Javaheri
  */
-
 public class ID004_createUserStepDefinitions {
 
-  @Autowired
-  AppUserService appUserService;
+  @Autowired AppUserService appUserService;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
   // client that will send requests
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
   // util class for clearing the database
-  @Autowired
-  private DatabaseUtil databaseUtil;
+  @Autowired private DatabaseUtil databaseUtil;
 
   // fields for catching the response of the http request
   private ResponseEntity<?> response;
 
   @Given("the database contains the following regular user account:")
   public void theDatabaseContainsTheFollowingRegularUserAccount(DataTable dataTable) {
-    // clear the database
 
-    databaseUtil.clearDatabase();
     // get access to the app users with the helper method
-    ArrayList<AppUser> appUsers = CucumberUtil.unpackTableIntoUser(dataTable);
+    ArrayList<AppUser> appUsers = CucumberUtil.unpackTableIntoUsers(dataTable);
 
     // create each app user
     for (AppUser appUser : appUsers) {
@@ -62,7 +55,8 @@ public class ID004_createUserStepDefinitions {
     }
   }
 
-  // it was critical to have a separate step definition for a successful account creation and an erroneous one
+  // it was critical to have a separate step definition for a successful account creation and an
+  // erroneous one
   @When(
       "a new regular user account is created with first name {string}, last name {string}, email {string} and password {string}")
   public void aNewRegularUserAccountIsCreatedWithFirstNameLastNameEmailAndPassword(
