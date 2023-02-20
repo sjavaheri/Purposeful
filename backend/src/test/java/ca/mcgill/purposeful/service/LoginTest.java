@@ -58,15 +58,20 @@ public class LoginTest {
 //    createAccount("moderator.john@gmail.com", "Moderator", "John", "moderatorIsAwesome02", Authority.Moderator);
 //    createAccount("user.jack@gmail.com", "User", "Jack", "userIsAwesome03", Authority.User);
 
-    HttpHeaders headers = new HttpHeaders();
-    String auth = "owner.steve@gmail.com:OwnerIsAwesome01";
-    var authHeader = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
-    headers.add( "Authorization", authHeader );
-    HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+    HttpEntity<String> requestEntity = new HttpEntity<>(basicAuthHeader("owner.steve@gmail.com", "1OwnerIsAwesome01"));
     HttpEntity<String> requestEntity2 = new HttpEntity<>("");
 
     ResponseEntity<String> response = client.exchange
         ("/login/", HttpMethod.POST, requestEntity, String.class);
+
+//    String jwt = response.getBody().toString();
+//    HttpEntity<String> requestEntity3 = new HttpEntity<>(bearerAuthHeader(jwt));
+//    ResponseEntity<String> response2 = client.exchange
+//        ("/demo/", HttpMethod.GET, requestEntity3, String.class);
+
+//        ResponseEntity<String> response2 = client.withBasicAuth("owner.steve@gmail.com", "OwnerIsAwesome01").exchange("/demo",
+//            HttpMethod.GET, requestEntity2, String.class);
+
 
 //    ResponseEntity<String> response = client.withBasicAuth("owner.steve@gmail.com", "OwnerIsAwesome01").postForEntity(
 //        "/login",requestEntity2, String.class);
@@ -74,6 +79,10 @@ public class LoginTest {
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotNull(response.getBody());
+
+//    assertNotNull(response2);
+//    assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response2.getStatusCode());
+//    assertEquals("kj:", response2.getBody());
   }
 
   /**
@@ -97,4 +106,26 @@ public class LoginTest {
     account.setAuthorities(authorities);
     appUserRepository.save(account);
   }
+
+  /**
+   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first authenticate
+   * @param email
+   * @param password
+   * @return HttpHeaders required in the request
+   */
+  private HttpHeaders basicAuthHeader(String email, String password) {
+    HttpHeaders headers = new HttpHeaders();
+    String auth = email + ":" + password;
+    var authHeader = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
+    headers.add( "Authorization", authHeader );
+    return headers;
+  }
+
+  private HttpHeaders bearerAuthHeader(String jwtToken) {
+    HttpHeaders headers = new HttpHeaders();
+    var authHeader = "Bearer " + jwtToken;
+    headers.add( "Authorization", authHeader );
+    return headers;
+  }
+
 }
