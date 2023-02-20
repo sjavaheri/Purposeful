@@ -87,9 +87,9 @@ public class IdeaService {
    * oldest.
    *
    * @param domainNames The list of domain names that the idea must have one of (null if no filter)
-   * @param topicNames  The list of topic names that the idea must have one of (null if no filter)
-   * @param techNames   The list of technology names that the idea must have one of (null if no
-   *                    filter)
+   * @param topicNames The list of topic names that the idea must have one of (null if no filter)
+   * @param techNames The list of technology names that the idea must have one of (null if no
+   *        filter)
    * @return The set of ideas that match all the criteria
    * @author Wassim Jabbour
    */
@@ -175,7 +175,7 @@ public class IdeaService {
     // Return the list of ideas otherwise
     return filteredIdeas;
   }
-  
+
   /**
    * Create an idea
    *
@@ -222,10 +222,10 @@ public class IdeaService {
     idea.setIconUrl(iconUrl);
     idea.setSupportingImageUrls(imgUrls);
     idea.setUser(user);
-    
-    //Save to repository
+
+    // Save to repository
     ideaRepository.save(idea);
-    
+
     return idea;
   }
 
@@ -234,14 +234,11 @@ public class IdeaService {
    * Modify an idea based on id
    *
    * @author Ramin Akhavan
-   * @throws GlobalException if necessary field are left empty or if an object
-   *                         does not exist
+   * @throws GlobalException if necessary field are left empty or if an object does not exist
    */
   public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions,
-      boolean isPaid,
-      boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds,
-      List<String> topicIds,
-      List<String> imgUrlIds, String iconUrlId) {
+      boolean isPaid, boolean inProgress, boolean isPrivate, List<String> domainIds,
+      List<String> techIds, List<String> topicIds, List<String> imgUrlIds, String iconUrlId) {
     // Retrieve idea (we assume that no user can access an idea they don't own
     // because of frontend)
     Idea idea = getIdeaById(id);
@@ -305,8 +302,7 @@ public class IdeaService {
   public void checkEmptyAttributeViolation(String newValue) {
     if (newValue != null) {
       if (newValue.isEmpty()) {
-        throw new GlobalException(HttpStatus.BAD_REQUEST,
-            "Necessary fields have been left empty");
+        throw new GlobalException(HttpStatus.BAD_REQUEST, "Necessary fields have been left empty");
       }
     }
   }
