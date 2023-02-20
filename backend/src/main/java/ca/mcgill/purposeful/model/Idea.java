@@ -1,7 +1,5 @@
 package ca.mcgill.purposeful.model;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,10 +11,10 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import org.hibernate.annotations.GenericGenerator;
 //import java.sql.Date;
 //import java.sql.Time;
 
@@ -216,4 +214,5 @@ public class Idea {
   public void setUser(RegularUser user) {
     this.user = user;
   }
+
 }
