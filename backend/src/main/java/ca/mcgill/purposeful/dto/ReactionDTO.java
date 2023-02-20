@@ -11,16 +11,22 @@ public class ReactionDTO {
   private ReactionType reactionType;
   @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date;
+  private String idea_id;
+  private String user_id;
 
   public ReactionDTO(Reaction reaction) {
     this.reactionType = reaction.getReactionType();
     this.date = reaction.getDate();
+    this.idea_id = reaction.getIdea().getId();
+    this.user_id = reaction.getRegularUser().getId();
   }
 
-  public ReactionDTO(String id, ReactionType reactionType, Date date) {
+  public ReactionDTO(String id, ReactionType reactionType, Date date, String idea_id, String user_id) {
     this.id = id;
     this.reactionType = reactionType;
     this.date = date;
+    this.idea_id = idea_id;
+    this.user_id = user_id;
   }
 
   public String getId() {
@@ -45,5 +51,21 @@ public class ReactionDTO {
 
   public void setDate(Date date) {
     this.date = date;
+  }
+
+  public String getIdea_id() {
+    return idea_id;
+  }
+
+  public void setIdea_id(String idea_id) {
+    this.idea_id = idea_id;
+  }
+
+  public String getUser_id() {
+    return user_id;
+  }
+
+  public void setUser_id(String user_id) {
+    this.user_id = user_id;
   }
 }
