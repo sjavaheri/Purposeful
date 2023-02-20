@@ -1,6 +1,5 @@
 package ca.mcgill.purposeful.service;
 
-import ca.mcgill.purposeful.controller.LoginController;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
@@ -21,13 +20,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.security.auth.login.LoginContext;
-import org.apache.tomcat.util.descriptor.web.LoginConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authorization.method.SecuredAuthorizationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
