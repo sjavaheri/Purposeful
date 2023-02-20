@@ -1,15 +1,12 @@
 package ca.mcgill.purposeful.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ca.mcgill.purposeful.dao.AppUserRepository;
@@ -51,13 +48,15 @@ public class TestExampleService {
   @Test
   public void poistiveOutcomeTest() {
 
-    // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+    // set up mocks. The number of mocks matches the number of calls to external
+    // dependancies in the service method
 
     // when this repository calls this method on this argument
     // then answer with this value
     // to return the same value use invocation.getArgument(0)
 
-    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock
+    // invocation ) -> this.user);
 
     // call the service method you are testing
 
@@ -66,7 +65,8 @@ public class TestExampleService {
     // make assertions on the result
     assertEquals(1, 1);
 
-    // make verifications that each repository was called the correct number of times
+    // make verifications that each repository was called the correct number of
+    // times
     // # of verifications matches # of mocks
 
     // verify(exampleRepository, times(1)).save(any(AppUser.class));
@@ -81,24 +81,28 @@ public class TestExampleService {
   @Test
   public void negativeOutcomeTest() {
 
-    // set up mocks. The number of mocks matches the number of calls to external dependancies in the service method
+    // set up mocks. The number of mocks matches the number of calls to external
+    // dependancies in the service method
 
     // when this repository calls this method on this argument
     // then answer with this value
     // to return the same value use invocation.getArgument(0)
 
-    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock invocation ) -> this.user);
+    // when(exampleRepository.save(any(AppUser.class))).thenAnswer((InvocationOnMock
+    // invocation ) -> this.user);
 
     // call the service method you are testing, and get the exception
     // service method is called within assert throws
 
-    // GlobalException exception = assertThrows(GlobalException.class, () -> exampleService.generateToken(this.user));
+    // GlobalException exception = assertThrows(GlobalException.class, () ->
+    // exampleService.generateToken(this.user));
 
     // make assertiosn on the exception
     // check the 1) Message and 2) status
     assertEquals(1, 1);
 
-    // make verifications that each repository was called the correct number of times
+    // make verifications that each repository was called the correct number of
+    // times
     // # of verifications matches # of mocks
 
     // verify(exampleRepository, times(1)).save(any(AppUser.class));

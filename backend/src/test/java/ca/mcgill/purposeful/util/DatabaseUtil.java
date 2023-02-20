@@ -1,13 +1,8 @@
 package ca.mcgill.purposeful.util;
 
-import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.*;
-import ca.mcgill.purposeful.model.AppUser;
-import io.cucumber.datatable.DataTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.*;
 
 /**
  * Class for resuable methods needed across other classes
