@@ -21,45 +21,45 @@ import ca.mcgill.purposeful.dao.VerificationRequestRepository;
 @Configuration
 public class Util {
 
-    @Autowired
-    private AppUserRepository appUserRepository;
+  @Autowired
+  private AppUserRepository appUserRepository;
 
-    @Autowired
-    private DomainRepository domainRepository;
+  @Autowired
+  private DomainRepository domainRepository;
 
-    @Autowired
-    private IdeaRepository ideaRepository;
+  @Autowired
+  private IdeaRepository ideaRepository;
 
-    @Autowired
-    private ModeratorRepository moderatorRepository;
+  @Autowired
+  private ModeratorRepository moderatorRepository;
 
-    @Autowired
-    private OwnerRepository ownerRepository;
+  @Autowired
+  private OwnerRepository ownerRepository;
 
-    @Autowired
-    private ReactionRepository reactionRepository;
+  @Autowired
+  private ReactionRepository reactionRepository;
 
-    @Autowired
-    private RegularUserRepository regularUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
-    @Autowired
-    private TechnologyRepository technologyRepository;
+  @Autowired
+  private TechnologyRepository technologyRepository;
 
-    @Autowired
-    private TopicRepository topicRepository;
+  @Autowired
+  private TopicRepository topicRepository;
 
-    @Autowired
-    private URLRepository urlRepository;
+  @Autowired
+  private URLRepository urlRepository;
 
-    @Autowired
-    private VerificationRequestRepository verificationRequestRepository;
+  @Autowired
+  private VerificationRequestRepository verificationRequestRepository;
 
-    /**
-     * Method to clear the database completely
-     * 
-     * @Author Shidan Javaheri
-     */
-    public void clearDatabase() {
+  /**
+   * Method to clear the database completely
+   *
+   * @Author Shidan Javaheri
+   */
+  public void clearDatabase() {
 //        reactionRepository.deleteAll();
 //        ideaRepository.deleteAll();
 //        appUserRepository.deleteAll();
@@ -71,17 +71,17 @@ public class Util {
 //        topicRepository.deleteAll();
 //        urlRepository.deleteAll();
 //        verificationRequestRepository.deleteAll();
-        reactionRepository.deleteAll();
-        ideaRepository.deleteAll();
-        appUserRepository.deleteAll();
-        domainRepository.deleteAll();
-        moderatorRepository.deleteAll();
-        ownerRepository.deleteAll();
-        regularUserRepository.deleteAll();
-        technologyRepository.deleteAll();
-        topicRepository.deleteAll();
-        urlRepository.deleteAll();
-        verificationRequestRepository.deleteAll();
-    }
+    reactionRepository.deleteAll();
+    ideaRepository.deleteAll();
+    appUserRepository.deleteAll();
+    domainRepository.deleteAll();
+    moderatorRepository.deleteAll();
+    ownerRepository.deleteAll();
+    regularUserRepository.deleteAll();
+    technologyRepository.deleteAll();
+    topicRepository.deleteAll();
+    urlRepository.deleteAll();
+    verificationRequestRepository.deleteAll();
+  }
 
 }

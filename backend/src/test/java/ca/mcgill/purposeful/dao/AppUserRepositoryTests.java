@@ -15,19 +15,16 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
- * AppUser Repository testing class which initiates an appUser with all its
- * attributes, executes the tests, then clears each instance from the database.
- * 
+ * AppUser Repository testing class which initiates an appUser with all its attributes, executes the
+ * tests, then clears each instance from the database.
+ *
  * @author Sasha Denouvilliez-Pech
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class AppUserRepositoryTests {
 
@@ -62,8 +59,8 @@ public class AppUserRepositoryTests {
   }
 
   /**
-   * AppUser testing method that creates and persists an AppUser instance
-   * with all its fields and all its associations persisted in the database.
+   * AppUser testing method that creates and persists an AppUser instance with all its fields and
+   * all its associations persisted in the database.
    */
   @Test
   public void testPersistAndLoadAppUser() {
@@ -83,8 +80,6 @@ public class AppUserRepositoryTests {
     regularUser.setVerifiedCompany(false);
     var regularUserList = new ArrayList<Role>();
     regularUserList.add(regularUser);
-
-
 
     // Create and persist multiple domains
     var domainSet = new HashSet<Domain>();
@@ -118,7 +113,8 @@ public class AppUserRepositoryTests {
 
     // Assertions
     var appUserFromDB = appUserRepository.findAppUserById(appUser.getId());
-    var regularUserFromDB = regularUserRepository.findRegularUserById(appUserFromDB.getRole().get(0).getId());
+    var regularUserFromDB = regularUserRepository.findRegularUserById(
+        appUserFromDB.getRole().get(0).getId());
     assertEquals(appUser.getId(), appUserFromDB.getId());
     assertEquals("peter", appUserFromDB.getFirstname());
     assertEquals("Griffin", appUserFromDB.getLastname());

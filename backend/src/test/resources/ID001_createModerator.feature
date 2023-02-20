@@ -3,37 +3,38 @@ Feature: Create Moderator
 
   Background:
     Given the database contains the following moderator account:
-      | firstName | lastName | email                 | password         | authorities |
+      | firstname | lastname | email                 | password         | authorities |
       | Owner     | Steve    | owner.steve@gmail.com | OwnerIsAwesome01 | [Moderator] |
 
   # Normal Flow
 
   Scenario Outline: Successfully create a new moderator account
-    When a new moderator account is created with first name <firstName>, last name <lastName>, email <email> and password <password>
-    Then a new moderator account exists in the database with first name <firstName>, last name <lastName>, email <email>, password <password> and authorities <authorities>
+    When a new moderator account is created with first name <firstname>, last name <lastname>, email <email> and password <password>
+    Then a new moderator account exists in the database with first name <firstname>, last name <lastname>, email <email>, password <password> and authorities <authorities>
 
     Examples:
-      | firstName | lastName | email                | password       | authorities |
+      | firstname | lastname | email                | password       | authorities |
       | Mo        | Salah    | mo.salah@gmail.com   | MoIsAwesome01  | [Moderator] |
       | Bob       | Marley   | bob.marley@gmail.com | BobIsAwesome01 | [Moderator] |
 
   # Error Flows
 
   Scenario Outline: Unsuccessfully create a new moderator account
-    When a new moderator account is created with first name <firstName>, last name <lastName>, email <email> and password <password>
+    When a new moderator account is created with first name <firstname>, last name <lastname>, email <email> and password <password>
     Then the following error <error> shall be raised
     Then the number of moderator accounts in the database is "1"
 
     Examples:
-      | firstName | lastName | email                    | password         | error                                                                                                                                                            |
-      |           |          | henry.mcmillan@gmail.com | HenryIsAwesome01 | Please enter a valid name. Name cannot be left empty                                                                                                             |
+      | firstname | lastname | email                    | password         | error                                                                                                                                                            |
+      |           | McMillan | henry.mcmillan@gmail.com | HenryIsAwesome01 | Please enter a valid first name. First name cannot be left empty                                                                                                 |
+      | Henry     |          | henry.mcmillan@gmail.com | HenryIsAwesome01 | Please enter a valid last name. Last name cannot be left empty                                                                                                   |
       | Owner     | Steve    | owner.steve@gmail.com    | OwnerIsAwesome01 | An account with this email address already exists                                                                                                                |
-      | Henry     | McMillan | henry.mcmillangmail.com  | HenryIsAwesome01 | The email address you entered is not valid                                                                                                                       |
-      | Henry     | McMillan | henry.mcmill@            | HenryIsAwesome01 | The email address you entered is not valid                                                                                                                       |
-      | Henry     | McMillan | henry.email@com          | HenryIsAwesome01 | The email address you entered is not valid                                                                                                                       |
-      | Henry     | McMillan |                          | HenryIsAwesome01 | Please enter a valid email. Emails cannot be left empty                                                                                                          |
+      | Henry     | McMillan | henry.mcmillangmail.com  | HenryIsAwesome01 | Please enter a valid email. The email address you entered is not valid                                                                                           |
+      | Henry     | McMillan | henry.mcmill@            | HenryIsAwesome01 | Please enter a valid email. The email address you entered is not valid                                                                                           |
+      | Henry     | McMillan | henry.email@com          | HenryIsAwesome01 | Please enter a valid email. The email address you entered is not valid                                                                                           |
+      | Henry     | McMillan |                          | HenryIsAwesome01 | Please enter a valid email. Email cannot be left empty                                                                                                           |
       | Henry     | McMillan | henry.mcmillan@gmail.com | henrymcmillan01  | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
-      | Henry     | McMillan | henry.mcmillan@gmail.com |                  | Please enter a valid password. Passwords cannot be left empty                                                                                                    |
+      | Henry     | McMillan | henry.mcmillan@gmail.com |                  | Please enter a valid password. Password cannot be left empty                                                                                                     |
       | Henry     | McMillan | henry.mcmillan@gmail.com | henryMcMillan    | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
       | Henry     | McMillan | henry.mcmillan@gmail.com | Henry01          | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
       | Henry     | McMillan | henry.mcmillan@gmail.com | henryisapassword | Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character |
