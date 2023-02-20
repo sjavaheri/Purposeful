@@ -52,6 +52,3 @@ jobs:
 
       - name: Execute Gradle build
         run: ./gradlew build
-
-      - name: Code Coverage Summary
-        uses: irongut/CodeCoverageSummary@v1.3.0
