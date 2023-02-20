@@ -20,7 +20,6 @@ import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
-import io.cucumber.java.hu.Ha;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,14 +32,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * To test the idea service methods
  *
- * @author Wassim Jabbour
+ * @author Wassim Jabbour, Ramin Akhavan-Sarraf (modifying Idea tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -420,6 +418,8 @@ public class TestIdeaService {
             return MockDatabase.topic2;
         } else if (id.equals(MockDatabase.topic3.getId())) {
             return MockDatabase.topic3;
+        } else if (id.equals(MockDatabase.topic4.getId())) {
+            return MockDatabase.topic3;
         } else {
           return null;
         }
@@ -447,11 +447,11 @@ public class TestIdeaService {
       return invocation.getArgument(0);
     }
 
-    static Iterator<Idea> findAll(InvocationOnMock invocation) {
+    static Iterable<Idea> findAll(InvocationOnMock invocation) {
       HashSet<Idea> ideas = new HashSet<>();
       ideas.add(MockDatabase.idea1);
       ideas.add(MockDatabase.idea2);
-      return ideas.iterator();
+      return ideas;
     }
   }
 
@@ -651,7 +651,7 @@ public class TestIdeaService {
 
       modifiableIdea.setId(UUID.randomUUID().toString());
       modifiableIdea.setDate(
-          new Date(14000)); // 10000 seconds since 1970 (Other constructors are deprecated)
+          new Date(14000)); // 14000 seconds since 1970 (Other constructors are deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
       modifiableIdea.setInProgress(false);;
