@@ -1,5 +1,6 @@
 package ca.mcgill.purposeful.service;
 
+import ca.mcgill.purposeful.controller.LoginController;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
@@ -8,17 +9,25 @@ import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
 import jakarta.transaction.Transactional;
+
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.security.auth.login.LoginContext;
+import org.apache.tomcat.util.descriptor.web.LoginConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.method.SecuredAuthorizationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,8 +37,8 @@ import org.springframework.stereotype.Service;
 public class IdeaService {
 
   /*
-   CRUD repos
-  */
+   * CRUD repos
+   */
 
   @Autowired
   IdeaRepository ideaRepository;
@@ -47,8 +56,8 @@ public class IdeaService {
   URLRepository urlRepository;
 
   /*
-   Service functions
-  */
+   * Service functions
+   */
 
   /**
    * Get an idea by its UUID
@@ -61,15 +70,15 @@ public class IdeaService {
   public Idea getIdeaById(String uuid) {
 
     if (uuid == null || uuid.isEmpty()) {
-      throw new GlobalException(
-          HttpStatus.BAD_REQUEST, "Please enter a valid UUID. UUID cannot be empty.");
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "Please enter a valid UUID. UUID cannot be empty.");
     }
 
     Idea idea = ideaRepository.findIdeaById(uuid);
 
     if (idea == null) {
-      throw new GlobalException(
-          HttpStatus.NOT_FOUND, "Idea with UUID " + uuid + " does not exist.");
+      throw new GlobalException(HttpStatus.NOT_FOUND,
+          "Idea with UUID " + uuid + " does not exist.");
     }
 
     return idea;
@@ -84,13 +93,13 @@ public class IdeaService {
    * @param domainNames The list of domain names that the idea must have one of (null if no filter)
    * @param topicNames The list of topic names that the idea must have one of (null if no filter)
    * @param techNames The list of technology names that the idea must have one of (null if no
-   *     filter)
+   *        filter)
    * @return The set of ideas that match all the criteria
    * @author Wassim Jabbour
    */
   @Transactional
-  public List<Idea> getIdeasByAllCriteria(
-      List<String> domainNames, List<String> topicNames, List<String> techNames) {
+  public List<Idea> getIdeasByAllCriteria(List<String> domainNames, List<String> topicNames,
+      List<String> techNames) {
 
     // Retrieve all ideas
     Iterable<Idea> allIdeas = ideaRepository.findAll();
@@ -154,8 +163,7 @@ public class IdeaService {
 
     // Check whether any ideas match the criteria
     if (filteredIdeas.isEmpty()) {
-      throw new GlobalException(
-          HttpStatus.NOT_FOUND,
+      throw new GlobalException(HttpStatus.NOT_FOUND,
           "No ideas match the given criteria. Please try again with different criteria.");
     }
 
@@ -166,9 +174,64 @@ public class IdeaService {
     // Return the list of ideas otherwise
     return filteredIdeas;
   }
+  
+  /**
+   * Create an idea
+   *
+   * @param idea title
+   * @param idea purpose
+   * @param idea description
+   * @param paid status of idea
+   * @param progress status of idea
+   * @param visibility of an idea
+   * @param domains to which the idea belongs
+   * @param the technologies used to achieve the idea
+   * @param the topics of the idea
+   * @param supporting images for idea
+   * @param icon for idea
+   * @return The newly created idea
+   * @author Adam Kazma
+   */
+  @Transactional
+  public Idea createIdea(String title, String purpose, String description, boolean isPaid,
+      boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds,
+      List<String> topicIds, List<String> imgUrlIds, String iconUrlId, RegularUser user) {
+    // Check parameters are not empty
+    checkEmptyAttributeViolation(title);
+    checkEmptyAttributeViolation(description);
+    checkEmptyAttributeViolation(purpose);
+
+    // Check to see if all given objects exist
+    Set<Domain> domains = checkDomains(domainIds);
+    Set<Technology> techs = checkTechs(techIds);
+    Set<Topic> topics = checkTopics(topicIds);
+    List<URL> imgUrls = checkImgURLS(imgUrlIds);
+    URL iconUrl = checkURL(iconUrlId);
+    Idea idea = new Idea();
+    idea.setDate(Date.from(Instant.now()));
+    idea.setTitle(title);
+    idea.setPurpose(purpose);
+    idea.setDescription(description);
+    idea.setPaid(isPaid);
+    idea.setInProgress(inProgress);
+    idea.setPrivate(isPrivate);
+    idea.setDomains(domains);
+    idea.setTechs(techs);
+    idea.setTopics(topics);
+    idea.setIconUrl(iconUrl);
+    idea.setSupportingImageUrls(imgUrls);
+    idea.setUser(user);
+    
+    //Save to repository
+    ideaRepository.save(idea);
+    
+    return idea;
+  }
 
   @Transactional
-  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions, boolean isPaid, boolean inProgress, boolean isPrivate, List<String> domainIds, List<String> techIds, List<String> topicIds, List<String> imgUrlIds, String iconUrlId){
+  public Idea modifyIdea(String id, String title, Date date, String purpose, String descriptions,
+      boolean isPaid, boolean inProgress, boolean isPrivate, List<String> domainIds,
+      List<String> techIds, List<String> topicIds, List<String> imgUrlIds, String iconUrlId) {
     // Retrieve idea (we assume that no user can access an idea they don't own because of frontend)
     Idea idea = getIdeaById(id);
 
@@ -185,29 +248,29 @@ public class IdeaService {
     URL iconUrl = checkURL(iconUrlId);
 
     // Check to see if it is necessary to change boolean fields
-    if (idea.isPaid() != isPaid){
+    if (idea.isPaid() != isPaid) {
       idea.setPaid(isPaid);
     }
-    if (idea.isInProgress() != inProgress){
+    if (idea.isInProgress() != inProgress) {
       idea.setInProgress(inProgress);
     }
-    if (idea.isPrivate() != isPrivate){
+    if (idea.isPrivate() != isPrivate) {
       idea.setPrivate(isPrivate);
     }
 
     // Change all remaining attributes
-    if (title != null){
+    if (title != null) {
       idea.setTitle(title);
     }
-    if (descriptions != null){
+    if (descriptions != null) {
       idea.setTitle(descriptions);
     }
-    if (purpose != null){
+    if (purpose != null) {
       idea.setPurpose(purpose);
     }
 
     // See if date changed
-    if (date.compareTo(idea.getDate()) != 0){
+    if (date.compareTo(idea.getDate()) != 0) {
       idea.setDate(date);
     }
     idea.setDomains(domains);
@@ -223,27 +286,26 @@ public class IdeaService {
   }
 
   // Responsible for checking if the new domains exist
-  public void checkEmptyAttributeViolation(String newValue){
-    if(newValue != null){
-      if (newValue.isEmpty()){
-        throw new GlobalException(HttpStatus.BAD_REQUEST,
-            "Necessary fields have been left empty");
+  public void checkEmptyAttributeViolation(String newValue) {
+    if (newValue != null) {
+      if (newValue.isEmpty()) {
+        throw new GlobalException(HttpStatus.BAD_REQUEST, "Necessary fields have been left empty");
       }
     }
   }
 
   // Responsible for checking if the new domains exist
-  public Set<Domain> checkDomains(List<String> domainIds){
+  public Set<Domain> checkDomains(List<String> domainIds) {
     Domain domain = null;
     Set<Domain> domains = new HashSet<Domain>();
-    if (domainIds != null){
-      for (String id : domainIds){
+    if (domainIds != null) {
+      for (String id : domainIds) {
         try {
           domain = domainRepository.findDomainById(id);
           domains.add(domain);
         } catch (Exception e) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "You are attempting to link your idea to an object that does not exist");
+              "You are attempting to link your idea to an object that does not exist");
         }
       }
     }
@@ -251,17 +313,17 @@ public class IdeaService {
   }
 
   // Responsible for checking if the new technologies exist
-  public Set<Technology> checkTechs(List<String> techIds){
+  public Set<Technology> checkTechs(List<String> techIds) {
     Technology tech = null;
     Set<Technology> techs = new HashSet<Technology>();
-    if (techIds != null){
-      for (String id : techIds){
+    if (techIds != null) {
+      for (String id : techIds) {
         try {
           tech = technologyRepository.findTechnologyById(id);
           techs.add(tech);
         } catch (Exception e) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "You are attempting to link your idea to an object that does not exist");
+              "You are attempting to link your idea to an object that does not exist");
         }
       }
     }
@@ -269,17 +331,17 @@ public class IdeaService {
   }
 
   // Responsible for checking if the new topics exist
-  public Set<Topic> checkTopics(List<String> topicIds){
+  public Set<Topic> checkTopics(List<String> topicIds) {
     Topic topic = null;
     Set<Topic> topics = new HashSet<Topic>();
-    if (topics != null){
-      for (String id : topicIds){
+    if (topics != null) {
+      for (String id : topicIds) {
         try {
           topic = topicRepository.findTopicById(id);
           topics.add(topic);
         } catch (Exception e) {
           throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "You are attempting to link your idea to an object that does not exist");
+              "You are attempting to link your idea to an object that does not exist");
         }
       }
     }
@@ -287,23 +349,23 @@ public class IdeaService {
   }
 
   // Responsible for checking if the new image URLs exist
-  public List<URL> checkImgURLS(List<String> imgUrlIds){
+  public List<URL> checkImgURLS(List<String> imgUrlIds) {
     List<URL> urls = new ArrayList<URL>();
-    if(imgUrlIds != null){
-      for (String id : imgUrlIds){
+    if (imgUrlIds != null) {
+      for (String id : imgUrlIds) {
         urls.add(checkURL(id));
       }
     }
     return urls;
   }
 
-  public URL checkURL(String urlId){
+  public URL checkURL(String urlId) {
     URL url = null;
     try {
       url = urlRepository.findURLById(urlId);
     } catch (Exception e) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
-      "You are attempting to link your idea to an object that does not exist");
+          "You are attempting to link your idea to an object that does not exist");
     }
     return url;
   }
