@@ -54,15 +54,20 @@ public class TestIdeaService {
   private static Date NEW_DATE = new Date(16000);
 
   // Mocks
-  @Mock private IdeaRepository ideaRepository;
-  @Mock private DomainRepository domainRepository;
-  @Mock private TopicRepository topicRepository;
-  @Mock private TechnologyRepository technologyRepository;
-  @Mock private URLRepository urlRepository;
+  @Mock
+  private IdeaRepository ideaRepository;
+  @Mock
+  private DomainRepository domainRepository;
+  @Mock
+  private TopicRepository topicRepository;
+  @Mock
+  private TechnologyRepository technologyRepository;
+  @Mock
+  private URLRepository urlRepository;
 
   // Inject mocks
-  @InjectMocks private IdeaService ideaService;
-
+  @InjectMocks
+  private IdeaService ideaService;
 
   // Set the mock output of each function in the repository
   @BeforeEach
@@ -149,8 +154,8 @@ public class TestIdeaService {
     }
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas =
-        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics,
+        search_techs);
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -187,8 +192,8 @@ public class TestIdeaService {
     search_techs.add(MockDatabase.tech2.getName());
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas =
-        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics,
+        search_techs);
     Iterator<Idea> iterator = fetchedIdeas.iterator();
 
     // Check that the ideas list fetched has only 1 idea, that is idea 1
@@ -224,7 +229,8 @@ public class TestIdeaService {
   @Test
   public void testGetIdeasByAllCriteria_NoMatch() {
 
-    // Convert topic group 3 to a list (No one has topic 4 which is in topic group 3)
+    // Convert topic group 3 to a list (No one has topic 4 which is in topic group
+    // 3)
     List<String> search_topics = new ArrayList<>();
     for (Topic topic : MockDatabase.topicGroup3) {
       search_topics.add(topic.getName());
@@ -242,9 +248,8 @@ public class TestIdeaService {
     fail();
   }
 
-  /** 
-   * @author Ramin Akhavan
-   * Test all attributes changing 
+  /**
+   * @author Ramin Akhavan Test all attributes changing
    */
   @Test
   public void testModifyAllAttributesOfIdea() {
@@ -254,24 +259,28 @@ public class TestIdeaService {
     List<String> imgUrlIds = new ArrayList<String>();
 
     // Retrieve Ids of all objects
-    for (Domain domain: MockDatabase.modifiableDomainGroup){
-        domainIds.add(domain.getId());
+    for (Domain domain : MockDatabase.modifiableDomainGroup) {
+      domainIds.add(domain.getId());
     }
-    for (Topic topic: MockDatabase.modifiableTopicGroup){
-        topicIds.add(topic.getId());
+    for (Topic topic : MockDatabase.modifiableTopicGroup) {
+      topicIds.add(topic.getId());
     }
-    for (Technology tech: MockDatabase.modifiableTechGroup){
-        techIds.add(tech.getId());
+    for (Technology tech : MockDatabase.modifiableTechGroup) {
+      techIds.add(tech.getId());
     }
-    for (URL url: MockDatabase.modifiableImgUrlGroup){
-        imgUrlIds.add(url.getId());
+    for (URL url : MockDatabase.modifiableImgUrlGroup) {
+      imgUrlIds.add(url.getId());
     }
     // Modify all attributes of idea
     Idea updatedIdea = null;
-    try{
-        updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+    try {
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
-        String message = e.getMessage();
+      String message = e.getMessage();
     }
 
     // Test all attributes of idea
@@ -286,25 +295,24 @@ public class TestIdeaService {
     assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
 
     // Check Ids of all objects of the idea
-    for(Domain domain: updatedIdea.getDomains()){
-        assertTrue(domainIds.contains(domain.getId()));
+    for (Domain domain : updatedIdea.getDomains()) {
+      assertTrue(domainIds.contains(domain.getId()));
     }
-    for(Technology tech: updatedIdea.getTechs()){
-        assertTrue(techIds.contains(tech.getId()));
+    for (Technology tech : updatedIdea.getTechs()) {
+      assertTrue(techIds.contains(tech.getId()));
     }
-    for(Topic topic: updatedIdea.getTopics()){
-        assertTrue(topicIds.contains(topic.getId()));
+    for (Topic topic : updatedIdea.getTopics()) {
+      assertTrue(topicIds.contains(topic.getId()));
     }
-    for(URL url: updatedIdea.getSupportingImageUrls()){
-        assertTrue(imgUrlIds.contains(url.getId()));
+    for (URL url : updatedIdea.getSupportingImageUrls()) {
+      assertTrue(imgUrlIds.contains(url.getId()));
     }
     assertEquals(updatedIdea.getIconUrl().getId(), MockDatabase.newIconUrl.getId());
 
   }
 
-  /** 
-   * @author Ramin Akhavan
-   * Test empty attribute violation 
+  /**
+   * @author Ramin Akhavan Test empty attribute violation
    */
   @Test
   public void testModifyIdeaWithInvalidEmptyFieldFailure() {
@@ -316,10 +324,14 @@ public class TestIdeaService {
     // Modify an existing idea with an empty title
     Idea updatedIdea = null;
     String message = "";
-    try{
-        updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_DATE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+    try {
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_DATE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
-        message = e.getMessage();
+      message = e.getMessage();
     }
 
     // Check error message
@@ -327,9 +339,8 @@ public class TestIdeaService {
 
   }
 
-  /** 
-   * @author Ramin Akhavan
-   * Test non-exsting object violation
+  /**
+   * @author Ramin Akhavan Test non-exsting object violation
    */
   @Test
   public void testModifyIdeaWithNonExistingObjectFailure() {
@@ -338,24 +349,25 @@ public class TestIdeaService {
     List<String> techIds = new ArrayList<String>();
     List<String> imgUrlIds = new ArrayList<String>();
 
-    
     String fakeId = "Ram";
     domainIds.add(fakeId);
 
     // Modify an idea with a non-existing object
     Idea updatedIdea = null;
     String message = "";
-    try{
-        updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+    try {
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
-        message = e.getMessage();
+      message = e.getMessage();
     }
     // Check error message
     assertEquals("You are attempting to link your idea to an object that does not exist", message);
 
   }
-
-
 
   /**
    * This class holds all of the mock methods of the CRUD repositories
@@ -363,6 +375,7 @@ public class TestIdeaService {
    * @author Wassim Jabbour
    */
   class MockRepository {
+
     static Idea findIdeaById(InvocationOnMock invocation) {
       String id = invocation.getArgument(0);
       if (id.equals(MockDatabase.idea1.getId())) {
@@ -377,71 +390,70 @@ public class TestIdeaService {
     }
 
     static Domain findDomainById(InvocationOnMock invocation) {
-        String id = invocation.getArgument(0);
-        if (id.equals(MockDatabase.originalDomain.getId())) {
-          return MockDatabase.originalDomain;
-        } else if (id.equals(MockDatabase.newDomain.getId())) {
-          return MockDatabase.newDomain;
-        } else if (id.equals(MockDatabase.domain1.getId())) {
-          return MockDatabase.domain1;
-        } else if (id.equals(MockDatabase.domain2.getId())) {
-            return MockDatabase.domain2;
-        } else {
-          return null;
-        }
+      String id = invocation.getArgument(0);
+      if (id.equals(MockDatabase.originalDomain.getId())) {
+        return MockDatabase.originalDomain;
+      } else if (id.equals(MockDatabase.newDomain.getId())) {
+        return MockDatabase.newDomain;
+      } else if (id.equals(MockDatabase.domain1.getId())) {
+        return MockDatabase.domain1;
+      } else if (id.equals(MockDatabase.domain2.getId())) {
+        return MockDatabase.domain2;
+      } else {
+        return null;
+      }
     }
 
     static Technology findTechnologyById(InvocationOnMock invocation) {
-        String id = invocation.getArgument(0);
-        if (id.equals(MockDatabase.originalTech.getId())) {
-          return MockDatabase.originalTech;
-        } else if (id.equals(MockDatabase.newTech.getId())) {
-          return MockDatabase.newTech;
-        } else if (id.equals(MockDatabase.tech1.getId())) {
-          return MockDatabase.tech1;
-        } else if (id.equals(MockDatabase.tech2.getId())) {
-            return MockDatabase.tech2;
-        } else {
-          return null;
-        }
+      String id = invocation.getArgument(0);
+      if (id.equals(MockDatabase.originalTech.getId())) {
+        return MockDatabase.originalTech;
+      } else if (id.equals(MockDatabase.newTech.getId())) {
+        return MockDatabase.newTech;
+      } else if (id.equals(MockDatabase.tech1.getId())) {
+        return MockDatabase.tech1;
+      } else if (id.equals(MockDatabase.tech2.getId())) {
+        return MockDatabase.tech2;
+      } else {
+        return null;
+      }
     }
 
     static Topic findTopicById(InvocationOnMock invocation) {
-        String id = invocation.getArgument(0);
-        if (id.equals(MockDatabase.originalTopic.getId())) {
-          return MockDatabase.originalTopic;
-        } else if (id.equals(MockDatabase.newTopic.getId())) {
-          return MockDatabase.newTopic;
-        } else if (id.equals(MockDatabase.topic1.getId())) {
-          return MockDatabase.topic1;
-        } else if (id.equals(MockDatabase.topic2.getId())) {
-            return MockDatabase.topic2;
-        } else if (id.equals(MockDatabase.topic3.getId())) {
-            return MockDatabase.topic3;
-        } else if (id.equals(MockDatabase.topic4.getId())) {
-            return MockDatabase.topic3;
-        } else {
-          return null;
-        }
+      String id = invocation.getArgument(0);
+      if (id.equals(MockDatabase.originalTopic.getId())) {
+        return MockDatabase.originalTopic;
+      } else if (id.equals(MockDatabase.newTopic.getId())) {
+        return MockDatabase.newTopic;
+      } else if (id.equals(MockDatabase.topic1.getId())) {
+        return MockDatabase.topic1;
+      } else if (id.equals(MockDatabase.topic2.getId())) {
+        return MockDatabase.topic2;
+      } else if (id.equals(MockDatabase.topic3.getId())) {
+        return MockDatabase.topic3;
+      } else if (id.equals(MockDatabase.topic4.getId())) {
+        return MockDatabase.topic3;
+      } else {
+        return null;
+      }
     }
 
     static URL findURLById(InvocationOnMock invocation) {
-        String id = invocation.getArgument(0);
-        if (id.equals(MockDatabase.originalImgUrl.getId())) {
-          return MockDatabase.originalImgUrl;
-        } else if (id.equals(MockDatabase.newImgUrl.getId())) {
-          return MockDatabase.newImgUrl;
-        } else if (id.equals(MockDatabase.newImgUrl2.getId())) {
-          return MockDatabase.newImgUrl2;
-        } else if (id.equals(MockDatabase.newIconUrl.getId())) {
-            return MockDatabase.newIconUrl;
-        } else if (id.equals(MockDatabase.originalIconUrl.getId())) {
-            return MockDatabase.originalIconUrl;
-        } else {
-          return null;
-        }
+      String id = invocation.getArgument(0);
+      if (id.equals(MockDatabase.originalImgUrl.getId())) {
+        return MockDatabase.originalImgUrl;
+      } else if (id.equals(MockDatabase.newImgUrl.getId())) {
+        return MockDatabase.newImgUrl;
+      } else if (id.equals(MockDatabase.newImgUrl2.getId())) {
+        return MockDatabase.newImgUrl2;
+      } else if (id.equals(MockDatabase.newIconUrl.getId())) {
+        return MockDatabase.newIconUrl;
+      } else if (id.equals(MockDatabase.originalIconUrl.getId())) {
+        return MockDatabase.originalIconUrl;
+      } else {
+        return null;
+      }
     }
-
 
     static Idea save(InvocationOnMock invocation) {
       return invocation.getArgument(0);
@@ -455,10 +467,14 @@ public class TestIdeaService {
     }
   }
 
-  /** This class holds all of the mock objects of the database */
+  /**
+   * This class holds all of the mock objects of the database
+   */
   static final class MockDatabase {
 
-    /** Create mock objects here * */
+    /**
+     * Create mock objects here *
+     */
 
     // Ideas
     static Idea idea1 = new Idea();
@@ -515,11 +531,9 @@ public class TestIdeaService {
     static HashSet<Technology> originalTechGroup = new HashSet<>();
     static HashSet<Technology> modifiableTechGroup = new HashSet<>();
 
-
     static URL originalImgUrl = new URL();
     static URL newImgUrl = new URL();
     static URL newImgUrl2 = new URL();
-
 
     static List<URL> originalImgUrlGroup = new ArrayList<>();
     static List<URL> modifiableImgUrlGroup = new ArrayList<>();
@@ -546,7 +560,7 @@ public class TestIdeaService {
 
       topic4.setId(UUID.randomUUID().toString());
       topic4.setName("Business");
-    
+
       originalTopic.setId(UUID.randomUUID().toString());
       originalTopic.setName("Algebra");
 
@@ -618,17 +632,16 @@ public class TestIdeaService {
 
       newImgUrl2.setId(UUID.randomUUID().toString());
       newImgUrl2.setURL("www.thirdone.com");
-      
+
       originalImgUrlGroup.add(originalImgUrl);
       modifiableImgUrlGroup.add(newImgUrl);
       modifiableImgUrlGroup.add(newImgUrl2);
-    
+
       originalIconUrl.setId(UUID.randomUUID().toString());
       originalIconUrl.setURL("www.mainicon.com");
 
       newIconUrl.setId(UUID.randomUUID().toString());
       newIconUrl.setURL("www.newmainicon.com");
-
 
       // Initialize ideas
       idea1.setId(UUID.randomUUID().toString());
@@ -654,7 +667,8 @@ public class TestIdeaService {
           new Date(14000)); // 14000 seconds since 1970 (Other constructors are deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);;
+      modifiableIdea.setInProgress(false);
+      ;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);

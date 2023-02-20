@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class IdeaDTO {
+
   private String id;
   private boolean isPaid;
   private boolean isPrivate;
@@ -37,8 +38,8 @@ public class IdeaDTO {
     this.domains = idea.getDomains().stream().map(DomainDTO::new).collect(Collectors.toSet());
     this.techs = idea.getTechs().stream().map(TechDTO::new).collect(Collectors.toSet());
     this.topics = idea.getTopics().stream().map(TopicDTO::new).collect(Collectors.toSet());
-    this.imgUrls =
-        idea.getSupportingImageUrls().stream().map(URLDTO::new).collect(Collectors.toList());
+    this.imgUrls = idea.getSupportingImageUrls().stream().map(URLDTO::new)
+        .collect(Collectors.toList());
     this.iconUrl = new URLDTO(idea.getIconUrl());
   }
 

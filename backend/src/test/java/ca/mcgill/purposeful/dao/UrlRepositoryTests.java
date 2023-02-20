@@ -1,7 +1,7 @@
 package ca.mcgill.purposeful.dao;
 
 import ca.mcgill.purposeful.model.URL;
-import ca.mcgill.purposeful.util.Util;
+import ca.mcgill.purposeful.util.DatabaseUtil;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +28,7 @@ public class UrlRepositoryTests {
    * Clear the database before all tests
    */
   @BeforeAll
-  public static void clearDatabaseBefore(@Autowired Util util) {
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
@@ -36,13 +36,12 @@ public class UrlRepositoryTests {
    * Clear the database after each test
    */
   @AfterEach
-  public void clearDatabaseAfter(@Autowired Util util) {
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
   /**
-   * Creates a url, saves it in the database and then retrieves it by id and
-   * checks that works
+   * Creates a url, saves it in the database and then retrieves it by id and checks that works
    *
    * @author Wassim Jabbour
    */
