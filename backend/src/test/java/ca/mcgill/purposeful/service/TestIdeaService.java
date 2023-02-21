@@ -38,7 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 /**
  * To test the idea service methods
  *
- * @author Wassim Jabbour, Ramin Akhavan-Sarraf (modifying Idea tests)
+ * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -246,6 +246,121 @@ public class TestIdeaService {
       return;
     }
     fail();
+  }
+  
+  /**
+   * @author Adam Kazma Test creation of idea
+   */
+  @Test
+  public void testCreationOfIdea() {
+    List<String> domainIds = new ArrayList<String>();
+    List<String> topicIds = new ArrayList<String>();
+    List<String> techIds = new ArrayList<String>();
+    List<String> imgUrlIds = new ArrayList<String>();
+
+    // Retrieve Ids of all objects
+    for (Domain domain : MockDatabase.modifiableDomainGroup) {
+      domainIds.add(domain.getId());
+    }
+    for (Topic topic : MockDatabase.modifiableTopicGroup) {
+      topicIds.add(topic.getId());
+    }
+    for (Technology tech : MockDatabase.modifiableTechGroup) {
+      techIds.add(tech.getId());
+    }
+    for (URL url : MockDatabase.modifiableImgUrlGroup) {
+      imgUrlIds.add(url.getId());
+    }
+    // Create idea
+    Idea createdIdea = null;
+    try {
+      createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,  MockDatabase.newIconUrl.getId(), MockDatabase.user1);
+    } catch (Exception e) {
+      String message = e.getMessage();
+    }
+
+    // Test all attributes of idea
+    assertEquals(NEW_TITLE, createdIdea.getTitle());
+    assertEquals(NEW_PURPOSE, createdIdea.getPurpose());
+    assertEquals(NEW_DESCRIPTION, createdIdea.getDescription());
+
+    assertEquals(NEW_PAY, createdIdea.isPaid());
+    assertEquals(NEW_PROGRESS, createdIdea.isInProgress());
+    assertEquals(NEW_PRIVACY, createdIdea.isPrivate());
+
+    assertEquals(NEW_DATE.toString(), createdIdea.getDate().toString());
+
+    // Check Ids of all objects of the idea
+    for (Domain domain : createdIdea.getDomains()) {
+      assertTrue(domainIds.contains(domain.getId()));
+    }
+    for (Technology tech : createdIdea.getTechs()) {
+      assertTrue(techIds.contains(tech.getId()));
+    }
+    for (Topic topic : createdIdea.getTopics()) {
+      assertTrue(topicIds.contains(topic.getId()));
+    }
+    for (URL url : createdIdea.getSupportingImageUrls()) {
+      assertTrue(imgUrlIds.contains(url.getId()));
+    }
+    assertEquals(createdIdea.getIconUrl().getId(), MockDatabase.newIconUrl.getId());
+
+  }
+  /**
+   * @author Adam Kazma Creating an idea with empty attribute
+   */
+  @Test
+  public void testCreateIdeaWithInvalidEmptyFieldFailure() {
+    List<String> domainIds = new ArrayList<String>();
+    List<String> topicIds = new ArrayList<String>();
+    List<String> techIds = new ArrayList<String>();
+    List<String> imgUrlIds = new ArrayList<String>();
+
+    // Create an idea with an empty title
+    Idea createdIdea = null;
+    String message = "";
+    try {
+      createdIdea = ideaService.createIdea("", 
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId(), MockDatabase.user1);
+    } catch (Exception e) {
+      message = e.getMessage();
+    }
+
+    // Check error message
+    assertEquals("Necessary fields have been left empty", message);
+
+  }
+  
+  /**
+   * @author Adam Kazma Test non-exsting object violation
+   */
+  @Test
+  public void testCreateIdeaWithNonExistingObjectFailure() {
+    List<String> domainIds = new ArrayList<String>();
+    List<String> topicIds = new ArrayList<String>();
+    List<String> techIds = new ArrayList<String>();
+    List<String> imgUrlIds = new ArrayList<String>();
+
+    String nonExistingId = "FakeImage";
+
+    // Create an idea with a non-existing object
+    Idea createdIdea = null;
+    String message = "";
+    try {
+      createdIdea = ideaService.createIdea(NEW_TITLE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds,
+          nonExistingId, MockDatabase.user1);
+    } catch (Exception e) {
+      message = e.getMessage();
+    }
+    // Check error message
+    assertEquals("You are attempting to link your idea to an object that does not exist", message);
+
   }
 
   /**
