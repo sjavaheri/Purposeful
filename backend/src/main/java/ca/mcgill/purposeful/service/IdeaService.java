@@ -50,9 +50,6 @@ public class IdeaService {
    Service functions
   */
 
-  @Autowired
-  ReactionService reactionService;
-
   /**
    * Get an idea by its UUID
    *
@@ -324,10 +321,10 @@ public class IdeaService {
    * @author Athmane Benarous
    */
   @Transactional
-  public void removeIdea(String uuid) {
+  public void removeIdeaById(String uuid) {
     // validate idea by getting it
     this.getIdeaById(uuid);
-    
+
     // remove idea
     ideaRepository.deleteById(uuid);
   }

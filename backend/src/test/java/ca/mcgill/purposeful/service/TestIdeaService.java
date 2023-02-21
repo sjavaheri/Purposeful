@@ -8,10 +8,14 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Reaction;
+import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
@@ -38,10 +42,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class TestIdeaService {
 
   // Mocks
-  @Mock private IdeaRepository ideaRepository;
+  @Mock
+  private IdeaRepository ideaRepository;
 
   // Inject mocks
-  @InjectMocks private IdeaService ideaService;
+  @InjectMocks
+  private IdeaService ideaService;
 
   // Set the mock output of each function in the repository
   @BeforeEach
@@ -210,11 +216,29 @@ public class TestIdeaService {
   }
 
   /**
+   * Test the removeIdeaById method (Success case)
+   *
+   * @author Athmane Benarous
+   */
+  @Test
+  public void testRemoveIdeaById() {
+    // idea var
+    Idea idea = MockDatabase.idea1;
+
+    // call service layer
+    ideaService.removeIdeaById(idea.getId());
+
+    // Verify
+    verify(ideaRepository, times(1)).deleteById(idea.getId());
+  }
+
+  /**
    * This class holds all of the mock methods of the CRUD repositories
    *
    * @author Wassim Jabbour
    */
   class MockRepository {
+
     static Idea findIdeaById(InvocationOnMock invocation) {
       String id = invocation.getArgument(0);
       if (id.equals(MockDatabase.idea1.getId())) {
@@ -236,6 +260,30 @@ public class TestIdeaService {
       ideas.add(MockDatabase.idea2);
       return ideas;
     }
+
+    static Reaction findReactionById(InvocationOnMock invocation) {
+      String id = invocation.getArgument(0);
+      if (id.equals(MockDatabase.reaction1.getId())) {
+        return MockDatabase.reaction1;
+      } else if (id.equals(MockDatabase.reaction2.getId())) {
+        return MockDatabase.reaction2;
+      } else {
+        return null;
+      }
+    }
+
+    static Reaction saveReaction(InvocationOnMock invocation) {
+      return invocation.getArgument(0);
+    }
+
+    static RegularUser findRegularUserById(InvocationOnMock invocation) {
+      String id = invocation.getArgument(0);
+      if (id.equals(MockDatabase.user1.getId())) {
+        return MockDatabase.user1;
+      } else {
+        return null;
+      }
+    }
   }
 
   /**
@@ -245,7 +293,9 @@ public class TestIdeaService {
    */
   static final class MockDatabase {
 
-    /** Create mock objects here * */
+    /**
+     * Create mock objects here *
+     */
 
     // Ideas
     static Idea idea1 = new Idea();
@@ -281,6 +331,10 @@ public class TestIdeaService {
     // Tech groups (A set of multiple of the above techs)
     static HashSet<Technology> techGroup1 = new HashSet<>();
     static HashSet<Technology> techGroup2 = new HashSet<>();
+
+    // Reactions
+    static Reaction reaction1 = new Reaction();
+    static Reaction reaction2 = new Reaction();
 
     /**
      * Initialize fields here
@@ -355,6 +409,19 @@ public class TestIdeaService {
       idea2.setTopics(topicGroup2);
       idea2.setTechs(techGroup2);
       idea2.setUser(user1);
+
+      // Initialize reactions
+      reaction1.setId(UUID.randomUUID().toString());
+      reaction1.setDate(new Date(12000));
+      reaction1.setReactionType(ReactionType.HighFive);
+      reaction1.setIdea(idea1);
+      reaction1.setRegularUser(user1);
+
+      reaction2.setId(UUID.randomUUID().toString());
+      reaction2.setDate(new Date(12000));
+      reaction2.setReactionType(ReactionType.HighFive);
+      reaction2.setIdea(idea2);
+      reaction2.setRegularUser(user1);
     }
   }
 }

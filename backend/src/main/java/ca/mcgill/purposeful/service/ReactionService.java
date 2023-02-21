@@ -26,11 +26,12 @@ public class ReactionService {
   ReactionRepository reactionRepository;
   @Autowired
   RegularUserRepository regularUserRepository;
+  @Autowired
+  IdeaService ideaService;
 
   /*
    Service functions
   */
-  IdeaService ideaService;
 
   /**
    * Method to create a reaction and fill its appropriate attributes if it doesn't exist. The method
