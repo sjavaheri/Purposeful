@@ -1,6 +1,9 @@
 package ca.mcgill.purposeful.service;
 
 import jakarta.transaction.Transactional;
+
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -185,4 +188,75 @@ public class AppUserService implements UserDetailsService {
     return new SecurityUser(appUser);
   }
 
+  @Transactional
+  public AppUser modifyUserNames(String email, String firstname, String lastname) {
+
+    // Input Validation
+    String error = "";
+    if (email == null || email.isEmpty()) {
+      error += "Email cannot be left empty! ";
+    }
+    if (firstname == null || firstname.isEmpty()) {
+      error += "First name cannot be left empty! ";
+    }
+    if (lastname == null || lastname.isEmpty()) {
+      error += "Last name cannot be left empty! ";
+    }
+    if (error.length() > 0) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          error);
+    }
+
+    // Check if the user we are trying to modify does indeed exist
+    AppUser user = appUserRepository.findAppUserByEmail(email);
+    if (user == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "This account does not exist.");
+    }
+
+    user.setFirstname(firstname);
+    user.setLastname(lastname);
+    appUserRepository.save(user);
+    return user;
+  }
+
+  /**
+   * This service method updates the moderator's password based on the givenm
+   * inputs
+   * asswords must be at least 8 characters long and contain at least one number,
+   * one lowercase character and one uppercase character
+   * 
+   * @param email    The email of the moderator account to modify its password
+   * @param password The new password of the moderator
+   * @return The modified moderator
+   * @author Enzo Benoit-Jeannin
+   */
+  @Transactional
+  public AppUser modifyPassword(String email, String password) {
+    // Input validation
+    String error = "";
+    if (email == null || email.trim().length() == 0) {
+      error += "Email cannot be left empty! ";
+    }
+    // Check that string is at least 8 characters long and contain at least one
+    // number, one lowercase character and one uppercase character
+    if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
+        || !password.matches(".*[a-z].*")) {
+      error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
+    }
+    if (error.length() > 0) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, error);
+    }
+
+    // Check if the user we are trying to modify does indeed exist
+    AppUser user = appUserRepository.findAppUserByEmail(email);
+    if (user == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST,
+          "This account does not exist.");
+    }
+
+    user.setPassword(passwordEncoder.encode(password));
+    appUserRepository.save(user);
+    return user;
+  }
 }
