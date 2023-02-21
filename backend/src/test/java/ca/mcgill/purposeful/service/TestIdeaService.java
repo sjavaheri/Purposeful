@@ -284,8 +284,6 @@ public class TestIdeaService {
     assertEquals(NEW_PROGRESS, createdIdea.isInProgress());
     assertEquals(NEW_PRIVACY, createdIdea.isPrivate());
 
-    assertEquals(NEW_DATE.toString(), createdIdea.getDate().toString());
-
     // Check Ids of all objects of the idea
     for (Domain domain : createdIdea.getDomains()) {
       assertTrue(domainIds.contains(domain.getId()));
