@@ -2,6 +2,7 @@ package ca.mcgill.purposeful.util;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -291,6 +292,15 @@ public class CucumberUtil {
       Idea idea = new Idea();
       idea.setTitle(row.get("title"));
       idea.setPurpose(row.get("purpose"));
+      Date date = new Date();
+      date.setHours(0);
+      idea.setDate(date);
+      idea.setDescription("");
+
+      // user
+      AppUser user = appUserRepository.findAppUserById(idMap.get(row.get("user")));
+      Role role = user.getRole().get(0);
+      idea.setUser((RegularUser) role);
 
       // domains
       Set<Domain> domains = new HashSet<Domain>();
