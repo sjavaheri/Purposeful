@@ -17,7 +17,7 @@ Feature: Modify Moderator
     Then account with email "owner.steve@gmail.com" should be updated with the following details:
       | firstName | lastName | password            |
       | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
-    Then the number of moderator accounts in the datavase shall be "2"
+    Then the number of moderator accounts in the database shall be "2"
 
   # Error Flows
 
@@ -37,7 +37,7 @@ Feature: Modify Moderator
   Scenario Outline: Unsuccessfully update an moderator account
     Given that the user is logged with the email "owner.steve@gmail.com" and the password "OwnerIsAwesome01"
     When the user request to update their account using the old password "<oldPassword>" with new password "<newPassword>"
-    Then the following error "<error>" should be raised
+    Then the following error "<error>" should be raised with http status "<httpstatus>"
     Then the number of moderator accounts in the database is still "2"
 
     Examples:
