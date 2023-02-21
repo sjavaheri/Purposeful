@@ -51,7 +51,7 @@ public class ModeratorService {
    * @return the modified moderator
    */
   @Transactional
-  public AppUser modifyModerator(String email, String lastname, String firstname, Set<Authority> authorities) {
+  public AppUser modifyModerator(String email, String lastname, String firstname) {
 
     // Input Validation
     String error = "";
@@ -63,9 +63,6 @@ public class ModeratorService {
     }
     if (lastname == null || lastname.isEmpty()) {
       error += "Last name cannot be left empty! ";
-    }
-    if (authorities == null) {
-      error += "Authorities cannot be null! ";
     }
     if (error.length() > 0) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,
@@ -79,19 +76,6 @@ public class ModeratorService {
           "This account does not exist.");
     }
 
-    // Check that the new auhtorities of that user still include a moderator
-    Iterator<Authority> itr = authorities.iterator();
-    boolean isModerator = false;
-    while (itr.hasNext()) {
-      if (itr.next().equals(Authority.Moderator)) {
-        isModerator = true;
-      }
-    }
-    if (!isModerator) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "New authorities do not include the moderator authority!");
-    }
-
     List<Role> roles = moderator.getRole();
 
     boolean modified = false;
@@ -101,7 +85,6 @@ public class ModeratorService {
         moderator.setFirstname(firstname);
         moderator.setLastname(lastname);
         moderator.setEmail(email);
-        moderator.setAuthorities(authorities);
         appUserRepository.save(moderator);
         modified = true;
       }
@@ -141,7 +124,7 @@ public class ModeratorService {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);
     }
 
-    // Check if the oderator we are trying to modify does indeed exist
+    // Check if the moderator we are trying to modify does indeed exist
     AppUser moderator = appUserRepository.findAppUserByEmail(email);
     if (moderator == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST,

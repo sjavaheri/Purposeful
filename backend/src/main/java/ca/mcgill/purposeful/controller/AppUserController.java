@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.purposeful.dto.AppUserDto;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.service.AppUserService;
+import ca.mcgill.purposeful.service.ModeratorService;
 import ca.mcgill.purposeful.util.DtoUtility;
 
 /**
@@ -29,6 +30,9 @@ public class AppUserController {
 
   @Autowired
   private AppUserService appUserService;
+
+  @Autowired
+  private ModeratorService moderatorService;
 
   /**
    * POST method to register a new regular user
@@ -151,5 +155,58 @@ public class AppUserController {
         .map(e -> DtoUtility.convertToDto(e))
         .collect(Collectors.toList());
   }
+
+  /**
+   * PUT method to update the names of a moderator
+   * @param appUserDto - the moderator to modify the names
+   * @return the modified moderator
+   * 
+   * @author Enzo Benoit-Jeannin
+   */
+  @PutMapping(value = {"/moderator",
+  "/moderator/"}, consumes = "application/json", produces = "application/json")
+  @PreAuthorize("hasAnyAuthority('Owner', 'Moderator')")
+  public ResponseEntity<AppUserDto> updateModerator(@RequestBody AppUserDto appUserDto) {
+    // Unpack the DTO
+    if (appUserDto == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");
+    }
+    String email = appUserDto.getEmail();
+    String firstname = appUserDto.getFirstname();
+    String lastname = appUserDto.getLastname();
+
+    // Register the user
+    AppUserDto registeredUser = DtoUtility.convertToDto(
+        moderatorService.modifyModerator(email, firstname, lastname));
+
+    return ResponseEntity.status(HttpStatus.OK).body(registeredUser);
+  }
+
+  /**
+     * PUT method to update the password of a moderator
+     * @param appUserDto - the moderator to modify the password
+     * @return the modified moderator
+     * 
+     * @author Enzo Benoit-Jeannin
+     */
+    @PutMapping(value = {"/mdoerator/password",
+      "/moderator/password/"}, consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasAnyAuthority('Owner', 'Moderator')")
+    public ResponseEntity<AppUserDto> updatePasswordModerator(@RequestBody AppUserDto appUserDto) {
+      // Unpack the DTO
+      if (appUserDto == null) {
+        throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");
+      }
+
+      String email = appUserDto.getEmail();
+      String password = appUserDto.getPassword();
+  
+      // Register the user
+      AppUserDto registeredUser = DtoUtility.convertToDto(
+          moderatorService.modifyPassword(email, password));
+  
+      return ResponseEntity.status(HttpStatus.OK).body(registeredUser);
+    }
+
 
 }

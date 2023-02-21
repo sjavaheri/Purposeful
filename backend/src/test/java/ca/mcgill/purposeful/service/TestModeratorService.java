@@ -84,8 +84,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_Success() {
     AppUser modified = null;
-    modified = moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim",
-        MockDatabase.authorities1);
+    modified = moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim");
     assertNotNull(modified);
     assertEquals(MockDatabase.appUser1.getEmail(), modified.getEmail());
     assertEquals("Jabbour", modified.getLastname());
@@ -104,7 +103,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_NullEmail() {
     try {
-      moderatorService.modifyModerator(null, "Jabbour", "Wassim", MockDatabase.authorities1);
+      moderatorService.modifyModerator(null, "Jabbour", "Wassim");
     } catch (GlobalException e) {
       assertEquals("Email cannot be left empty! ", e.getMessage());
       return;
@@ -121,7 +120,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_EmptyEmail() {
     try {
-      moderatorService.modifyModerator("", "Jabbour", "Wassim", MockDatabase.authorities1);
+      moderatorService.modifyModerator("", "Jabbour", "Wassim");
     } catch (GlobalException e) {
       assertEquals("Email cannot be left empty! ", e.getMessage());
       return;
@@ -138,7 +137,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_NullFirstname() {
     try {
-      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", null, MockDatabase.authorities1);
+      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", null);
     } catch (GlobalException e) {
       assertEquals("First name cannot be left empty! ", e.getMessage());
       return;
@@ -155,7 +154,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_EmptyFirstname() {
     try {
-      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "", MockDatabase.authorities1);
+      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "");
     } catch (GlobalException e) {
       assertEquals("First name cannot be left empty! ", e.getMessage());
       return;
@@ -172,7 +171,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_NullLastname() {
     try {
-      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), null, "Wassim", MockDatabase.authorities1);
+      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), null, "Wassim");
     } catch (GlobalException e) {
       assertEquals("Last name cannot be left empty! ", e.getMessage());
       return;
@@ -189,31 +188,13 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_EmptyLastname() {
     try {
-      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "", "Wassim", MockDatabase.authorities1);
+      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "", "Wassim");
     } catch (GlobalException e) {
       assertEquals("Last name cannot be left empty! ", e.getMessage());
       return;
     }
     fail();
   }
-
-  /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with a null set of authorities
-   *
-   * @author Enzo Benoit-Jeannin
-   */
-  @Test
-  public void testModifyModerator_NullAuthorities() {
-    try {
-      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim", null);
-    } catch (GlobalException e) {
-      assertEquals("Authorities cannot be null! ", e.getMessage());
-      return;
-    }
-    fail();
-  }
-
   /**
    * Method to check that an error is thrown when we try to modify a moderator
    * taht does not exist
@@ -223,7 +204,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_NotInDb() {
     try {
-      moderatorService.modifyModerator("unregistered@gmail.com", "Jabbour", "Wassim", MockDatabase.authorities1);
+      moderatorService.modifyModerator("unregistered@gmail.com", "Jabbour", "Wassim");
     } catch (GlobalException e) {
       assertEquals("This account does not exist.", e.getMessage());
       return;
@@ -231,23 +212,6 @@ public class TestModeratorService {
     fail();
   }
 
-  /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with auhtorities that does not contain moderator
-   *
-   * @author Enzo Benoit-Jeannin
-   */
-  @Test
-  public void testModifyModerator_NoModeratorAuthority() {
-    try {
-      moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim",
-          MockDatabase.authorities2);
-    } catch (GlobalException e) {
-      assertEquals("New authorities do not include the moderator authority!", e.getMessage());
-      return;
-    }
-    fail();
-  }
 
   /**
    * Method to check that an error is thrown when we try to modify an appUser that
@@ -258,8 +222,7 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_NotModerator() {
     try {
-      moderatorService.modifyModerator(MockDatabase.appUser2.getEmail(), "Jabbour", "Wassim",
-          MockDatabase.authorities1);
+      moderatorService.modifyModerator(MockDatabase.appUser2.getEmail(), "Jabbour", "Wassim");
     } catch (GlobalException e) {
       assertEquals("User is not a moderator!", e.getMessage());
       return;
