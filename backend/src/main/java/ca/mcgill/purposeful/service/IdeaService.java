@@ -325,9 +325,9 @@ public class IdeaService {
    */
   @Transactional
   public void removeIdea(String uuid) {
-    // delete reactions
-    reactionService.removeReactionsByIdea(uuid);
-
+    // validate idea by getting it
+    this.getIdeaById(uuid);
+    
     // remove idea
     ideaRepository.deleteById(uuid);
   }

@@ -46,24 +46,27 @@ public class ReactionService {
   public Reaction react(Date date, ReactionType reactionType, String idea_id,
       String user_id) {
 
-    // check if a previous reaction exists (in which case it gets deleted by reacting a second time)
+    // check if a previous reaction exists
     Reaction previousReaction = this.getReactionByIdeaAndRegularUser(idea_id, user_id);
 
+    // delete reaction if it exists and return null
     if (previousReaction != null) {
-      this.removeReaction(previousReaction.getId());
+      reactionRepository.deleteById(previousReaction.getId());
       return null;
-    } else {
+    }
+    // create reaction if it doesn't exist and return reaction
+    else {
       Reaction reaction = new Reaction();
       reaction.setDate(date);
       reaction.setReactionType(reactionType);
       reaction.setIdea(ideaService.getIdeaById(idea_id));
       reaction.setRegularUser(regularUserRepository.findRegularUserById(user_id));
-      return reaction;
+      return reactionRepository.save(reaction);
     }
   }
 
   /**
-   * Get a reaction by its id
+   * DEPRECATED Get a reaction by its id
    *
    * @param uuid UUID of the reaction
    * @return The reaction with the given UUID
@@ -77,7 +80,6 @@ public class ReactionService {
           HttpStatus.BAD_REQUEST, "Please enter a valid UUID. UUID cannot be empty.");
     }
 
-    // TODO: replace this by a getRegularUser method from the RegularUserService class
     Reaction reaction = reactionRepository.findReactionById(uuid);
 
     if (reaction == null) {
@@ -88,13 +90,20 @@ public class ReactionService {
     return reaction;
   }
 
-
+  /**
+   * Finds a reaction given its idea id and regular user id
+   *
+   * @param idea_id id of the idea
+   * @param user_id id of the regular user
+   * @return the reaction linking the idea and the regular user
+   */
   @Transactional
   public Reaction getReactionByIdeaAndRegularUser(String idea_id, String user_id) {
-
+    // validate idea
+    ideaService.getIdeaById(idea_id);
     // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
-    Reaction reaction = reactionRepository.findReactionByIdeaAndRegularUser(
-        ideaService.getIdeaById(idea_id).getId(), user_id);
+
+    Reaction reaction = reactionRepository.findReactionByIdeaAndRegularUser(idea_id, user_id);
 
     if (reaction == null) {
       throw new GlobalException(
@@ -107,7 +116,7 @@ public class ReactionService {
   }
 
   /**
-   * Get all reactions by their idea
+   * DEPRECATED Get all reactions by their idea
    *
    * @param uuid UUID of the idea
    * @return An ArrayList of reactions for an idea with the given UUID
@@ -115,17 +124,23 @@ public class ReactionService {
    */
   @Transactional
   public ArrayList<Reaction> getReactionsByIdea(String uuid) {
+    // validate idea
+    ideaService.getIdeaById(uuid);
 
-    if (uuid == null || uuid.isEmpty()) {
+    ArrayList<Reaction> reactions = reactionRepository.findAllByIdeaId(uuid);
+
+    if (reactions.size() == 0) {
       throw new GlobalException(
-          HttpStatus.BAD_REQUEST, "Please enter a valid UUID. UUID cannot be empty.");
+          HttpStatus.NOT_FOUND,
+          "Reactions associated with idea_id " + uuid
+              + " do not exist.");
     }
 
-    return reactionRepository.findAllByIdeaId(ideaService.getIdeaById(uuid).getId());
+    return reactions;
   }
 
   /**
-   * Get all reactions by their regular user
+   * DEPRECATED Get all reactions by their regular user
    *
    * @param uuid UUID of the regular user
    * @return An ArrayList of reactions for a regular user with the given UUID
@@ -134,27 +149,35 @@ public class ReactionService {
   @Transactional
   public ArrayList<Reaction> getReactionsByRegularUser(String uuid) {
 
-    if (uuid == null || uuid.isEmpty()) {
+    // TODO: validate regular user with a getRegularUserById method from its service class
+
+    ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUserId(uuid);
+
+    if (reactions.size() == 0) {
       throw new GlobalException(
-          HttpStatus.BAD_REQUEST, "Please enter a valid UUID. UUID cannot be empty.");
+          HttpStatus.NOT_FOUND,
+          "Reactions associated with user_id " + uuid
+              + " do not exist.");
     }
 
-    return reactionRepository.findAllByRegularUserId(uuid);
+    return reactions;
   }
 
   /**
-   * Remove a reaction by its id
+   * DEPRECATED Remove a reaction by its id
    *
    * @param uuid the UUID of the reaction that is to be removed
    * @author Athmane Benarous
    */
   @Transactional
   public void removeReaction(String uuid) {
-    reactionRepository.deleteById(this.getReactionById(uuid).getId());
+    // validate reaction
+    this.getReactionById(uuid);
+    reactionRepository.deleteById(uuid);
   }
 
   /**
-   * Remove all reactions by an idea
+   * DEPRECATED Remove all reactions by an idea
    *
    * @param uuid the UUID of the idea that contains the reactions
    * @author Athmane Benarous
@@ -168,7 +191,7 @@ public class ReactionService {
 
 
   /**
-   * Remove all reactions by a regular user
+   * DEPRECATED Remove all reactions by a regular user
    *
    * @param uuid the UUID of the regular user that contains the reactions
    * @author Athmane Benarous
