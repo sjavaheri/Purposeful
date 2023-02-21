@@ -3,10 +3,12 @@ Feature: View more details for a feature
   As a user, I want to be able to view the details of an idea in a structured manner, so that I can grasp the essence of the idea and make informed decisions about its value and potential impact.
 
   Background:
-    Given the database contains the following domains:
+    Given the database contains the following users:
+      | id | firstname | lastname | email                    | password |
+      | 0  | Leia      | Organa   | leia.organa@republic.org | P@ssw0rd |
+    And the database contains the following domains:
       | id | name     |
       | 1  | Software |
-
     And the database contains the following topics:
       | id | name    |
       | 2  | Music   |
@@ -20,9 +22,9 @@ Feature: View more details for a feature
       | 6  | https://www.flaticon.com/free-icon/music_3844724                                    |
       | 7  | https://miro.medium.com/v2/resize:fit:4800/format:webp/1*IWBf4ZlgysgEl-AaUJedRQ.png |
     And the database contains the following ideas:
-      | id | title            | purpose                                           | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate |
-      | 8  | Music generation | Open sourced software to generate classical music | 1       | 2      | 4, 5  | 7                   | 6       | false  | false        | false     |
-      | 9  | Techno boom      | Open sourced software to generate techno music    | 1       | 2      | 4     |                     | 6       | false  | false        | false     |
+      | id | title            | purpose                                           | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate | user |
+      | 8  | Music generation | Open sourced software to generate classical music | 1       | 2      | 4, 5  | 7                   | 6       | false  | false        | false     | 0    |
+      | 9  | Techno boom      | Open sourced software to generate techno music    | 1       | 2      | 4     |                     | 6       | false  | false        | false     | 0    |
     And I am logged in
 
   # Main flow: Includes supporting images
