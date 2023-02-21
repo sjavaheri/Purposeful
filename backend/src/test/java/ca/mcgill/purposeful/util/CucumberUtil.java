@@ -13,10 +13,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import ca.mcgill.purposeful.configuration.Authority;
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.DomainRepository;
+import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.URL;
+import io.cucumber.datatable.DataTable;
 
 @Configuration
 public class CucumberUtil {
@@ -25,7 +41,20 @@ public class CucumberUtil {
 
   @Autowired private RegularUserRepository regularUserRepository;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @Autowired
+  private DomainRepository domainRepository;
+
+  @Autowired
+  private TopicRepository topicRepository;
+
+  @Autowired
+  private TechnologyRepository technologyRepository;
+
+  @Autowired
+  private URLRepository urlRepository;
+
+  @Autowired
+  private IdeaRepository ideaRepository;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -170,5 +199,96 @@ public class CucumberUtil {
     var authHeader = "Bearer " + jwtToken;
     headers.add("Authorization", authHeader);
     return headers;
+  }
+
+  /**
+   * This method creates and saves Domains from a data table
+   * @param dataTable a data table containing the domains to be created
+   */
+  public void createAndSaveDomainFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Domain domain = new Domain();
+      domain.setName(row.get("name"));
+      domainRepository.save(domain);
+      idMap.put(row.get("id"), domain.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves Topics from a data table
+   * @param dataTable a data table containing the topics to be created
+   */
+  public void createAndSaveTopicFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Topic topic = new Topic();
+      topic.setName(row.get("name"));
+      topicRepository.save(topic);
+      idMap.put(row.get("id"), topic.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves Technologies from a data table
+   * @param dataTable a data table containing the technologies to be created
+   */
+  public void createAndSaveTechFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Technology tech = new Technology();
+      tech.setName(row.get("name"));
+      technologyRepository.save(tech);
+      idMap.put(row.get("id"), tech.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves URLs from a data table
+   * @param dataTable a data table containing the URLs to be created
+   */
+  public void createAndSaveURLFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      URL url = new URL();
+      url.setURL(row.get("url"));
+      urlRepository.save(url);
+      idMap.put(row.get("id"), url.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves Ideas from a data table
+   * @param dataTable a data table containing the ideas to be created
+   */
+  public void createAndSaveIdeaFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Idea idea = new Idea();
+      idea.setTitle(row.get("title"));
+      idea.setPurpose(row.get("purpose"));
+
+      // TODO: add associations
+      idea.setDomains(null);
+      idea.setTopics(null);
+      idea.setTechs(null);
+      idea.setSupportingImageUrls(null);
+      idea.setIconUrl(null);
+      idea.setPaid(Boolean.parseBoolean(row.get("isPaid")));
+      idea.setInProgress(Boolean.parseBoolean(row.get("isInProgress")));
+      idea.setPrivate(Boolean.parseBoolean(row.get("isPrivate")));
+      ideaRepository.save(idea);
+      idMap.put(row.get("id"), idea.getId());
+    }
   }
 }
