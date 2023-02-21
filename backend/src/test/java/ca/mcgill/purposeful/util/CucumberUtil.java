@@ -17,6 +17,8 @@ import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.ModeratorRepository;
+import ca.mcgill.purposeful.dao.OwnerRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
 import ca.mcgill.purposeful.dao.TopicRepository;
@@ -41,6 +43,12 @@ public class CucumberUtil {
 
   @Autowired
   private RegularUserRepository regularUserRepository;
+
+  @Autowired
+  private ModeratorRepository moderatorRepository;
+
+  @Autowired
+  private OwnerRepository ownerRepository;
 
   @Autowired
   private DomainRepository domainRepository;
@@ -108,18 +116,20 @@ public class CucumberUtil {
       appUser.setLastname(row.get("lastname"));
       appUser.setEmail(row.get("email"));
       appUser.setPassword(passwordEncoder.encode(row.get("password")));
-      // set the athorities of the app user
+      // set the authorities of the app user
       Set<Authority> setOfAuthorities = new HashSet<Authority>();
-      Authority authority = Authority.valueOf(row.get("authorities"));
-      setOfAuthorities.add(authority);
+      String[] authorities = row.get("authorities").split(",");
+      for (String authority : authorities) {
+        setOfAuthorities.add(Authority.valueOf(authority));
+      }
+
+      // add the app user to the list of app users
+      appUserRepository.save(appUser);
 
       // Add the user to the map of ids if it was passed
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
       }
-
-      // add the app user to the list of app users
-      appUserRepository.save(appUser);
     }
   }
 
@@ -148,6 +158,7 @@ public class CucumberUtil {
 
       // Create a regular user class
       RegularUser regularUser = new RegularUser();
+      regularUser.setAppUser(appUser);
 
       // Add the regular user to a list of roles
       List<Role> roles = new ArrayList<Role>();
@@ -160,12 +171,8 @@ public class CucumberUtil {
       appUserRepository.save(appUser);
       regularUserRepository.save(regularUser);
 
-      // Add the regular user to the map if it was passed
-      // Note: no need to add the app user to the map since we only will be
-      // manipulating the regular
-      // user instance later on
       if (idMap != null) {
-        idMap.put(row.get("id"), regularUser.getId());
+        idMap.put(row.get("id"), appUser.getId());
       }
     }
   }
