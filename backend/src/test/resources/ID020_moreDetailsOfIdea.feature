@@ -23,10 +23,10 @@ Feature: View more details for a feature
       | id | title            | purpose                                           | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate |
       | 8  | Music generation | Open sourced software to generate classical music | 1       | 2      | 4, 5  | 7                   | 6       | false  | false        | false     |
       | 9  | Techno boom      | Open sourced software to generate techno music    | 1       | 2      | 4     |                     | 6       | false  | false        | false     |
+    And I am logged in
 
   # Main flow: Includes supporting images
   Scenario: View the details of an idea that includes supporting images
-    Given I am logged in
     When I request to view the details of idea with id 8
     Then the following information about the idea should be displayed:
       | title        | Music generation                                  |
@@ -46,7 +46,6 @@ Feature: View more details for a feature
 
   # Alternate flow: No supporting images
   Scenario: View the details of an idea that does not include supporting images
-    Given I am logged in as a student
     When I request to view the details of idea with id 9
     Then the following information about the idea should be displayed:
       | title        | Techno boom                                    |
@@ -64,7 +63,6 @@ Feature: View more details for a feature
 
   # Error flow: Idea does not exist
   Scenario: Title of your scenario outline
-    Given I am logged in as a student
     When I request to view the details of idea with UUID "00000000-0000-0000-0000-000000000000"
     Then the user shall recieve the error message "The requested idea does not exist" with status "400"
 
