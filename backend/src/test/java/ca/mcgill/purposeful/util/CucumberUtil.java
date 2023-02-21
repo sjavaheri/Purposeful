@@ -1,12 +1,5 @@
 package ca.mcgill.purposeful.util;
 
-import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.RegularUserRepository;
-import ca.mcgill.purposeful.model.AppUser;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Role;
-import io.cucumber.datatable.DataTable;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
@@ -23,12 +16,15 @@ import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
 import ca.mcgill.purposeful.dao.TopicRepository;
 import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
@@ -36,10 +32,14 @@ import io.cucumber.datatable.DataTable;
 
 @Configuration
 public class CucumberUtil {
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
-  @Autowired private AppUserRepository appUserRepository;
+  @Autowired
+  private AppUserRepository appUserRepository;
 
-  @Autowired private RegularUserRepository regularUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
   @Autowired
   private DomainRepository domainRepository;
@@ -160,7 +160,8 @@ public class CucumberUtil {
       regularUserRepository.save(regularUser);
 
       // Add the regular user to the map if it was passed
-      // Note: no need to add the app user to the map since we only will be manipulating the regular
+      // Note: no need to add the app user to the map since we only will be
+      // manipulating the regular
       // user instance later on
       if (idMap != null) {
         idMap.put(row.get("id"), regularUser.getId());
@@ -168,12 +169,9 @@ public class CucumberUtil {
     }
   }
 
-  public void createAndSaveDomainsFromTable() {
-    // TODO: Implement this method
-  }
-
   /**
-   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first authenticate
+   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first
+   * authenticate
    *
    * @param email
    * @param password
@@ -188,7 +186,8 @@ public class CucumberUtil {
   }
 
   /**
-   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is already
+   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is
+   * already
    * authenticated
    *
    * @param jwtToken
@@ -203,7 +202,10 @@ public class CucumberUtil {
 
   /**
    * This method creates and saves Domains from a data table
+   * 
    * @param dataTable a data table containing the domains to be created
+   * 
+   * @author Thibaut Baguette
    */
   public void createAndSaveDomainFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
@@ -219,7 +221,10 @@ public class CucumberUtil {
 
   /**
    * This method creates and saves Topics from a data table
+   * 
    * @param dataTable a data table containing the topics to be created
+   * 
+   * @author Thibaut Baguette
    */
   public void createAndSaveTopicFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
@@ -235,7 +240,10 @@ public class CucumberUtil {
 
   /**
    * This method creates and saves Technologies from a data table
+   * 
    * @param dataTable a data table containing the technologies to be created
+   * 
+   * @author Thibaut Baguette
    */
   public void createAndSaveTechFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
@@ -251,7 +259,10 @@ public class CucumberUtil {
 
   /**
    * This method creates and saves URLs from a data table
+   * 
    * @param dataTable a data table containing the URLs to be created
+   * 
+   * @author Thibaut Baguette
    */
   public void createAndSaveURLFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
@@ -267,7 +278,10 @@ public class CucumberUtil {
 
   /**
    * This method creates and saves Ideas from a data table
+   * 
    * @param dataTable a data table containing the ideas to be created
+   * 
+   * @author Thibaut Baguette
    */
   public void createAndSaveIdeaFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
@@ -278,12 +292,42 @@ public class CucumberUtil {
       idea.setTitle(row.get("title"));
       idea.setPurpose(row.get("purpose"));
 
-      // TODO: add associations
-      idea.setDomains(null);
-      idea.setTopics(null);
-      idea.setTechs(null);
-      idea.setSupportingImageUrls(null);
-      idea.setIconUrl(null);
+      // domains
+      Set<Domain> domains = new HashSet<Domain>();
+      String[] domainIds = row.get("domains").split(",");
+      for (String domainId : domainIds) {
+        domains.add(domainRepository.findDomainById(idMap.get(domainId)));
+      }
+      idea.setDomains(domains);
+
+      // topics
+      Set<Topic> topics = new HashSet<Topic>();
+      String[] topicIds = row.get("topics").split(",");
+      for (String topicId : topicIds) {
+        topics.add(topicRepository.findTopicById(idMap.get(topicId)));
+      }
+      idea.setTopics(topics);
+
+      // techs
+      Set<Technology> techs = new HashSet<Technology>();
+      String[] techIds = row.get("techs").split(",");
+      for (String techId : techIds) {
+        techs.add(technologyRepository.findTechnologyById(idMap.get(techId)));
+      }
+      idea.setTechs(techs);
+
+      // urls
+      List<URL> supportingUrls = new ArrayList<URL>();
+      String[] urlIds = row.get("supportingImageUrls").split(",");
+      for (String urlId : urlIds) {
+        supportingUrls.add(urlRepository.findURLById(idMap.get(urlId)));
+      }
+      idea.setSupportingImageUrls(supportingUrls);
+
+      // icon
+      URL iconUrl = urlRepository.findURLById(idMap.get(row.get("iconUrl")));
+      idea.setIconUrl(iconUrl);
+
       idea.setPaid(Boolean.parseBoolean(row.get("isPaid")));
       idea.setInProgress(Boolean.parseBoolean(row.get("isInProgress")));
       idea.setPrivate(Boolean.parseBoolean(row.get("isPrivate")));
