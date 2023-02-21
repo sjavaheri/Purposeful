@@ -313,19 +313,4 @@ public class IdeaService {
     }
     return url;
   }
-
-  /**
-   * Remove a posted idea from the system alongside its reaction and URLs
-   *
-   * @param uuid the idea's uuid
-   * @author Athmane Benarous
-   */
-  @Transactional
-  public void removeIdeaById(String uuid) {
-    // validate idea by getting it
-    this.getIdeaById(uuid);
-
-    // remove idea
-    ideaRepository.deleteById(uuid);
-  }
 }

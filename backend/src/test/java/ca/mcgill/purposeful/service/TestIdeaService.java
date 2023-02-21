@@ -8,8 +8,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.model.Domain;
@@ -212,23 +210,6 @@ public class TestIdeaService {
       return;
     }
     fail();
-  }
-
-  /**
-   * Test the removeIdeaById method (Success case)
-   *
-   * @author Athmane Benarous
-   */
-  @Test
-  public void testRemoveIdeaById() {
-    // idea var
-    Idea idea = MockDatabase.idea1;
-
-    // call service layer
-    ideaService.removeIdeaById(idea.getId());
-
-    // Verify
-    verify(ideaRepository, times(1)).deleteById(idea.getId());
   }
 
   /**
