@@ -38,7 +38,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 /**
  * To test the idea service methods
  *
- * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea tests)
+ * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea
+ *         tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -72,23 +73,17 @@ public class TestIdeaService {
   // Set the mock output of each function in the repository
   @BeforeEach
   public void setMockOutput() {
-    lenient()
-        .when(ideaRepository.findIdeaById(anyString()))
+    lenient().when(ideaRepository.findIdeaById(anyString()))
         .thenAnswer(MockRepository::findIdeaById);
     lenient().when(ideaRepository.save(any(Idea.class))).thenAnswer(MockRepository::save);
     lenient().when(ideaRepository.findAll()).thenAnswer(MockRepository::findAll);
-    lenient()
-        .when(domainRepository.findDomainById(anyString()))
+    lenient().when(domainRepository.findDomainById(anyString()))
         .thenAnswer(MockRepository::findDomainById);
-    lenient()
-        .when(topicRepository.findTopicById(anyString()))
+    lenient().when(topicRepository.findTopicById(anyString()))
         .thenAnswer(MockRepository::findTopicById);
-    lenient()
-        .when(technologyRepository.findTechnologyById(anyString()))
+    lenient().when(technologyRepository.findTechnologyById(anyString()))
         .thenAnswer(MockRepository::findTechnologyById);
-    lenient()
-        .when(urlRepository.findURLById(anyString()))
-        .thenAnswer(MockRepository::findURLById);
+    lenient().when(urlRepository.findURLById(anyString())).thenAnswer(MockRepository::findURLById);
   }
 
   /**
@@ -154,8 +149,8 @@ public class TestIdeaService {
     }
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics,
-        search_techs);
+    Iterable<Idea> fetchedIdeas =
+        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -192,8 +187,8 @@ public class TestIdeaService {
     search_techs.add(MockDatabase.tech2.getName());
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics,
-        search_techs);
+    Iterable<Idea> fetchedIdeas =
+        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
     Iterator<Idea> iterator = fetchedIdeas.iterator();
 
     // Check that the ideas list fetched has only 1 idea, that is idea 1
@@ -240,14 +235,13 @@ public class TestIdeaService {
     try {
       Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(null, search_topics, null);
     } catch (Exception e) {
-      assertEquals(
-          "No ideas match the given criteria. Please try again with different criteria.",
+      assertEquals("No ideas match the given criteria. Please try again with different criteria.",
           e.getMessage());
       return;
     }
     fail();
   }
-  
+
   /**
    * @author Adam Kazma Test creation of idea
    */
@@ -274,7 +268,9 @@ public class TestIdeaService {
     // Create idea
     Idea createdIdea = null;
     try {
-      createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,  MockDatabase.newIconUrl.getId(), MockDatabase.user1);
+      createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY,
+          NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,
+          MockDatabase.newIconUrl.getId(), MockDatabase.user1);
     } catch (Exception e) {
       String message = e.getMessage();
     }
@@ -306,6 +302,7 @@ public class TestIdeaService {
     assertEquals(createdIdea.getIconUrl().getId(), MockDatabase.newIconUrl.getId());
 
   }
+
   /**
    * @author Adam Kazma Creating an idea with empty attribute
    */
@@ -320,11 +317,9 @@ public class TestIdeaService {
     Idea createdIdea = null;
     String message = "";
     try {
-      createdIdea = ideaService.createIdea("", 
-          NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
-          imgUrlIds,
-          MockDatabase.newIconUrl.getId(), MockDatabase.user1);
+      createdIdea = ideaService.createIdea("", NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS,
+          NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, MockDatabase.newIconUrl.getId(),
+          MockDatabase.user1);
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -333,7 +328,7 @@ public class TestIdeaService {
     assertEquals("Necessary fields have been left empty", message);
 
   }
-  
+
   /**
    * @author Adam Kazma Test non-exsting object violation
    */
@@ -350,11 +345,9 @@ public class TestIdeaService {
     Idea createdIdea = null;
     String message = "";
     try {
-      createdIdea = ideaService.createIdea(NEW_TITLE,
-          NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
-          imgUrlIds,
-          nonExistingId, MockDatabase.user1);
+      createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY,
+          NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, nonExistingId,
+          MockDatabase.user1);
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -390,10 +383,8 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     try {
       updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
-          NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
-          imgUrlIds,
-          MockDatabase.newIconUrl.getId());
+          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
+          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       String message = e.getMessage();
     }
@@ -441,10 +432,8 @@ public class TestIdeaService {
     String message = "";
     try {
       updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_DATE,
-          NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
-          imgUrlIds,
-          MockDatabase.newIconUrl.getId());
+          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
+          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -472,10 +461,8 @@ public class TestIdeaService {
     String message = "";
     try {
       updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
-          NEW_PURPOSE,
-          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
-          imgUrlIds,
-          MockDatabase.newIconUrl.getId());
+          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
+          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -760,8 +747,8 @@ public class TestIdeaService {
 
       // Initialize ideas
       idea1.setId(UUID.randomUUID().toString());
-      idea1.setDate(
-          new Date(10000)); // 10000 seconds since 1970 (Other constructors are deprecated)
+      idea1.setDate(new Date(10000)); // 10000 seconds since 1970 (Other constructors are
+                                      // deprecated)
       idea1.setDescription("Cool web application for playing chess");
       idea1.setDomains(domainGroup1);
       idea1.setTopics(topicGroup1);
@@ -769,8 +756,8 @@ public class TestIdeaService {
       idea1.setUser(user1);
 
       idea2.setId(UUID.randomUUID().toString());
-      idea2.setDate(
-          new Date(12000)); // 12000 seconds since 1970 (Other constructors are deprecated)
+      idea2.setDate(new Date(12000)); // 12000 seconds since 1970 (Other constructors are
+                                      // deprecated)
       idea2.setDescription("Cool web application for generating music");
       idea2.setDomains(domainGroup2);
       idea2.setTopics(topicGroup2);
@@ -778,12 +765,11 @@ public class TestIdeaService {
       idea2.setUser(user1);
 
       modifiableIdea.setId(UUID.randomUUID().toString());
-      modifiableIdea.setDate(
-          new Date(14000)); // 14000 seconds since 1970 (Other constructors are deprecated)
+      modifiableIdea.setDate(new Date(14000)); // 14000 seconds since 1970 (Other constructors are
+                                               // deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);
-      ;
+      modifiableIdea.setInProgress(false);;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);
