@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Set;
 import org.hibernate.annotations.GenericGenerator;
 
-/** The AppUser class, the model for all accounts in the database */
+/**
+ * The AppUser class, the model for all accounts in the database
+ */
 @Entity
 public class AppUser {
 
@@ -52,13 +54,14 @@ public class AppUser {
   private Set<Authority> authorities = new HashSet<Authority>();
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appUser")
-  private List<Role> role;
+  private List<Role> roles;
 
   // ------------------------
   // AppUser Constructor
   // ------------------------
 
-  public AppUser() {}
+  public AppUser() {
+  }
 
   // ------------------------
   // Getter/Setter Methods
@@ -112,11 +115,11 @@ public class AppUser {
     this.authorities = authorities;
   }
 
-  public List<Role> getRole() {
-    return role;
+  public List<Role> getRoles() {
+    return roles;
   }
 
-  public void setRole(List<Role> role) {
-    this.role = role;
+  public void setRoles(List<Role> roles) {
+    this.roles = roles;
   }
 }

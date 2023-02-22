@@ -33,23 +33,32 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class CucumberUtil {
 
-  @Autowired private TopicRepository topicRepository;
+  @Autowired
+  private TopicRepository topicRepository;
 
-  @Autowired private TechnologyRepository technologyRepository;
+  @Autowired
+  private TechnologyRepository technologyRepository;
 
-  @Autowired private URLRepository urlRepository;
+  @Autowired
+  private URLRepository urlRepository;
 
-  @Autowired private IdeaRepository ideaRepository;
+  @Autowired
+  private IdeaRepository ideaRepository;
 
-  @Autowired private DomainRepository domainRepository;
+  @Autowired
+  private DomainRepository domainRepository;
 
-  @Autowired private AppUserService appUserService;
+  @Autowired
+  private AppUserService appUserService;
 
-  @Autowired private AppUserRepository appUserRepository;
+  @Autowired
+  private AppUserRepository appUserRepository;
 
-  @Autowired private RegularUserRepository regularUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
-  @Autowired private PasswordEncoder passwordEncoder;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -154,7 +163,7 @@ public class CucumberUtil {
       roles.add(regularUser);
 
       // Make the appuser instance point to the regular user
-      appUser.setRole(roles);
+      appUser.setRoles(roles);
       appUser.setAuthorities(setOfAuthorities);
 
       // Save both in the database
@@ -166,7 +175,6 @@ public class CucumberUtil {
       // user instance later on
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
-        idMap.put(row.get("id"), appUser.getId());
       }
     }
   }
@@ -175,7 +183,7 @@ public class CucumberUtil {
    * This method creates and saves domains from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveDomainsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -202,7 +210,7 @@ public class CucumberUtil {
    * This method creates and saves topics from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTopicsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -229,7 +237,7 @@ public class CucumberUtil {
    * This method creates and saves technologies from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTechsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -256,7 +264,7 @@ public class CucumberUtil {
    * This method creates and saves ideas from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveIdeasFromTable1(DataTable dataTable, Map<String, String> idMap) {
@@ -277,20 +285,23 @@ public class CucumberUtil {
 
       // Set domains
       Set<Domain> domainSet = new HashSet<>();
-      for (String domainId : row.get("domains").split(","))
+      for (String domainId : row.get("domains").split(",")) {
         domainSet.add(domainRepository.findDomainById(idMap.get(domainId)));
+      }
       idea.setDomains(domainSet);
 
       // Set topics
       Set<Topic> topicSet = new HashSet<>();
-      for (String topicId : row.get("topics").split(","))
+      for (String topicId : row.get("topics").split(",")) {
         topicSet.add(topicRepository.findTopicById(idMap.get(topicId)));
+      }
       idea.setTopics(topicSet);
 
       // Set technologies
       Set<Technology> techSet = new HashSet<>();
-      for (String techId : row.get("techs").split(","))
+      for (String techId : row.get("techs").split(",")) {
         techSet.add(technologyRepository.findTechnologyById(idMap.get(techId)));
+      }
       idea.setTechs(techSet);
 
       // Set description
@@ -327,9 +338,9 @@ public class CucumberUtil {
   /**
    * This method creates and saves Ideas from a data table
    *
-   * @implNote {@code idMap} CANNOT BE NULL
    * @param dataTable a data table containing the ideas to be created
-   * @param idMap a map containing the ids of the users and domains
+   * @param idMap     a map containing the ids of the users and domains
+   * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
   public void createAndSaveIdeasFromTable2(DataTable dataTable, Map<String, String> idMap) {
@@ -347,7 +358,7 @@ public class CucumberUtil {
 
       // user
       AppUser user = appUserRepository.findAppUserById(idMap.get(row.get("user")));
-      Role role = user.getRole().get(0);
+      Role role = user.getRoles().get(0);
       idea.setUser((RegularUser) role);
 
       // domains
@@ -405,7 +416,7 @@ public class CucumberUtil {
    * This method creates and saves URLs from a data table
    *
    * @param dataTable a data table containing the URLs to be created
-   * @param idMap a map containing the ids of the users and domains
+   * @param idMap     a map containing the ids of the users and domains
    * @author Thibaut Baguette
    */
   public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -417,7 +428,9 @@ public class CucumberUtil {
       url.setURL(row.get("url"));
       urlRepository.save(url);
 
-      if (idMap != null) idMap.put(row.get("id"), url.getId());
+      if (idMap != null) {
+        idMap.put(row.get("id"), url.getId());
+      }
     }
   }
 
