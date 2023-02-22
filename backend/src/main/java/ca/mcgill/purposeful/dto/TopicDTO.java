@@ -7,6 +7,7 @@ public class TopicDTO {
   private String id;
   private String name;
 
+  public TopicDTO() {}
 
   public TopicDTO(Topic topic) {
     this.id = topic.getId();
