@@ -197,9 +197,20 @@ public class AppUserController {
     String firstname = appUserDto.getFirstname();
     String lastname = appUserDto.getLastname();
 
+    // Check if the user making the request is authorized to modify the password
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String currentEmail = authentication.getName();
+    List<String> authorities = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
+
+    if (!authorities.contains("Owner") && !currentEmail.equals(email)) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    }
+
     // Register the user
     AppUserDto registeredUser = DtoUtility.convertToDto(
-        moderatorService.modifyModerator(email, firstname, lastname));
+        moderatorService.modifyModerator(email, lastname, firstname));
 
     return ResponseEntity.status(HttpStatus.OK).body(registeredUser);
   }
@@ -222,6 +233,17 @@ public class AppUserController {
 
       String email = appUserDto.getEmail();
       String password = appUserDto.getPassword();
+
+      // Check if the user making the request is authorized to modify the password
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String currentEmail = authentication.getName();
+      List<String> authorities = authentication.getAuthorities().stream()
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.toList());
+
+      if (!authorities.contains("Owner") && !currentEmail.equals(email)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      }
   
       // Register the user
       AppUserDto registeredUser = DtoUtility.convertToDto(
