@@ -40,13 +40,13 @@ public class ReactionController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "reactionDTO is null");
     }
 
-    ReactionType reactionType = reactionDTO.getReactionType();
-    String userId = reactionDTO.getUser_id();
-    String ideaId = reactionDTO.getIdea_id();
     Date date = reactionDTO.getDate();
+    ReactionType reactionType = reactionDTO.getReactionType();
+    String ideaId = reactionDTO.getIdea_id();
+    String userId = reactionDTO.getUser_id();
 
     // react
-    Reaction reaction = reactionService.react(date, reactionType, userId, ideaId);
+    Reaction reaction = reactionService.react(date, reactionType, ideaId, userId);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReactionDTO(reaction));
   }
