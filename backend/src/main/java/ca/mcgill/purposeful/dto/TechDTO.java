@@ -7,6 +7,7 @@ public class TechDTO {
   private String id;
   private String name;
 
+  public TechDTO() {}
   public TechDTO(Technology tech) {
     this.id = tech.getId();
     this.name = tech.getName();

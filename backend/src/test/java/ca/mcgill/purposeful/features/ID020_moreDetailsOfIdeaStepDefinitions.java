@@ -36,17 +36,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ID020_moreDetailsOfIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
@@ -57,29 +53,29 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following domains:")
+  @Given("the database contains the following domains \\(Strategy2):")
   public void theDatabaseContainsTheFollowingDomains(DataTable dataTable) {
-    cucumberUtil.createAndSaveDomainFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following topics:")
+  @Given("the database contains the following topics \\(Strategy2):")
   public void theDatabaseContainsTheFollowingTopics(DataTable dataTable) {
-    cucumberUtil.createAndSaveTopicFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following techs:")
+  @Given("the database contains the following techs \\(Strategy2):")
   public void theDatabaseContainsTheFollowingTechs(DataTable dataTable) {
-    cucumberUtil.createAndSaveTechFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following URLs:")
+  @Given("the database contains the following URLs \\(Strategy2):")
   public void theDatabaseContainsTheFollowingURLs(DataTable dataTable) {
-    cucumberUtil.createAndSaveURLFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following ideas:")
+  @Given("the database contains the following ideas \\(Strategy2):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeaFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
   }
 
   @Given("I am logged in")
@@ -100,8 +96,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     appUserRepository.save(appUser);
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response = client.exchange("/login", HttpMethod.POST, request,
-        String.class);
+    ResponseEntity<String> response =
+        client.exchange("/login", HttpMethod.POST, request, String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
@@ -109,11 +105,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
   public void iRequestToViewTheDetailsOfIdeaWithId(Integer id) {
     String correctedId = idMap.get(id.toString());
     HttpEntity<String> request = new HttpEntity<>(authHeader);
-    response = client.exchange(
-        "/api/idea/" + correctedId,
-        HttpMethod.GET,
-        request,
-        String.class);
+    response = client.exchange("/api/idea/" + correctedId, HttpMethod.GET, request, String.class);
   }
 
   @Then("the following information about the idea should be displayed:")
@@ -127,45 +119,61 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
 
     // domains
     Set<String> domains = new HashSet<String>();
-    json.get("domains").asArray().iterator().forEachRemaining(domain -> {
-      domains.add(domain.asObject().get("name").asString());
-    });
-    Set<String> domainsExpected = new HashSet<String>(
-        Arrays.asList(dataTable.get("domains").split(", ")));
+    json.get("domains")
+        .asArray()
+        .iterator()
+        .forEachRemaining(
+            domain -> {
+              domains.add(domain.asObject().get("name").asString());
+            });
+    Set<String> domainsExpected =
+        new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
     assertEquals(domainsExpected, domains);
 
     // topics
     Set<String> topics = new HashSet<String>();
-    json.get("topics").asArray().iterator().forEachRemaining(topic -> {
-      topics.add(topic.asObject().get("name").asString());
-    });
-    Set<String> topicsExpected = new HashSet<String>(
-        Arrays.asList(dataTable.get("topics").split(", ")));
+    json.get("topics")
+        .asArray()
+        .iterator()
+        .forEachRemaining(
+            topic -> {
+              topics.add(topic.asObject().get("name").asString());
+            });
+    Set<String> topicsExpected =
+        new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
     assertEquals(topicsExpected, topics);
 
     // techs
     Set<String> techs = new HashSet<String>();
-    json.get("techs").asArray().iterator().forEachRemaining(tech -> {
-      techs.add(tech.asObject().get("name").asString());
-    });
-    Set<String> techsExpected = new HashSet<String>(
-        Arrays.asList(dataTable.get("techs").split(", ")));
+    json.get("techs")
+        .asArray()
+        .iterator()
+        .forEachRemaining(
+            tech -> {
+              techs.add(tech.asObject().get("name").asString());
+            });
+    Set<String> techsExpected =
+        new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
     assertEquals(techsExpected, techs);
 
     assertEquals(Boolean.parseBoolean(dataTable.get("isPaid")), json.get("isPaid").asBoolean());
-    assertEquals(Boolean.parseBoolean(dataTable.get("isInProgress")),
-        json.get("inProgress").asBoolean());
-    assertEquals(Boolean.parseBoolean(dataTable.get("isPrivate")),
-        json.get("isPrivate").asBoolean());
+    assertEquals(
+        Boolean.parseBoolean(dataTable.get("isInProgress")), json.get("inProgress").asBoolean());
+    assertEquals(
+        Boolean.parseBoolean(dataTable.get("isPrivate")), json.get("isPrivate").asBoolean());
   }
 
   @Then("the supporting image with the following URL should be displayed:")
   public void theSupportingImageWithTheFollowingURLShouldBeDisplayed(List<String> dataTable) {
     JsonObject json = Json.parse(response.getBody().toString()).asObject();
     Set<String> urls = new HashSet<String>();
-    json.get("imgUrls").asArray().iterator().forEachRemaining(url -> {
-      urls.add(url.asObject().get("url").asString());
-    });
+    json.get("imgUrls")
+        .asArray()
+        .iterator()
+        .forEachRemaining(
+            url -> {
+              urls.add(url.asObject().get("url").asString());
+            });
 
     Set<String> urlsExpected = new HashSet<String>();
     for (String url : dataTable) {
@@ -196,11 +204,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
   @When("I request to view the details of idea with UUID {string}")
   public void iRequestToViewTheDetailsOfIdeaWithUUID(String uuid) {
     HttpEntity<String> request = new HttpEntity<>(authHeader);
-    response = client.exchange(
-        "/api/idea/" + uuid,
-        HttpMethod.GET,
-        request,
-        String.class);
+    response = client.exchange("/api/idea/" + uuid, HttpMethod.GET, request, String.class);
   }
 
   @Then("the user shall receive the error message {string} with status {int}")
