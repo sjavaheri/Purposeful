@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,14 +32,13 @@ public class ReactionController {
    * @return the newly created reaction DTO or the removed reaction DTO with null values
    * @author Athmane Benarous
    */
-  @PutMapping(value = {"/react", "/react/"})
-  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  @PostMapping(value = {"/react", "/react/"})
+  @PreAuthorize("hasAuthorities('User', 'Moderator', 'Owner')")
   public ResponseEntity<ReactionDTO> react(@RequestBody ReactionDTO reactionDTO) {
     // Unpack the DTO
     if (reactionDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "reactionDTO is null");
     }
-
     Date date = reactionDTO.getDate();
     ReactionType reactionType = reactionDTO.getReactionType();
     String idea_id = reactionDTO.getIdea_id();
@@ -48,7 +47,7 @@ public class ReactionController {
     // react
     Reaction reaction = reactionService.react(date, reactionType, idea_id, user_id);
 
-    return ResponseEntity.status(HttpStatus.OK).body(new ReactionDTO(reaction));
+    return new ResponseEntity<ReactionDTO>(new ReactionDTO(reaction), HttpStatus.CREATED);
   }
 
 }
