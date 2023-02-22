@@ -1,11 +1,15 @@
 package ca.mcgill.purposeful.model;
 
 import ca.mcgill.purposeful.configuration.Authority;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -46,6 +50,9 @@ public class AppUser {
   //  @Enumerated(EnumType.STRING)
   //  @Column(name = "authorities", nullable = false)
   private Set<Authority> authorities = new HashSet<Authority>();
+
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appUser")
+  private List<Role> role;
 
   // ------------------------
   // AppUser Constructor
@@ -103,5 +110,13 @@ public class AppUser {
 
   public void setAuthorities(Set<Authority> authorities) {
     this.authorities = authorities;
+  }
+
+  public List<Role> getRole() {
+    return role;
+  }
+
+  public void setRole(List<Role> role) {
+    this.role = role;
   }
 }

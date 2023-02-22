@@ -44,11 +44,11 @@ public class DatabaseUtil {
   public void clearDatabase() {
     reactionRepository.deleteAll();
     ideaRepository.deleteAll();
+    appUserRepository.deleteAll();
     domainRepository.deleteAll();
     moderatorRepository.deleteAll();
     ownerRepository.deleteAll();
     regularUserRepository.deleteAll();
-    appUserRepository.deleteAll();
     technologyRepository.deleteAll();
     topicRepository.deleteAll();
     urlRepository.deleteAll();

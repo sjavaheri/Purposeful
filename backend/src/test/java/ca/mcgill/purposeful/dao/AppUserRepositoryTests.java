@@ -6,8 +6,10 @@ import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.DatabaseUtil;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
@@ -67,6 +69,8 @@ public class AppUserRepositoryTests {
     // Create a regular user
     var regularUser = new RegularUser();
     regularUser.setVerifiedCompany(false);
+    var regularUserList = new ArrayList<Role>();
+    regularUserList.add(regularUser);
 
     // Create and persist multiple domains
     var domainSet = new HashSet<Domain>();
@@ -93,6 +97,8 @@ public class AppUserRepositoryTests {
     regularUser.setInterests(topicSet);
 
     regularUser.setAppUser(appUser);
+    appUser.setRole(regularUserList);
+
     // save the appUser
     appUser = appUserRepository.save(appUser);
     regularUser = regularUserRepository.save(regularUser);
