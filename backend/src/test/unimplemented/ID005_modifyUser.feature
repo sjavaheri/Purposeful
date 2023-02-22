@@ -6,13 +6,37 @@ Feature: Modify Moderator
       | firstName | lastName       | email                    | password              | authority |
       | Enzo      | Benoit-Jeannin | enzo.benoit@gmail.com    | EnzoIsAwesome01       | User      |
       | Wassim    | Jabbour        | wassim.jabbour@gmail.com | WassimIsAwesome01     | User      |
+      | Owner     | Steve          | owner.steve@gmail.com    | OwnerIsAwesome01      | Owner     |
+      | Moderator | Bob            | moderator.bob@gmail.com  | ModeratorIsAwesome01  | Moderator |
 
   # Normal Flow
 
-  Scenario Outline: Successfully update a user account
+  Scenario Outline: Successfully update a user account (own account)
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
-    When the user requests to modify the account with email "enzo.benoit@gmail.com" with <new_lastname> as the new lastname and <new_firstname> as the new first name
-    Then account with email "enzo.benoit@gmail.com" have <new_lastname> as lastname and <new_firstname> as firstname
+    When the user requests to modify the account with email "enzo.benoit@gmail.com" with "<new_lastname>" as the new lastname and "<new_firstname>" as the new first name
+    Then account with email "enzo.benoit@gmail.com" have "<new_lastname>" as lastname and "<new_firstname>" as firstname
+    Then the number of moderator accounts in the database shall be "2"
+
+    Examples:
+      | new_lastname   | new_firstname |
+      | Benoit-Jeannin | Enzo          |
+      | Benoit         | Enzo-Jeannin  |
+
+  Scenario Outline: Successfully update a user account (from owner account)
+    Given that the user is logged as owner with email "owner.steve@gmail.com" and password "OwnerIsAwesome01"
+    When the user requests to modify the account with email "enzo.benoit@gmail.com" with "<new_lastname>" as the new lastname and "<new_firstname>" as the new first name
+    Then account with email "enzo.benoit@gmail.com" have "<new_lastname>" as lastname and "<new_firstname>" as firstname
+    Then the number of moderator accounts in the database shall be "2"
+
+    Examples:
+      | new_lastname   | new_firstname |
+      | Benoit-Jeannin | Enzo          |
+      | Benoit         | Enzo-Jeannin  |
+
+  Scenario Outline: Successfully update a user account (from moderator account)
+    Given that the user is logged as moderator with email "moderator.bob@gmail.com" and password "ModeratorIsAwesome01"
+    When the user requests to modify the account with email "enzo.benoit@gmail.com" with "<new_lastname>" as the new lastname and "<new_firstname>" as the new first name
+    Then account with email "enzo.benoit@gmail.com" have "<new_lastname>" as lastname and "<new_firstname>" as firstname
     Then the number of moderator accounts in the database shall be "2"
 
     Examples:
@@ -21,15 +45,17 @@ Feature: Modify Moderator
       | Benoit          | Enzo-Jeannin  |
 
   # Error Flows
-  Scenario: Unsuccessfully update a user account because you are not logged in
+  Scenario Outline: Unsuccessfully update a user account because you are not logged in
     Given I am not logged in
-    When the user requests to update their account information with the following details:
-      | firstName | lastName | oldPassword     | newPassword        |
-      | NewEnzo   | Benoit   | EnzoIsAwesome01 | NewEnzoIsAwesome01 |
-    Then the user should be denied permission to the requested resource with an HTTP status code of "401"
+    When the user requests to modify the account with email <email> with <new_lastname> as the new lastname and <new_firstname> as the new first name
+    Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
+
+    Examples:
+      | email                    | new_lastname   | new_firstname | httpstatus |
+      | enzo.benoit@gmail.com    | Benoit         | NewEnzo       | 403        |
 
   Scenario: Unsuccessfully update a user account because you are not logged in with the correct account
-    Given that the user is logged with the email "wassim.jabbour@gmail.com" and the password "WassimIsAwesome01"
+    Given that the user is logged as user with the email "wassim.jabbour@gmail.com" and the password "WassimIsAwesome01"
     When the user requests to update their account information with the following details:
       | email                 | firstName | lastName | oldPassword     | newPassword        |
       | enzo.benoit@gmail.com | NewEnzo   | Benoit   | EnzoIsAwesome01 | NewEnzoIsAwesome01 |

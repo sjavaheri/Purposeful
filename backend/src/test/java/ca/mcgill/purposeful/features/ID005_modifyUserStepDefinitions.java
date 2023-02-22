@@ -57,6 +57,8 @@ public class ID005_modifyUserStepDefinitions {
     // util class for clearing the database
     @Autowired private DatabaseUtil databaseUtil;
 
+    private String jwtToken;
+
     @Given("the database contains the following accounts:")
     public void theDatabaseContainsTheFollowingAccounts(DataTable dataTable) {
         // get access to the app users with the helper method
@@ -84,7 +86,35 @@ public class ID005_modifyUserStepDefinitions {
     }
 
     @Given("that the user is logged as user with email {string} and password {string}")
-    public void iAmLoggedInAsModeratorWithEmailAndPassword(String email, String password) {
+    public void iAmLoggedInAsUserWithEmailAndPassword(String email, String password) {
+        // Login as the owner
+        HttpEntity<String> requestEntity = new HttpEntity<>(
+                cucumberUtil.basicAuthHeader(email, password));
+        this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+
+        // check that the login was successful
+        assertEquals(200, this.response.getStatusCode().value());
+
+        // save the jwt token
+        this.jwtToken = this.response.getBody().toString();
+    }
+
+    @Given("that the user is logged as owner with email {string} and password {string}")
+    public void iAmLoggedInAsOwnerWithEmailAndPassword(String email, String password) {
+        // Login as the owner
+        HttpEntity<String> requestEntity = new HttpEntity<>(
+                cucumberUtil.basicAuthHeader(email, password));
+        this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+
+        // check that the login was successful
+        assertEquals(200, this.response.getStatusCode().value());
+
+        // save the jwt token
+        this.jwtToken = this.response.getBody().toString();
+    }
+
+    @Given("that the user is logged as moderator with email {string} and password {string}")
+    public void iAmLoggedInAsTheModeratorWithEmailAndPassword(String email, String password) {
         // Login as the owner
         HttpEntity<String> requestEntity = new HttpEntity<>(
                 cucumberUtil.basicAuthHeader(email, password));
@@ -103,16 +133,15 @@ public class ID005_modifyUserStepDefinitions {
         this.jwtToken = null;
     }
 
-    @When("the user requests to modify the lastname {string} to become {string} and the firstname {string} to become {string}")
-    public void aNewModeratorAccountIsCreatedWithFirstNameLastNameEmailAndPassword(String old_lastname,
-                                                                                   String new_lastname, String old_firstname, String new_firstname) {
+    @When("the user requests to modify the account with email {string} with {string} as the new lastname and {string} as the new first name")
+    public void userAccountIsUpdatedWithNewLastNameFirstName(String email, String new_lastname, String new_firstname) {
         // create a DTO to send the request to the service
-        AppUserDto appUserDto = new AppUserDto(email, password, firstname, lastname);
+        AppUserDto appUserDto = new AppUserDto(email, "", new_firstname, new_lastname);
 
         // make a post request to create the user and store the response
         HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto,
                 cucumberUtil.bearerAuthHeader(this.jwtToken));
-        this.response = client.exchange("/api/appuser/moderator", HttpMethod.POST, requestEntity,
+        this.response = client.exchange("/api/appuser/regu", HttpMethod.PUT, requestEntity,
                 AppUserDto.class);
     }
 
