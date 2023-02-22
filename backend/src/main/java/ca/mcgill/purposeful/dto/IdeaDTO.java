@@ -27,6 +27,9 @@ public class IdeaDTO {
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
+  public IdeaDTO() {
+  }
+
   public IdeaDTO(Idea idea) {
     this.isPaid = idea.isPaid();
     this.isPrivate = idea.isPrivate();
