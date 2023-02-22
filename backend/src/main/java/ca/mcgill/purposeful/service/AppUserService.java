@@ -1,17 +1,5 @@
 package ca.mcgill.purposeful.service;
 
-import jakarta.transaction.Transactional;
-
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.ModeratorRepository;
@@ -21,68 +9,75 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.SecurityUser;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-/**
- * The AppUserService class, the business logic for managing AppUsers
- */
+/** The AppUserService class, the business logic for managing AppUsers */
 @Service
 public class AppUserService implements UserDetailsService {
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
-  @Autowired
-  RegularUserRepository regularUserRepository;
+  @Autowired RegularUserRepository regularUserRepository;
 
-  @Autowired
-  ModeratorRepository moderatorRepository;
+  @Autowired ModeratorRepository moderatorRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
   /**
    * Register a new regular user
    *
-   * @param email     - email of the user
-   * @param password  - password of the user
+   * @param email - email of the user
+   * @param password - password of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return AppUser - the newly created user
    * @author Siger Ma
    */
   @Transactional
-  public AppUser registerRegularUser(String email, String password, String firstname,
-      String lastname) {
+  public AppUser registerRegularUser(
+      String email, String password, String firstname, String lastname) {
 
     // Error validation
     if (email == null || email.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid email. Email cannot be left empty");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Please enter a valid email. Email cannot be left empty");
     }
     if (firstname == null || firstname.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST,
           "Please enter a valid first name. First name cannot be left empty");
     }
     if (lastname == null || lastname.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid last name. Last name cannot be left empty");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Please enter a valid last name. Last name cannot be left empty");
     }
     if (password == null || password.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid password. Password cannot be left empty");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Please enter a valid password. Password cannot be left empty");
     }
     if (!email.matches("^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST,
           "Please enter a valid email. The email address you entered is not valid");
     }
-    if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
+    if (password.length() < 8
+        || !password.matches(".*[0-9].*")
+        || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST,
           "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character");
     }
     if (appUserRepository.findAppUserByEmail(email) != null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "An account with this email address already exists");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "An account with this email address already exists");
     }
     AppUser appUser = null;
 
@@ -105,52 +100,58 @@ public class AppUserService implements UserDetailsService {
       throw new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
+    // return appUser;
     return appUser;
   }
 
   /**
    * Register a new moderator user
    *
-   * @param email     - email of the user
-   * @param password  - password of the user
+   * @param email - email of the user
+   * @param password - password of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return AppUser - the newly created user
    * @author Siger Ma
    */
   @Transactional
-  public AppUser registerModerator(String email, String password, String firstname,
-      String lastname) {
+  public AppUser registerModerator(
+      String email, String password, String firstname, String lastname) {
 
     // Error validation
     if (email == null || email.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid email. Email cannot be left empty");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Please enter a valid email. Email cannot be left empty");
     }
     if (firstname == null || firstname.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST,
           "Please enter a valid first name. First name cannot be left empty");
     }
     if (lastname == null || lastname.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid last name. Last name cannot be left empty");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Please enter a valid last name. Last name cannot be left empty");
     }
     if (password == null || password.isEmpty()) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "Please enter a valid password. Password cannot be left empty");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Please enter a valid password. Password cannot be left empty");
     }
     if (!email.matches("^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST,
           "Please enter a valid email. The email address you entered is not valid");
     }
-    if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
+    if (password.length() < 8
+        || !password.matches(".*[0-9].*")
+        || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST,
           "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character");
     }
     if (appUserRepository.findAppUserByEmail(email) != null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "An account with this email address already exists");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "An account with this email address already exists");
     }
     AppUser appUser = null;
 
@@ -203,15 +204,13 @@ public class AppUserService implements UserDetailsService {
       error += "Last name cannot be left empty! ";
     }
     if (error.length() > 0) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          error);
+      throw new GlobalException(HttpStatus.BAD_REQUEST, error);
     }
 
     // Check if the user we are trying to modify does indeed exist
     AppUser user = appUserRepository.findAppUserByEmail(email);
     if (user == null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "This account does not exist.");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
     }
 
     user.setFirstname(firstname);
@@ -221,12 +220,11 @@ public class AppUserService implements UserDetailsService {
   }
 
   /**
-   * This service method updates the moderator's password based on the givenm
-   * inputs
-   * asswords must be at least 8 characters long and contain at least one number,
-   * one lowercase character and one uppercase character
-   * 
-   * @param email    The email of the moderator account to modify its password
+   * This service method updates the moderator's password based on the givenm inputs asswords must
+   * be at least 8 characters long and contain at least one number, one lowercase character and one
+   * uppercase character
+   *
+   * @param email The email of the moderator account to modify its password
    * @param password The new password of the moderator
    * @return The modified moderator
    * @author Enzo Benoit-Jeannin
@@ -240,9 +238,12 @@ public class AppUserService implements UserDetailsService {
     }
     // Check that string is at least 8 characters long and contain at least one
     // number, one lowercase character and one uppercase character
-    if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
+    if (password.length() < 8
+        || !password.matches(".*[0-9].*")
+        || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
+      error +=
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
     }
     if (error.length() > 0) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);
@@ -251,8 +252,7 @@ public class AppUserService implements UserDetailsService {
     // Check if the user we are trying to modify does indeed exist
     AppUser user = appUserRepository.findAppUserByEmail(email);
     if (user == null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "This account does not exist.");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
     }
 
     user.setPassword(passwordEncoder.encode(password));
