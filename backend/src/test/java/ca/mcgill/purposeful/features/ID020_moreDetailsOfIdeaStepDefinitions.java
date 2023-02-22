@@ -1,7 +1,9 @@
 package ca.mcgill.purposeful.features;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +24,9 @@ import ca.mcgill.purposeful.controller.IdeaController;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.util.CucumberUtil;
-import ca.mcgill.purposeful.util.DatabaseUtil;
+import io.cucumber.core.gherkin.messages.internal.gherkin.internal.com.eclipsesource.json.Json;
+import io.cucumber.core.gherkin.messages.internal.gherkin.internal.com.eclipsesource.json.JsonArray;
+import io.cucumber.core.gherkin.messages.internal.gherkin.internal.com.eclipsesource.json.JsonObject;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -43,18 +48,15 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
   IdeaController ideaController;
 
   @Autowired
-  private DatabaseUtil databaseUtil;
-
-  @Autowired
   private CucumberUtil cucumberUtil;
 
   @Autowired
   AppUserRepository appUserRepository;
 
-  private String jwtToken;
+  private HttpHeaders authHeader;
   private ResponseEntity<?> response;
   private Map<String, String> idMap = new HashMap<String, String>();
-  
+
   @Given("the database contains the following users:")
   public void theDatabaseContainsTheFollowingUsers(DataTable dataTable) {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
@@ -99,19 +101,20 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     Authority authority = Authority.valueOf("User");
     setOfAuthorities.add(authority);
     // add the app user to the list of app users
+    appUser.setAuthorities(setOfAuthorities);
     appUserRepository.save(appUser);
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     ResponseEntity<String> response = client.exchange("/login", HttpMethod.POST, request, String.class);
-    jwtToken = response.getBody();
+    authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
   @When("I request to view the details of idea with id {int}")
   public void iRequestToViewTheDetailsOfIdeaWithId(Integer id) {
     String correctedId = idMap.get(id.toString());
-    HttpEntity<String> request = new HttpEntity<>(jwtToken);
+    HttpEntity<String> request = new HttpEntity<>(authHeader);
     response = client.exchange(
-        "/idea/" + correctedId + "/details",
+        "/api/idea/" + correctedId,
         HttpMethod.GET,
         request,
         String.class);
@@ -119,37 +122,87 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
 
   @Then("the following information about the idea should be displayed:")
   public void theFollowingInformationAboutTheIdeaShouldBeDisplayed(Map<String, String> dataTable) {
-    // TODO: check the response body
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+
+    JsonObject json = Json.parse(response.getBody().toString()).asObject();
+
+    assertEquals(dataTable.get("title"), json.get("title").asString());
+    assertEquals(dataTable.get("purpose"), json.get("purpose").asString());
+
+    // domains
+    Set<String> domains = new HashSet<String>();
+    json.get("domains").asArray().iterator().forEachRemaining(domain -> {
+      domains.add(domain.asObject().get("name").asString());
+    });
+    Set<String> domainsExpected = new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
+    assertEquals(domainsExpected, domains);
+
+    // topics
+    Set<String> topics = new HashSet<String>();
+    json.get("topics").asArray().iterator().forEachRemaining(topic -> {
+      topics.add(topic.asObject().get("name").asString());
+    });
+    Set<String> topicsExpected = new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
+    assertEquals(topicsExpected, topics);
+
+    // techs
+    Set<String> techs = new HashSet<String>();
+    json.get("techs").asArray().iterator().forEachRemaining(tech -> {
+      techs.add(tech.asObject().get("name").asString());
+    });
+    Set<String> techsExpected = new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
+    assertEquals(techsExpected, techs);
+
+    assertEquals(Boolean.parseBoolean(dataTable.get("isPaid")), json.get("isPaid").asBoolean());
+    assertEquals(Boolean.parseBoolean(dataTable.get("isInProgress")), json.get("inProgress").asBoolean());
+    assertEquals(Boolean.parseBoolean(dataTable.get("isPrivate")), json.get("isPrivate").asBoolean());
   }
 
   @Then("the supporting image with the following URL should be displayed:")
   public void theSupportingImageWithTheFollowingURLShouldBeDisplayed(List<String> dataTable) {
-    // TODO: check the response body
+    JsonObject json = Json.parse(response.getBody().toString()).asObject();
+    Set<String> urls = new HashSet<String>();
+    json.get("imgUrls").asArray().iterator().forEachRemaining(url -> {
+      urls.add(url.asObject().get("url").asString());
+    });
+
+    Set<String> urlsExpected = new HashSet<String>();
+    for (String url : dataTable) {
+      if (!url.equals("url"))
+        urlsExpected.add(url);
+    }
+
+    assertEquals(urlsExpected, urls);
   }
 
   @Then("the icon with the following URL should be displayed:")
   public void theIconWithTheFollowingURLShouldBeDisplayed(List<String> dataTable) {
-    // TODO: check the response body
+    JsonObject json = Json.parse(response.getBody().toString()).asObject();
+    String url = json.get("iconUrl").asObject().get("url").asString();
+
+    assertEquals(dataTable.get(1), url);
   }
 
   @Then("no supporting images should be displayed")
   public void noSupportingImagesShouldBeDisplayed() {
-    // TODO: check the response body
+    JsonObject json = Json.parse(response.getBody().toString()).asObject();
+    JsonArray urls = json.get("imgUrls").asArray();
+
+    assertTrue(urls.isEmpty());
   }
 
   @When("I request to view the details of idea with UUID {string}")
   public void iRequestToViewTheDetailsOfIdeaWithUUID(String uuid) {
-    HttpEntity<String> request = new HttpEntity<>(jwtToken);
+    HttpEntity<String> request = new HttpEntity<>(authHeader);
     response = client.exchange(
-        "/idea/" + uuid + "/details",
+        "/api/idea/" + uuid,
         HttpMethod.GET,
         request,
         String.class);
   }
 
-  @Then("the user shall recieve the error message {string} with status {int}")
-  public void theUserShallRecieveTheErrorMessageWithStatus(String errorMessage, int status) {
+  @Then("the user shall receive the error message {string} with status {int}")
+  public void theUserShallReceiveTheErrorMessageWithStatus(String errorMessage, int status) {
     assertEquals(HttpStatus.valueOf(status), response.getStatusCode());
-    // TODO: check the response body
   }
 }

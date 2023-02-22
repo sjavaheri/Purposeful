@@ -69,7 +69,7 @@ public class IdeaService {
 
     if (idea == null) {
       throw new GlobalException(
-          HttpStatus.NOT_FOUND, "Idea with UUID " + uuid + " does not exist.");
+          HttpStatus.BAD_REQUEST, "Idea with UUID " + uuid + " does not exist.");
     }
 
     return idea;

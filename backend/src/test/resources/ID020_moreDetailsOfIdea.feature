@@ -66,5 +66,5 @@ Feature: View more details for a feature
   # Error flow: Idea does not exist
   Scenario: Title of your scenario outline
     When I request to view the details of idea with UUID "00000000-0000-0000-0000-000000000000"
-    Then the user shall recieve the error message "The requested idea does not exist" with status "400"
+    Then the user shall receive the error message "Idea with UUID 00000000-0000-0000-0000-000000000000 does not exist." with status 400
 

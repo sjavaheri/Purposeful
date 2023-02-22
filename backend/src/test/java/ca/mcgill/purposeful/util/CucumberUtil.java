@@ -313,7 +313,7 @@ public class CucumberUtil {
       Set<Domain> domains = new HashSet<Domain>();
       String[] domainIds = row.get("domains").split(",");
       for (String domainId : domainIds) {
-        domains.add(domainRepository.findDomainById(idMap.get(domainId)));
+        domains.add(domainRepository.findDomainById(idMap.get(domainId.replaceAll("\\s", ""))));
       }
       idea.setDomains(domains);
 
@@ -321,7 +321,7 @@ public class CucumberUtil {
       Set<Topic> topics = new HashSet<Topic>();
       String[] topicIds = row.get("topics").split(",");
       for (String topicId : topicIds) {
-        topics.add(topicRepository.findTopicById(idMap.get(topicId)));
+        topics.add(topicRepository.findTopicById(idMap.get(topicId.replaceAll("\\s", ""))));
       }
       idea.setTopics(topics);
 
@@ -329,15 +329,21 @@ public class CucumberUtil {
       Set<Technology> techs = new HashSet<Technology>();
       String[] techIds = row.get("techs").split(",");
       for (String techId : techIds) {
-        techs.add(technologyRepository.findTechnologyById(idMap.get(techId)));
+        techs.add(technologyRepository.findTechnologyById(idMap.get(techId.replaceAll("\\s", ""))));
       }
       idea.setTechs(techs);
 
       // urls
       List<URL> supportingUrls = new ArrayList<URL>();
-      String[] urlIds = row.get("supportingImageUrls").split(",");
+      String urlString = row.get("supportingImageUrls");
+      if (urlString == null) {
+        urlString = "";
+      }  
+      String[] urlIds = urlString.split(",");
       for (String urlId : urlIds) {
-        supportingUrls.add(urlRepository.findURLById(idMap.get(urlId)));
+        if (!urlId.equals("")) {
+          supportingUrls.add(urlRepository.findURLById(idMap.get(urlId)));
+        }
       }
       idea.setSupportingImageUrls(supportingUrls);
 
@@ -348,6 +354,7 @@ public class CucumberUtil {
       idea.setPaid(Boolean.parseBoolean(row.get("isPaid")));
       idea.setInProgress(Boolean.parseBoolean(row.get("isInProgress")));
       idea.setPrivate(Boolean.parseBoolean(row.get("isPrivate")));
+
       ideaRepository.save(idea);
       idMap.put(row.get("id"), idea.getId());
     }
