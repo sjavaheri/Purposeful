@@ -10,9 +10,6 @@ import java.util.stream.Collectors;
 
 public class IdeaDTO {
 
-  public IdeaDTO() {
-  }
-
   private String id;
   private boolean isPaid;
   private boolean isPrivate;
@@ -30,7 +27,8 @@ public class IdeaDTO {
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
-  public IdeaDTO() {}
+  public IdeaDTO() {
+  }
 
   public IdeaDTO(Idea idea) {
     this.isPaid = idea.isPaid();
