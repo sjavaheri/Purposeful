@@ -3,22 +3,23 @@ Feature: Modify Moderator
 
   Background:
     Given the database contains the following user accounts:
-      | firstName | lastName       | email                    | password          |
-      | Enzo      | Benoit-Jeannin | enzo.benoit@gmail.com    | EnzoIsAwesome01   |
-      | Wassim    | Jabbour        | wassim.jabbour@gmail.com | WassimIsAwesome01 |
+      | firstName | lastName       | email                    | password          | authority |
+      | Enzo      | Benoit-Jeannin | enzo.benoit@gmail.com    | EnzoIsAwesome01   | User      |
+      | Wassim    | Jabbour        | wassim.jabbour@gmail.com | WassimIsAwesome01 | User      |
 
   # Normal Flow
 
   Scenario: Successfully update a user account
-    Given that the user is logged with the email "enzo.benoit@gmail.com" and the password "EnzoIsAwesome01"
-    When the user requests to update their account information with the following details:
-      | firstName | lastName | oldPassword     | newPassword        |
-      | NewEnzo   | Benoit   | EnzoIsAwesome01 | NewEnzoIsAwesome01 |
-    Then account with email "enzo.benoit@gmail.com" should be updated with the following details:
-      | firstName | lastName | password           |
-      | NewEnzo   | Benoit   | NewEnzoIsAwesome01 |
-    Then the number of user accounts in the datavase shall be "2"
+    Given that the user is logged with the email "<email>" and the password "<password>"
+    When the user requests to update their account information with first name "<firstname>", last name "<lastname>", password "<password>"
+    Then account with email "<email>" should be updated with the following details
+      | firstName | lastName | password |
+      | <firstname> | <lastname> | <password> |
+    Then the number of moderator accounts in the database shall be "2"
 
+    Examples:
+      | email                   | password             | firstname | lastname |
+      | owner.steve@gmail.com         | OwnerIsAwesome01     | NewOwner  | Steve2   |
   # Error Flows
 
   Scenario: Unsuccessfully update a user account because you are not logged in

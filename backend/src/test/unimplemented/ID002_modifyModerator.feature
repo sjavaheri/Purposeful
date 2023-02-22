@@ -10,14 +10,16 @@ Feature: Modify Moderator
   # Normal Flow
 
   Scenario: Successfully update an moderator account
-    Given that the user is logged with the email "owner.steve@gmail.com" and the password "OwnerIsAwesome01"
-    When the user requests to update their account information with the following details:
-      | firstName | lastName | oldPassword      | newPassword         |
-      | NewOwner  | Steve2   | OwnerIsAwesome01 | NewOwnerIsAwesome01 |
-    Then account with email "owner.steve@gmail.com" should be updated with the following details:
-      | firstName | lastName | password            |
-      | NewOwner  | Steve2   | NewOwnerIsAwesome01 |
-    Then the number of moderator accounts in the datavase shall be "2"
+    Given that the user is logged with the email "<email>" and the password "<password>"
+    When the user requests to update their account information with first name "<firstname>", last name "<lastname>"
+    Then account with email "<email>" should be updated with the following details
+      | firstName | lastName |
+      | <firstname> | <lastname> |
+    Then the number of moderator accounts in the database shall be 2
+
+    Examples:
+      | email                   | password             | firstname | lastname |
+      | owner.steve@gmail.com         | OwnerIsAwesome01     | NewOwner  | Steve2   |
 
   # Error Flows
 
