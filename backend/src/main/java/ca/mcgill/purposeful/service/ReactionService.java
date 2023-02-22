@@ -48,8 +48,14 @@ public class ReactionService {
   public Reaction react(Date date, ReactionType reactionType, String idea_id,
       String user_id) {
 
+    // validate idea
+    ideaService.getIdeaById(idea_id);
+
+    // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
+
     // check if a previous reaction exists
-    Reaction previousReaction = this.getReactionByIdeaAndRegularUser(idea_id, user_id);
+    Reaction previousReaction = reactionRepository.findReactionByIdeaAndRegularUser(idea_id,
+        user_id);
 
     // delete reaction if it exists and return null
     if (previousReaction != null) {
@@ -93,7 +99,7 @@ public class ReactionService {
   }
 
   /**
-   * Finds a reaction given its idea id and regular user id
+   * DEPRECATED Finds a reaction given its idea id and regular user id
    *
    * @param idea_id id of the idea
    * @param user_id id of the regular user
@@ -106,13 +112,6 @@ public class ReactionService {
     // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
 
     Reaction reaction = reactionRepository.findReactionByIdeaAndRegularUser(idea_id, user_id);
-
-    if (reaction == null) {
-      throw new GlobalException(
-          HttpStatus.NOT_FOUND,
-          "Reaction associated with idea_id " + idea_id + " and user_id " + user_id
-              + " does not exist.");
-    }
 
     return reaction;
   }
