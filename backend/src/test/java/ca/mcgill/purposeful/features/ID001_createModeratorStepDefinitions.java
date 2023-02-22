@@ -11,7 +11,6 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Owner;
 import ca.mcgill.purposeful.service.AppUserService;
 import ca.mcgill.purposeful.util.CucumberUtil;
-import ca.mcgill.purposeful.util.DatabaseUtil;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -48,9 +47,6 @@ public class ID001_createModeratorStepDefinitions {
 
   @Autowired
   private TestRestTemplate client;
-
-  @Autowired
-  private DatabaseUtil databaseUtil;
 
   @Autowired
   private CucumberUtil cucumberUtil;
