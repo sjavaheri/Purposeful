@@ -76,7 +76,7 @@ public class TestReactionService {
   }
 
   /**
-   * Test the react method (Delete reaction case)
+   * Test the react method again (Delete reaction case)
    *
    * @author Athmane Benarous
    */
