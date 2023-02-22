@@ -70,8 +70,8 @@ public class IdeaService {
     Idea idea = ideaRepository.findIdeaById(uuid);
 
     if (idea == null) {
-      throw new GlobalException(HttpStatus.NOT_FOUND,
-          "Idea with UUID " + uuid + " does not exist.");
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Idea with UUID " + uuid + " does not exist.");
     }
 
     return idea;
