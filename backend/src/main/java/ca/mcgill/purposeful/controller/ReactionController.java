@@ -33,7 +33,7 @@ public class ReactionController {
    * @author Athmane Benarous
    */
   @PutMapping(value = {"/react", "/react/"})
-  @PreAuthorize("hasAuthorities('User', 'Moderator', 'Owner')")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<ReactionDTO> react(@RequestBody ReactionDTO reactionDTO) {
     // Unpack the DTO
     if (reactionDTO == null) {
