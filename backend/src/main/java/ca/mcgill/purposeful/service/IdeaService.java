@@ -13,7 +13,6 @@ import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
 import jakarta.transaction.Transactional;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,9 +86,9 @@ public class IdeaService {
    * oldest.
    *
    * @param domainNames The list of domain names that the idea must have one of (null if no filter)
-   * @param topicNames The list of topic names that the idea must have one of (null if no filter)
-   * @param techNames The list of technology names that the idea must have one of (null if no
-   *        filter)
+   * @param topicNames  The list of topic names that the idea must have one of (null if no filter)
+   * @param techNames   The list of technology names that the idea must have one of (null if no
+   *                    filter)
    * @return The set of ideas that match all the criteria
    * @author Wassim Jabbour
    */
@@ -179,17 +178,17 @@ public class IdeaService {
   /**
    * Create an idea
    *
-   * @param idea title
-   * @param idea purpose
-   * @param idea description
-   * @param paid status of idea
-   * @param progress status of idea
+   * @param idea       title
+   * @param idea       purpose
+   * @param idea       description
+   * @param paid       status of idea
+   * @param progress   status of idea
    * @param visibility of an idea
-   * @param domains to which the idea belongs
-   * @param the technologies used to achieve the idea
-   * @param the topics of the idea
+   * @param domains    to which the idea belongs
+   * @param the        technologies used to achieve the idea
+   * @param the        topics of the idea
    * @param supporting images for idea
-   * @param icon for idea
+   * @param icon       for idea
    * @return The newly created idea
    * @author Adam Kazma
    */
@@ -405,5 +404,20 @@ public class IdeaService {
       }
     }
     return url;
+  }
+
+  /**
+   * Remove a posted idea from the system alongside its reaction and URLs
+   *
+   * @param uuid the idea's uuid
+   * @author Athmane Benarous
+   */
+  @Transactional
+  public void removeIdeaById(String uuid) {
+    // validate idea by getting it
+    this.getIdeaById(uuid);
+
+    // remove idea
+    ideaRepository.deleteById(uuid);
   }
 }
