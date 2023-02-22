@@ -42,11 +42,11 @@ public class ReactionController {
 
     Date date = reactionDTO.getDate();
     ReactionType reactionType = reactionDTO.getReactionType();
-    String ideaId = reactionDTO.getIdea_id();
-    String userId = reactionDTO.getUser_id();
+    String idea_id = reactionDTO.getIdea_id();
+    String user_id = reactionDTO.getUser_id();
 
     // react
-    Reaction reaction = reactionService.react(date, reactionType, ideaId, userId);
+    Reaction reaction = reactionService.react(date, reactionType, idea_id, user_id);
 
     return ResponseEntity.status(HttpStatus.OK).body(new ReactionDTO(reaction));
   }
