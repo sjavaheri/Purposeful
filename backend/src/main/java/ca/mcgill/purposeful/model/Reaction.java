@@ -7,10 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.util.Date;
-//import java.sql.Date;
-//import java.sql.Time;
-
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * The Reaction class, the model for all reactions in the database
@@ -49,10 +48,12 @@ public class Reaction {
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "idea_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Idea idea;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "user_id", nullable = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private RegularUser regularUser;
 
   // ------------------------
