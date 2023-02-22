@@ -74,29 +74,29 @@ public class ID019_browseIdeaStepDefinitions {
     idMap = new HashMap<>();
   }
 
-  @And("the database contains the following RegularUser accounts:")
+  @And("the database contains the following RegularUser accounts \\(Strategy1):")
   public void theDatabaseContainsTheFollowingRegularUserAccounts(DataTable dataTable) {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following domains:")
+  @And("the database contains the following domains \\(Strategy1):")
   public void theDatabaseContainsTheFollowingDomains(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following topics:")
+  @And("the database contains the following topics \\(Strategy1):")
   public void theDatabaseContainsTheFollowingTopics(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following techs:")
+  @And("the database contains the following techs \\(Strategy1):")
   public void theDatabaseContainsTheFollowingTechs(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following ideas:")
+  @And("the database contains the following ideas \\(Strategy1):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable1(dataTable, idMap);
   }
 
   @And("I am logged in as the user with email {string} and password {string}")

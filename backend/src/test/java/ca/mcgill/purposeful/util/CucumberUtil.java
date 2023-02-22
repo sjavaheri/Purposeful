@@ -12,6 +12,7 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
@@ -32,23 +33,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class CucumberUtil {
 
+  @Autowired private TopicRepository topicRepository;
+
+  @Autowired private TechnologyRepository technologyRepository;
+
+  @Autowired private URLRepository urlRepository;
+
+  @Autowired private IdeaRepository ideaRepository;
+
+  @Autowired private DomainRepository domainRepository;
+
+  @Autowired private AppUserService appUserService;
+
   @Autowired private AppUserRepository appUserRepository;
 
   @Autowired private RegularUserRepository regularUserRepository;
 
-  @Autowired PasswordEncoder passwordEncoder;
-
-  @Autowired DomainRepository domainRepository;
-
-  @Autowired TopicRepository topicRepository;
-
-  @Autowired TechnologyRepository technologyRepository;
-
-  @Autowired IdeaRepository ideaRepository;
-
-  @Autowired AppUserService appUserService;
-
-  @Autowired URLRepository urlRepository;
+  @Autowired private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -101,10 +102,12 @@ public class CucumberUtil {
       appUser.setLastname(row.get("lastname"));
       appUser.setEmail(row.get("email"));
       appUser.setPassword(passwordEncoder.encode(row.get("password")));
-      // set the athorities of the app user
+      // set the authorities of the app user
       Set<Authority> setOfAuthorities = new HashSet<Authority>();
-      Authority authority = Authority.valueOf(row.get("authorities"));
-      setOfAuthorities.add(authority);
+      String[] authorities = row.get("authorities").split(",");
+      for (String authority : authorities) {
+        setOfAuthorities.add(Authority.valueOf(authority));
+      }
 
       // add the app user to the list of app users
       appUserRepository.save(appUser);
@@ -113,6 +116,9 @@ public class CucumberUtil {
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
       }
+
+      // add the app user to the list of app users
+      appUserRepository.save(appUser);
     }
   }
 
@@ -128,15 +134,38 @@ public class CucumberUtil {
 
     for (var row : rows) {
 
-      // Create a regular user from the table values
-      AppUser appUser =
-          appUserService.registerRegularUser(
-              row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
+      // create an instance of App User from the table values
+      AppUser appUser = new AppUser();
+      appUser.setFirstname(row.get("firstname"));
+      appUser.setLastname(row.get("lastname"));
+      appUser.setEmail(row.get("email"));
+      appUser.setPassword(passwordEncoder.encode(row.get("password")));
+
+      // Set the user to be regular
+      Set<Authority> setOfAuthorities = new HashSet<Authority>();
+      setOfAuthorities.add(Authority.User);
+
+      // Create a regular user class
+      RegularUser regularUser = new RegularUser();
+      regularUser.setAppUser(appUser);
+
+      // Add the regular user to a list of roles
+      List<Role> roles = new ArrayList<Role>();
+      roles.add(regularUser);
+
+      // Make the appuser instance point to the regular user
+      appUser.setRole(roles);
+      appUser.setAuthorities(setOfAuthorities);
+
+      // Save both in the database
+      appUserRepository.save(appUser);
+      regularUserRepository.save(regularUser);
 
       // Add the regular user to the map if it was passed
       // Note: no need to add the app user to the map since we only will be manipulating the regular
       // user instance later on
       if (idMap != null) {
+        idMap.put(row.get("id"), appUser.getId());
         idMap.put(row.get("id"), appUser.getId());
       }
     }
@@ -230,7 +259,7 @@ public class CucumberUtil {
    * @param idMap The map of ids
    * @author Wassim Jabbour
    */
-  public void createAndSaveIdeasFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveIdeasFromTable1(DataTable dataTable, Map<String, String> idMap) {
 
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
@@ -292,6 +321,103 @@ public class CucumberUtil {
       if (idMap != null) {
         idMap.put(row.get("id"), idea.getId());
       }
+    }
+  }
+
+  /**
+   * This method creates and saves Ideas from a data table
+   *
+   * @implNote {@code idMap} CANNOT BE NULL
+   * @param dataTable a data table containing the ideas to be created
+   * @param idMap a map containing the ids of the users and domains
+   * @author Thibaut Baguette
+   */
+  public void createAndSaveIdeasFromTable2(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Idea idea = new Idea();
+      idea.setTitle(row.get("title"));
+      idea.setPurpose(row.get("purpose"));
+      Date date = new Date();
+      date.setHours(0);
+      idea.setDate(date);
+      idea.setDescription("");
+
+      // user
+      AppUser user = appUserRepository.findAppUserById(idMap.get(row.get("user")));
+      Role role = user.getRole().get(0);
+      idea.setUser((RegularUser) role);
+
+      // domains
+      Set<Domain> domains = new HashSet<Domain>();
+      String[] domainIds = row.get("domains").split(",");
+      for (String domainId : domainIds) {
+        domains.add(domainRepository.findDomainById(idMap.get(domainId.replaceAll("\\s", ""))));
+      }
+      idea.setDomains(domains);
+
+      // topics
+      Set<Topic> topics = new HashSet<Topic>();
+      String[] topicIds = row.get("topics").split(",");
+      for (String topicId : topicIds) {
+        topics.add(topicRepository.findTopicById(idMap.get(topicId.replaceAll("\\s", ""))));
+      }
+      idea.setTopics(topics);
+
+      // techs
+      Set<Technology> techs = new HashSet<Technology>();
+      String[] techIds = row.get("techs").split(",");
+      for (String techId : techIds) {
+        techs.add(technologyRepository.findTechnologyById(idMap.get(techId.replaceAll("\\s", ""))));
+      }
+      idea.setTechs(techs);
+
+      // urls
+      List<URL> supportingUrls = new ArrayList<URL>();
+      String urlString = row.get("supportingImageUrls");
+      if (urlString == null) {
+        urlString = "";
+      }
+      String[] urlIds = urlString.split(",");
+      for (String urlId : urlIds) {
+        if (!urlId.equals("")) {
+          supportingUrls.add(urlRepository.findURLById(idMap.get(urlId)));
+        }
+      }
+      idea.setSupportingImageUrls(supportingUrls);
+
+      // icon
+      URL iconUrl = urlRepository.findURLById(idMap.get(row.get("iconUrl")));
+      idea.setIconUrl(iconUrl);
+
+      idea.setPaid(Boolean.parseBoolean(row.get("isPaid")));
+      idea.setInProgress(Boolean.parseBoolean(row.get("isInProgress")));
+      idea.setPrivate(Boolean.parseBoolean(row.get("isPrivate")));
+
+      ideaRepository.save(idea);
+      idMap.put(row.get("id"), idea.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves URLs from a data table
+   *
+   * @param dataTable a data table containing the URLs to be created
+   * @param idMap a map containing the ids of the users and domains
+   * @author Thibaut Baguette
+   */
+  public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      URL url = new URL();
+      url.setURL(row.get("url"));
+      urlRepository.save(url);
+
+      if (idMap != null) idMap.put(row.get("id"), url.getId());
     }
   }
 

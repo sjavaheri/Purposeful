@@ -188,7 +188,15 @@ public class AppUserService implements UserDetailsService {
     // check the password and whether it matches the given username
     return new SecurityUser(appUser);
   }
-
+  /**
+   * Modify the first name and last name of a user
+   *
+   * @param email - email of the user
+   * @param firstname - first name of the user
+   * @param lastname - last name of the user
+   * @return AppUser - the modified user
+   * @auhtor Enzo Benoit-Jeannin
+   */
   @Transactional
   public AppUser modifyUserNames(String email, String firstname, String lastname) {
 

@@ -3,29 +3,29 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
 
   Background:
     Given the id map is initialized
-    And the database contains the following RegularUser accounts:
+    And the database contains the following RegularUser accounts (Strategy1):
       | id | firstname | lastname | email                   | password     |
       | 1  | John      | Goblikon | john.goblikon@gmail.com | P@ssWord1234 |
-    And the database contains the following domains:
+    And the database contains the following domains (Strategy1):
       | id | name       |
       | 2  | Software   |
       | 3  | English    |
       | 4  | Electrical |
-    And the database contains the following topics:
+    And the database contains the following topics (Strategy1):
       | id | name              |
       | 5  | Web Dev           |
       | 6  | Game Dev          |
       | 7  | Embedded Software |
       | 8  | CLI Tool          |
       | 9  | Other             |
-    And the database contains the following techs:
+    And the database contains the following techs (Strategy1):
       | id | name       |
       | 10 | Rust       |
       | 11 | TypeScript |
       | 12 | Go         |
       | 13 | C++        |
       | 14 | Other      |
-    And the database contains the following ideas:
+    And the database contains the following ideas (Strategy1):
       # Date in ms from the unix epoch (Other constructors are deprecated)
       | id | title             | domains | topics | techs    | date | description | iconUrl  | purpose    | author |
       | 15 | Website Idea      | 2       | 5      | 10,11,12 | 1500 | Cool idea   | test.com | Great idea | 1      |

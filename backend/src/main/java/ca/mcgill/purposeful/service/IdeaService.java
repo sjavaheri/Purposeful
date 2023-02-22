@@ -8,10 +8,12 @@ import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
 import jakarta.transaction.Transactional;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -62,7 +64,7 @@ public class IdeaService {
 
     if (idea == null) {
       throw new GlobalException(
-          HttpStatus.NOT_FOUND, "Idea with UUID " + uuid + " does not exist.");
+          HttpStatus.BAD_REQUEST, "Idea with UUID " + uuid + " does not exist.");
     }
 
     return idea;
@@ -179,6 +181,58 @@ public class IdeaService {
     return filteredIdeas;
   }
 
+  /**
+   * Create an idea
+   *
+   * @return The newly created idea
+   * @author Adam Kazma
+   */
+  @Transactional
+  public Idea createIdea(
+      String title,
+      String purpose,
+      String description,
+      boolean isPaid,
+      boolean inProgress,
+      boolean isPrivate,
+      List<String> domainIds,
+      List<String> techIds,
+      List<String> topicIds,
+      List<String> imgUrlIds,
+      String iconUrlId,
+      RegularUser user) {
+    // Check parameters are not empty
+    checkEmptyAttributeViolation(title);
+    checkEmptyAttributeViolation(description);
+    checkEmptyAttributeViolation(purpose);
+
+    // Check to see if all given objects exist
+    Set<Domain> domains = checkDomains(domainIds);
+    Set<Technology> techs = checkTechs(techIds);
+    Set<Topic> topics = checkTopics(topicIds);
+    List<URL> imgUrls = checkImgURLS(imgUrlIds);
+    URL iconUrl = checkURL(iconUrlId);
+    Idea idea = new Idea();
+    idea.setDate(Date.from(Instant.now()));
+    idea.setTitle(title);
+    idea.setPurpose(purpose);
+    idea.setDescription(description);
+    idea.setPaid(isPaid);
+    idea.setInProgress(inProgress);
+    idea.setPrivate(isPrivate);
+    idea.setDomains(domains);
+    idea.setTechs(techs);
+    idea.setTopics(topics);
+    idea.setIconUrl(iconUrl);
+    idea.setSupportingImageUrls(imgUrls);
+    idea.setUser(user);
+
+    // Save to repository
+    ideaRepository.save(idea);
+
+    return idea;
+  }
+
   @Transactional
   /**
    * Modify an idea based on id
@@ -200,6 +254,7 @@ public class IdeaService {
       List<String> topicIds,
       List<String> imgUrlIds,
       String iconUrlId) {
+
     // Retrieve idea (we assume that no user can access an idea they don't own
     // because of frontend)
     Idea idea = getIdeaById(id);
@@ -370,5 +425,20 @@ public class IdeaService {
       }
     }
     return url;
+  }
+
+  /**
+   * Remove a posted idea from the system alongside its reaction and URLs
+   *
+   * @param uuid the idea's uuid
+   * @author Athmane Benarous
+   */
+  @Transactional
+  public void removeIdeaById(String uuid) {
+    // validate idea by getting it
+    this.getIdeaById(uuid);
+
+    // remove idea
+    ideaRepository.deleteById(uuid);
   }
 }
