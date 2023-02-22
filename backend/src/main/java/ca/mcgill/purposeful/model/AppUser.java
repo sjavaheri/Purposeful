@@ -1,10 +1,6 @@
 package ca.mcgill.purposeful.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.hibernate.annotations.GenericGenerator;
+import ca.mcgill.purposeful.configuration.Authority;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,8 +8,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-
-import ca.mcgill.purposeful.configuration.Authority;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * The AppUser class, the model for all accounts in the database
@@ -31,7 +29,7 @@ public class AppUser {
   private String id;
 
   //  @Column(unique = true, nullable = false)
-//  private String username;
+  //  private String username;
   @Column(nullable = false)
   private String firstname;
 
@@ -49,10 +47,10 @@ public class AppUser {
   // ------------------------
 
   // Every AppUser has a set of Authorities that they can be granted
-//  @ElementCollection(targetClass = Authority.class)
-//  @CollectionTable(name = "app_user_authority", joinColumns = @JoinColumn(name = "app_user_id"))
-//  @Enumerated(EnumType.STRING)
-//  @Column(name = "authorities", nullable = false)
+  //  @ElementCollection(targetClass = Authority.class)
+  //  @CollectionTable(name = "app_user_authority", joinColumns = @JoinColumn(name = "app_user_id"))
+  //  @Enumerated(EnumType.STRING)
+  //  @Column(name = "authorities", nullable = false)
   private Set<Authority> authorities = new HashSet<Authority>();
 
   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appUser")
@@ -117,11 +115,11 @@ public class AppUser {
     this.authorities = authorities;
   }
 
-  public List<Role> getRole() {
+  public List<Role> getRoles() {
     return roles;
   }
 
-  public void setRole(List<Role> roles) {
+  public void setRoles(List<Role> roles) {
     this.roles = roles;
   }
 }

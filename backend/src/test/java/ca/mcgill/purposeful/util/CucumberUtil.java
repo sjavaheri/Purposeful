@@ -1,18 +1,5 @@
 package ca.mcgill.purposeful.util;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.DomainRepository;
@@ -29,21 +16,22 @@ import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.service.AppUserService;
 import io.cucumber.datatable.DataTable;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class CucumberUtil {
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-
-  @Autowired
-  private AppUserRepository appUserRepository;
-
-  @Autowired
-  private RegularUserRepository regularUserRepository;
-
-  @Autowired
-  private DomainRepository domainRepository;
 
   @Autowired
   private TopicRepository topicRepository;
@@ -56,6 +44,21 @@ public class CucumberUtil {
 
   @Autowired
   private IdeaRepository ideaRepository;
+
+  @Autowired
+  private DomainRepository domainRepository;
+
+  @Autowired
+  private AppUserService appUserService;
+
+  @Autowired
+  private AppUserRepository appUserRepository;
+
+  @Autowired
+  private RegularUserRepository regularUserRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -122,6 +125,9 @@ public class CucumberUtil {
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
       }
+
+      // add the app user to the list of app users
+      appUserRepository.save(appUser);
     }
   }
 
@@ -157,12 +163,16 @@ public class CucumberUtil {
       roles.add(regularUser);
 
       // Make the appuser instance point to the regular user
-      appUser.setRole(roles);
+      appUser.setRoles(roles);
+      appUser.setAuthorities(setOfAuthorities);
 
       // Save both in the database
       appUserRepository.save(appUser);
       regularUserRepository.save(regularUser);
 
+      // Add the regular user to the map if it was passed
+      // Note: no need to add the app user to the map since we only will be manipulating the regular
+      // user instance later on
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
       }
@@ -170,135 +180,170 @@ public class CucumberUtil {
   }
 
   /**
-   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first
-   * authenticate
+   * This method creates and saves domains from a data table
    *
-   * @param email
-   * @param password
-   * @return HttpHeaders required in the request
+   * @param dataTable The table
+   * @param idMap     The map of ids
+   * @author Wassim Jabbour
    */
-  public HttpHeaders basicAuthHeader(String email, String password) {
-    HttpHeaders headers = new HttpHeaders();
-    String auth = email + ":" + password;
-    var authHeader = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
-    headers.add("Authorization", authHeader);
-    return headers;
-  }
+  public void createAndSaveDomainsFromTable(DataTable dataTable, Map<String, String> idMap) {
 
-  /**
-   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is
-   * already
-   * authenticated
-   *
-   * @param jwtToken
-   * @return HttpHeaders required in the request
-   */
-  public HttpHeaders bearerAuthHeader(String jwtToken) {
-    HttpHeaders headers = new HttpHeaders();
-    var authHeader = "Bearer " + jwtToken;
-    headers.add("Authorization", authHeader);
-    return headers;
-  }
-
-  /**
-   * This method creates and saves Domains from a data table
-   * 
-   * @param dataTable a data table containing the domains to be created
-   * @param idMap a map containing the ids of the users and domains
-   * 
-   * @author Thibaut Baguette
-   */
-  public void createAndSaveDomainFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
     for (var row : rows) {
+
       Domain domain = new Domain();
       domain.setName(row.get("name"));
+
+      // Save the domain in memory
       domainRepository.save(domain);
 
-      if (idMap != null)
+      // Save the domain in the map if it exists
+      if (idMap != null) {
         idMap.put(row.get("id"), domain.getId());
+      }
     }
   }
 
   /**
-   * This method creates and saves Topics from a data table
-   * 
-   * @param dataTable a data table containing the topics to be created
-   * @param idMap a map containing the ids of the users and domains
-   * 
-   * @author Thibaut Baguette
+   * This method creates and saves topics from a data table
+   *
+   * @param dataTable The table
+   * @param idMap     The map of ids
+   * @author Wassim Jabbour
    */
-  public void createAndSaveTopicFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveTopicsFromTable(DataTable dataTable, Map<String, String> idMap) {
+
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
     for (var row : rows) {
+
       Topic topic = new Topic();
       topic.setName(row.get("name"));
+
+      // Save the domain in memory
       topicRepository.save(topic);
 
-      if (idMap != null)
+      // Save the domain in the map if it exists
+      if (idMap != null) {
         idMap.put(row.get("id"), topic.getId());
+      }
     }
   }
 
   /**
-   * This method creates and saves Technologies from a data table
-   * 
-   * @param dataTable a data table containing the technologies to be created
-   * @param idMap a map containing the ids of the users and domains
-   * 
-   * @author Thibaut Baguette
+   * This method creates and saves technologies from a data table
+   *
+   * @param dataTable The table
+   * @param idMap     The map of ids
+   * @author Wassim Jabbour
    */
-  public void createAndSaveTechFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveTechsFromTable(DataTable dataTable, Map<String, String> idMap) {
+
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
     for (var row : rows) {
+
       Technology tech = new Technology();
       tech.setName(row.get("name"));
+
+      // Save the domain in memory
       technologyRepository.save(tech);
 
-      if (idMap != null)
+      // Save the domain in the map if it exists
+      if (idMap != null) {
         idMap.put(row.get("id"), tech.getId());
+      }
     }
   }
 
   /**
-   * This method creates and saves URLs from a data table
-   * 
-   * @param dataTable a data table containing the URLs to be created
-   * @param idMap a map containing the ids of the users and domains
-   * 
-   * @author Thibaut Baguette
+   * This method creates and saves ideas from a data table
+   *
+   * @param dataTable The table
+   * @param idMap     The map of ids
+   * @author Wassim Jabbour
    */
-  public void createAndSaveURLFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveIdeasFromTable1(DataTable dataTable, Map<String, String> idMap) {
+
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
     for (var row : rows) {
-      URL url = new URL();
-      url.setURL(row.get("url"));
-      urlRepository.save(url);
 
-      if (idMap != null)
-        idMap.put(row.get("id"), url.getId());
+      // Create idea
+      Idea idea = new Idea();
+
+      // Set title
+      idea.setTitle(row.get("title"));
+
+      // Set date
+      idea.setDate(new Date(Integer.parseInt(row.get("date"))));
+
+      // Set domains
+      Set<Domain> domainSet = new HashSet<>();
+      for (String domainId : row.get("domains").split(",")) {
+        domainSet.add(domainRepository.findDomainById(idMap.get(domainId)));
+      }
+      idea.setDomains(domainSet);
+
+      // Set topics
+      Set<Topic> topicSet = new HashSet<>();
+      for (String topicId : row.get("topics").split(",")) {
+        topicSet.add(topicRepository.findTopicById(idMap.get(topicId)));
+      }
+      idea.setTopics(topicSet);
+
+      // Set technologies
+      Set<Technology> techSet = new HashSet<>();
+      for (String techId : row.get("techs").split(",")) {
+        techSet.add(technologyRepository.findTechnologyById(idMap.get(techId)));
+      }
+      idea.setTechs(techSet);
+
+      // Set description
+      idea.setDescription(row.get("description"));
+
+      // Set icon
+      URL iconUrl = new URL();
+      iconUrl.setURL(row.get("iconUrl"));
+      iconUrl.setPresetIcon(false);
+      urlRepository.save(iconUrl);
+      idea.setIconUrl(iconUrl);
+
+      // Set purpose
+      idea.setPurpose(row.get("purpose"));
+
+      // Set the user
+      AppUser appUser =
+          appUserRepository.findAppUserById(idMap.get(row.get("author"))); // Extract app user saved
+      RegularUser regularUser =
+          regularUserRepository.findRegularUserByAppUserEmail(
+              appUser.getEmail()); // Extract regular user from app user
+      idea.setUser(regularUser);
+
+      // Save the domain in memory
+      ideaRepository.save(idea);
+
+      // Save the domain in the map if it exists
+      if (idMap != null) {
+        idMap.put(row.get("id"), idea.getId());
+      }
     }
   }
 
   /**
    * This method creates and saves Ideas from a data table
-   * 
-   * @implNote {@code idMap} CANNOT BE NULL
-   * 
+   *
    * @param dataTable a data table containing the ideas to be created
-   * @param idMap a map containing the ids of the users and domains
-   * 
+   * @param idMap     a map containing the ids of the users and domains
+   * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
-  public void createAndSaveIdeaFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveIdeasFromTable2(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
@@ -313,7 +358,7 @@ public class CucumberUtil {
 
       // user
       AppUser user = appUserRepository.findAppUserById(idMap.get(row.get("user")));
-      Role role = user.getRole().get(0);
+      Role role = user.getRoles().get(0);
       idea.setUser((RegularUser) role);
 
       // domains
@@ -365,5 +410,56 @@ public class CucumberUtil {
       ideaRepository.save(idea);
       idMap.put(row.get("id"), idea.getId());
     }
+  }
+
+  /**
+   * This method creates and saves URLs from a data table
+   *
+   * @param dataTable a data table containing the URLs to be created
+   * @param idMap     a map containing the ids of the users and domains
+   * @author Thibaut Baguette
+   */
+  public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      URL url = new URL();
+      url.setURL(row.get("url"));
+      urlRepository.save(url);
+
+      if (idMap != null) {
+        idMap.put(row.get("id"), url.getId());
+      }
+    }
+  }
+
+  /**
+   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first authenticate
+   *
+   * @param email
+   * @param password
+   * @return HttpHeaders required in the request
+   */
+  public HttpHeaders basicAuthHeader(String email, String password) {
+    HttpHeaders headers = new HttpHeaders();
+    String auth = email + ":" + password;
+    var authHeader = "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
+    headers.add("Authorization", authHeader);
+    return headers;
+  }
+
+  /**
+   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is already
+   * authenticated
+   *
+   * @param jwtToken
+   * @return HttpHeaders required in the request
+   */
+  public HttpHeaders bearerAuthHeader(String jwtToken) {
+    HttpHeaders headers = new HttpHeaders();
+    var authHeader = "Bearer " + jwtToken;
+    headers.add("Authorization", authHeader);
+    return headers;
   }
 }
