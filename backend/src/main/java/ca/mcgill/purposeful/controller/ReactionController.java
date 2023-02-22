@@ -29,7 +29,7 @@ public class ReactionController {
    * POST method to react
    *
    * @param reactionDTO - the reaction added or removed
-   * @return the newly created reaction or null if the reaction was removed
+   * @return the newly created reaction DTO or the removed reaction DTO with null values
    * @author Athmane Benarous
    */
   @PutMapping(value = {"/react", "/react/"})
