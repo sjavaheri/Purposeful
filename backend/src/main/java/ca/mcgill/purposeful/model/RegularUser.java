@@ -50,7 +50,6 @@ public class RegularUser extends Role {
   // Getter/Setter Methods
   // ------------------------
 
-
   public boolean isVerifiedCompany() {
     return verifiedCompany;
   }

@@ -10,5 +10,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface IdeaRepository extends CrudRepository<Idea, Integer> {
 
   Idea findIdeaById(String id);
-  Idea deleteById(String id);
+
 }
