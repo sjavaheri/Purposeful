@@ -3,24 +3,7 @@ package ca.mcgill.purposeful.features;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.controller.IdeaController;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.util.CucumberUtil;
@@ -31,21 +14,33 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Step definitions for the ID020_moreDetailsOfIdea.feature file
- * 
+ *
  * @author Thibaut Baguette
  */
 public class ID020_moreDetailsOfIdeaStepDefinitions {
+
   @Autowired
   private TestRestTemplate client;
 
   @Autowired
   PasswordEncoder passwordEncoder;
-
-  @Autowired
-  IdeaController ideaController;
 
   @Autowired
   private CucumberUtil cucumberUtil;
@@ -105,7 +100,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     appUserRepository.save(appUser);
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response = client.exchange("/login", HttpMethod.POST, request, String.class);
+    ResponseEntity<String> response = client.exchange("/login", HttpMethod.POST, request,
+        String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
@@ -134,7 +130,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     json.get("domains").asArray().iterator().forEachRemaining(domain -> {
       domains.add(domain.asObject().get("name").asString());
     });
-    Set<String> domainsExpected = new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
+    Set<String> domainsExpected = new HashSet<String>(
+        Arrays.asList(dataTable.get("domains").split(", ")));
     assertEquals(domainsExpected, domains);
 
     // topics
@@ -142,7 +139,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     json.get("topics").asArray().iterator().forEachRemaining(topic -> {
       topics.add(topic.asObject().get("name").asString());
     });
-    Set<String> topicsExpected = new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
+    Set<String> topicsExpected = new HashSet<String>(
+        Arrays.asList(dataTable.get("topics").split(", ")));
     assertEquals(topicsExpected, topics);
 
     // techs
@@ -150,12 +148,15 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     json.get("techs").asArray().iterator().forEachRemaining(tech -> {
       techs.add(tech.asObject().get("name").asString());
     });
-    Set<String> techsExpected = new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
+    Set<String> techsExpected = new HashSet<String>(
+        Arrays.asList(dataTable.get("techs").split(", ")));
     assertEquals(techsExpected, techs);
 
     assertEquals(Boolean.parseBoolean(dataTable.get("isPaid")), json.get("isPaid").asBoolean());
-    assertEquals(Boolean.parseBoolean(dataTable.get("isInProgress")), json.get("inProgress").asBoolean());
-    assertEquals(Boolean.parseBoolean(dataTable.get("isPrivate")), json.get("isPrivate").asBoolean());
+    assertEquals(Boolean.parseBoolean(dataTable.get("isInProgress")),
+        json.get("inProgress").asBoolean());
+    assertEquals(Boolean.parseBoolean(dataTable.get("isPrivate")),
+        json.get("isPrivate").asBoolean());
   }
 
   @Then("the supporting image with the following URL should be displayed:")
@@ -168,8 +169,9 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
 
     Set<String> urlsExpected = new HashSet<String>();
     for (String url : dataTable) {
-      if (!url.equals("url"))
+      if (!url.equals("url")) {
         urlsExpected.add(url);
+      }
     }
 
     assertEquals(urlsExpected, urls);
