@@ -9,7 +9,6 @@ import ca.mcgill.purposeful.dto.AppUserDto;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.service.AppUserService;
 import ca.mcgill.purposeful.util.CucumberUtil;
-import ca.mcgill.purposeful.util.DatabaseUtil;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -35,9 +34,6 @@ public class ID004_createUserStepDefinitions {
 
   // client that will send requests
   @Autowired private TestRestTemplate client;
-
-  // util class for clearing the database
-  @Autowired private DatabaseUtil databaseUtil;
 
   // fields for catching the response of the http request
   private ResponseEntity<?> response;

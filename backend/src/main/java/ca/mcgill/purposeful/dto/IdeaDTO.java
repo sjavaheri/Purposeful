@@ -30,6 +30,8 @@ public class IdeaDTO {
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
+  public IdeaDTO() {}
+
   public IdeaDTO(Idea idea) {
     this.isPaid = idea.isPaid();
     this.isPrivate = idea.isPrivate();
@@ -41,8 +43,8 @@ public class IdeaDTO {
     this.domains = idea.getDomains().stream().map(DomainDTO::new).collect(Collectors.toSet());
     this.techs = idea.getTechs().stream().map(TechDTO::new).collect(Collectors.toSet());
     this.topics = idea.getTopics().stream().map(TopicDTO::new).collect(Collectors.toSet());
-    this.imgUrls = idea.getSupportingImageUrls().stream().map(URLDTO::new)
-        .collect(Collectors.toList());
+    this.imgUrls =
+        idea.getSupportingImageUrls().stream().map(URLDTO::new).collect(Collectors.toList());
     this.iconUrl = new URLDTO(idea.getIconUrl());
   }
 
@@ -134,9 +136,9 @@ public class IdeaDTO {
    * @return The converted list
    * @author Wassim Jabbour
    */
-  public static List<IdeaDTO> convertToDto(List<Idea> ideas) {
+  public static ArrayList<IdeaDTO> convertToDto(List<Idea> ideas) {
 
-    List<IdeaDTO> dtoList = new ArrayList<>();
+    ArrayList<IdeaDTO> dtoList = new ArrayList<>();
 
     for (Idea idea : ideas) {
       dtoList.add(new IdeaDTO(idea));

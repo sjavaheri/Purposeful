@@ -9,7 +9,6 @@ import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.DatabaseUtil;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -107,19 +106,18 @@ public class AppUserRepositoryTests {
     regularUser.setInterests(topicSet);
 
     regularUser.setAppUser(appUser);
-    appUser.setRole(regularUserList);
+    appUser.setRoles(regularUserList);
+
     // save the appUser
     appUser = appUserRepository.save(appUser);
     regularUser = regularUserRepository.save(regularUser);
 
     // Assertions
     var appUserFromDB = appUserRepository.findAppUserById(appUser.getId());
-    var regularUserFromDB = regularUserRepository.findRegularUserById(
-        appUserFromDB.getRole().get(0).getId());
+    var regularUserFromDB = regularUserRepository.findRegularUserById(regularUser.getId());
     assertEquals(appUser.getId(), appUserFromDB.getId());
     assertEquals("peter", appUserFromDB.getFirstname());
     assertEquals("Griffin", appUserFromDB.getLastname());
-    assertEquals(regularUser.getId(), regularUserFromDB.getId());
     assertEquals(domainSet.size(), regularUserFromDB.getDomains().size());
     assertEquals(topicSet.size(), regularUserFromDB.getInterests().size());
   }

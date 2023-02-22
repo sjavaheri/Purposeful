@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ca.mcgill.purposeful.controller.LoginController;
 import ca.mcgill.purposeful.util.CucumberUtil;
-import ca.mcgill.purposeful.util.DatabaseUtil;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -27,8 +26,6 @@ public class ID003_loginStepDefinitions {
   @Autowired private TestRestTemplate client;
 
   @Autowired LoginController loginController;
-
-  @Autowired private DatabaseUtil databaseUtil;
 
   @Autowired private CucumberUtil cucumberUtil;
 
