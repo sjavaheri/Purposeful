@@ -204,6 +204,7 @@ public class CucumberUtil {
    * This method creates and saves Domains from a data table
    * 
    * @param dataTable a data table containing the domains to be created
+   * @param idMap a map containing the ids of the users and domains
    * 
    * @author Thibaut Baguette
    */
@@ -215,7 +216,9 @@ public class CucumberUtil {
       Domain domain = new Domain();
       domain.setName(row.get("name"));
       domainRepository.save(domain);
-      idMap.put(row.get("id"), domain.getId());
+
+      if (idMap != null)
+        idMap.put(row.get("id"), domain.getId());
     }
   }
 
@@ -223,6 +226,7 @@ public class CucumberUtil {
    * This method creates and saves Topics from a data table
    * 
    * @param dataTable a data table containing the topics to be created
+   * @param idMap a map containing the ids of the users and domains
    * 
    * @author Thibaut Baguette
    */
@@ -234,7 +238,9 @@ public class CucumberUtil {
       Topic topic = new Topic();
       topic.setName(row.get("name"));
       topicRepository.save(topic);
-      idMap.put(row.get("id"), topic.getId());
+
+      if (idMap != null)
+        idMap.put(row.get("id"), topic.getId());
     }
   }
 
@@ -242,6 +248,7 @@ public class CucumberUtil {
    * This method creates and saves Technologies from a data table
    * 
    * @param dataTable a data table containing the technologies to be created
+   * @param idMap a map containing the ids of the users and domains
    * 
    * @author Thibaut Baguette
    */
@@ -253,7 +260,9 @@ public class CucumberUtil {
       Technology tech = new Technology();
       tech.setName(row.get("name"));
       technologyRepository.save(tech);
-      idMap.put(row.get("id"), tech.getId());
+
+      if (idMap != null)
+        idMap.put(row.get("id"), tech.getId());
     }
   }
 
@@ -261,6 +270,7 @@ public class CucumberUtil {
    * This method creates and saves URLs from a data table
    * 
    * @param dataTable a data table containing the URLs to be created
+   * @param idMap a map containing the ids of the users and domains
    * 
    * @author Thibaut Baguette
    */
@@ -272,14 +282,19 @@ public class CucumberUtil {
       URL url = new URL();
       url.setURL(row.get("url"));
       urlRepository.save(url);
-      idMap.put(row.get("id"), url.getId());
+
+      if (idMap != null)
+        idMap.put(row.get("id"), url.getId());
     }
   }
 
   /**
    * This method creates and saves Ideas from a data table
    * 
+   * @implNote {@code idMap} CANNOT BE NULL
+   * 
    * @param dataTable a data table containing the ideas to be created
+   * @param idMap a map containing the ids of the users and domains
    * 
    * @author Thibaut Baguette
    */
@@ -330,7 +345,7 @@ public class CucumberUtil {
       String urlString = row.get("supportingImageUrls");
       if (urlString == null) {
         urlString = "";
-      }  
+      }
       String[] urlIds = urlString.split(",");
       for (String urlId : urlIds) {
         if (!urlId.equals("")) {
