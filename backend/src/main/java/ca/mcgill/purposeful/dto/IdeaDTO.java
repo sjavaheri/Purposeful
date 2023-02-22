@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class IdeaDTO {
 
+  public IdeaDTO() {
+  }
+
   private String id;
   private boolean isPaid;
   private boolean isPrivate;

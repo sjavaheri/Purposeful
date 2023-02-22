@@ -60,7 +60,7 @@ public class TestReactionService {
         .thenAnswer(ReactionMockRepository::findReactionById);
 
     lenient()
-        .when(reactionRepository.findReactionByIdeaAndRegularUser(anyString(), anyString()))
+        .when(reactionRepository.findReactionByIdea_IdAndRegularUser_Id(anyString(), anyString()))
         .thenAnswer(ReactionMockRepository::findReactionByIdeaAndRegularUser);
 
     lenient().when(reactionRepository.save(any(Reaction.class)))
@@ -92,7 +92,7 @@ public class TestReactionService {
 
     // Verify
     assertNull(reaction);
-    verify(reactionRepository, times(1)).deleteById(ReactionMockDatabase.reaction1.getId());
+    verify(reactionRepository, times(1)).deleteReactionById(ReactionMockDatabase.reaction1.getId());
   }
 
   /**

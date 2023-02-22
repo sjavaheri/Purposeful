@@ -33,7 +33,7 @@ public class ReactionController {
    * @author Athmane Benarous
    */
   @PostMapping(value = {"/react", "/react/"})
-  @PreAuthorize("hasAuthorities('User', 'Moderator', 'Owner')")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<ReactionDTO> react(@RequestBody ReactionDTO reactionDTO) {
     // Unpack the DTO
     if (reactionDTO == null) {
@@ -47,7 +47,9 @@ public class ReactionController {
     // react
     Reaction reaction = reactionService.react(date, reactionType, idea_id, user_id);
 
-    return new ResponseEntity<ReactionDTO>(new ReactionDTO(reaction), HttpStatus.CREATED);
+    // return the reaction
+    return new ResponseEntity<ReactionDTO>(
+        (reaction == null) ? new ReactionDTO() : new ReactionDTO(reaction), HttpStatus.CREATED);
   }
 
 }

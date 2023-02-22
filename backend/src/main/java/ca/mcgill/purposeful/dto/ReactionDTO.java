@@ -14,6 +14,9 @@ public class ReactionDTO {
   private String idea_id;
   private String user_id;
 
+  public ReactionDTO() {
+  }
+
   public ReactionDTO(Reaction reaction) {
     this.reactionType = reaction.getReactionType();
     this.date = reaction.getDate();

@@ -418,6 +418,6 @@ public class IdeaService {
     this.getIdeaById(uuid);
 
     // remove idea
-    ideaRepository.deleteById(uuid);
+    ideaRepository.deleteIdeaById(uuid);
   }
 }

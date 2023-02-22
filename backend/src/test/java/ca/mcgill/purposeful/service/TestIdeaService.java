@@ -582,7 +582,7 @@ public class TestIdeaService {
     ideaService.removeIdeaById(idea.getId());
 
     // Verify
-    verify(ideaRepository, times(1)).deleteById(idea.getId());
+    verify(ideaRepository, times(1)).deleteIdeaById(idea.getId());
   }
 
   /**

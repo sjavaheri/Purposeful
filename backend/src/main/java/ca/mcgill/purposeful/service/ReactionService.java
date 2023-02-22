@@ -3,8 +3,10 @@ package ca.mcgill.purposeful.service;
 import ca.mcgill.purposeful.dao.ReactionRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
+import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
+import ca.mcgill.purposeful.model.RegularUser;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,18 +50,18 @@ public class ReactionService {
   public Reaction react(Date date, ReactionType reactionType, String idea_id,
       String user_id) {
 
-    // validate idea
+    // validate idea and user
     ideaService.getIdeaById(idea_id);
 
     // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
 
     // check if a previous reaction exists
-    Reaction previousReaction = reactionRepository.findReactionByIdeaAndRegularUser(idea_id,
+    Reaction previousReaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id,
         user_id);
 
     // delete reaction if it exists and return null
     if (previousReaction != null) {
-      reactionRepository.deleteById(previousReaction.getId());
+      reactionRepository.deleteReactionById(previousReaction.getId());
       return null;
     }
     // create reaction if it doesn't exist and return reaction
@@ -107,11 +109,13 @@ public class ReactionService {
    */
   @Transactional
   public Reaction getReactionByIdeaAndRegularUser(String idea_id, String user_id) {
-    // validate idea
-    ideaService.getIdeaById(idea_id);
+    // validate idea and regularUser
+    Idea idea = ideaService.getIdeaById(idea_id);
+    RegularUser regularUser = regularUserRepository.findRegularUserById(user_id);
     // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
 
-    Reaction reaction = reactionRepository.findReactionByIdeaAndRegularUser(idea_id, user_id);
+    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id,
+        user_id);
 
     return reaction;
   }
@@ -174,7 +178,7 @@ public class ReactionService {
   public void removeReaction(String uuid) {
     // validate reaction
     this.getReactionById(uuid);
-    reactionRepository.deleteById(uuid);
+    reactionRepository.deleteReactionById(uuid);
   }
 
   /**
