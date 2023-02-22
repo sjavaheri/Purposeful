@@ -29,15 +29,19 @@ import org.springframework.http.ResponseEntity;
  */
 public class ID004_createUserStepDefinitions {
 
-  @Autowired AppUserService appUserService;
+  @Autowired
+  AppUserService appUserService;
 
-  @Autowired AppUserRepository appUserRepository;
+  @Autowired
+  AppUserRepository appUserRepository;
 
   // client that will send requests
-  @Autowired private TestRestTemplate client;
+  @Autowired
+  private TestRestTemplate client;
 
   // util class for clearing the database
-  @Autowired private DatabaseUtil databaseUtil;
+  @Autowired
+  private DatabaseUtil databaseUtil;
 
   // fields for catching the response of the http request
   private ResponseEntity<?> response;
@@ -103,11 +107,9 @@ public class ID004_createUserStepDefinitions {
   }
 
   @Then("the number of regular user accounts in the database is {string}")
-  public void theNumberOfRegularUserAccountsInTheDatabaseIs(String number) {
-    // get all the app users from the database
-    ArrayList<AppUser> appUsers = appUserRepository.findAll();
-    // assert that the number of app users is correct
-    assertEquals(Integer.parseInt(number), appUsers.size());
+  public void theNumberOfRegularUserAccountsInTheDatabaseIs(String count) {
+    // Assert that the number of user accounts in the database is equal to the count
+    assertEquals(Integer.parseInt(count), appUserRepository.count());
   }
 
   @Then("the following error {string} shall be raised with http status {string}")
