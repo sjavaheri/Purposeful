@@ -17,8 +17,6 @@ import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
-import ca.mcgill.purposeful.dao.ModeratorRepository;
-import ca.mcgill.purposeful.dao.OwnerRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
 import ca.mcgill.purposeful.dao.TopicRepository;
@@ -43,12 +41,6 @@ public class CucumberUtil {
 
   @Autowired
   private RegularUserRepository regularUserRepository;
-
-  @Autowired
-  private ModeratorRepository moderatorRepository;
-
-  @Autowired
-  private OwnerRepository ownerRepository;
 
   @Autowired
   private DomainRepository domainRepository;
