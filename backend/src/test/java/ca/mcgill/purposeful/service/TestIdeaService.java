@@ -16,7 +16,6 @@ import ca.mcgill.purposeful.dao.TopicRepository;
 import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
@@ -39,8 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 /**
  * To test the idea service methods
  *
- * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin
- *         Akhavan-Sarraf (modifying Idea
+ * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea
  *         tests)
  */
 @ExtendWith(MockitoExtension.class)
@@ -151,7 +149,8 @@ public class TestIdeaService {
     }
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas =
+        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -188,7 +187,8 @@ public class TestIdeaService {
     search_techs.add(MockDatabase.tech2.getName());
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas =
+        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
     Iterator<Idea> iterator = fetchedIdeas.iterator();
 
     // Check that the ideas list fetched has only 1 idea, that is idea 1
@@ -767,8 +767,7 @@ public class TestIdeaService {
                                                // deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);
-      ;
+      modifiableIdea.setInProgress(false);;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);
