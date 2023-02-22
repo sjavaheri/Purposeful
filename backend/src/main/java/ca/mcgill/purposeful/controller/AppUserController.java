@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -101,10 +104,22 @@ public class AppUserController {
       if (appUserDto == null) {
         throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUserDto is null");
       }
+
       String email = appUserDto.getEmail();
       String firstname = appUserDto.getFirstname();
       String lastname = appUserDto.getLastname();
-  
+
+      // Check if the user making the request is authorized to modify the password
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String currentEmail = authentication.getName();
+      List<String> authorities = authentication.getAuthorities().stream()
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.toList());
+
+      if (!authorities.contains("Owner") && !authorities.contains("Moderator") && !currentEmail.equals(email)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      }
+
       // Register the user
       AppUserDto registeredUser = DtoUtility.convertToDto(
           appUserService.modifyUserNames(email, firstname, lastname));
@@ -130,7 +145,18 @@ public class AppUserController {
 
       String email = appUserDto.getEmail();
       String password = appUserDto.getPassword();
-  
+
+      // Check if the user making the request is authorized to modify the password
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String currentEmail = authentication.getName();
+      List<String> authorities = authentication.getAuthorities().stream()
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.toList());
+
+      if (!authorities.contains("Owner") && !authorities.contains("Moderator") && !currentEmail.equals(email)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+      }
+
       // Register the user
       AppUserDto registeredUser = DtoUtility.convertToDto(
           appUserService.modifyPassword(email, password));
@@ -185,7 +211,7 @@ public class AppUserController {
      * 
      * @author Enzo Benoit-Jeannin
      */
-    @PutMapping(value = {"/mdoerator/password",
+    @PutMapping(value = {"/moderator/password",
       "/moderator/password/"}, consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasAnyAuthority('Owner', 'Moderator')")
     public ResponseEntity<AppUserDto> updatePasswordModerator(@RequestBody AppUserDto appUserDto) {
