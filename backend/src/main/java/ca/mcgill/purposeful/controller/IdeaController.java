@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +21,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** API for demonstrating how permissions work for access to endpoints */
+/**
+ * API for demonstrating how permissions work for access to endpoints
+ */
+
 @RestController
 @RequestMapping({"api/idea", "api/idea/"})
 public class IdeaController {
 
-  @Autowired IdeaService ideaService;
+  @Autowired
+  IdeaService ideaService;
 
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
@@ -92,5 +97,21 @@ public class IdeaController {
             imgUrlIds,
             iconUrlId);
     return new IdeaDTO(modifiedIdea);
+  }
+
+  /**
+   * Remove an idea by its id
+   *
+   * @param id the idea's id
+   * @return a response entity with a message instance and the HttpStatus
+   * @author Athmane Benarous
+   */
+  @DeleteMapping({"/{id}", "/{id}/"})
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<String> removeIdea(@PathVariable String id) {
+    // call service layer
+    ideaService.removeIdeaById(id);
+    // return response status with confirmation message
+    return new ResponseEntity<String>("Idea successfully deleted", HttpStatus.OK);
   }
 }
