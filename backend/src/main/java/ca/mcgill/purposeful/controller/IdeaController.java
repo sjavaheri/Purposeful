@@ -29,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping({"api/idea", "api/idea/"})
 public class IdeaController {
 
-  @Autowired IdeaService ideaService;
+  @Autowired
+  IdeaService ideaService;
 
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
@@ -103,13 +104,14 @@ public class IdeaController {
    *
    * @param id the idea's id
    * @return a response entity with a message instance and the HttpStatus
+   * @author Athmane Benarous
    */
   @DeleteMapping({"/{id}", "/{id}/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<String> removeIdea(@PathVariable String id) {
     // call service layer
     ideaService.removeIdeaById(id);
-    // return updated Visitor as Dto
+    // return response status with confirmation message
     return new ResponseEntity<String>("Idea successfully deleted", HttpStatus.OK);
   }
 }
