@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
@@ -27,7 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  *
  * @author Athmane Benarous
  */
-public class ID017_removeIdea {
+public class ID017_removeIdeaStepDefinitions {
 
   @Autowired
   private TestRestTemplate client;
@@ -112,6 +115,7 @@ public class ID017_removeIdea {
 
   @Then("the idea entry with id {int} will no longer exist in the idea database")
   public void theIdeaEntryWithIdWillNoLongerExistInTheIdeaDatabase(Integer id) {
+    assertEquals(response.getStatusCode(), HttpStatus.OK);
     String correctedId = idMap.get(id.toString());
     HttpEntity<String> request = new HttpEntity<>(authHeader);
     response = client.exchange(
@@ -119,7 +123,7 @@ public class ID017_removeIdea {
         HttpMethod.GET,
         request,
         String.class);
-    assert (response.getStatusCode() == HttpStatus.NOT_FOUND);
+    assertNotEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
   }
 
   @When("I request to remove the idea with the invalid UUID {string}")
@@ -132,8 +136,8 @@ public class ID017_removeIdea {
         String.class);
   }
 
-  @Then("the error message {string} will be thrown with status code {string}")
-  public void theErrorMessageWillBeThrownWithStatusCode(String msg, String code) {
-    assert (response.getStatusCode() == HttpStatus.valueOf(code));
+  @Then("the error message {string} will be thrown with status code {int}")
+  public void theErrorMessageWillBeThrownWithStatusCode(String msg, Integer code) {
+    assertEquals(HttpStatus.valueOf(code), response.getStatusCode());
   }
 }

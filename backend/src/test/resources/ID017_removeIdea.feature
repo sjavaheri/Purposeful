@@ -3,8 +3,8 @@ Feature: Remove Idea
 
   Background:
     Given the database contains the following user accounts before removing an idea:
-      | firstName | lastName | email                | password         |
-      | Steve     | Nash     | steve.nash@gmail.com | SteveIsAwesome01 |
+      | id | firstname |  | lastname | email                | password         |
+      | 0  | Steve     |  | Nash     | steve.nash@gmail.com | SteveIsAwesome01 |
     And the database contains the following domains before removing an idea:
       | name       |
       | Software   |
@@ -22,7 +22,7 @@ Feature: Remove Idea
       | React  |
       | C      |
     And the database contains the following URLs before removing an idea:
-      | URL           |
+      | url           |
       | something.com |
       | another.com   |
       | sayless.com   |
@@ -30,11 +30,11 @@ Feature: Remove Idea
       | interest.com  |
       | bestteam.com  |
     And the database contains the following ideas before removing an idea:
-      | id | title             | date       | purpose   | descriptions     | isPaid | inProgress | isPrivate | domains            | topics                    | techs          | image_urls                 | icon_url     | user_email           |
-      | 1  | Home Care App     | 2022-02-15 | Health    | Quality app      | True   | True       | False     | Software           | Frontend Dev              | Python         | something.com              | interest.com | user.steve@gmail.com |
-      | 2  | Football Game     | 2022-02-16 | Entertain | For fun          | False  | True       | False     | Software, Computer | Frontend Dev              | Python         | something.com, another.com | interest.com | user.steve@gmail.com |
-      | 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer           | Backend Dev, Frontend Dev | Python, C      | keepitup.com               | bestteam.com | user.steve@gmail.com |
-      | 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical         | Embedded Software         | Java, React, C | sayless.com                | bestteam.com | user.steve@gmail.com |
+      | id | title             | date       | purpose   | descriptions     | isPaid | inProgress | isPrivate | domains            | topics                    | techs          | image_urls                 | icon_url     | user |
+      | 1  | Home Care App     | 2022-02-15 | Health    | Quality app      | True   | True       | False     | Software           | Frontend Dev              | Python         | something.com              | interest.com | 0    |
+      | 2  | Football Game     | 2022-02-16 | Entertain | For fun          | False  | True       | False     | Software, Computer | Frontend Dev              | Python         | something.com, another.com | interest.com | 0    |
+      | 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer           | Backend Dev, Frontend Dev | Python, C      | keepitup.com               | bestteam.com | 0    |
+      | 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical         | Embedded Software         | Java, React, C | sayless.com                | bestteam.com | 0    |
     And I am logged in before removing an idea
 
   Scenario: Successfully remove an idea
@@ -45,4 +45,4 @@ Feature: Remove Idea
 
   Scenario: Unsuccessfully remove an idea that does not exist in the idea database
     When I request to remove the idea with the invalid UUID "00000000-0000-0000-000000000000"
-    Then the error message "The requested idea does not exist" will be thrown with status code "400"
+    Then the error message "The requested idea does not exist" will be thrown with status code 400
