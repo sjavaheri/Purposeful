@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Idea;
@@ -45,16 +44,28 @@ public class ID016_modifyIdeaStepDefinitions {
     private TestRestTemplate client;
   
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
   
     @Autowired
     private CucumberUtil cucumberUtil;
   
     @Autowired
-    AppUserRepository appUserRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
-    IdeaRepository ideaRepository;
+    private DomainRepository domainRepository;
+
+    @Autowired
+    private TopicRepository topicRepository;
+
+    @Autowired
+    private TechnologyRepository technologyRepository;
+
+    @Autowired
+    private IdeaRepository ideaRepository;
+
+    @Autowired
+    private URLRepository urlRepository;
 
     private ResponseEntity<?> response;
   

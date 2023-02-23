@@ -11,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-<<<<<<< HEAD
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-=======
 import org.springframework.web.bind.annotation.*;
 import org.springframework.format.annotation.DateTimeFormat;
->>>>>>> 956f134 (modify idea step definitions)
 
 /**
  * API for demonstrating how permissions work for access to endpoints
@@ -69,41 +66,6 @@ public class IdeaController {
    * @throws Exception
    * @author Ramin Akhavan
    */
-<<<<<<< HEAD
-  @PutMapping(value = {"/idea/edit", "/idea/edit/"})
-  public IdeaDTO modifyIdea(
-      @RequestParam("id") String id,
-      @RequestParam("title") String title,
-      @RequestParam("purpose") String purpose,
-      @RequestParam("descriptions") String descriptions,
-      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-mm-dd")
-          Date date,
-      @RequestParam("isPaid") boolean isPaid,
-      @RequestParam("inProgress") boolean inProgress,
-      @RequestParam("isPrivate") boolean isPrivate,
-      @RequestParam("domains") List<String> domainIds,
-      @RequestParam("techs") List<String> techIds,
-      @RequestParam("topics") List<String> topicIds,
-      @RequestParam("imgUrls") List<String> imgUrlIds,
-      @RequestParam("iconUrl") String iconUrlId)
-      throws Exception {
-    Idea modifiedIdea =
-        ideaService.modifyIdea(
-            id,
-            title,
-            date,
-            descriptions,
-            purpose,
-            isPaid,
-            inProgress,
-            isPrivate,
-            domainIds,
-            techIds,
-            topicIds,
-            imgUrlIds,
-            iconUrlId);
-    return new IdeaDTO(modifiedIdea);
-=======
   @PutMapping(value = {"/edit/{id}", "/edit/{id}/"})
   public ResponseEntity<IdeaDTO> modifyIdea(@PathVariable String id,
       @RequestParam(value = "title", required = false) String title,
@@ -122,7 +84,6 @@ public class IdeaController {
         inProgress, isPrivate,
         domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
     return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO(modifiedIdea));
->>>>>>> 956f134 (modify idea step definitions)
   }
 
   /**
