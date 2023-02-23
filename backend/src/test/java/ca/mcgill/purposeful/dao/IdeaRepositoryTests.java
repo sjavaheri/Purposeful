@@ -7,8 +7,11 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.util.DatabaseUtil;
 import java.time.Instant;
 import java.util.Date;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,21 +31,21 @@ public class IdeaRepositoryTests {
   @Autowired
   private RegularUserRepository regularUserRepository;
 
-//  /**
-//   * Clear the database before all tests
-//   */
-//  @BeforeAll
-//  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
-//    util.clearDatabase();
-//  }
-//
-//  /**
-//   * Clear the database after each test
-//   */
-//  @AfterEach
-//  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
-//    util.clearDatabase();
-//  }
+  /**
+   * Clear the database before all tests
+   */
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
+    util.clearDatabase();
+  }
+
+  /**
+   * Clear the database after each test
+   */
+  @AfterEach
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
+    util.clearDatabase();
+  }
 
   @Test
   public void testPersistAndLoadIdea() {
