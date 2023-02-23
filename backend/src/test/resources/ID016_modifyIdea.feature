@@ -1,49 +1,48 @@
+#noinspection CucumberUndefinedStep
 Feature: Modify Idea
   As a user, I want to be able to modify the details of any idea that I have posted it so that my idea can be changed over time
 
   Background:
     Given the database contains the following user accounts:
-      | firstName | lastName | email                | password         |
-      | User      | Steve    | user.steve@gmail.com | SteveIsAwesome01 |
-      | User      | Bob      | user.bob@gmail.com   | BobIsAwesome01   |
-    And the database contains the following domains:
-      | name       |
-      | Software   |
-      | Computer   |
-      | Electrical |
-    And the database contains the following topics:
-      | name              |
-      | Frontend Dev      |
-      | Backend Dev       |
-      | Embedded Software |
-    And the database contains the following techs:
-      | name   |
-      | Python |
-      | Java   |
-      | React  |
-      | C      |
-    And the database contains the following URLs:
-      | URL           |
-      | something.com |
-      | another.com   |
-      | sayless.com   |
-      | keepitup.com  |
-      | interest.com  |
-      | bestteam.com  |
-    And the database contains the following ideas:
-      | id | title             | date       | purpose   | descriptions     | isPaid | inProgress | isPrivate | domains            | topics                    | techs          | image_urls                 | icon_url     | user_email           |
-      | 1  | Home Care App     | 2022-02-15 | Health    | Quality app      | True   | True       | False     | Software           | Frontend Dev              | Python         | something.com              | interest.com | user.steve@gmail.com |
-      | 2  | Football Game     | 2022-02-16 | Entertain | For fun          | False  | True       | False     | Software, Computer | Frontend Dev              | Python         | something.com, another.com | interest.com | user.steve@gmail.com |
-      | 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer           | Backend Dev, Frontend Dev | Python, C      | keepitup.com               | bestteam.com | user.steve@gmail.com |
-      | 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical         | Embedded Software         | Java, React, C | sayless.com                | bestteam.com | user.steve@gmail.com |
+      | id | firstname | lastname | email                | password         |
+      | 0  | User      | Steve    | user.steve@gmail.com | SteveIsAwesome01 |
+      | 1  | User      | Bob      | user.bob@gmail.com   | BobIsAwesome01   |
+    And the database contains the following domain objects:
+      | id | name       |
+      | 2  | Software   |
+      | 3  | Computer   |
+      | 4  | Electrical |
+    And the database contains the following topic objects:
+      | id | name              |
+      | 5  | Frontend Dev      |
+      | 6  | Backend Dev       |
+      | 7  | Embedded Software |
+    And the database contains the following tech objects:
+      | id | name   |
+      | 8  | Python |
+      | 9  | Java   |
+      | 10 | React  |
+      | 11 | C      |
+    And the database contains the following URL objects:
+      | id | url           |
+      | 12 | something.com |
+      | 13 | another.com   |
+      | 14 | sayless.com   |
+      | 15 | keepitup.com  |
+      | 16 | interest.com  |
+      | 17 | bestteam.com  |
+    And the database contains the following idea objects:
+      | id | title            | purpose                                           | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate | user |
+      | 18 | Music generation | Open sourced software to generate classical music | 2       | 5      | 8, 9  | 16                  | 17      | false  | false        | false     | 0    |
+      | 19 | Techno boom      | Open sourced software to generate techno music    | 2       | 6      | 10    | 12                  | 15      | false  | false        | false     | 0    |
     And I am logged in as the user with email "user.steve@gmail.com" and password "SteveIsAwesome01"
 
 
 	# Normal Flow
 
   Scenario Outline: Successfully modify an idea
-    When the user requests to modify the field <field> to become <new_value> instead of <old_value> for idea with id <id>
-    Then the idea with id <id> will have value <new_value> for the field <field>
+    When the user requests to modify the field "<field>" to become "<new_value>" instead of "<old_value>" for idea with id "<id>"
+    Then the idea with id "<id>" will have value "<new_value>" for the field "<field>"
 
     Examples:
       | id | title             | field        | old_value     | new_value    |
@@ -63,8 +62,8 @@ Feature: Modify Idea
 	# Alternate Flow
 
   Scenario Outline: Successfully modify the idea with an empty field that can be empty
-    When the user requests to modify the field <field> to become empty for idea with id <id>
-    Then the idea with id <id> will have empty for the field <field>
+    When the user requests to modify the field "<field>" to become empty for idea with id "<id>"
+    Then the idea with id "<id>" will have empty for the field "<field>"
 
     Examples:
       | id | title             | field      |
@@ -76,9 +75,9 @@ Feature: Modify Idea
 	# Error Flow
 
   Scenario Outline: Unsuccessfully modify the idea with an empty field that cannot be empty
-    When the user requests to modify the field <field> to become empty for idea with id <id>
-    Then the idea with id <id> will have value <old_value> for the field <field>
-    Then the error message <error> will be thrown with status code <Http_status>
+    When the user requests to modify the field "<field>" to become empty for idea with id "<id>"
+    Then the idea with id "<id>" will have value "<old_value>" for the field "<field>"
+    Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
       | id | title         | field        | old_value     | error                                 | Http_status |
@@ -89,17 +88,17 @@ Feature: Modify Idea
 	# Error Flow
 
   Scenario Outline: (Error Flow) Unsuccessfully modify an idea with a non-existing object
-    When the user requests to modify the field <field> to become new value <new value> for idea with id <id>
-    Then the idea with id <id> will have value <old_value> for the field <field>
-    Then the error message <error> will be thrown with status code <Http_status>
+    When the user requests to modify the field "<field>" to become new value "<new value>" for idea with id "<id>"
+    Then the idea with id "<id>" will have value "<old_value>" for the field "<field>"
+    Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | title             | field      | old_value    | new_value        | error                                                                 | Http_status |
-      | 4  | Circuit Design    | domains    | Electrical   | Earth Specialist | You are attempting to link your idea to an object that does not exist | 400         |
-      | 1  | Home Care App     | topics     | Frontend Dev | Fake Dev         | You are attempting to link your idea to an object that does not exist | 400         |
-      | 2  | Football Game     | techs      | Python       | Latin Language   | You are attempting to link your idea to an object that does not exist | 400         |
-      | 3  | Car Detection App | image URLs | keepitup.com | nonexisting.com  | You are attempting to link your idea to an object that does not exist | 400         |
-      | 4  | Circuit Design    | icon URL   | bestteam.com | evenworse.com    | You are attempting to link your idea to an object that does not exist | 400         |
+      | id | title             | field      | old_value    | error                                                                 | Http_status |
+      | 4  | Circuit Design    | domains    | Electrical   | You are attempting to link your idea to an object that does not exist | 400         |
+      | 1  | Home Care App     | topics     | Frontend Dev | You are attempting to link your idea to an object that does not exist | 400         |
+      | 2  | Football Game     | techs      | Python       | You are attempting to link your idea to an object that does not exist | 400         |
+      | 3  | Car Detection App | image URLs | keepitup.com | You are attempting to link your idea to an object that does not exist | 400         |
+      | 4  | Circuit Design    | icon URL   | bestteam.com | You are attempting to link your idea to an object that does not exist | 400         |
 
 
 

@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+=======
+import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+>>>>>>> 956f134 (modify idea step definitions)
 
 /**
  * API for demonstrating how permissions work for access to endpoints
@@ -64,6 +69,7 @@ public class IdeaController {
    * @throws Exception
    * @author Ramin Akhavan
    */
+<<<<<<< HEAD
   @PutMapping(value = {"/idea/edit", "/idea/edit/"})
   public IdeaDTO modifyIdea(
       @RequestParam("id") String id,
@@ -97,6 +103,26 @@ public class IdeaController {
             imgUrlIds,
             iconUrlId);
     return new IdeaDTO(modifiedIdea);
+=======
+  @PutMapping(value = {"/edit/{id}", "/edit/{id}/"})
+  public ResponseEntity<IdeaDTO> modifyIdea(@PathVariable String id,
+      @RequestParam(value = "title", required = false) String title,
+      @RequestParam(value = "purpose", required = false) String purpose,
+      @RequestParam(value = "descriptions", required = false) String descriptions,
+      @RequestParam(value = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-mm-dd") Date date,
+      @RequestParam(value = "isPaid") boolean isPaid,
+      @RequestParam(value = "inProgress") boolean inProgress,
+      @RequestParam(value = "isPrivate") boolean isPrivate,
+      @RequestParam(value = "domains", required = false) List<String> domainIds,
+      @RequestParam(value = "techs", required = false) List<String> techIds,
+      @RequestParam(value = "topics", required = false) List<String> topicIds,
+      @RequestParam(value = "imgUrls", required = false) List<String> imgUrlIds,
+      @RequestParam(value = "iconUrl") String iconUrlId) throws Exception {
+    Idea modifiedIdea = ideaService.modifyIdea(id, title, date, descriptions, purpose, isPaid,
+        inProgress, isPrivate,
+        domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
+    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO(modifiedIdea));
+>>>>>>> 956f134 (modify idea step definitions)
   }
 
   /**

@@ -236,9 +236,19 @@ public class IdeaService {
   @Transactional
   /**
    * Modify an idea based on id
-   *
-   * @author Ramin Akhavan
-   * @throws GlobalException if necessary field are left empty or if an object does not exist
+   *    @param title       title
+   *    @param purpose      purpose
+   *    @param descriptions description
+   *    @param isPaid       status of pay
+   *    @param inProgress   status of progress
+   *    @param isPrivate    privacy of idea
+   *    @param domainIds    domain Ids of domains
+   *    @param techIds      tech Ids of idea
+   *    @param topicIds     topic Ids of idea
+   *    @param imgUrlIds    image url Ids of idea
+   *    @param iconUrlId    icon url Ids of idea
+   *    @author Ramin Akhavan
+   *    @throws GlobalException if necessary field are left empty or if an object does not exist
    */
   public Idea modifyIdea(
       String id,
