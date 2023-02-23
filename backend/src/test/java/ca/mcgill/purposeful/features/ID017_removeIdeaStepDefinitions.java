@@ -55,27 +55,27 @@ public class ID017_removeIdeaStepDefinitions {
 
   @Given("the database contains the following domains before removing an idea:")
   public void theDatabaseContainsTheFollowingDomainsBeforeRemovingAnIdea(DataTable dataTable) {
-    cucumberUtil.createAndSaveDomainFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
   @Given("the database contains the following topics before removing an idea:")
   public void theDatabaseContainsTheFollowingTopicsBeforeRemovingAnIdea(DataTable dataTable) {
-    cucumberUtil.createAndSaveTopicFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
   @Given("the database contains the following techs before removing an idea:")
   public void theDatabaseContainsTheFollowingTechsBeforeRemovingAnIdea(DataTable dataTable) {
-    cucumberUtil.createAndSaveTechFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
   @Given("the database contains the following URLs before removing an idea:")
   public void theDatabaseContainsTheFollowingURLsBeforeRemovingAnIdea(DataTable dataTable) {
-    cucumberUtil.createAndSaveURLFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
   @Given("the database contains the following ideas before removing an idea:")
   public void theDatabaseContainsTheFollowingIdeasBeforeRemovingAnIdea(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeaFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
   }
 
   @And("I am logged in before removing an idea")
