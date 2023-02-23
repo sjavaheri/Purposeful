@@ -307,15 +307,22 @@ public class IdeaService {
     if (date.compareTo(idea.getDate()) != 0) {
       idea.setDate(date);
     }
-    idea.setDomains(domains);
-    idea.setTechs(techs);
-    idea.setTopics(topics);
-    idea.setSupportingImageUrls(imgUrls);
+    if (domainIds != null) {
+      idea.setDomains(domains);
+    }
+    if (techIds != null) {
+      idea.setTechs(techs);
+    }
+    if (topicIds != null) {
+      idea.setTopics(topics);
+    }
+    if (imgUrlIds != null) {
+      idea.setSupportingImageUrls(imgUrls);
+    }
     idea.setIconUrl(iconUrl);
 
     // Save updated idea in the repository
     ideaRepository.save(idea);
-
     return idea;
   }
 

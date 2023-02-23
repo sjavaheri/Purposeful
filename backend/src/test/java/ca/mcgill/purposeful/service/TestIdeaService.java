@@ -25,6 +25,7 @@ import ca.mcgill.purposeful.model.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -364,6 +365,11 @@ public class TestIdeaService {
     List<String> topicIds = new ArrayList<String>();
     List<String> techIds = new ArrayList<String>();
     List<String> imgUrlIds = new ArrayList<String>();
+
+    Set<Domain> domains = new HashSet<>();
+    Set<Topic> topics = new HashSet<>();
+    Set<Technology> techs = new HashSet<>();
+    List<URL> imgUrls = new ArrayList<>();
 
     // Retrieve Ids of all objects
     for (Domain domain : MockDatabase.modifiableDomainGroup) {

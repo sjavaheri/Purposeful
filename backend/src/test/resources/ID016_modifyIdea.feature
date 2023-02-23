@@ -32,10 +32,10 @@ Feature: Modify Idea
       | 16 | interest.com  |
       | 17 | bestteam.com  |
     And the database contains the following idea objects:
-      | id | title            | purpose                                           | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate | user |
-      | 18 | Music generation | Open sourced software to generate classical music | 2       | 5      | 8, 9  | 16                  | 17      | false  | false        | false     | 0    |
-      | 19 | Techno boom      | Open sourced software to generate techno music    | 2       | 6      | 10    | 12                  | 15      | false  | false        | false     | 0    |
-    And I am logged in as the user with email "user.steve@gmail.com" and password "SteveIsAwesome01"
+      | id | title            | purpose      | description | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate | user |
+      | 18 | Music generation | Open source  | extra info1 | 2       | 5      | 8,9   | 16                  | 17      | false  | false        | false     | 0    |
+      | 19 | Techno boom      | Techno music | extra info2 | 2       | 6      | 10    | 12                  | 15      | false  | false        | false     | 0    |
+    And I am successfully logged in as the user with email "user.steve@gmail.com" and password "SteveIsAwesome01"
 
 
 	# Normal Flow
@@ -45,19 +45,19 @@ Feature: Modify Idea
     Then the idea with id "<id>" will have value "<new_value>" for the field "<field>"
 
     Examples:
-      | id | title             | field        | old_value     | new_value    |
-      | 1  | Home Care App     | title        | Home Care App | Health App   |
-      | 1  | Home Care App     | date         | 2022-02-15    | 2022-01-15   |
-      | 2  | Football Game     | purpose      | Entertain     | FIFA Product |
-      | 2  | Football Game     | descriptions | For fun       | La Liga      |
-      | 3  | Car Detection App | isPaid       | True          | False        |
-      | 3  | Car Detection App | inProgress   | False         | True         |
-      | 4  | Circuit Design    | isPrivate    | True          | False        |
-      | 4  | Circuit Design    | domains      | Electrical    | Software     |
-      | 1  | Home Care App     | topics       | Frontend Dev  | Backend Dev  |
-      | 2  | Football Game     | techs        | Python        | Java, React  |
-      | 3  | Car Detection App | image URLs   | keepitup.com  | sayless.com  |
-      | 4  | Circuit Design    | icon URL     | bestteam.com  | another.com  |
+      | id | title            | field       | old_value        | new_value      |
+      | 18 | Music generation | title       | Music generation | Health App     |
+      | 19 | Techno boom      | date        | 2022-02-15       | 2022-01-15     |
+      | 18 | Music generation | purpose     | Open source      | For customer   |
+      | 19 | Techno boom      | description | extra info2      | new extra info |
+      | 18 | Music generation | isPaid      | False            | True           |
+      | 18 | Music generation | inProgress  | False            | True           |
+      | 19 | Techno boom      | isPrivate   | False            | True           |
+      | 18 | Music generation | domains     | 2                | 1              |
+      | 19 | Techno boom      | topics      | 6                | 7              |
+      | 18 | Music generation | techs       | 8,9              | 8              |
+      | 19 | Techno boom      | image URLs  | 12               | 13             |
+      | 18 | Music generation | icon URL    | 17               | 14             |
 
 	# Alternate Flow
 
