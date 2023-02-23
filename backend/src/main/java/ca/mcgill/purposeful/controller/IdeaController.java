@@ -59,6 +59,7 @@ public class IdeaController {
         .body(IdeaDTO.convertToDto(ideaService.getIdeasByAllCriteria(searchFilterDTO.getDomains(),
             searchFilterDTO.getTopics(), searchFilterDTO.getTechnologies())));
   }
+
   /**
    * This method creates an idea
    *
