@@ -1,11 +1,16 @@
 package ca.mcgill.purposeful.controller;
 
 import ca.mcgill.purposeful.dao.RegularUserRepository;
+import ca.mcgill.purposeful.dto.DomainDTO;
 import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
+import ca.mcgill.purposeful.dto.TechDTO;
+import ca.mcgill.purposeful.dto.TopicDTO;
+import ca.mcgill.purposeful.dto.URLDTO;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.service.IdeaService;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,22 +74,35 @@ public class IdeaController {
    */
   @PostMapping(value = {"/create", "/create/"})
   @PreAuthorize("hasAuthority('User')")
-  public IdeaDTO createIdea(@RequestParam("title") String title,
-      @RequestParam("purpose") String purpose, @RequestParam("description") String description,
-      @RequestParam("isPaid") boolean isPaid, @RequestParam("inProgress") boolean inProgress,
-      @RequestParam("isPrivate") boolean isPrivate, @RequestParam("domains") List<String> domainIds,
-      @RequestParam("techs") List<String> techIds, @RequestParam("topics") List<String> topicIds,
-      @RequestParam("imgUrls") List<String> imgUrlIds, @RequestParam("iconUrl") String iconUrlId)
-      throws Exception {
+  public IdeaDTO createIdea(@RequestBody IdeaDTO ideaDto) throws Exception {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new Exception("User not authenticated.");
-    } else {
-      System.out.println("||||||    " + auth.getName() + "     ||||||");
     }
     RegularUser user = regularUserRepository.findRegularUserByAppUserEmail(auth.getName());
-    Idea createdIdea = ideaService.createIdea(title, purpose, description, isPaid, inProgress,
-        isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId, user);
+
+    ArrayList<String> domainIds = new ArrayList<String>();
+    ArrayList<String> techIds = new ArrayList<String>();
+    ArrayList<String> topicIds = new ArrayList<String>();
+    ArrayList<String> imgUrls = new ArrayList<String>();
+
+    for (DomainDTO domainDTO : ideaDto.getDomains()) {
+      domainIds.add(domainDTO.getId());
+    }
+    for (TechDTO techDTO : ideaDto.getTechs()) {
+      techIds.add(techDTO.getId());
+    }
+    for (TopicDTO topicDTO : ideaDto.getTopics()) {
+      topicIds.add(topicDTO.getId());
+    }
+    for (URLDTO imgUrlDto : ideaDto.getImgUrls()) {
+      imgUrls.add(imgUrlDto.getId());
+    }
+
+    Idea createdIdea =
+        ideaService.createIdea(ideaDto.getTitle(), ideaDto.getPurpose(), ideaDto.getDescription(),
+            ideaDto.getIsPaid(), ideaDto.getInProgress(), ideaDto.getIsPrivate(), domainIds,
+            techIds, topicIds, imgUrls, ideaDto.getIconUrl().getId(), user);
     return new IdeaDTO(createdIdea);
   }
 
