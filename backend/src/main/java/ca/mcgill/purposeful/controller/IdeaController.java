@@ -1,6 +1,7 @@
 package ca.mcgill.purposeful.controller;
 
 import ca.mcgill.purposeful.dao.RegularUserRepository;
+import ca.mcgill.purposeful.dto.AppUserDto;
 import ca.mcgill.purposeful.dto.DomainDTO;
 import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
@@ -74,7 +75,7 @@ public class IdeaController {
    */
   @PostMapping(value = {"/create", "/create/"})
   @PreAuthorize("hasAuthority('User')")
-  public IdeaDTO createIdea(@RequestBody IdeaDTO ideaDto) throws Exception {
+  public ResponseEntity<IdeaDTO> createIdea(@RequestBody IdeaDTO ideaDto) throws Exception {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new Exception("User not authenticated.");
@@ -103,7 +104,7 @@ public class IdeaController {
         ideaService.createIdea(ideaDto.getTitle(), ideaDto.getPurpose(), ideaDto.getDescription(),
             ideaDto.getIsPaid(), ideaDto.getInProgress(), ideaDto.getIsPrivate(), domainIds,
             techIds, topicIds, imgUrls, ideaDto.getIconUrl().getId(), user);
-    return new IdeaDTO(createdIdea);
+    return new ResponseEntity<IdeaDTO>(new IdeaDTO(createdIdea), HttpStatus.OK);
   }
 
   /**
