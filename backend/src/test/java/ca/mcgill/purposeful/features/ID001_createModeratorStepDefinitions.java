@@ -1,8 +1,5 @@
 package ca.mcgill.purposeful.features;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.OwnerRepository;
@@ -15,9 +12,6 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -26,6 +20,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * Step definitions for the ID001_createModerator.feature file
  *
@@ -33,23 +34,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ID001_createModeratorStepDefinitions {
 
-  @Autowired
-  AppUserService appUserService;
+  @Autowired AppUserService appUserService;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
-  @Autowired
-  OwnerRepository ownerRepository;
+  @Autowired OwnerRepository ownerRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
   private String jwtToken;
 
@@ -64,7 +59,9 @@ public class ID001_createModeratorStepDefinitions {
     for (AppUser appUser : appUsers) {
       if (appUser.getAuthorities().contains(Authority.Moderator)) {
         appUserService.registerModerator(
-            appUser.getEmail(), appUser.getPassword(), appUser.getFirstname(),
+            appUser.getEmail(),
+            appUser.getPassword(),
+            appUser.getFirstname(),
             appUser.getLastname());
       } else if (appUser.getAuthorities().contains(Authority.Owner)) {
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
@@ -80,8 +77,8 @@ public class ID001_createModeratorStepDefinitions {
   @Given("I am logged in as the owner with email {string} and password {string}")
   public void iAmLoggedInAsTheOwnerWithEmailAndPassword(String email, String password) {
     // Login as the owner
-    HttpEntity<String> requestEntity = new HttpEntity<>(
-        cucumberUtil.basicAuthHeader(email, password));
+    HttpEntity<String> requestEntity =
+        new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
@@ -94,8 +91,8 @@ public class ID001_createModeratorStepDefinitions {
   @Given("I am logged in as the moderator with email {string} and password {string}")
   public void iAmLoggedInAsTheModeratorWithEmailAndPassword(String email, String password) {
     // Login as the owner
-    HttpEntity<String> requestEntity = new HttpEntity<>(
-        cucumberUtil.basicAuthHeader(email, password));
+    HttpEntity<String> requestEntity =
+        new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
@@ -111,35 +108,39 @@ public class ID001_createModeratorStepDefinitions {
     this.jwtToken = null;
   }
 
-  @When("a new moderator account is created with first name {string}, last name {string}, email {string} and password {string}")
-  public void aNewModeratorAccountIsCreatedWithFirstNameLastNameEmailAndPassword(String firstname,
-      String lastname, String email, String password) {
+  @When(
+      "a new moderator account is created with first name {string}, last name {string}, email {string} and password {string}")
+  public void aNewModeratorAccountIsCreatedWithFirstNameLastNameEmailAndPassword(
+      String firstname, String lastname, String email, String password) {
     // create a DTO to send the request to the service
     AppUserDto appUserDto = new AppUserDto(email, password, firstname, lastname);
 
     // make a post request to create the user and store the response
-    HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto,
-        cucumberUtil.bearerAuthHeader(this.jwtToken));
-    this.response = client.exchange("/api/appuser/moderator", HttpMethod.POST, requestEntity,
-        AppUserDto.class);
+    HttpEntity<AppUserDto> requestEntity =
+        new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
+    this.response =
+        client.exchange("/api/appuser/moderator", HttpMethod.POST, requestEntity, AppUserDto.class);
   }
 
-  @When("a new moderator account is created erroneously with first name {string}, last name {string}, email {string} and password {string}")
+  @When(
+      "a new moderator account is created erroneously with first name {string}, last name {string}, email {string} and password {string}")
   public void aNewModeratorAccountIsCreatedErroneouslyWithFirstNameLastNameEmailAndPassword(
       String firstname, String lastname, String email, String password) {
     // create a DTO to send the request to the service
     AppUserDto appUserDto = new AppUserDto(email, password, firstname, lastname);
 
     // make a post request to create the user and store the response
-    HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto,
-        cucumberUtil.bearerAuthHeader(this.jwtToken));
-    this.response = client.exchange("/api/appuser/moderator", HttpMethod.POST, requestEntity,
-        String.class);
+    HttpEntity<AppUserDto> requestEntity =
+        new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
+    this.response =
+        client.exchange("/api/appuser/moderator", HttpMethod.POST, requestEntity, String.class);
   }
 
-  @Then("a new moderator account exists in the database with first name {string}, last name {string}, email {string}, password {string} and authorities {string}")
-  public void aNewModeratorAccountExistsInTheDatabaseWithFirstNameLastNameEmailPasswordAndAuthorities(
-      String firstname, String lastname, String email, String password, String authorities) {
+  @Then(
+      "a new moderator account exists in the database with first name {string}, last name {string}, email {string}, password {string} and authorities {string}")
+  public void
+      aNewModeratorAccountExistsInTheDatabaseWithFirstNameLastNameEmailPasswordAndAuthorities(
+          String firstname, String lastname, String email, String password, String authorities) {
     // assert the response was not null
     assertNotNull(this.response, "The response was null");
 
@@ -160,7 +161,7 @@ public class ID001_createModeratorStepDefinitions {
     assertEquals(setOfAuthorities, retrievedUser.getAuthorities());
   }
 
-  @Then("the number of moderator accounts in the database is {string}")
+  @Then("the number of accounts in the database is {string}")
   public void theNumberOfModeratorAccountsInTheDatabaseIs(String count) {
     // Assert that the number of user accounts in the database is equal to the count
     assertEquals(Integer.parseInt(count), appUserRepository.count());

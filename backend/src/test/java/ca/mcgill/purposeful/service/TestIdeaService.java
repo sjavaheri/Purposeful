@@ -1,34 +1,7 @@
 package ca.mcgill.purposeful.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import ca.mcgill.purposeful.dao.DomainRepository;
-import ca.mcgill.purposeful.dao.IdeaRepository;
-import ca.mcgill.purposeful.dao.TechnologyRepository;
-import ca.mcgill.purposeful.dao.TopicRepository;
-import ca.mcgill.purposeful.dao.URLRepository;
-import ca.mcgill.purposeful.model.Domain;
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.model.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import ca.mcgill.purposeful.dao.*;
+import ca.mcgill.purposeful.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,11 +10,18 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.*;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
 /**
  * To test the idea service methods
  *
  * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea
- * tests)
+ *     tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -57,33 +37,31 @@ public class TestIdeaService {
   private static Date NEW_DATE = new Date(16000);
 
   // Mocks
-  @Mock
-  private IdeaRepository ideaRepository;
-  @Mock
-  private DomainRepository domainRepository;
-  @Mock
-  private TopicRepository topicRepository;
-  @Mock
-  private TechnologyRepository technologyRepository;
-  @Mock
-  private URLRepository urlRepository;
+  @Mock private IdeaRepository ideaRepository;
+  @Mock private DomainRepository domainRepository;
+  @Mock private TopicRepository topicRepository;
+  @Mock private TechnologyRepository technologyRepository;
+  @Mock private URLRepository urlRepository;
 
   // Inject mocks
-  @InjectMocks
-  private IdeaService ideaService;
+  @InjectMocks private IdeaService ideaService;
 
   // Set the mock output of each function in the repository
   @BeforeEach
   public void setMockOutput() {
-    lenient().when(ideaRepository.findIdeaById(anyString()))
+    lenient()
+        .when(ideaRepository.findIdeaById(anyString()))
         .thenAnswer(MockRepository::findIdeaById);
     lenient().when(ideaRepository.save(any(Idea.class))).thenAnswer(MockRepository::save);
     lenient().when(ideaRepository.findAll()).thenAnswer(MockRepository::findAll);
-    lenient().when(domainRepository.findDomainById(anyString()))
+    lenient()
+        .when(domainRepository.findDomainById(anyString()))
         .thenAnswer(MockRepository::findDomainById);
-    lenient().when(topicRepository.findTopicById(anyString()))
+    lenient()
+        .when(topicRepository.findTopicById(anyString()))
         .thenAnswer(MockRepository::findTopicById);
-    lenient().when(technologyRepository.findTechnologyById(anyString()))
+    lenient()
+        .when(technologyRepository.findTechnologyById(anyString()))
         .thenAnswer(MockRepository::findTechnologyById);
     lenient().when(urlRepository.findURLById(anyString())).thenAnswer(MockRepository::findURLById);
   }
@@ -237,7 +215,8 @@ public class TestIdeaService {
     try {
       Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(null, search_topics, null);
     } catch (Exception e) {
-      assertEquals("No ideas match the given criteria. Please try again with different criteria.",
+      assertEquals(
+          "No ideas match the given criteria. Please try again with different criteria.",
           e.getMessage());
       return;
     }
@@ -270,9 +249,20 @@ public class TestIdeaService {
     // Create idea
     Idea createdIdea = null;
     try {
-      createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY,
-          NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,
-          MockDatabase.newIconUrl.getId(), MockDatabase.user1);
+      createdIdea =
+          ideaService.createIdea(
+              NEW_TITLE,
+              NEW_PURPOSE,
+              NEW_DESCRIPTION,
+              NEW_PAY,
+              NEW_PROGRESS,
+              NEW_PRIVACY,
+              domainIds,
+              techIds,
+              topicIds,
+              imgUrlIds,
+              MockDatabase.newIconUrl.getId(),
+              MockDatabase.user1);
     } catch (Exception e) {
       String message = e.getMessage();
     }
@@ -300,7 +290,6 @@ public class TestIdeaService {
       assertTrue(imgUrlIds.contains(url.getId()));
     }
     assertEquals(createdIdea.getIconUrl().getId(), MockDatabase.newIconUrl.getId());
-
   }
 
   /**
@@ -317,16 +306,26 @@ public class TestIdeaService {
     Idea createdIdea = null;
     String message = "";
     try {
-      createdIdea = ideaService.createIdea("", NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS,
-          NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, MockDatabase.newIconUrl.getId(),
-          MockDatabase.user1);
+      createdIdea =
+          ideaService.createIdea(
+              "",
+              NEW_PURPOSE,
+              NEW_DESCRIPTION,
+              NEW_PAY,
+              NEW_PROGRESS,
+              NEW_PRIVACY,
+              domainIds,
+              techIds,
+              topicIds,
+              imgUrlIds,
+              MockDatabase.newIconUrl.getId(),
+              MockDatabase.user1);
     } catch (Exception e) {
       message = e.getMessage();
     }
 
     // Check error message
     assertEquals("Necessary fields have been left empty", message);
-
   }
 
   /**
@@ -345,15 +344,25 @@ public class TestIdeaService {
     Idea createdIdea = null;
     String message = "";
     try {
-      createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY,
-          NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, nonExistingId,
-          MockDatabase.user1);
+      createdIdea =
+          ideaService.createIdea(
+              NEW_TITLE,
+              NEW_PURPOSE,
+              NEW_DESCRIPTION,
+              NEW_PAY,
+              NEW_PROGRESS,
+              NEW_PRIVACY,
+              domainIds,
+              techIds,
+              topicIds,
+              imgUrlIds,
+              nonExistingId,
+              MockDatabase.user1);
     } catch (Exception e) {
       message = e.getMessage();
     }
     // Check error message
     assertEquals("You are attempting to link your idea to an object that does not exist", message);
-
   }
 
   /**
@@ -387,9 +396,20 @@ public class TestIdeaService {
     // Modify all attributes of idea
     Idea updatedIdea = null;
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE,
-          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
-          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+      updatedIdea =
+          ideaService.modifyIdea(
+              MockDatabase.modifiableIdea.getId(),
+              NEW_TITLE,
+              NEW_PURPOSE,
+              NEW_DESCRIPTION,
+              NEW_PAY,
+              NEW_PROGRESS,
+              NEW_PRIVACY,
+              domainIds,
+              techIds,
+              topicIds,
+              imgUrlIds,
+              MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       String message = e.getMessage();
     }
@@ -403,7 +423,7 @@ public class TestIdeaService {
     assertEquals(NEW_PROGRESS, updatedIdea.isInProgress());
     assertEquals(NEW_PRIVACY, updatedIdea.isPrivate());
 
-//    assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
+    //    assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
 
     // Check Ids of all objects of the idea
     for (Domain domain : updatedIdea.getDomains()) {
@@ -419,7 +439,6 @@ public class TestIdeaService {
       assertTrue(imgUrlIds.contains(url.getId()));
     }
     assertEquals(updatedIdea.getIconUrl().getId(), MockDatabase.newIconUrl.getId());
-
   }
 
   /**
@@ -436,16 +455,26 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "",
-          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
-          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+      updatedIdea =
+          ideaService.modifyIdea(
+              MockDatabase.modifiableIdea.getId(),
+              "",
+              NEW_PURPOSE,
+              NEW_DESCRIPTION,
+              NEW_PAY,
+              NEW_PROGRESS,
+              NEW_PRIVACY,
+              domainIds,
+              techIds,
+              topicIds,
+              imgUrlIds,
+              MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
 
     // Check error message
     assertEquals("Necessary fields have been left empty", message);
-
   }
 
   /**
@@ -465,15 +494,25 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE,
-          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
-          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+      updatedIdea =
+          ideaService.modifyIdea(
+              MockDatabase.modifiableIdea.getId(),
+              NEW_TITLE,
+              NEW_PURPOSE,
+              NEW_DESCRIPTION,
+              NEW_PAY,
+              NEW_PROGRESS,
+              NEW_PRIVACY,
+              domainIds,
+              techIds,
+              topicIds,
+              imgUrlIds,
+              MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
     // Check error message
     assertEquals("You are attempting to link your idea to an object that does not exist", message);
-
   }
 
   /**
@@ -591,14 +630,10 @@ public class TestIdeaService {
     verify(ideaRepository, times(1)).deleteById(idea.getId());
   }
 
-  /**
-   * This class holds all of the mock objects of the database
-   */
+  /** This class holds all of the mock objects of the database */
   static final class MockDatabase {
 
-    /**
-     * Create mock objects here *
-     */
+    /** Create mock objects here * */
 
     // Ideas
     static Idea idea1 = new Idea();

@@ -2,33 +2,27 @@ package ca.mcgill.purposeful.dao;
 
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.util.DatabaseUtil;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @SpringBootTest
 public class TechnologyRepositoryTests {
 
-  @Autowired
-  private TechnologyRepository technologyRepository;
+  @Autowired private TechnologyRepository technologyRepository;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();

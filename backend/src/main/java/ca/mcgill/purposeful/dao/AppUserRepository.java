@@ -5,10 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 
-/**
- * Repository for AppUser
- */
-
+/** Repository for AppUser */
 public interface AppUserRepository extends CrudRepository<AppUser, Integer> {
 
   AppUser findAppUserById(String id);
@@ -16,5 +13,4 @@ public interface AppUserRepository extends CrudRepository<AppUser, Integer> {
   AppUser findAppUserByEmail(String email);
 
   ArrayList<AppUser> findAll();
-
 }

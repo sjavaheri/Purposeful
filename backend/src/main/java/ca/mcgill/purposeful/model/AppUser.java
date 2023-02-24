@@ -1,21 +1,14 @@
 package ca.mcgill.purposeful.model;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.hibernate.annotations.GenericGenerator;
 
-/**
- * The AppUser class, the model for all accounts in the database
- */
+/** The AppUser class, the model for all accounts in the database */
 @Entity
 public class AppUser {
 
@@ -60,8 +53,7 @@ public class AppUser {
   // AppUser Constructor
   // ------------------------
 
-  public AppUser() {
-  }
+  public AppUser() {}
 
   // ------------------------
   // Getter/Setter Methods

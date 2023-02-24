@@ -1,27 +1,10 @@
 package ca.mcgill.purposeful.service;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.dao.ReactionRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
-import ca.mcgill.purposeful.model.AppUser;
-import ca.mcgill.purposeful.model.Domain;
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.Reaction;
+import ca.mcgill.purposeful.model.*;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.model.Topic;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +12,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.UUID;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 /**
  * To test the idea service methods
@@ -39,18 +32,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class TestReactionService {
 
   // Mocks
-  @Mock
-  private ReactionRepository reactionRepository;
-  @Mock
-  private IdeaRepository ideaRepository;
-  @Mock
-  private RegularUserRepository regularUserRepository;
-  @Mock
-  private IdeaService ideaService;
+  @Mock private ReactionRepository reactionRepository;
+  @Mock private IdeaRepository ideaRepository;
+  @Mock private RegularUserRepository regularUserRepository;
+  @Mock private IdeaService ideaService;
 
   // Inject mocks
-  @InjectMocks
-  private ReactionService reactionService;
+  @InjectMocks private ReactionService reactionService;
 
   // Set the mock output of each function in the repository
   @BeforeEach
@@ -63,7 +51,8 @@ public class TestReactionService {
         .when(reactionRepository.findReactionByIdeaAndRegularUser(anyString(), anyString()))
         .thenAnswer(ReactionMockRepository::findReactionByIdeaAndRegularUser);
 
-    lenient().when(reactionRepository.save(any(Reaction.class)))
+    lenient()
+        .when(reactionRepository.save(any(Reaction.class)))
         .thenAnswer(ReactionMockRepository::save);
 
     lenient()
@@ -86,9 +75,12 @@ public class TestReactionService {
     Reaction targetReaction = ReactionMockDatabase.reaction1;
 
     // Call service layer
-    Reaction reaction = reactionService.react(targetReaction.getDate(),
-        targetReaction.getReactionType(), targetReaction.getIdea().getId(),
-        targetReaction.getRegularUser().getId());
+    Reaction reaction =
+        reactionService.react(
+            targetReaction.getDate(),
+            targetReaction.getReactionType(),
+            targetReaction.getIdea().getId(),
+            targetReaction.getRegularUser().getId());
 
     // Verify
     assertNull(reaction);
@@ -112,9 +104,12 @@ public class TestReactionService {
     newReaction.setRegularUser(ReactionMockDatabase.user1);
 
     // Call service layer
-    Reaction reaction = reactionService.react(newReaction.getDate(),
-        newReaction.getReactionType(), newReaction.getIdea().getId(),
-        newReaction.getRegularUser().getId());
+    Reaction reaction =
+        reactionService.react(
+            newReaction.getDate(),
+            newReaction.getReactionType(),
+            newReaction.getIdea().getId(),
+            newReaction.getRegularUser().getId());
 
     // Verify
     assertNotNull(reaction);
@@ -138,15 +133,17 @@ public class TestReactionService {
     newReaction.setRegularUser(ReactionMockDatabase.user1);
 
     // Call service layer
-    Reaction reaction = reactionService.react(newReaction.getDate(),
-        newReaction.getReactionType(), newReaction.getIdea().getId(),
-        newReaction.getRegularUser().getId());
+    Reaction reaction =
+        reactionService.react(
+            newReaction.getDate(),
+            newReaction.getReactionType(),
+            newReaction.getIdea().getId(),
+            newReaction.getRegularUser().getId());
 
     // Verify
     assertNotNull(reaction);
     verify(reactionRepository, times(1)).save(reaction);
   }
-
 
   /**
    * This class holds all of the mock methods of the CRUD repositories
@@ -210,12 +207,11 @@ public class TestReactionService {
    */
   static final class ReactionMockDatabase {
 
-    /**
-     * Create mock objects here *
-     */
+    /** Create mock objects here * */
 
     // Ideas
     static Idea idea1 = new Idea();
+
     static Idea idea2 = new Idea();
 
     // Users

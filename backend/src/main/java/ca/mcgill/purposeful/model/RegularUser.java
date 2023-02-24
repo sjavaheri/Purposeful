@@ -1,17 +1,10 @@
 package ca.mcgill.purposeful.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
+
 import java.util.Set;
 
-/**
- * The RegularUser class, the model for accounts with regular user authority in the database
- */
+/** The RegularUser class, the model for accounts with regular user authority in the database */
 @Entity
 public class RegularUser extends Role {
 
@@ -27,12 +20,18 @@ public class RegularUser extends Role {
   // ------------------------
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "regular_user_domain", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "domain_id"))
+  @JoinTable(
+      name = "regular_user_domain",
+      joinColumns = @JoinColumn(name = "app_user_id"),
+      inverseJoinColumns = @JoinColumn(name = "domain_id"))
   private Set<Domain> domains;
 
   // Interests are minimum 2 (2..*). This is enforced in the controller
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "regular_user_topic", joinColumns = @JoinColumn(name = "app_user_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  @JoinTable(
+      name = "regular_user_topic",
+      joinColumns = @JoinColumn(name = "app_user_id"),
+      inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> interests;
 
   @OneToOne(optional = true)
@@ -43,8 +42,7 @@ public class RegularUser extends Role {
   // RegularUser Constructor
   // ------------------------
 
-  public RegularUser() {
-  }
+  public RegularUser() {}
 
   // ------------------------
   // Getter/Setter Methods

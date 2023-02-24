@@ -1,8 +1,5 @@
 package ca.mcgill.purposeful.features;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
@@ -12,18 +9,18 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID017_removeIdea.feature file
@@ -32,17 +29,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ID017_removeIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
@@ -96,21 +89,17 @@ public class ID017_removeIdeaStepDefinitions {
     appUserRepository.save(appUser);
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response = client.exchange("/login", HttpMethod.POST, request,
-        String.class);
+    ResponseEntity<String> response =
+        client.exchange("/login", HttpMethod.POST, request, String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
-
 
   @When("the user requests to remove the idea with id {int}")
   public void theUserRequestsToRemoveTheIdeaWithId(Integer id) {
     String correctedId = idMap.get(id.toString());
     HttpEntity<String> request = new HttpEntity<>(authHeader);
-    response = client.exchange(
-        "/api/idea/" + correctedId,
-        HttpMethod.DELETE,
-        request,
-        String.class);
+    response =
+        client.exchange("/api/idea/" + correctedId, HttpMethod.DELETE, request, String.class);
   }
 
   @Then("the idea entry with id {int} will no longer exist in the idea database")
@@ -118,22 +107,14 @@ public class ID017_removeIdeaStepDefinitions {
     assertEquals(response.getStatusCode(), HttpStatus.OK);
     String correctedId = idMap.get(id.toString());
     HttpEntity<String> request = new HttpEntity<>(authHeader);
-    response = client.exchange(
-        "/api/idea/" + correctedId,
-        HttpMethod.GET,
-        request,
-        String.class);
+    response = client.exchange("/api/idea/" + correctedId, HttpMethod.GET, request, String.class);
     assertNotEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
   }
 
   @When("I request to remove the idea with the invalid UUID {string}")
   public void iRequestToRemoveTheIdeaWithTheInvalidUUID(String uuid) {
     HttpEntity<String> request = new HttpEntity<>(authHeader);
-    response = client.exchange(
-        "/api/idea/" + uuid,
-        HttpMethod.DELETE,
-        request,
-        String.class);
+    response = client.exchange("/api/idea/" + uuid, HttpMethod.DELETE, request, String.class);
   }
 
   @Then("the error message {string} will be thrown with status code {int}")

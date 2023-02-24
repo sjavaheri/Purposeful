@@ -1,31 +1,17 @@
 package ca.mcgill.purposeful.service;
 
-import ca.mcgill.purposeful.dao.DomainRepository;
-import ca.mcgill.purposeful.dao.IdeaRepository;
-import ca.mcgill.purposeful.dao.TechnologyRepository;
-import ca.mcgill.purposeful.dao.TopicRepository;
-import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.exception.GlobalException;
-import ca.mcgill.purposeful.model.Domain;
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.model.*;
 import jakarta.transaction.Transactional;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-/**
- * Service functions of the Idea class
- */
+import java.time.Instant;
+import java.util.*;
+
+/** Service functions of the Idea class */
 @Service
 public class IdeaService {
 
@@ -33,20 +19,15 @@ public class IdeaService {
    * CRUD repos
    */
 
-  @Autowired
-  IdeaRepository ideaRepository;
+  @Autowired IdeaRepository ideaRepository;
 
-  @Autowired
-  DomainRepository domainRepository;
+  @Autowired DomainRepository domainRepository;
 
-  @Autowired
-  TechnologyRepository technologyRepository;
+  @Autowired TechnologyRepository technologyRepository;
 
-  @Autowired
-  TopicRepository topicRepository;
+  @Autowired TopicRepository topicRepository;
 
-  @Autowired
-  URLRepository urlRepository;
+  @Autowired URLRepository urlRepository;
 
   /*
    * Service functions
@@ -56,7 +37,7 @@ public class IdeaService {
    * Get an idea by its UUID
    *
    * @param uuid UUID of the idea
-   * @return The idea with the given UUID
+   * @return The {@link Idea} with the given UUID
    * @author Wassim Jabbour
    */
   @Transactional
@@ -77,7 +58,7 @@ public class IdeaService {
     return idea;
   }
 
-  // TODO: For the second sprint, we will implement a recommendations engine to
+  // TODO: For in a future sprint, we will implement a recommendations engine to
   // sort the ideas!
 
   /**
@@ -86,10 +67,10 @@ public class IdeaService {
    * oldest.
    *
    * @param domainNames The list of domain names that the idea must have one of (null if no filter)
-   * @param topicNames  The list of topic names that the idea must have one of (null if no filter)
-   * @param techNames   The list of technology names that the idea must have one of (null if no
-   *                    filter)
-   * @return The set of ideas that match all the criteria
+   * @param topicNames The list of topic names that the idea must have one of (null if no filter)
+   * @param techNames The list of technology names that the idea must have one of (null if no
+   *     filter)
+   * @return A list of ideas that match all the criteria
    * @author Wassim Jabbour
    */
   @Transactional
@@ -189,9 +170,9 @@ public class IdeaService {
   }
 
   /**
-   * Create an idea
+   * Method to create an idea
    *
-   * @return The newly created idea
+   * @return The newly created {@link Idea}
    * @author Adam Kazma
    */
   @Transactional
@@ -242,20 +223,21 @@ public class IdeaService {
 
   /**
    * Modify an idea based on id
-   *    @param id           id
-   *    @param title        title
-   *    @param purpose      purpose
-   *    @param descriptions  description
-   *    @param isPaid       paid or not paid idea
-   *    @param inProgress   status of progress
-   *    @param isPrivate    privacy of idea
-   *    @param domainIds    domain Ids of domains
-   *    @param techIds      tech Ids of idea
-   *    @param topicIds     topic Ids of idea
-   *    @param imgUrlIds    image url Ids of idea
-   *    @param iconUrlId    icon url Ids of idea
-   *    @author Ramin Akhavan
-   *    @throws GlobalException if necessary field are left empty or if an object does not exist
+   *
+   * @param id id
+   * @param title title
+   * @param purpose purpose
+   * @param descriptions description
+   * @param isPaid paid or not paid idea
+   * @param inProgress status of progress
+   * @param isPrivate privacy of idea
+   * @param domainIds domain Ids of domains
+   * @param techIds tech Ids of idea
+   * @param topicIds topic Ids of idea
+   * @param imgUrlIds image url Ids of idea
+   * @param iconUrlId icon url Ids of idea
+   * @author Ramin Akhavan
+   * @throws GlobalException if necessary field are left empty or if an object does not exist
    */
   @Transactional
   public Idea modifyIdea(

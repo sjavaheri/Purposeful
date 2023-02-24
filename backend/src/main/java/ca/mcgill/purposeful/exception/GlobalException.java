@@ -12,21 +12,17 @@ public class GlobalException extends RuntimeException {
   private HttpStatus status;
 
   /**
-   * @param status  the http status of the failure
+   * @param status the http status of the failure
    * @param message the error message
    * @author Shidan Javaheri This constructor creates the a Global Exception All exceptions thrown
-   * will be Global Exceptions
+   *     will be Global Exceptions
    */
   public GlobalException(HttpStatus status, String message) {
     super(message);
     this.status = status;
-
   }
 
   public HttpStatus getStatus() {
     return status;
   }
-
-
 }
-

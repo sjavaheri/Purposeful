@@ -1,16 +1,6 @@
 package ca.mcgill.purposeful.util;
 
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.DomainRepository;
-import ca.mcgill.purposeful.dao.IdeaRepository;
-import ca.mcgill.purposeful.dao.ModeratorRepository;
-import ca.mcgill.purposeful.dao.OwnerRepository;
-import ca.mcgill.purposeful.dao.ReactionRepository;
-import ca.mcgill.purposeful.dao.RegularUserRepository;
-import ca.mcgill.purposeful.dao.TechnologyRepository;
-import ca.mcgill.purposeful.dao.TopicRepository;
-import ca.mcgill.purposeful.dao.URLRepository;
-import ca.mcgill.purposeful.dao.VerificationRequestRepository;
+import ca.mcgill.purposeful.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
