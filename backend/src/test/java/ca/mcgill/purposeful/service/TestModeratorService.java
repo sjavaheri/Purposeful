@@ -7,29 +7,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
+import ca.mcgill.purposeful.configuration.Authority;
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.ModeratorRepository;
+import ca.mcgill.purposeful.exception.GlobalException;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Moderator;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Role;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.ModeratorRepository;
-
-import ca.mcgill.purposeful.exception.GlobalException;
-import ca.mcgill.purposeful.model.AppUser;
-import ca.mcgill.purposeful.model.Moderator;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Role;
 
 /**
  * Tests for the Moderator services
@@ -84,19 +81,19 @@ public class TestModeratorService {
   @Test
   public void testModifyModerator_Success() {
     AppUser modified = null;
-    modified = moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour", "Wassim");
+    modified = moderatorService.modifyModerator(MockDatabase.appUser1.getEmail(), "Jabbour",
+        "Wassim");
     assertNotNull(modified);
     assertEquals(MockDatabase.appUser1.getEmail(), modified.getEmail());
     assertEquals("Jabbour", modified.getLastname());
     assertEquals("Wassim", modified.getFirstname());
     assertEquals(MockDatabase.appUser1.getPassword(), modified.getPassword());
     assertEquals(MockDatabase.authorities1, modified.getAuthorities());
-    assertEquals(MockDatabase.roles1, modified.getRole());
+    assertEquals(MockDatabase.roles1, modified.getRoles());
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with a null email
+   * Method to check that an error is thrown when we try to modify a moderator with a null email
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -112,8 +109,7 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with an empty email
+   * Method to check that an error is thrown when we try to modify a moderator with an empty email
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -129,8 +125,8 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with a null fristname
+   * Method to check that an error is thrown when we try to modify a moderator with a null
+   * fristname
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -146,8 +142,8 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with an empty fristname
+   * Method to check that an error is thrown when we try to modify a moderator with an empty
+   * fristname
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -163,8 +159,7 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with a null lastname
+   * Method to check that an error is thrown when we try to modify a moderator with a null lastname
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -180,8 +175,8 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * with an empty lastname
+   * Method to check that an error is thrown when we try to modify a moderator with an empty
+   * lastname
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -195,9 +190,9 @@ public class TestModeratorService {
     }
     fail();
   }
+
   /**
-   * Method to check that an error is thrown when we try to modify a moderator
-   * taht does not exist
+   * Method to check that an error is thrown when we try to modify a moderator taht does not exist
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -214,9 +209,9 @@ public class TestModeratorService {
 
 
   /**
-   * Method to check that an error is thrown when we try to modify an appUser that
-   * is not a moderator
-   * 
+   * Method to check that an error is thrown when we try to modify an appUser that is not a
+   * moderator
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -238,26 +233,28 @@ public class TestModeratorService {
   @Test
   public void testModifyPassword_Success() {
     AppUser modified = null;
-    modified = moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.VALID_PASSWORD);
+    modified = moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(),
+        MockDatabase.VALID_PASSWORD);
     assertNotNull(modified);
     assertEquals(MockDatabase.appUser1.getEmail(), modified.getEmail());
     assertEquals(MockDatabase.appUser1.getLastname(), modified.getLastname());
     assertEquals(MockDatabase.appUser1.getFirstname(), modified.getFirstname());
     assertEquals(MockDatabase.VALID_PASSWORD_ENCODED, modified.getPassword());
     assertEquals(MockDatabase.authorities1, modified.getAuthorities());
-    assertEquals(MockDatabase.roles1, modified.getRole());
+    assertEquals(MockDatabase.roles1, modified.getRoles());
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
   public void testModifyPassword_TooShort() {
     try {
-      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_ONE);
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(),
+          MockDatabase.INVALID_PASSWORD_ONE);
     } catch (GlobalException e) {
       assertEquals(
           "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
@@ -268,15 +265,16 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
   public void testModifyPassword_NoNumber() {
     try {
-      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_TWO);
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(),
+          MockDatabase.INVALID_PASSWORD_TWO);
     } catch (GlobalException e) {
       assertEquals(
           "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
@@ -287,15 +285,16 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
   public void testModifyPassword_NoUpperCase() {
     try {
-      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_THREE);
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(),
+          MockDatabase.INVALID_PASSWORD_THREE);
     } catch (GlobalException e) {
       assertEquals(
           "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
@@ -306,15 +305,16 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
   public void testModifyPassword_NoLowerCase() {
     try {
-      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(), MockDatabase.INVALID_PASSWORD_FOUR);
+      moderatorService.modifyPassword(MockDatabase.appUser1.getEmail(),
+          MockDatabase.INVALID_PASSWORD_FOUR);
     } catch (GlobalException e) {
       assertEquals(
           "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ",
@@ -325,9 +325,9 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password but the moderator does not exist
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password but the
+   * moderator does not exist
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -342,15 +342,16 @@ public class TestModeratorService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password but the account is not a moderator
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password but the
+   * account is not a moderator
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
   public void testModifyPassword_NotModerator() {
     try {
-      moderatorService.modifyPassword(MockDatabase.appUser2.getEmail(), MockDatabase.VALID_PASSWORD);
+      moderatorService.modifyPassword(MockDatabase.appUser2.getEmail(),
+          MockDatabase.VALID_PASSWORD);
     } catch (GlobalException e) {
       assertEquals("User is not a moderator!", e.getMessage());
       return;
@@ -362,6 +363,7 @@ public class TestModeratorService {
    * This class holds all of the mock methods of the CRUD repository.
    */
   class MockRepository {
+
     static AppUser findUserByEmail(InvocationOnMock invocation) {
       String email = (String) invocation.getArgument(0);
       if (email.equals(MockDatabase.appUser1.getEmail())) {
@@ -387,6 +389,7 @@ public class TestModeratorService {
    * This class mock data for tests.
    */
   final static class MockDatabase {
+
     static AppUser appUser1 = new AppUser();
     static AppUser appUser2 = new AppUser();
 
@@ -415,13 +418,13 @@ public class TestModeratorService {
       // Initialize a first appUser that is a moderator
       roles1.add(role1);
       authorities1.add(authority1);
-      appUser1.setRole(roles1);
+      appUser1.setRoles(roles1);
       appUser1.setAuthorities(authorities1);
 
       // Initlaize appUser that is just a regular user
       roles2.add(role2);
       authorities2.add(authority2);
-      appUser2.setRole(roles2);
+      appUser2.setRoles(roles2);
       appUser2.setAuthorities(authorities2);
 
       // appUser1 Information
