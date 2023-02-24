@@ -106,10 +106,11 @@ public class IdeaController {
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
     }
-    IdeaRequestDTO modifiedIdea = new IdeaRequestDTO(ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getDate(), ideaDTO.getDescription(), ideaDTO.getPurpose(), ideaDTO.getIsPaid(),
-            ideaDTO.getInProgress(), ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId()));
-    return ResponseEntity.status(HttpStatus.OK).body(modifiedIdea);
-//    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO());
+    Idea modifiedIdea = ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getPurpose(), ideaDTO.getDescription(), ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(), ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId());
+    IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
+    return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
+//    return ResponseEntity.status(HttpStatus.OK).body(new IdeaRequestDTO());
 
   }
 

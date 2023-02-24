@@ -41,23 +41,22 @@ Feature: Modify Idea
 	# Normal Flow
 
   Scenario Outline: Successfully modify an idea
-    When the user requests to modify the field "<field>" to become "<new_value>" instead of "<old_value>" for idea with id "<id>"
+    When the user requests to modify the field "<field>" to become new value "<new_value>" for idea with id "<id>"
     Then the idea with id "<id>" will have value "<new_value>" for the field "<field>"
 
     Examples:
-      | id | title            | field       | old_value        | new_value      |
-      | 18 | Music generation | title       | Music generation | Health App     |
-      | 19 | Techno boom      | date        | 2022-02-15       | 2022-01-15     |
-      | 18 | Music generation | purpose     | Open source      | For customer   |
-      | 19 | Techno boom      | description | extra info2      | new extra info |
-      | 18 | Music generation | isPaid      | False            | True           |
-      | 18 | Music generation | inProgress  | False            | True           |
-      | 19 | Techno boom      | isPrivate   | False            | True           |
-      | 18 | Music generation | domains     | 2                | 1              |
-      | 19 | Techno boom      | topics      | 6                | 7              |
-      | 18 | Music generation | techs       | 8,9              | 8              |
-      | 19 | Techno boom      | image URLs  | 12               | 13             |
-      | 18 | Music generation | icon URL    | 17               | 14             |
+      | id | title            | field       | new_value      |
+      | 18 | Music generation | title       | Health App     |
+      | 18 | Music generation | purpose     | For customer   |
+      | 19 | Techno boom      | description | new extra info |
+      | 18 | Music generation | isPaid      | True           |
+      | 18 | Music generation | inProgress  | True           |
+      | 19 | Techno boom      | isPrivate   | True           |
+      | 18 | Music generation | domains     | 3              |
+      | 19 | Techno boom      | topics      | 7              |
+      | 18 | Music generation | techs       | 8              |
+      | 19 | Techno boom      | image URLs  | 13             |
+      | 18 | Music generation | icon URL    | 13             |
 
 	# Alternate Flow
 
@@ -66,11 +65,11 @@ Feature: Modify Idea
     Then the idea with id "<id>" will have empty for the field "<field>"
 
     Examples:
-      | id | title             | field      |
-      | 4  | Circuit Design    | domains    |
-      | 1  | Home Care App     | topics     |
-      | 2  | Football Game     | techs      |
-      | 3  | Car Detection App | image URLs |
+      | id | title            | field      |
+      | 18 | Music generation | domains    |
+      | 18 | Music generation | topics     |
+      | 19 | Techno boom      | techs      |
+      | 19 | Techno boom      | image URLs |
 
 	# Error Flow
 
@@ -80,25 +79,24 @@ Feature: Modify Idea
     Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | title         | field        | old_value     | error                                 | Http_status |
-      | 1  | Home Care App | title        | Home Care App | Necessary fields have been left empty | 400         |
-      | 2  | Football Game | purpose      | Entertain     | Necessary fields have been left empty | 400         |
-      | 2  | Football Game | descriptions | For fun       | Necessary fields have been left empty | 400         |
+      | id | title            | field   | old_value        | error                                 | Http_status |
+      | 18 | Music generation | title   | Music generation | Necessary fields have been left empty | 400         |
+      | 18 | Music generation | purpose | Open source      | Necessary fields have been left empty | 400         |
 
 	# Error Flow
 
   Scenario Outline: (Error Flow) Unsuccessfully modify an idea with a non-existing object
-    When the user requests to modify the field "<field>" to become new value "<new value>" for idea with id "<id>"
+    When the user requests to modify the field "<field>" to become new value "<new_value>" for idea with id "<id>"
     Then the idea with id "<id>" will have value "<old_value>" for the field "<field>"
     Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | title             | field      | old_value    | error                                                                 | Http_status |
-      | 4  | Circuit Design    | domains    | Electrical   | You are attempting to link your idea to an object that does not exist | 400         |
-      | 1  | Home Care App     | topics     | Frontend Dev | You are attempting to link your idea to an object that does not exist | 400         |
-      | 2  | Football Game     | techs      | Python       | You are attempting to link your idea to an object that does not exist | 400         |
-      | 3  | Car Detection App | image URLs | keepitup.com | You are attempting to link your idea to an object that does not exist | 400         |
-      | 4  | Circuit Design    | icon URL   | bestteam.com | You are attempting to link your idea to an object that does not exist | 400         |
+      | id | title            | field      | old_value | new_value | error                                                                 | Http_status |
+      | 18 | Music generation | domains    | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 19 | Techno boom      | topics     | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 18 | Music generation | techs      | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 19 | Techno boom      | image URLs | 12        | 1         | You are attempting to link your idea to an object that does not exist | 400         |
+      | 18 | Music generation | icon URL   | 17        | 2         | You are attempting to link your idea to an object that does not exist | 400         |
 
 
 

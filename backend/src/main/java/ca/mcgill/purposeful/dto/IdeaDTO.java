@@ -27,12 +27,6 @@ public class IdeaDTO {
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
-  private List<String> domainIds;
-  private List<String> techIds;
-  private List<String> topicIds;
-  private List<String> imgUrlIds;
-  private String iconUrlId;
-
   public IdeaDTO() {}
 
   public IdeaDTO(Idea idea) {
@@ -78,35 +72,6 @@ public class IdeaDTO {
     this.topics = topics;
     this.imgUrls = imgUrls;
     this.iconUrl = iconUrl;
-  }
-
-  public IdeaDTO(
-          String id,
-          String title,
-          String purpose,
-          String descriptions,
-          Date date,
-          boolean isPaid,
-          boolean inProgress,
-          boolean isPrivate,
-          List<String> domains,
-          List<String> techs,
-          List<String> topics,
-          List<String> imgUrls,
-          String iconUrl) {
-    this.id = id;
-    this.isPaid = isPaid;
-    this.isPrivate = isPrivate;
-    this.inProgress = inProgress;
-    this.title = title;
-    this.purpose = purpose;
-    this.description = descriptions;
-    this.date = date;
-    this.domainIds = domains;
-    this.techIds = techs;
-    this.topicIds = topics;
-    this.imgUrlIds = imgUrls;
-    this.iconUrlId = iconUrl;
   }
 
 
@@ -160,26 +125,6 @@ public class IdeaDTO {
 
   public URLDTO getIconUrl() {
     return iconUrl;
-  }
-
-  public List<String> getDomainIds() {
-    return domainIds;
-  }
-
-  public List<String> getTechIds() {
-    return techIds;
-  }
-
-  public List<String> getTopicIds() {
-    return topicIds;
-  }
-
-  public List<String> getImgUrlIds() {
-    return imgUrlIds;
-  }
-
-  public String getIconUrlId() {
-    return iconUrlId;
   }
 
   /**

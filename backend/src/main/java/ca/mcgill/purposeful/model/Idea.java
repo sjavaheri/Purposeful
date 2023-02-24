@@ -10,6 +10,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.FetchType;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -59,27 +60,27 @@ public class Idea {
   // Idea Associations
   // ------------------------
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "idea_domain", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "url_id"))
   private Set<Domain> domains;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "idea_topic", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> topics;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "idea_technology", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "technology_id"))
   private Set<Technology> techs;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "icon_url_id", nullable = false)
   private URL iconUrl;
 
-  @OneToMany(cascade = CascadeType.REMOVE)
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
   @JoinColumn(name = "supported_idea_id", nullable = true)
   private List<URL> supportingImageUrls;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "user_id", nullable = false)
   private RegularUser user;
 

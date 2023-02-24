@@ -8,9 +8,13 @@ import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.dto.IdeaRequestDTO;
+import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.core.gherkin.messages.internal.gherkin.internal.com.eclipsesource.json.Json;
@@ -23,14 +27,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.text.ParseException;
-import java.util.Date;
+import java.time.Instant;
+import java.util.*;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +75,8 @@ public class ID016_modifyIdeaStepDefinitions {
     private HttpHeaders authHeader;
     private String jwtToken;
     private Map<String, String> idMap = new HashMap<String, String>();
+    private String message;
+
 
     @Given("the database contains the following user accounts:")
     public void theDatabaseContainsTheFollowingUserAccounts(DataTable dataTable) {
@@ -123,10 +124,9 @@ public class ID016_modifyIdeaStepDefinitions {
         assertNotNull(jwtToken); // Ensure the token is not null
     }
 
-    @When("the user requests to modify the field {string} to become {string} instead of {string} for idea with id {string}")
-    public void theUserRequestsToModifyTheFieldToBecomeInsteadOfForIdeaWithId(String field, String new_value, String old_value, String id)
+    @When("the user requests to modify the field {string} to become new value {string} for idea with id {string}")
+    public void theUserRequestsToModifyTheFieldToBecomeNewValueForIdeaWithId(String field, String new_value, String id)
             throws JsonProcessingException, JSONException {
-        String tableId = idMap.get(id);
         Idea idea = ideaRepository.findIdeaById(idMap.get(id));
 
         // Not required fields
@@ -142,7 +142,6 @@ public class ID016_modifyIdeaStepDefinitions {
         boolean isPaid = idea.isPaid();
         boolean inProgress = idea.isInProgress();
         boolean isPrivate = idea.isPrivate();
-        Date date = idea.getDate();
         String iconUrlId = idea.getIconUrl().getId();
 
 
@@ -153,7 +152,7 @@ public class ID016_modifyIdeaStepDefinitions {
         if (field.equalsIgnoreCase("purpose")){
             purpose = new_value;
         }
-        if (field.equalsIgnoreCase("descriptions")){
+        if (field.equalsIgnoreCase("description")){
             description = new_value;
         }
 
@@ -168,39 +167,36 @@ public class ID016_modifyIdeaStepDefinitions {
             isPrivate = Boolean.valueOf(new_value);
         }
         if (field.equalsIgnoreCase("icon URL")){
-            iconUrlId = new_value;
-        }
-
-        if (field.equalsIgnoreCase("date")){
-            try {
-                date= new SimpleDateFormat("yyyy-mm-dd").parse(new_value);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            iconUrlId = idMap.get(new_value);
         }
 
         if (field.equalsIgnoreCase("domains")){
+            domainIds = new ArrayList<>();
             for(String single_id: List.of(new_value.split(","))){
                 domainIds.add(idMap.get(single_id));
             }
         }
         if (field.equalsIgnoreCase("topics")){
+            topicIds = new ArrayList<>();
             for(String single_id: List.of(new_value.split(","))){
                 topicIds.add(idMap.get(single_id));
             }
         }
         if (field.equalsIgnoreCase("techs")){
+            techIds = new ArrayList<>();
             for(String single_id: List.of(new_value.split(","))){
                 techIds.add(idMap.get(single_id));
             }
         }
         if (field.equalsIgnoreCase("image URLs")){
+            imgUrlIds = new ArrayList<>();
             for(String single_id: List.of(new_value.split(","))){
+                //assertEquals(1, single_id);
                 imgUrlIds.add(idMap.get(single_id));
             }
         }
 
-        IdeaRequestDTO ideaDTO = new IdeaRequestDTO(id, title, purpose, description, date, isPaid, inProgress, isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
+        IdeaRequestDTO ideaDTO = new IdeaRequestDTO(idMap.get(id), title, purpose, description, Date.from(Instant.now()), isPaid, inProgress, isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
 
         this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
         this.authHeader.setContentType(MediaType.APPLICATION_JSON);
@@ -215,37 +211,174 @@ public class ID016_modifyIdeaStepDefinitions {
                     requestEntity,
                     IdeaRequestDTO.class);
         } catch(Exception e){
-            assertEquals("hello", e.getMessage());
+            this.response = client.exchange(
+                    "/api/idea/edit/",
+                    HttpMethod.PUT,
+                    requestEntity,
+                    String.class);
         }
 
-        assertEquals(200, this.response.getStatusCode());
 
     }
 
     @Then("the idea with id {string} will have value {string} for the field {string}")
-    public void theIdeaWithIdWillHaveValueForTheField(String id, String value, String field) {
-        String tableId = idMap.get(id.toString());
+    public void theIdeaWithIdWillHaveValueForTheField(String id, String value, String field) throws ParseException {
+        String tableId = idMap.get(id);
         Idea idea = ideaRepository.findIdeaById(tableId);
-        //assertEquals(value, idea.getTitle());
+
+        List<String> objIds = new ArrayList<>();
+
+
+        // Parameters for String fields
+        if (field.equalsIgnoreCase("title")){
+            assertEquals(value, idea.getTitle());
+        }
+        if (field.equalsIgnoreCase("purpose")){
+            assertEquals(value, idea.getPurpose());
+        }
+        if (field.equalsIgnoreCase("description")){
+            assertEquals(value, idea.getDescription());
+        }
+
+        // Parameters for mandatory fields
+        if (field.equalsIgnoreCase("isPaid")){
+            assertEquals(Boolean.valueOf(value), idea.isPaid());
+        }
+        if (field.equalsIgnoreCase("inProgress")){
+            assertEquals(Boolean.valueOf(value), idea.isInProgress());
+        }
+        if (field.equalsIgnoreCase("isPrivate")){
+            assertEquals(Boolean.valueOf(value), idea.isPrivate());
+        }
+        if (field.equalsIgnoreCase("icon URL")){
+            assertEquals(idMap.get(value), idea.getIconUrl().getId());
+        }
+
+
+        if (field.equalsIgnoreCase("domains")){
+            for(Domain domain: idea.getDomains()){
+                objIds.add(domain.getId());
+            }
+        }
+
+
+        if (field.equalsIgnoreCase("topics")){
+            for(Topic topic: idea.getTopics()){
+                objIds.add(topic.getId());
+            }
+        }
+        if (field.equalsIgnoreCase("techs")){
+            for(Technology technology: idea.getTechs()){
+                objIds.add(technology.getId());
+            }
+        }
+        if (field.equalsIgnoreCase("image URLs")){
+            for(URL url: idea.getSupportingImageUrls()){
+                objIds.add(url.getId());
+            }
+        }
+
+        if(field.equalsIgnoreCase("image URLs") || field.equalsIgnoreCase("topics") || field.equalsIgnoreCase("techs") || field.equalsIgnoreCase("domains")) {
+            List<String> newObjIds = List.of(value.split(","));
+
+            for (String newObjId : newObjIds) {
+                assertTrue(objIds.contains(idMap.get(newObjId)));
+            }
+        }
+
 
     }
 
     @When("the user requests to modify the field {string} to become empty for idea with id {string}")
     public void theUserRequestsToModifyTheFieldToBecomeEmptyForIdeaWithId(String field, String id) {
+        Idea idea = ideaRepository.findIdeaById(idMap.get(id));
+
+        // Not required fields
+        String title = null;
+        String purpose = null;
+        String description = null;
+        List<String> domainIds = null;
+        List<String> techIds = null;
+        List<String> topicIds = null;
+        List<String> imgUrlIds = null;
+
+        // Required fields
+        boolean isPaid = idea.isPaid();
+        boolean inProgress = idea.isInProgress();
+        boolean isPrivate = idea.isPrivate();
+        String iconUrlId = idea.getIconUrl().getId();
+
+
+        // Parameters for String fields
+        if (field.equalsIgnoreCase("title")){
+            title = "";
+        }
+        if (field.equalsIgnoreCase("purpose")){
+            purpose = "";
+        }
+        if (field.equalsIgnoreCase("description")){
+            description = "";
+        }
+
+
+        if (field.equalsIgnoreCase("domains")){
+            domainIds = new ArrayList<>();
+        }
+        if (field.equalsIgnoreCase("topics")){
+            topicIds = new ArrayList<>();
+        }
+        if (field.equalsIgnoreCase("techs")){
+            techIds = new ArrayList<>();
+        }
+        if (field.equalsIgnoreCase("image URLs")){
+            imgUrlIds = new ArrayList<>();
+        }
+
+        IdeaRequestDTO ideaDTO = new IdeaRequestDTO(idMap.get(id), title, purpose, description, Date.from(Instant.now()), isPaid, inProgress, isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
+
+        this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
+        this.authHeader.setContentType(MediaType.APPLICATION_JSON);
+        this.authHeader.setAccessControlAllowOrigin("*");
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(ideaDTO, this.authHeader);
+
+        try {
+            this.response = client.exchange(
+                    "/api/idea/edit/",
+                    HttpMethod.PUT,
+                    requestEntity,
+                    IdeaRequestDTO.class);
+        } catch(Exception e){
+            this.response = client.exchange(
+                    "/api/idea/edit/",
+                    HttpMethod.PUT,
+                    requestEntity,
+                    String.class);
+        }
 
     }
 
     @Then("the idea with id {string} will have empty for the field {string}")
     public void theIdeaWithIdWillHaveEmptyForTheField(String id, String field) {
-
+        Idea idea = ideaRepository.findIdeaById(idMap.get(id));
+        if (field.equalsIgnoreCase("domains")){
+            assertTrue(idea.getDomains().isEmpty());
+        }
+        else if (field.equalsIgnoreCase("topics")){
+            assertTrue(idea.getTopics().isEmpty());
+        }
+        else if (field.equalsIgnoreCase("techs")){
+            assertTrue(idea.getTechs().isEmpty());
+        }
+        else if (field.equalsIgnoreCase("image URLs")){
+            assertTrue(idea.getSupportingImageUrls().isEmpty());
+        }
     }
 
     @Then("the error message {string} will be thrown with status code {string}")
     public void theErrorMessageWillBeThrownWithStatusCode(String err_message, String status_code) {
-
+        assertEquals(err_message, this.response.getBody());
+        assertEquals(status_code, Integer.toString(this.response.getStatusCode().value()));
     }
 
-    @When("the user requests to modify the field {string} to become new value {string} for idea with id {string}")
-    public void theUserRequestsToModifyTheFieldToBecomeNewValueForIdeaWithId(String field, String new_value, String id) {
-    }
 }

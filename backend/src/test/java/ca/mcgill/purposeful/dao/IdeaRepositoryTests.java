@@ -15,12 +15,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 public class IdeaRepositoryTests {
 
   @Autowired
   private IdeaRepository ideaRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
   private URLRepository urlRepository;
@@ -34,18 +38,18 @@ public class IdeaRepositoryTests {
   /**
    * Clear the database before all tests
    */
-  @BeforeAll
-  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
-    util.clearDatabase();
-  }
+//  @BeforeAll
+//  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
+//    util.clearDatabase();
+//  }
 
   /**
    * Clear the database after each test
    */
-  @AfterEach
-  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
-    util.clearDatabase();
-  }
+//  @AfterEach
+//  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
+//    util.clearDatabase();
+//  }
 
   @Test
   public void testPersistAndLoadIdea() {
@@ -60,7 +64,7 @@ public class IdeaRepositoryTests {
     user.setEmail("test@mail.purposeful.com");
     user.setFirstname("Rob");
     user.setLastname("Sab");
-    user.setPassword("1234");
+    user.setPassword(passwordEncoder.encode("something"));
 
     RegularUser regUser = new RegularUser();
     regUser.setAppUser(user);
