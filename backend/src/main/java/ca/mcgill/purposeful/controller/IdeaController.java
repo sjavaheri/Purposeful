@@ -1,21 +1,13 @@
 package ca.mcgill.purposeful.controller;
 
-import ca.mcgill.purposeful.dao.RegularUserRepository;
-import ca.mcgill.purposeful.dto.AppUserDto;
-import ca.mcgill.purposeful.dto.DomainDTO;
 import ca.mcgill.purposeful.dto.IdeaDTO;
+import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
-import ca.mcgill.purposeful.dto.TechDTO;
-import ca.mcgill.purposeful.dto.TopicDTO;
-import ca.mcgill.purposeful.dto.URLDTO;
+import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.service.IdeaService;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,14 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping({"/api/idea", "/api/idea/"})
+@RequestMapping({"api/idea", "api/idea/"})
 public class IdeaController {
 
   @Autowired
   IdeaService ideaService;
-
-  @Autowired
-  RegularUserRepository regularUserRepository;
 
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
@@ -75,36 +63,24 @@ public class IdeaController {
    */
   @PostMapping(value = {"/create", "/create/"})
   @PreAuthorize("hasAuthority('User')")
-  public ResponseEntity<IdeaDTO> createIdea(@RequestBody IdeaDTO ideaDto) throws Exception {
+  public ResponseEntity<IdeaRequestDTO> createIdea(@RequestBody IdeaRequestDTO ideaDTO)
+      throws Exception {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
-      throw new Exception("User not authenticated.");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
     }
-    RegularUser user = regularUserRepository.findRegularUserByAppUserEmail(auth.getName());
-
-    ArrayList<String> domainIds = new ArrayList<String>();
-    ArrayList<String> techIds = new ArrayList<String>();
-    ArrayList<String> topicIds = new ArrayList<String>();
-    ArrayList<String> imgUrls = new ArrayList<String>();
-
-    for (DomainDTO domainDTO : ideaDto.getDomains()) {
-      domainIds.add(domainDTO.getId());
-    }
-    for (TechDTO techDTO : ideaDto.getTechs()) {
-      techIds.add(techDTO.getId());
-    }
-    for (TopicDTO topicDTO : ideaDto.getTopics()) {
-      topicIds.add(topicDTO.getId());
-    }
-    for (URLDTO imgUrlDto : ideaDto.getImgUrls()) {
-      imgUrls.add(imgUrlDto.getId());
+    if (ideaDTO == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
 
-    Idea createdIdea =
-        ideaService.createIdea(ideaDto.getTitle(), ideaDto.getPurpose(), ideaDto.getDescription(),
-            ideaDto.getIsPaid(), ideaDto.getInProgress(), ideaDto.getIsPrivate(), domainIds,
-            techIds, topicIds, imgUrls, ideaDto.getIconUrl().getId(), user);
-    return new ResponseEntity<IdeaDTO>(new IdeaDTO(createdIdea), HttpStatus.OK);
+    Idea createdIdea = ideaService.createIdea(ideaDTO.getTitle(), ideaDTO.getPurpose(),
+        ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
+        ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(),
+        ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId(), auth.getName());
+
+    IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
+
+    return ResponseEntity.status(HttpStatus.OK).body(createdIdeaDTO);
   }
 
   /**
@@ -114,19 +90,24 @@ public class IdeaController {
    * @throws Exception
    * @author Ramin Akhavan
    */
-  @PutMapping(value = {"/idea/edit", "/idea/edit/"})
-  public IdeaDTO modifyIdea(@RequestParam("id") String id, @RequestParam("title") String title,
-      @RequestParam("purpose") String purpose, @RequestParam("descriptions") String descriptions,
-      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME,
-          pattern = "yyyy-mm-dd") Date date,
-      @RequestParam("isPaid") boolean isPaid, @RequestParam("inProgress") boolean inProgress,
-      @RequestParam("isPrivate") boolean isPrivate, @RequestParam("domains") List<String> domainIds,
-      @RequestParam("techs") List<String> techIds, @RequestParam("topics") List<String> topicIds,
-      @RequestParam("imgUrls") List<String> imgUrlIds, @RequestParam("iconUrl") String iconUrlId)
+  @PutMapping(value = {"/edit", "/edit/"}, consumes = "application/json",
+      produces = "application/json")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
       throws Exception {
-    Idea modifiedIdea = ideaService.modifyIdea(id, title, date, descriptions, purpose, isPaid,
-        inProgress, isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
-    return new IdeaDTO(modifiedIdea);
+    // Unpack the DTO
+    if (ideaDTO == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
+    }
+
+    Idea modifiedIdea =
+        ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getPurpose(),
+            ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId());
+    IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
+
+    return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
   }
 
   /**
