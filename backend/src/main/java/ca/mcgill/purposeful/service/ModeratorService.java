@@ -1,23 +1,16 @@
 package ca.mcgill.purposeful.service;
 
-import jakarta.transaction.Transactional;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import ca.mcgill.purposeful.exception.GlobalException;
-import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.ModeratorRepository;
+import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.Role;
-
+import jakarta.transaction.Transactional;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 /**
  * The services of the Moderator class
@@ -32,18 +25,14 @@ public class ModeratorService {
   private AppUserRepository appUserRepository;
 
   @Autowired
-  private ModeratorRepository moderatorRepository;
-
-  @Autowired
   PasswordEncoder passwordEncoder;
 
   /**
    * This service method modifies an exisiting moderator based on the given inputs
-   * 
-   * Note we do not modify the role of that app user, because we consider it to
-   * stay a moderator.
-   * We can use the modifyUser in the appUser service to change its role
-   * 
+   * <p>
+   * Note we do not modify the role of that app user, because we consider it to stay a moderator. We
+   * can use the modifyUser in the appUser service to change its role
+   *
    * @param email       new email of the moderator (must be unique)
    * @param lastname    new last name of the moderator
    * @param firstname   new first name of the moderator
@@ -76,7 +65,7 @@ public class ModeratorService {
           "This account does not exist.");
     }
 
-    List<Role> roles = moderator.getRole();
+    List<Role> roles = moderator.getRoles();
 
     boolean modified = false;
 
@@ -97,11 +86,10 @@ public class ModeratorService {
   }
 
   /**
-   * This service method updates the moderator's password based on the givenm
-   * inputs
-   * asswords must be at least 8 characters long and contain at least one number,
-   * one lowercase character and one uppercase character
-   * 
+   * This service method updates the moderator's password based on the given inputs. Passwords must
+   * be at least 8 characters long and contain at least one number, one lowercase character and one
+   * uppercase character
+   *
    * @param email    The email of the moderator account to modify its password
    * @param password The new password of the moderator
    * @return The modified moderator
@@ -131,7 +119,7 @@ public class ModeratorService {
           "This account does not exist.");
     }
 
-    List<Role> roles = moderator.getRole();
+    List<Role> roles = moderator.getRoles();
 
     boolean modified = false;
 
