@@ -58,7 +58,7 @@ public class IdeaController {
    * This method creates an idea
    *
    * @return created idea
-   * @throws Exception
+   * @throws GlobalException if user is not authenticated or ideaDTO is null
    * @author Adam Kazma
    */
   @PostMapping(value = {"/create", "/create/"})
