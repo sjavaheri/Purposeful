@@ -1,10 +1,11 @@
 package ca.mcgill.purposeful.util;
 
-import org.springframework.http.HttpStatus;
-
-import ca.mcgill.purposeful.dto.*;
+import ca.mcgill.purposeful.dto.AppUserDto;
+import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
-import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Idea;
+import org.springframework.http.HttpStatus;
 
 public class DtoUtility {
 
@@ -36,7 +37,7 @@ public class DtoUtility {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "Idea is null");
     }
 
-    // Convert AppUser to AppUserDto
+    // Convert Idea to IdeaDTO
     IdeaDTO ideaDTO = new IdeaDTO(idea);
     return ideaDTO;
   }

@@ -38,18 +38,18 @@ public class IdeaRepositoryTests {
   /**
    * Clear the database before all tests
    */
-//  @BeforeAll
-//  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
-//    util.clearDatabase();
-//  }
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
+    util.clearDatabase();
+  }
 
   /**
    * Clear the database after each test
    */
-//  @AfterEach
-//  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
-//    util.clearDatabase();
-//  }
+  @AfterEach
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
+    util.clearDatabase();
+  }
 
   @Test
   public void testPersistAndLoadIdea() {
