@@ -11,4 +11,5 @@ public interface IdeaRepository extends CrudRepository<Idea, Integer> {
 
   Idea findIdeaById(String id);
 
+  String deleteById(String id);
 }

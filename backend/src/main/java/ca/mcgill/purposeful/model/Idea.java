@@ -3,7 +3,6 @@ package ca.mcgill.purposeful.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -76,7 +75,7 @@ public class Idea {
   @JoinColumn(name = "icon_url_id", nullable = false)
   private URL iconUrl;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @OneToMany(cascade = CascadeType.REMOVE)
   @JoinColumn(name = "supported_idea_id", nullable = true)
   private List<URL> supportingImageUrls;
 

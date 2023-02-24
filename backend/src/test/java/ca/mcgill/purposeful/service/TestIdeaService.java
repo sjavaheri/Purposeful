@@ -8,6 +8,8 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
@@ -20,15 +22,14 @@ import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -39,7 +40,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * To test the idea service methods
  *
  * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea
- *         tests)
+ * tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -568,6 +569,23 @@ public class TestIdeaService {
   }
 
   /**
+   * Test the removeIdeaById method (Success case)
+   *
+   * @author Athmane Benarous
+   */
+  @Test
+  public void testRemoveIdeaById() {
+    // idea var
+    Idea idea = MockDatabase.idea1;
+
+    // call service layer
+    ideaService.removeIdeaById(idea.getId());
+
+    // Verify
+    verify(ideaRepository, times(1)).deleteById(idea.getId());
+  }
+
+  /**
    * This class holds all of the mock objects of the database
    */
   static final class MockDatabase {
@@ -746,7 +764,7 @@ public class TestIdeaService {
       // Initialize ideas
       idea1.setId(UUID.randomUUID().toString());
       idea1.setDate(new Date(10000)); // 10000 seconds since 1970 (Other constructors are
-                                      // deprecated)
+      // deprecated)
       idea1.setDescription("Cool web application for playing chess");
       idea1.setDomains(domainGroup1);
       idea1.setTopics(topicGroup1);
@@ -755,7 +773,7 @@ public class TestIdeaService {
 
       idea2.setId(UUID.randomUUID().toString());
       idea2.setDate(new Date(12000)); // 12000 seconds since 1970 (Other constructors are
-                                      // deprecated)
+      // deprecated)
       idea2.setDescription("Cool web application for generating music");
       idea2.setDomains(domainGroup2);
       idea2.setTopics(topicGroup2);
@@ -764,10 +782,11 @@ public class TestIdeaService {
 
       modifiableIdea.setId(UUID.randomUUID().toString());
       modifiableIdea.setDate(new Date(14000)); // 14000 seconds since 1970 (Other constructors are
-                                               // deprecated)
+      // deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);;
+      modifiableIdea.setInProgress(false);
+      ;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);

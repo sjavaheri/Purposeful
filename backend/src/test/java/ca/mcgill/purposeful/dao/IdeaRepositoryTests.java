@@ -3,20 +3,18 @@ package ca.mcgill.purposeful.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.util.DatabaseUtil;
 import java.time.Instant;
 import java.util.Date;
-
-import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.URL;
-import ca.mcgill.purposeful.model.AppUser;
 
 @SpringBootTest
 public class IdeaRepositoryTests {
