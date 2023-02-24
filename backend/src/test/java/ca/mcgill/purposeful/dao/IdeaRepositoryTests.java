@@ -15,12 +15,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 public class IdeaRepositoryTests {
 
   @Autowired
   private IdeaRepository ideaRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
   private URLRepository urlRepository;
@@ -60,7 +64,7 @@ public class IdeaRepositoryTests {
     user.setEmail("test@mail.purposeful.com");
     user.setFirstname("Rob");
     user.setLastname("Sab");
-    user.setPassword("1234");
+    user.setPassword(passwordEncoder.encode("something"));
 
     RegularUser regUser = new RegularUser();
     regUser.setAppUser(user);
