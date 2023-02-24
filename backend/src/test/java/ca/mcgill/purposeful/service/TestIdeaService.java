@@ -676,10 +676,10 @@ public class TestIdeaService {
      */
     static {
 
-      //Initialize user
+      // Initialize user
       appUser1.setEmail("example@gmail.com");
       user1.setAppUser(appUser1);
-      
+
       // Initialize topics
       topic1.setId(UUID.randomUUID().toString());
       topic1.setName("Music");
