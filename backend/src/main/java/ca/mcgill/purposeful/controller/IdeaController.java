@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,12 +50,37 @@ public class IdeaController {
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<IdeaDTO>> filterIdeas(@RequestBody SearchFilterDTO searchFilterDTO) {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(
-            IdeaDTO.convertToDto(
-                ideaService.getIdeasByAllCriteria(
-                    searchFilterDTO.getDomains(),
-                    searchFilterDTO.getTopics(),
-                    searchFilterDTO.getTechnologies())));
+        .body(IdeaDTO.convertToDto(ideaService.getIdeasByAllCriteria(searchFilterDTO.getDomains(),
+            searchFilterDTO.getTopics(), searchFilterDTO.getTechnologies())));
+  }
+
+  /**
+   * This method creates an idea
+   *
+   * @return created idea
+   * @throws GlobalException if user is not authenticated or ideaDTO is null
+   * @author Adam Kazma
+   */
+  @PostMapping(value = {"/create", "/create/"})
+  @PreAuthorize("hasAuthority('User')")
+  public ResponseEntity<IdeaRequestDTO> createIdea(@RequestBody IdeaRequestDTO ideaDTO)
+      throws GlobalException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
+    }
+    if (ideaDTO == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
+    }
+
+    Idea createdIdea = ideaService.createIdea(ideaDTO.getTitle(), ideaDTO.getPurpose(),
+        ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
+        ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(),
+        ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId(), auth.getName());
+
+    IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
+
+    return ResponseEntity.status(HttpStatus.OK).body(createdIdeaDTO);
   }
 
   /**
@@ -63,8 +90,8 @@ public class IdeaController {
    * @throws Exception
    * @author Ramin Akhavan
    */
-  @PutMapping(value = {"/edit",
-      "/edit/"}, consumes = "application/json", produces = "application/json")
+  @PutMapping(value = {"/edit", "/edit/"}, consumes = "application/json",
+      produces = "application/json")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
       throws Exception {
@@ -73,11 +100,11 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
     }
 
-    Idea modifiedIdea = ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(),
-        ideaDTO.getPurpose(), ideaDTO.getDescription(), ideaDTO.getIsPaid(),
-        ideaDTO.getInProgress(), ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(),
-        ideaDTO.getTechIds(), ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(),
-        ideaDTO.getIconUrlId());
+    Idea modifiedIdea =
+        ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getPurpose(),
+            ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId());
     IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
 
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
