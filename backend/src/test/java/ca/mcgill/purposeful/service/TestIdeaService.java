@@ -10,12 +10,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
 import ca.mcgill.purposeful.dao.TopicRepository;
 import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.RegularUser;
@@ -65,6 +66,8 @@ public class TestIdeaService {
   private TechnologyRepository technologyRepository;
   @Mock
   private URLRepository urlRepository;
+  @Mock
+  private RegularUserRepository regularUserRepository;
 
   // Inject mocks
   @InjectMocks
@@ -84,6 +87,8 @@ public class TestIdeaService {
     lenient().when(technologyRepository.findTechnologyById(anyString()))
         .thenAnswer(MockRepository::findTechnologyById);
     lenient().when(urlRepository.findURLById(anyString())).thenAnswer(MockRepository::findURLById);
+    lenient().when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
+        .thenReturn(MockDatabase.user1);
   }
 
   /**
@@ -606,6 +611,7 @@ public class TestIdeaService {
     static Idea modifiableIdea = new Idea();
 
     // Users
+    static AppUser appUser1 = new AppUser();
     static RegularUser user1 = new RegularUser();
 
     // Domains
@@ -670,6 +676,10 @@ public class TestIdeaService {
      */
     static {
 
+      //Initialize user
+      appUser1.setEmail("example@gmail.com");
+      user1.setAppUser(appUser1);
+      
       // Initialize topics
       topic1.setId(UUID.randomUUID().toString());
       topic1.setName("Music");
