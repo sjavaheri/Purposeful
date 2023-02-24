@@ -1,12 +1,10 @@
 package ca.mcgill.purposeful.controller;
 
-import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.service.IdeaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +32,6 @@ public class IdeaController {
 
   @Autowired
   IdeaService ideaService;
-
-  @Autowired
-  RegularUserRepository regularUserRepository;
 
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
@@ -77,12 +72,11 @@ public class IdeaController {
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
-    RegularUser user = regularUserRepository.findRegularUserByAppUserEmail(auth.getName());
 
     Idea createdIdea = ideaService.createIdea(ideaDTO.getTitle(), ideaDTO.getPurpose(),
         ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
         ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(),
-        ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId(), user);
+        ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId(), auth.getName());
 
     IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
 
