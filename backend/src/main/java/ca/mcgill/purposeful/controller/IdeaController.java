@@ -64,7 +64,7 @@ public class IdeaController {
   @PostMapping(value = {"/create", "/create/"})
   @PreAuthorize("hasAuthority('User')")
   public ResponseEntity<IdeaRequestDTO> createIdea(@RequestBody IdeaRequestDTO ideaDTO)
-      throws Exception {
+      throws GlobalException {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
