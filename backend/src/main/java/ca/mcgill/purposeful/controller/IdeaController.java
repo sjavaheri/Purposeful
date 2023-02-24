@@ -2,6 +2,7 @@ package ca.mcgill.purposeful.controller;
 
 import ca.mcgill.purposeful.dto.AppUserDto;
 import ca.mcgill.purposeful.dto.IdeaDTO;
+import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
@@ -70,49 +71,47 @@ public class IdeaController {
    * @throws Exception
    * @author Ramin Akhavan
    */
-  @PutMapping(value = {"/edit/{id}", "/edit/{id}/"})
-  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
-  public ResponseEntity<IdeaDTO> modifyIdea(@PathVariable String id,
-      @RequestParam(value = "title", required = false) String title,
-      @RequestParam(value = "purpose", required = false) String purpose,
-      @RequestParam(value = "descriptions", required = false) String descriptions,
-      @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-mm-dd") Date date,
-      @RequestParam(value = "isPaid", required = false) boolean isPaid,
-      @RequestParam(value = "inProgress", required = false) boolean inProgress,
-      @RequestParam(value = "isPrivate", required = false) boolean isPrivate,
-      @RequestParam(value = "domains", required = false) List<String> domainIds,
-      @RequestParam(value = "techs", required = false) List<String> techIds,
-      @RequestParam(value = "topics", required = false) List<String> topicIds,
-      @RequestParam(value = "imgUrls", required = false) List<String> imgUrlIds,
-      @RequestParam(value = "iconUrl", required = false) String iconUrlId) throws Exception {
-    Idea modifiedIdea = ideaService.modifyIdea(id, title, date, descriptions, purpose, isPaid,
-        inProgress, isPrivate,
-        domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
-    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO(modifiedIdea));
-  }
-
-//  /**
-//   * This method modifies an idea
-//   *
-//   * @return update idea
-//   * @throws Exception
-//   * @author Ramin Akhavan
-//   */
-//  @PutMapping(value = {"/edit", "/edit/"}, consumes = "application/json", produces = "application/json")
+//  @PutMapping(value = {"/edit/{id}", "/edit/{id}/"})
 //  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
-//  public ResponseEntity<IdeaDTO> modifyIdea(@RequestBody IdeaDTO ideaDTO) throws Exception {
-//    // Unpack the DTO
-//    if (ideaDTO == null) {
-//      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
-//    }
-//    IdeaDTO modifiedIdea = DtoUtility.convertToDto(ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getDate(), ideaDTO.getDescription(), ideaDTO.getPurpose(), ideaDTO.getIsPaid(),
-//            ideaDTO.getInProgress(), ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId()));
-////    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO(modifiedIdea));
-//    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO());
-//
-//    return new ResponseEntity<IdeaDTO>(registeredUser, HttpStatus.OK);
-//
+//  public ResponseEntity<IdeaDTO> modifyIdea(@PathVariable String id,
+//      @RequestParam(value = "title", required = false) String title,
+//      @RequestParam(value = "purpose", required = false) String purpose,
+//      @RequestParam(value = "descriptions", required = false) String descriptions,
+//      @RequestParam(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-mm-dd") Date date,
+//      @RequestParam(value = "isPaid", required = false) boolean isPaid,
+//      @RequestParam(value = "inProgress", required = false) boolean inProgress,
+//      @RequestParam(value = "isPrivate", required = false) boolean isPrivate,
+//      @RequestParam(value = "domains", required = false) List<String> domainIds,
+//      @RequestParam(value = "techs", required = false) List<String> techIds,
+//      @RequestParam(value = "topics", required = false) List<String> topicIds,
+//      @RequestParam(value = "imgUrls", required = false) List<String> imgUrlIds,
+//      @RequestParam(value = "iconUrl", required = false) String iconUrlId) throws Exception {
+//    Idea modifiedIdea = ideaService.modifyIdea(id, title, date, descriptions, purpose, isPaid,
+//        inProgress, isPrivate,
+//        domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
+//    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO(modifiedIdea));
 //  }
+
+  /**
+   * This method modifies an idea
+   *
+   * @return update idea
+   * @throws Exception
+   * @author Ramin Akhavan
+   */
+  @PutMapping(value = {"/edit", "/edit/"}, consumes = "application/json", produces = "application/json")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO) throws Exception {
+    // Unpack the DTO
+    if (ideaDTO == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
+    }
+    IdeaRequestDTO modifiedIdea = new IdeaRequestDTO(ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getDate(), ideaDTO.getDescription(), ideaDTO.getPurpose(), ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(), ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId()));
+    return ResponseEntity.status(HttpStatus.OK).body(modifiedIdea);
+//    return ResponseEntity.status(HttpStatus.OK).body(new IdeaDTO());
+
+  }
 
   /**
    * Remove an idea by its id

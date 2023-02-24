@@ -30,4 +30,14 @@ public class DtoUtility {
     appUserDto.setPassword("");
     return appUserDto;
   }
+
+  public static IdeaDTO convertToDto(Idea idea) {
+    if (idea == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "Idea is null");
+    }
+
+    // Convert AppUser to AppUserDto
+    IdeaDTO ideaDTO = new IdeaDTO(idea);
+    return ideaDTO;
+  }
 }

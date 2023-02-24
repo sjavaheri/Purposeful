@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.dto.IdeaDTO;
+import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.URL;
@@ -199,8 +200,12 @@ public class ID016_modifyIdeaStepDefinitions {
             }
         }
 
-        IdeaDTO ideaDTO = new IdeaDTO(id, title, purpose, description, date, isPaid, inProgress, isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
+        IdeaRequestDTO ideaDTO = new IdeaRequestDTO(id, title, purpose, description, date, isPaid, inProgress, isPrivate, domainIds, techIds, topicIds, imgUrlIds, iconUrlId);
+
         this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
+        this.authHeader.setContentType(MediaType.APPLICATION_JSON);
+        this.authHeader.setAccessControlAllowOrigin("*");
+
         HttpEntity<?> requestEntity = new HttpEntity<>(ideaDTO, this.authHeader);
 
         try {
@@ -208,12 +213,12 @@ public class ID016_modifyIdeaStepDefinitions {
                     "/api/idea/edit/",
                     HttpMethod.PUT,
                     requestEntity,
-                    IdeaDTO.class);
+                    IdeaRequestDTO.class);
         } catch(Exception e){
             assertEquals("hello", e.getMessage());
         }
 
-//        assertEquals(200, this.response.getStatusCode());
+        assertEquals(200, this.response.getStatusCode());
 
     }
 
