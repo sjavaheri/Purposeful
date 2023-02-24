@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-/** Service functions of the Idea class */
+/**
+ * Service functions of the Idea class
+ */
 @Service
 public class IdeaService {
 
@@ -31,15 +33,20 @@ public class IdeaService {
    * CRUD repos
    */
 
-  @Autowired IdeaRepository ideaRepository;
+  @Autowired
+  IdeaRepository ideaRepository;
 
-  @Autowired DomainRepository domainRepository;
+  @Autowired
+  DomainRepository domainRepository;
 
-  @Autowired TechnologyRepository technologyRepository;
+  @Autowired
+  TechnologyRepository technologyRepository;
 
-  @Autowired TopicRepository topicRepository;
+  @Autowired
+  TopicRepository topicRepository;
 
-  @Autowired URLRepository urlRepository;
+  @Autowired
+  URLRepository urlRepository;
 
   /*
    * Service functions
@@ -79,9 +86,9 @@ public class IdeaService {
    * oldest.
    *
    * @param domainNames The list of domain names that the idea must have one of (null if no filter)
-   * @param topicNames The list of topic names that the idea must have one of (null if no filter)
-   * @param techNames The list of technology names that the idea must have one of (null if no
-   *     filter)
+   * @param topicNames  The list of topic names that the idea must have one of (null if no filter)
+   * @param techNames   The list of technology names that the idea must have one of (null if no
+   *                    filter)
    * @return The set of ideas that match all the criteria
    * @author Wassim Jabbour
    */
