@@ -41,7 +41,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * To test the idea service methods
  *
  * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea
- * tests)
+ *         tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -53,8 +53,6 @@ public class TestIdeaService {
   private static boolean NEW_PAY = true;
   private static boolean NEW_PRIVACY = true;
   private static boolean NEW_PROGRESS = true;
-
-  private static Date NEW_DATE = new Date(16000);
 
   // Mocks
   @Mock
@@ -272,9 +270,9 @@ public class TestIdeaService {
     try {
       createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY,
           NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds,
-          MockDatabase.newIconUrl.getId(), MockDatabase.user1);
+          MockDatabase.newIconUrl.getId(), MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
-      String message = e.getMessage();
+
     }
 
     // Test all attributes of idea
@@ -319,7 +317,7 @@ public class TestIdeaService {
     try {
       createdIdea = ideaService.createIdea("", NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS,
           NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, MockDatabase.newIconUrl.getId(),
-          MockDatabase.user1);
+          MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -347,7 +345,7 @@ public class TestIdeaService {
     try {
       createdIdea = ideaService.createIdea(NEW_TITLE, NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY,
           NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds, imgUrlIds, nonExistingId,
-          MockDatabase.user1);
+          MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -403,7 +401,7 @@ public class TestIdeaService {
     assertEquals(NEW_PROGRESS, updatedIdea.isInProgress());
     assertEquals(NEW_PRIVACY, updatedIdea.isPrivate());
 
-//    assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
+    // assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
 
     // Check Ids of all objects of the idea
     for (Domain domain : updatedIdea.getDomains()) {
@@ -436,9 +434,9 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "",
-          NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
-          topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_PURPOSE,
+          NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds, topicIds,
+          imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -791,8 +789,7 @@ public class TestIdeaService {
       // deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);
-      ;
+      modifiableIdea.setInProgress(false);;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);
