@@ -25,7 +25,6 @@ import ca.mcgill.purposeful.model.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -366,11 +365,6 @@ public class TestIdeaService {
     List<String> techIds = new ArrayList<String>();
     List<String> imgUrlIds = new ArrayList<String>();
 
-    Set<Domain> domains = new HashSet<>();
-    Set<Topic> topics = new HashSet<>();
-    Set<Technology> techs = new HashSet<>();
-    List<URL> imgUrls = new ArrayList<>();
-
     // Retrieve Ids of all objects
     for (Domain domain : MockDatabase.modifiableDomainGroup) {
       domainIds.add(domain.getId());
@@ -387,7 +381,7 @@ public class TestIdeaService {
     // Modify all attributes of idea
     Idea updatedIdea = null;
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE,
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
           NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
           topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
@@ -403,7 +397,7 @@ public class TestIdeaService {
     assertEquals(NEW_PROGRESS, updatedIdea.isInProgress());
     assertEquals(NEW_PRIVACY, updatedIdea.isPrivate());
 
-//    assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
+    assertEquals(NEW_DATE.toString(), updatedIdea.getDate().toString());
 
     // Check Ids of all objects of the idea
     for (Domain domain : updatedIdea.getDomains()) {
@@ -436,7 +430,7 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "",
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), "", NEW_DATE,
           NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
           topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
@@ -465,7 +459,7 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE,
+      updatedIdea = ideaService.modifyIdea(MockDatabase.modifiableIdea.getId(), NEW_TITLE, NEW_DATE,
           NEW_PURPOSE, NEW_DESCRIPTION, NEW_PAY, NEW_PROGRESS, NEW_PRIVACY, domainIds, techIds,
           topicIds, imgUrlIds, MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
