@@ -839,7 +839,6 @@ public class TestIdeaService {
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
       modifiableIdea.setInProgress(false);
-      ;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);
