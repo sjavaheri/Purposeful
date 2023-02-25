@@ -13,7 +13,7 @@ public class AuthenticationConverter implements Converter<Jwt, AbstractAuthentic
   /**
    * Spring method to convert a JWT token to an authentication object A user sends the token they
    * have to be validated for access This method is used between the server and the API call See the
-   * security filter chain method in {@link SecurityConfiguration} }
+   * security filter chain method in {@link SecurityConfiguration}
    */
   @Override
   public AbstractAuthenticationToken convert(Jwt source) {

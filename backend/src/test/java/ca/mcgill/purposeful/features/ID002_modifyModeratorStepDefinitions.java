@@ -27,27 +27,39 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Step definitions for the ID002_modifyModerator.feature file
+ *
+ * @author Enzo Benoit-Jeannin
+ */
 public class ID002_modifyModeratorStepDefinitions {
 
-  @Autowired AppUserService appUserService;
+  @Autowired
+  AppUserService appUserService;
 
-  @Autowired AppUserRepository appUserRepository;
+  @Autowired
+  AppUserRepository appUserRepository;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-  @Autowired OwnerRepository ownerRepository;
+  @Autowired
+  OwnerRepository ownerRepository;
 
   // Util class
-  @Autowired private CucumberUtil cucumberUtil;
+  @Autowired
+  private CucumberUtil cucumberUtil;
 
   // fields for catching the response of the http request
   private ResponseEntity<?> response;
 
   // client that will send requests
-  @Autowired private TestRestTemplate client;
+  @Autowired
+  private TestRestTemplate client;
 
   // util class for clearing the database
-  @Autowired private DatabaseUtil databaseUtil;
+  @Autowired
+  private DatabaseUtil databaseUtil;
 
   private String jwtToken;
 
@@ -90,8 +102,7 @@ public class ID002_modifyModeratorStepDefinitions {
   @Given("that I am logged as moderator with email {string} and password {string}")
   public void iAmLoggedInAsModeratorWithEmailAndPassword(String email, String password) {
     // Login as the moderator
-    HttpEntity<String> requestEntity =
-        new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
+    HttpEntity<String> requestEntity = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
@@ -104,8 +115,7 @@ public class ID002_modifyModeratorStepDefinitions {
   @Given("that I am logged as owner with email {string} and password {string}")
   public void iAmLoggedInAsOwnerWithEmailAndPassword(String email, String password) {
     // Login as the owner
-    HttpEntity<String> requestEntity =
-        new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
+    HttpEntity<String> requestEntity = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
@@ -118,8 +128,7 @@ public class ID002_modifyModeratorStepDefinitions {
   @Given("that I am logged as user with email {string} and password {string}")
   public void iAmLoggedInAsUserWithEmailAndPassword(String email, String password) {
     // Login as the user
-    HttpEntity<String> requestEntity =
-        new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
+    HttpEntity<String> requestEntity = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
@@ -129,18 +138,15 @@ public class ID002_modifyModeratorStepDefinitions {
     this.jwtToken = this.response.getBody().toString();
   }
 
-  @When(
-      "I request to modify the account with email {string} with {string} as the new lastname and {string} as the new first name")
+  @When("I request to modify the account with email {string} with {string} as the new lastname and {string} as the new first name")
   public void moderatorAccountIsUpdatedWithNewLastNameFirstName(
       String email, String new_lastname, String new_firstname) {
     // create a DTO to send the request to the service
     AppUserDto appUserDto = new AppUserDto(email, "", new_firstname, new_lastname);
 
     // make a post request to modify the user and store the response
-    HttpEntity<AppUserDto> requestEntity =
-        new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
-    this.response =
-        client.exchange("/api/appuser/moderator", HttpMethod.PUT, requestEntity, AppUserDto.class);
+    HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
+    this.response = client.exchange("/api/appuser/moderator", HttpMethod.PUT, requestEntity, AppUserDto.class);
   }
 
   @When("I request to modify the account with email {string} with {string} as the password")
@@ -149,40 +155,32 @@ public class ID002_modifyModeratorStepDefinitions {
     AppUserDto appUserDto = new AppUserDto(email, new_password, "", "");
 
     // make a post request to modify the user's password and store the response
-    HttpEntity<AppUserDto> requestEntity =
-        new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
-    this.response =
-        client.exchange(
-            "/api/appuser/moderator/password", HttpMethod.PUT, requestEntity, AppUserDto.class);
+    HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
+    this.response = client.exchange(
+        "/api/appuser/moderator/password", HttpMethod.PUT, requestEntity, AppUserDto.class);
   }
 
-  @When(
-      "I erroneously request to modify the account with email {string} with {string} as the new lastname and {string} as the new first name")
+  @When("I erroneously request to modify the account with email {string} with {string} as the new lastname and {string} as the new first name")
   public void moderatorAccountIsErroneouslyUpdatedWithNewLastNameFirstName(
       String email, String new_lastname, String new_firstname) {
     // create a DTO to send the request to the service
     AppUserDto appUserDto = new AppUserDto(email, "", new_firstname, new_lastname);
 
     // make a post request to modify the user and store the response
-    HttpEntity<AppUserDto> requestEntity =
-        new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
-    this.response =
-        client.exchange("/api/appuser/moderator", HttpMethod.PUT, requestEntity, String.class);
+    HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
+    this.response = client.exchange("/api/appuser/moderator", HttpMethod.PUT, requestEntity, String.class);
   }
 
-  @When(
-      "I erroneously request to modify the account with email {string} with new password {string}")
+  @When("I erroneously request to modify the account with email {string} with new password {string}")
   public void moderatorAccountIsErroneouslyUpdatedWithNewPassword(
       String email, String new_password) {
     // create a DTO to send the request to the service
     AppUserDto appUserDto = new AppUserDto(email, new_password, "", "");
 
     // make a post request to modify the user and store the response
-    HttpEntity<AppUserDto> requestEntity =
-        new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
-    this.response =
-        client.exchange(
-            "/api/appuser/moderator/password", HttpMethod.PUT, requestEntity, String.class);
+    HttpEntity<AppUserDto> requestEntity = new HttpEntity<>(appUserDto, cucumberUtil.bearerAuthHeader(this.jwtToken));
+    this.response = client.exchange(
+        "/api/appuser/moderator/password", HttpMethod.PUT, requestEntity, String.class);
   }
 
   @Then("account with email {string} have {string} {string} as lastname and firstname")
@@ -225,8 +223,7 @@ public class ID002_modifyModeratorStepDefinitions {
     assertEquals(Integer.parseInt(count), appUserRepository.count());
   }
 
-  @Then(
-      "the user should be denied permission to the requested resource and receive an HTTP status code of {string}")
+  @Then("the user should be denied permission to the requested resource and receive an HTTP status code of {string}")
   public void permissionDeniedWithHTTPStatusCoseOf(String status) {
     // Assert that the response was not null
     assertNotNull(this.response, "The response was null");

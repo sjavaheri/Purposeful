@@ -161,7 +161,7 @@ public class ID001_createModeratorStepDefinitions {
     assertEquals(setOfAuthorities, retrievedUser.getAuthorities());
   }
 
-  @Then("the number of moderator accounts in the database is {string}")
+  @Then("the number of accounts in the database is {string}")
   public void theNumberOfModeratorAccountsInTheDatabaseIs(String count) {
     // Assert that the number of user accounts in the database is equal to the count
     assertEquals(Integer.parseInt(count), appUserRepository.count());

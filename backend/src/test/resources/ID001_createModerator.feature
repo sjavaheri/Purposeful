@@ -13,7 +13,7 @@ Feature: Create Moderator
     Given I am logged in as the owner with email "owner.steve@gmail.com" and password "OwnerIsAwesome01"
     When a new moderator account is created with first name "<firstname>", last name "<lastname>", email "<email>" and password "<password>"
     Then a new moderator account exists in the database with first name "<firstname>", last name "<lastname>", email "<email>", password "<password>" and authorities "<authorities>"
-    Then the number of moderator accounts in the database is "3"
+    Then the number of accounts in the database is "3"
 
     Examples:
       | firstname | lastname | email                | password       | authorities |
@@ -26,7 +26,7 @@ Feature: Create Moderator
     Given I am logged in as the owner with email "owner.steve@gmail.com" and password "OwnerIsAwesome01"
     When a new moderator account is created erroneously with first name "<firstname>", last name "<lastname>", email "<email>" and password "<password>"
     Then the following error "<error>" shall be raised with http status code "<httpstatus>"
-    Then the number of moderator accounts in the database is "2"
+    Then the number of accounts in the database is "2"
 
     Examples:
       | firstname | lastname | email                    | password         | error                                                                                                                                                            | httpstatus |
@@ -49,7 +49,7 @@ Feature: Create Moderator
     Given I am logged in as the moderator with email "mod.steve@gmail.com" and password "ModIsAwesome01"
     When a new moderator account is created erroneously with first name "<firstname>", last name "<lastname>", email "<email>" and password "<password>"
     Then the following http status "<httpstatus>" shall be raised
-    Then the number of moderator accounts in the database is "2"
+    Then the number of accounts in the database is "2"
 
     Examples:
       | firstname | lastname | email                    | password         | httpstatus |
@@ -60,7 +60,7 @@ Feature: Create Moderator
     Given I am not logged in
     When a new moderator account is created erroneously with first name "<firstname>", last name "<lastname>", email "<email>" and password "<password>"
     Then the following http status "<httpstatus>" shall be raised
-    Then the number of moderator accounts in the database is "2"
+    Then the number of accounts in the database is "2"
 
     Examples:
       | firstname | lastname | email                    | password         | httpstatus |

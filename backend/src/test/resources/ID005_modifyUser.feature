@@ -87,8 +87,9 @@ Feature: Modify Moderator
     Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
 
     Examples:
-      | email                 | new_lastname | new_firstname | httpstatus |
-      | enzo.benoit@gmail.com | Benoit       | NewEnzo       | 401        |
+      | email                    | new_lastname | new_firstname | httpstatus |
+      | enzo.benoit@gmail.com    | Benoit       | NewEnzo       | 401        |
+      | wassim.jabbour@gmail.com | Jabbour      | NewWassim     | 401        |
 
   Scenario Outline: Unsuccessfully update a user password because you are not logged in
     Given The user is not logged in
@@ -96,8 +97,9 @@ Feature: Modify Moderator
     Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
 
     Examples:
-      | email                 | new_password       | httpstatus |
-      | enzo.benoit@gmail.com | NewEnzoIsAwesome01 | 401        |
+      | email                    | new_password       | httpstatus |
+      | enzo.benoit@gmail.com    | NewEnzoIsAwesome01 | 401        |
+      | wassim.jabbour@gmail.com | NewWassimIsAwesome | 401        |
 
   Scenario Outline: Unsuccessfully update a user account because you are not logged in with the correct account
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
@@ -107,6 +109,7 @@ Feature: Modify Moderator
     Examples:
       | new_lastname | new_firstname | httpstatus |
       | Benoit       | NewEnzo       | 403        |
+      | Potato       | NewWassim     | 403        |
 
   Scenario Outline: Unsuccessfully update a user password because you are not logged in with the correct account
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
@@ -116,6 +119,7 @@ Feature: Modify Moderator
     Examples:
       | new_password       | httpstatus |
       | NewEnzoIsAwesome01 | 403        |
+      | NewWassimIsAwesome | 403        |
 
   Scenario Outline: Unsuccessfully update a user account because of wrong password
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"

@@ -52,13 +52,13 @@ public class IdeaController {
    * This method creates an idea
    *
    * @return created idea
-   * @throws Exception
+   * @throws GlobalException if user is not authenticated or ideaDTO is null
    * @author Adam Kazma
    */
   @PostMapping(value = {"/create", "/create/"})
   @PreAuthorize("hasAuthority('User')")
   public ResponseEntity<IdeaRequestDTO> createIdea(@RequestBody IdeaRequestDTO ideaDTO)
-      throws Exception {
+      throws GlobalException {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
@@ -91,7 +91,7 @@ public class IdeaController {
    * This method modifies an idea
    *
    * @return update idea
-   * @throws Exception
+   * @throws GlobalException if the ideaDTO is null
    * @author Ramin Akhavan
    */
   @PutMapping(
@@ -100,7 +100,7 @@ public class IdeaController {
       produces = "application/json")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
-      throws Exception {
+      throws GlobalException {
     // Unpack the DTO
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");

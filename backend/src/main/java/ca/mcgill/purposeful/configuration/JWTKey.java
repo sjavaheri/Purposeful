@@ -3,7 +3,7 @@ package ca.mcgill.purposeful.configuration;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
-/** Class containts the RSA public and private keys for JWT */
+/** Class contains the RSA public and private keys for JWT */
 public class JWTKey {
 
   private RSAPrivateKey privateKey;

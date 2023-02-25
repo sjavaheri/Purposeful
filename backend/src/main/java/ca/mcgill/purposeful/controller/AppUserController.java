@@ -172,6 +172,7 @@ public class AppUserController {
    * @author Enzo Benoit-Jeannin
    */
   @GetMapping(value = {"/users", "/users/"})
+  @PreAuthorize("hasAnyAuthority('Owner', 'Moderator')")
   public List<AppUserDto> getAllUsers() {
     return appUserService.getAllUsers().stream()
         .map(e -> DtoUtility.convertToDto(e))

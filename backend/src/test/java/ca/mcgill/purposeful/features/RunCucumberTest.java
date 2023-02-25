@@ -7,6 +7,11 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
+/**
+ * Class that allows all other cucumber classes to be run
+ *
+ * @author Shidan Javaheri
+ */
 @RunWith(Cucumber.class)
 @CucumberOptions(
     plugin = {"pretty", "html:target/cucumber-report.html"},

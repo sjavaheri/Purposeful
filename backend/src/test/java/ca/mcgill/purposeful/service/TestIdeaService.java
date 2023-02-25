@@ -20,8 +20,9 @@ import static org.mockito.Mockito.*;
 /**
  * To test the idea service methods
  *
- * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin Akhavan-Sarraf (modifying Idea
- *     tests)
+ * @author Wassim Jabbour, Adam Kazma (creating Idea tests), Ramin
+ *         Akhavan-Sarraf (modifying Idea
+ *         tests)
  */
 @ExtendWith(MockitoExtension.class)
 public class TestIdeaService {
@@ -35,15 +36,27 @@ public class TestIdeaService {
   private static boolean NEW_PROGRESS = true;
 
   // Mocks
-  @Mock private IdeaRepository ideaRepository;
-  @Mock private DomainRepository domainRepository;
-  @Mock private TopicRepository topicRepository;
-  @Mock private TechnologyRepository technologyRepository;
-  @Mock private URLRepository urlRepository;
-  @Mock private RegularUserRepository regularUserRepository;
+  @Mock
+  private IdeaRepository ideaRepository;
+
+  @Mock
+  private DomainRepository domainRepository;
+
+  @Mock
+  private TopicRepository topicRepository;
+
+  @Mock
+  private TechnologyRepository technologyRepository;
+
+  @Mock
+  private URLRepository urlRepository;
+
+  @Mock
+  private RegularUserRepository regularUserRepository;
 
   // Inject mocks
-  @InjectMocks private IdeaService ideaService;
+  @InjectMocks
+  private IdeaService ideaService;
 
   // Set the mock output of each function in the repository
   @BeforeEach
@@ -131,8 +144,7 @@ public class TestIdeaService {
     }
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas =
-        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -169,8 +181,7 @@ public class TestIdeaService {
     search_techs.add(MockDatabase.tech2.getName());
 
     // Try to get the ideas by all criteria
-    Iterable<Idea> fetchedIdeas =
-        ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
+    Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(search_domains, search_topics, search_techs);
     Iterator<Idea> iterator = fetchedIdeas.iterator();
 
     // Check that the ideas list fetched has only 1 idea, that is idea 1
@@ -251,20 +262,19 @@ public class TestIdeaService {
     // Create idea
     Idea createdIdea = null;
     try {
-      createdIdea =
-          ideaService.createIdea(
-              NEW_TITLE,
-              NEW_PURPOSE,
-              NEW_DESCRIPTION,
-              NEW_PAY,
-              NEW_PROGRESS,
-              NEW_PRIVACY,
-              domainIds,
-              techIds,
-              topicIds,
-              imgUrlIds,
-              MockDatabase.newIconUrl.getId(),
-              MockDatabase.user1.getAppUser().getEmail());
+      createdIdea = ideaService.createIdea(
+          NEW_TITLE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION,
+          NEW_PAY,
+          NEW_PROGRESS,
+          NEW_PRIVACY,
+          domainIds,
+          techIds,
+          topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId(),
+          MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
 
     }
@@ -322,20 +332,19 @@ public class TestIdeaService {
     Idea createdIdea = null;
     String message = "";
     try {
-      createdIdea =
-          ideaService.createIdea(
-              "",
-              NEW_PURPOSE,
-              NEW_DESCRIPTION,
-              NEW_PAY,
-              NEW_PROGRESS,
-              NEW_PRIVACY,
-              domainIds,
-              techIds,
-              topicIds,
-              imgUrlIds,
-              MockDatabase.newIconUrl.getId(),
-              MockDatabase.user1.getAppUser().getEmail());
+      createdIdea = ideaService.createIdea(
+          "",
+          NEW_PURPOSE,
+          NEW_DESCRIPTION,
+          NEW_PAY,
+          NEW_PROGRESS,
+          NEW_PRIVACY,
+          domainIds,
+          techIds,
+          topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId(),
+          MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -374,20 +383,19 @@ public class TestIdeaService {
     Idea createdIdea = null;
     String message = "";
     try {
-      createdIdea =
-          ideaService.createIdea(
-              NEW_TITLE,
-              NEW_PURPOSE,
-              NEW_DESCRIPTION,
-              NEW_PAY,
-              NEW_PROGRESS,
-              NEW_PRIVACY,
-              domainIds,
-              techIds,
-              topicIds,
-              imgUrlIds,
-              nonExistingId,
-              MockDatabase.user1.getAppUser().getEmail());
+      createdIdea = ideaService.createIdea(
+          NEW_TITLE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION,
+          NEW_PAY,
+          NEW_PROGRESS,
+          NEW_PRIVACY,
+          domainIds,
+          techIds,
+          topicIds,
+          imgUrlIds,
+          nonExistingId,
+          MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -426,20 +434,19 @@ public class TestIdeaService {
     // Modify all attributes of idea
     Idea updatedIdea = null;
     try {
-      updatedIdea =
-          ideaService.modifyIdea(
-              MockDatabase.modifiableIdea.getId(),
-              NEW_TITLE,
-              NEW_PURPOSE,
-              NEW_DESCRIPTION,
-              NEW_PAY,
-              NEW_PROGRESS,
-              NEW_PRIVACY,
-              domainIds,
-              techIds,
-              topicIds,
-              imgUrlIds,
-              MockDatabase.newIconUrl.getId());
+      updatedIdea = ideaService.modifyIdea(
+          MockDatabase.modifiableIdea.getId(),
+          NEW_TITLE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION,
+          NEW_PAY,
+          NEW_PROGRESS,
+          NEW_PRIVACY,
+          domainIds,
+          techIds,
+          topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       String message = e.getMessage();
     }
@@ -485,20 +492,19 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea =
-          ideaService.modifyIdea(
-              MockDatabase.modifiableIdea.getId(),
-              "",
-              NEW_PURPOSE,
-              NEW_DESCRIPTION,
-              NEW_PAY,
-              NEW_PROGRESS,
-              NEW_PRIVACY,
-              domainIds,
-              techIds,
-              topicIds,
-              imgUrlIds,
-              MockDatabase.newIconUrl.getId());
+      updatedIdea = ideaService.modifyIdea(
+          MockDatabase.modifiableIdea.getId(),
+          "",
+          NEW_PURPOSE,
+          NEW_DESCRIPTION,
+          NEW_PAY,
+          NEW_PROGRESS,
+          NEW_PRIVACY,
+          domainIds,
+          techIds,
+          topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -524,20 +530,19 @@ public class TestIdeaService {
     Idea updatedIdea = null;
     String message = "";
     try {
-      updatedIdea =
-          ideaService.modifyIdea(
-              MockDatabase.modifiableIdea.getId(),
-              NEW_TITLE,
-              NEW_PURPOSE,
-              NEW_DESCRIPTION,
-              NEW_PAY,
-              NEW_PROGRESS,
-              NEW_PRIVACY,
-              domainIds,
-              techIds,
-              topicIds,
-              imgUrlIds,
-              MockDatabase.newIconUrl.getId());
+      updatedIdea = ideaService.modifyIdea(
+          MockDatabase.modifiableIdea.getId(),
+          NEW_TITLE,
+          NEW_PURPOSE,
+          NEW_DESCRIPTION,
+          NEW_PAY,
+          NEW_PROGRESS,
+          NEW_PRIVACY,
+          domainIds,
+          techIds,
+          topicIds,
+          imgUrlIds,
+          MockDatabase.newIconUrl.getId());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -862,7 +867,6 @@ public class TestIdeaService {
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
       modifiableIdea.setInProgress(false);
-      ;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);

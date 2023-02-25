@@ -22,13 +22,13 @@ public class LoginController {
    * encodes the username and password in base64 format
    *
    * @return a JWT token if the user is properly authenticated
+   * @author Shidan Javaheri, Sasha Denouvilliez-Pech
    */
   @PostMapping()
   public String getToken() {
     // get the authentication object from the context
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    // generate a token from the authentication object for the user
-    String token = loginService.generateToken(authentication);
-    return token;
+    // generate a token from the authentication object for the user and return it
+    return loginService.generateToken(authentication);
   }
 }

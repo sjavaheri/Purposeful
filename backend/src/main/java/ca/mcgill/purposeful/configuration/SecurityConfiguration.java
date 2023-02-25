@@ -27,7 +27,7 @@ import java.security.interfaces.RSAPublicKey;
 /** Configuration for all Spring Security Setttings */
 public class SecurityConfiguration {
 
-  /** Configures the filters between ther server layer and the controller */
+  /** Configures the filters between the server layer and the controller */
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf()
@@ -90,25 +90,26 @@ public class SecurityConfiguration {
   }
 
   /**
-   * Takes json objects and converts it to JWT token format - with a signature and base64 encoding
+   * Takes json objects and converts it to JWT token format - with a signature and
+   * base64 encoding
    *
    * @return a NimbusJWT Encoder object
-   * @throws Exception
+   * @throws Exception if the keys are not valid
    */
   @Bean
   JwtEncoder jwtEncoder() throws Exception {
-    JWK jwk =
-        new RSAKey.Builder(rsaKeys().getPublicKey()).privateKey(rsaKeys().getPrivateKey()).build();
+    JWK jwk = new RSAKey.Builder(rsaKeys().getPublicKey()).privateKey(rsaKeys().getPrivateKey()).build();
     JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
   }
 
   /**
-   * Takes in public key, and uses it to decode the JWT. Decoded from base64 to ascii so that it can
+   * Takes in public key, and uses it to decode the JWT. Decoded from base64 to
+   * ascii so that it can
    * be validated
    *
    * @return a Nimbus JWT Decoder object
-   * @throws Exception
+   * @throws Exception if the keys are not valid
    */
   @Bean
   JwtDecoder jwtDecoder() throws Exception {
