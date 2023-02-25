@@ -3,8 +3,8 @@ Feature: Create Idea
 
   Background: 
     Given the database contains the following user account:
-      | firstname | lastname | email               | password           | authorities |
-      | User      | Test     | user.test@gmail.com | UnbreakableCode101 | User        |
+      | firstname | lastname | email               | password           |
+      | User      | Test     | user.test@gmail.com | UnbreakableCode101 |
     And the number of ideas in the database is 0
     And the database contains the following domains:
       | name     |
