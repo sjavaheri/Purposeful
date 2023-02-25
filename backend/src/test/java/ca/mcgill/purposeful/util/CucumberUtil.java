@@ -25,11 +25,11 @@ public class CucumberUtil {
 
   @Autowired private DomainRepository domainRepository;
 
-  @Autowired private AppUserService appUserService;
-
   @Autowired private AppUserRepository appUserRepository;
 
   @Autowired private RegularUserRepository regularUserRepository;
+
+  @Autowired private AppUserService appUserService;
 
   @Autowired private PasswordEncoder passwordEncoder;
 
@@ -117,34 +117,13 @@ public class CucumberUtil {
     for (var row : rows) {
 
       // create an instance of App User from the table values
-      AppUser appUser = new AppUser();
-      appUser.setFirstname(row.get("firstname"));
-      appUser.setLastname(row.get("lastname"));
-      appUser.setEmail(row.get("email"));
-      appUser.setPassword(passwordEncoder.encode(row.get("password")));
-
-      // Set the user to be regular
-      Set<Authority> setOfAuthorities = new HashSet<Authority>();
-      setOfAuthorities.add(Authority.User);
-
-      // Create a regular user class
-      RegularUser regularUser = new RegularUser();
-      regularUser.setAppUser(appUser);
-
-      // Add the regular user to a list of roles
-      List<Role> roles = new ArrayList<Role>();
-      roles.add(regularUser);
-
-      // Make the appuser instance point to the regular user
-      appUser.setRoles(roles);
-      appUser.setAuthorities(setOfAuthorities);
-
-      // Save both in the database
-      appUserRepository.save(appUser);
-      regularUserRepository.save(regularUser);
+      AppUser appUser =
+          appUserService.registerRegularUser(
+              row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
 
       // Add the regular user to the map if it was passed
-      // Note: no need to add the app user to the map since we only will be manipulating the regular
+      // Note: no need to add the app user to the map since we only will be
+      // manipulating the regular
       // user instance later on
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
@@ -331,8 +310,8 @@ public class CucumberUtil {
 
       // user
       AppUser user = appUserRepository.findAppUserById(idMap.get(row.get("user")));
-      Role role = user.getRoles().get(0);
-      idea.setUser((RegularUser) role);
+      RegularUser role = regularUserRepository.findRegularUserByAppUserEmail(user.getEmail());
+      idea.setUser(role);
 
       // domains
       Set<Domain> domains = new HashSet<Domain>();

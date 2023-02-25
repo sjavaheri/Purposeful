@@ -46,6 +46,7 @@ public class Reaction {
   private Idea idea;
 
   @ManyToOne(optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
   private RegularUser regularUser;
 
