@@ -36,14 +36,16 @@ public class TestIdeaService {
 
   // Mocks
   @Mock private IdeaRepository ideaRepository;
-  
+
   @Mock private DomainRepository domainRepository;
-  
+
   @Mock private TopicRepository topicRepository;
-  
+
   @Mock private TechnologyRepository technologyRepository;
-  
+
   @Mock private URLRepository urlRepository;
+
+  @Mock private RegularUserRepository regularUserRepository;
 
   // Inject mocks
   @InjectMocks private IdeaService ideaService;
@@ -66,7 +68,8 @@ public class TestIdeaService {
         .when(technologyRepository.findTechnologyById(anyString()))
         .thenAnswer(MockRepository::findTechnologyById);
     lenient().when(urlRepository.findURLById(anyString())).thenAnswer(MockRepository::findURLById);
-    lenient().when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
+    lenient()
+        .when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
         .thenReturn(MockDatabase.user1);
   }
 
@@ -266,7 +269,7 @@ public class TestIdeaService {
               topicIds,
               imgUrlIds,
               MockDatabase.newIconUrl.getId(),
-              MockDatabase.user1);
+              MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
 
     }
@@ -323,7 +326,7 @@ public class TestIdeaService {
               topicIds,
               imgUrlIds,
               MockDatabase.newIconUrl.getId(),
-              MockDatabase.user1);
+              MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -361,7 +364,7 @@ public class TestIdeaService {
               topicIds,
               imgUrlIds,
               nonExistingId,
-              MockDatabase.user1);
+              MockDatabase.user1.getAppUser().getEmail());
     } catch (Exception e) {
       message = e.getMessage();
     }
@@ -835,7 +838,8 @@ public class TestIdeaService {
       // deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);;
+      modifiableIdea.setInProgress(false);
+      ;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);

@@ -40,8 +40,12 @@ public class IdeaController {
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<IdeaDTO>> filterIdeas(@RequestBody SearchFilterDTO searchFilterDTO) {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(IdeaDTO.convertToDto(ideaService.getIdeasByAllCriteria(searchFilterDTO.getDomains(),
-            searchFilterDTO.getTopics(), searchFilterDTO.getTechnologies())));
+        .body(
+            IdeaDTO.convertToDto(
+                ideaService.getIdeasByAllCriteria(
+                    searchFilterDTO.getDomains(),
+                    searchFilterDTO.getTopics(),
+                    searchFilterDTO.getTechnologies())));
   }
 
   /**
@@ -63,10 +67,20 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
 
-    Idea createdIdea = ideaService.createIdea(ideaDTO.getTitle(), ideaDTO.getPurpose(),
-        ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
-        ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(),
-        ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId(), auth.getName());
+    Idea createdIdea =
+        ideaService.createIdea(
+            ideaDTO.getTitle(),
+            ideaDTO.getPurpose(),
+            ideaDTO.getDescription(),
+            ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(),
+            ideaDTO.getDomainIds(),
+            ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(),
+            ideaDTO.getImgUrlIds(),
+            ideaDTO.getIconUrlId(),
+            auth.getName());
 
     IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
 

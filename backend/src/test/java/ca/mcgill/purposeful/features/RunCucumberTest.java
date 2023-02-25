@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 /**
  * Class that allows all other cucumber classes to be run
+ *
  * @author Shidan Javaheri
  */
 @RunWith(Cucumber.class)
