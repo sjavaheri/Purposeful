@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
@@ -9,18 +12,18 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Step definitions for the ID017_removeIdea.feature file
@@ -90,7 +93,7 @@ public class ID017_removeIdeaStepDefinitions {
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     ResponseEntity<String> response =
-        client.exchange("/login", HttpMethod.POST, request, String.class);
+        client.exchange("/api/login", HttpMethod.POST, request, String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 

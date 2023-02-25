@@ -1,5 +1,9 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.OwnerRepository;
@@ -13,6 +17,7 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -20,12 +25,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Step Definition for the ID005_modifyUser.feature file
@@ -97,7 +96,7 @@ public class ID005_modifyUserStepDefinitions {
     // Login as the owner
     HttpEntity<String> requestEntity =
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+    this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
     assertEquals(200, this.response.getStatusCode().value());
@@ -111,7 +110,7 @@ public class ID005_modifyUserStepDefinitions {
     // Login as the owner
     HttpEntity<String> requestEntity =
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+    this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
     assertEquals(200, this.response.getStatusCode().value());
@@ -125,7 +124,7 @@ public class ID005_modifyUserStepDefinitions {
     // Login as the owner
     HttpEntity<String> requestEntity =
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+    this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
 
     // check that the login was successful
     assertEquals(200, this.response.getStatusCode().value());

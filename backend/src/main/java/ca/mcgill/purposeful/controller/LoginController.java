@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /** API for authenticating users when they log in */
 @RestController
-@RequestMapping({"/login", "/login/"})
+@RequestMapping({"/api/login", "/api/login/"})
 public class LoginController {
 
   @Autowired LoginService loginService;

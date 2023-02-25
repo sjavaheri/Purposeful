@@ -1,8 +1,21 @@
 package ca.mcgill.purposeful.features;
 
-import ca.mcgill.purposeful.dao.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.DomainRepository;
+import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.dto.IdeaRequestDTO;
-import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
@@ -10,19 +23,23 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.ParseException;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.text.ParseException;
-import java.time.Instant;
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Step Definitions for Modifying an Idea
@@ -95,7 +112,7 @@ public class ID016_modifyIdeaStepDefinitions {
     // In this case we are testing whether the browse ideas response is correct so we only
     // need the token
     ResponseEntity<?> response =
-        client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+        client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
     assertEquals(HttpStatus.OK, response.getStatusCode()); // Making sure the login was successful
     jwtToken = response.getBody().toString(); // Extract the token for future requests
     assertNotNull(jwtToken); // Ensure the token is not null

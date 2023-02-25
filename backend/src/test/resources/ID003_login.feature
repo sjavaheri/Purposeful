@@ -15,10 +15,10 @@ Feature: Login User
     Then I should receive a valid JWT token and a HTTP status code "<HTTP status>"
 
     Examples:
-      | email                    | password             | authorities         | HTTP status |
-      | owner.steve@gmail.com    | OwnerIsAwesome01     | Authority.Owner     | 200         |
-      | moderator.john@gmail.com | moderatorIsAwesome02 | Authority.Moderator | 200         |
-      | user.jack@gmail.com      | userIsAwesome03      | Authority.User      | 200         |
+      | email                    | password             | HTTP status |
+      | owner.steve@gmail.com    | OwnerIsAwesome01     | 200         |
+      | moderator.john@gmail.com | moderatorIsAwesome02 | 200         |
+      | user.jack@gmail.com      | userIsAwesome03      | 200         |
 
     # Error flow
 
