@@ -1,17 +1,15 @@
 package ca.mcgill.purposeful.service;
 
 import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.ModeratorRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
-import ca.mcgill.purposeful.model.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * The services of the Moderator class
@@ -23,6 +21,8 @@ public class ModeratorService {
 
   // CRUD Repositories
   @Autowired private AppUserRepository appUserRepository;
+
+  @Autowired private ModeratorRepository moderatorRepository;
 
   @Autowired PasswordEncoder passwordEncoder;
 
@@ -55,28 +55,23 @@ public class ModeratorService {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);
     }
 
-    // Check if the oderator we are trying to modify does indeed exist
+    // Check if the moderator we are trying to modify does indeed exist
     AppUser moderator = appUserRepository.findAppUserByEmail(email);
     if (moderator == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
     }
 
-    List<Role> roles = moderator.getRoles();
+    Moderator role = moderatorRepository.findModeratorByAppUserEmail(email);
 
-    boolean modified = false;
-
-    for (int i = 0; i < roles.size(); i++) {
-      if (roles.get(i) instanceof Moderator) {
-        moderator.setFirstname(firstname);
-        moderator.setLastname(lastname);
-        moderator.setEmail(email);
-        appUserRepository.save(moderator);
-        modified = true;
-      }
-    }
-    if (!modified) {
+    if (role == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not a moderator!");
     }
+
+    moderator.setFirstname(firstname);
+    moderator.setLastname(lastname);
+    moderator.setEmail(email);
+    appUserRepository.save(moderator);
+
     return moderator;
   }
 
@@ -116,20 +111,15 @@ public class ModeratorService {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
     }
 
-    List<Role> roles = moderator.getRoles();
+    Moderator role = moderatorRepository.findModeratorByAppUserEmail(email);
 
-    boolean modified = false;
-
-    for (int i = 0; i < roles.size(); i++) {
-      if (roles.get(i) instanceof Moderator) {
-        moderator.setPassword(passwordEncoder.encode(password));
-        appUserRepository.save(moderator);
-        modified = true;
-      }
-    }
-    if (!modified) {
+    if (role == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not a moderator!");
     }
+
+    moderator.setPassword(passwordEncoder.encode(password));
+    appUserRepository.save(moderator);
+
     return moderator;
   }
 }

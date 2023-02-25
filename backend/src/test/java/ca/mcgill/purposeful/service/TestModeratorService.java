@@ -17,9 +17,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,6 +53,10 @@ public class TestModeratorService {
         .thenAnswer(MockRepository::findUserByEmail);
 
     lenient()
+        .when(moderatorRepository.findModeratorByAppUserEmail(any()))
+        .thenAnswer(MockRepository::findModeratorByEmail);
+
+    lenient()
         .when(passwordEncoder.encode(anyString()))
         .thenAnswer(
             (InvocationOnMock invocation) -> {
@@ -85,7 +87,6 @@ public class TestModeratorService {
     assertEquals("Wassim", modified.getFirstname());
     assertEquals(MockDatabase.appUser1.getPassword(), modified.getPassword());
     assertEquals(MockDatabase.authorities1, modified.getAuthorities());
-    assertEquals(MockDatabase.roles1, modified.getRoles());
   }
 
   /**
@@ -236,7 +237,6 @@ public class TestModeratorService {
     assertEquals(MockDatabase.appUser1.getFirstname(), modified.getFirstname());
     assertEquals(MockDatabase.VALID_PASSWORD_ENCODED, modified.getPassword());
     assertEquals(MockDatabase.authorities1, modified.getAuthorities());
-    assertEquals(MockDatabase.roles1, modified.getRoles());
   }
 
   /**
@@ -368,6 +368,14 @@ public class TestModeratorService {
       return null;
     }
 
+    static Role findModeratorByEmail(InvocationOnMock invocation) {
+      String email = (String) invocation.getArgument(0);
+      if (email.equals(MockDatabase.appUser1.getEmail())) {
+        return MockDatabase.role1;
+      }
+      return null;
+    }
+
     static Moderator saveModerator(InvocationOnMock invocation) {
       return (Moderator) invocation.getArgument(0);
     }
@@ -383,11 +391,8 @@ public class TestModeratorService {
     static AppUser appUser1 = new AppUser();
     static AppUser appUser2 = new AppUser();
 
-    static Role role1 = new Moderator();
-    static Role role2 = new RegularUser();
-
-    static List<Role> roles1 = new ArrayList<Role>();
-    static List<Role> roles2 = new ArrayList<Role>();
+    static Moderator role1 = new Moderator();
+    static RegularUser role2 = new RegularUser();
 
     static Authority authority1 = Authority.Moderator;
     static Authority authority2 = Authority.User;
@@ -405,18 +410,6 @@ public class TestModeratorService {
     static {
       // Set the roles to all appUsers
 
-      // Initialize a first appUser that is a moderator
-      roles1.add(role1);
-      authorities1.add(authority1);
-      appUser1.setRoles(roles1);
-      appUser1.setAuthorities(authorities1);
-
-      // Initlaize appUser that is just a regular user
-      roles2.add(role2);
-      authorities2.add(authority2);
-      appUser2.setRoles(roles2);
-      appUser2.setAuthorities(authorities2);
-
       // appUser1 Information
       appUser1.setEmail("example@gmail.com");
       appUser1.setFirstname("John");
@@ -428,6 +421,17 @@ public class TestModeratorService {
       appUser2.setFirstname("Jane");
       appUser2.setLastname("Doe");
       appUser2.setPassword("password2");
+
+      // Initialize a first appUser that is a moderator
+      authorities1.add(authority1);
+      appUser1.setAuthorities(authorities1);
+      role1.setAppUser(appUser1);
+
+      // Initlaize appUser that is just a regular user
+      authorities2.add(authority2);
+      appUser2.setAuthorities(authorities2);
+      role2.setVerifiedCompany(false);
+      role2.setAppUser(appUser2);
     }
   }
 }

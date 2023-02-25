@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface ModeratorRepository extends CrudRepository<Moderator, Integer> {
 
   Moderator findModeratorById(String id);
+
+  Moderator findModeratorByAppUserEmail(String email);
 }
