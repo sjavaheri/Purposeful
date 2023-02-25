@@ -1,10 +1,12 @@
 package ca.mcgill.purposeful.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-
+import ca.mcgill.purposeful.configuration.Authority;
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.ModeratorRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Moderator;
+import ca.mcgill.purposeful.model.RegularUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,34 +17,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.ModeratorRepository;
-import ca.mcgill.purposeful.dao.RegularUserRepository;
-import ca.mcgill.purposeful.model.AppUser;
-import ca.mcgill.purposeful.model.Moderator;
-import ca.mcgill.purposeful.model.RegularUser;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 
-/**
- * This class tests the AppUser service
- */
+/** This class tests the AppUser service */
 @ExtendWith(MockitoExtension.class)
 public class TestAppUserService {
 
-  @Mock
-  private AppUserRepository appUserRepository;
+  @Mock private AppUserRepository appUserRepository;
 
-  @Mock
-  private RegularUserRepository regularUserRepository;
+  @Mock private RegularUserRepository regularUserRepository;
 
-  @Mock
-  private ModeratorRepository moderatorRepository;
+  @Mock private ModeratorRepository moderatorRepository;
 
-  @Mock
-  private PasswordEncoder passwordEncoder;
+  @Mock private PasswordEncoder passwordEncoder;
 
-  @InjectMocks
-  private AppUserService appUserService;
+  @InjectMocks private AppUserService appUserService;
 
   private static final String VALID_REGULARUSER_EMAIL_ONE = "regular.user.one@email.com";
   private static final String VALID_REGULARUSER_EMAIL_TWO = "regular.user.two@email.com";
@@ -74,42 +66,49 @@ public class TestAppUserService {
    */
   @BeforeEach
   public void setMockOutput() {
-    Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-      return invocation.getArgument(0);
-    };
+    Answer<?> returnParameterAsAnswer =
+        (InvocationOnMock invocation) -> {
+          return invocation.getArgument(0);
+        };
 
-    lenient().when(appUserRepository.findAppUserByEmail(anyString()))
-        .thenAnswer((InvocationOnMock invocation) -> {
-          if (invocation.getArgument(0).equals(VALID_REGULARUSER_EMAIL_TWO)) {
-            AppUser appUser = new AppUser();
-            appUser.setEmail(VALID_REGULARUSER_EMAIL_TWO);
-            appUser.setFirstname(VALID_REGULARUSER_FIRSTNAME_TWO);
-            appUser.setLastname(VALID_REGULARUSER_LASTNAME_TWO);
-            appUser.setPassword(VALID_PASSWORD);
-            appUser.getAuthorities().add(Authority.User);
-            return appUser;
-          } else if (invocation.getArgument(0).equals(VALID_MODERATOR_EMAIL_TWO)) {
-            AppUser appUser = new AppUser();
-            appUser.setEmail(VALID_MODERATOR_EMAIL_TWO);
-            appUser.setFirstname(VALID_MODERATOR_FIRSTNAME_TWO);
-            appUser.setLastname(VALID_MODERATOR_LASTNAME_TWO);
-            appUser.setPassword(VALID_PASSWORD);
-            appUser.getAuthorities().add(Authority.Moderator);
-            return appUser;
-          } else {
-            return null;
-          }
-        });
+    lenient()
+        .when(appUserRepository.findAppUserByEmail(anyString()))
+        .thenAnswer(
+            (InvocationOnMock invocation) -> {
+              if (invocation.getArgument(0).equals(VALID_REGULARUSER_EMAIL_TWO)) {
+                AppUser appUser = new AppUser();
+                appUser.setEmail(VALID_REGULARUSER_EMAIL_TWO);
+                appUser.setFirstname(VALID_REGULARUSER_FIRSTNAME_TWO);
+                appUser.setLastname(VALID_REGULARUSER_LASTNAME_TWO);
+                appUser.setPassword(VALID_PASSWORD);
+                appUser.getAuthorities().add(Authority.User);
+                return appUser;
+              } else if (invocation.getArgument(0).equals(VALID_MODERATOR_EMAIL_TWO)) {
+                AppUser appUser = new AppUser();
+                appUser.setEmail(VALID_MODERATOR_EMAIL_TWO);
+                appUser.setFirstname(VALID_MODERATOR_FIRSTNAME_TWO);
+                appUser.setLastname(VALID_MODERATOR_LASTNAME_TWO);
+                appUser.setPassword(VALID_PASSWORD);
+                appUser.getAuthorities().add(Authority.Moderator);
+                return appUser;
+              } else {
+                return null;
+              }
+            });
 
-    lenient().when(passwordEncoder.encode(anyString()))
-        .thenAnswer((InvocationOnMock invocation) -> {
-          return invocation.getArgument(0) + "Encoded";
-        });
+    lenient()
+        .when(passwordEncoder.encode(anyString()))
+        .thenAnswer(
+            (InvocationOnMock invocation) -> {
+              return invocation.getArgument(0) + "Encoded";
+            });
 
     lenient().when(appUserRepository.save(any(AppUser.class))).thenAnswer(returnParameterAsAnswer);
-    lenient().when(regularUserRepository.save(any(RegularUser.class)))
+    lenient()
+        .when(regularUserRepository.save(any(RegularUser.class)))
         .thenAnswer(returnParameterAsAnswer);
-    lenient().when(moderatorRepository.save(any(Moderator.class)))
+    lenient()
+        .when(moderatorRepository.save(any(Moderator.class)))
         .thenAnswer(returnParameterAsAnswer);
   }
 
@@ -123,8 +122,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          VALID_PASSWORD, VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE,
+              VALID_PASSWORD,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -147,8 +150,9 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser("",
-          VALID_PASSWORD, VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              "", VALID_PASSWORD, VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid email. Email cannot be left empty", e.getMessage());
@@ -165,12 +169,13 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, VALID_PASSWORD, "",
-          VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE, VALID_PASSWORD, "", VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid first name. First name cannot be left empty",
-          e.getMessage());
+      assertEquals(
+          "Please enter a valid first name. First name cannot be left empty", e.getMessage());
     }
   }
 
@@ -184,12 +189,13 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, VALID_PASSWORD,
-          VALID_REGULARUSER_LASTNAME_ONE, "");
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE, VALID_PASSWORD, VALID_REGULARUSER_LASTNAME_ONE, "");
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid last name. Last name cannot be left empty",
-          e.getMessage());
+      assertEquals(
+          "Please enter a valid last name. Last name cannot be left empty", e.getMessage());
     }
   }
 
@@ -203,8 +209,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE, "",
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE,
+              "",
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid password. Password cannot be left empty", e.getMessage());
@@ -221,18 +231,21 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(INVALID_EMAIL, VALID_PASSWORD,
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              INVALID_EMAIL,
+              VALID_PASSWORD,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid email. The email address you entered is not valid",
-          e.getMessage());
+      assertEquals(
+          "Please enter a valid email. The email address you entered is not valid", e.getMessage());
     }
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password too
-   * short
+   * Test the method that creates a new regular user with an invalid password too short
    *
    * @author Siger Ma
    */
@@ -241,9 +254,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          INVALID_PASSWORD_ONE,
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE,
+              INVALID_PASSWORD_ONE,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -253,8 +269,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password no
-   * number
+   * Test the method that creates a new regular user with an invalid password no number
    *
    * @author Siger Ma
    */
@@ -263,9 +278,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          INVALID_PASSWORD_TWO,
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE,
+              INVALID_PASSWORD_TWO,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -275,9 +293,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password no
-   * uppercase
-   * character
+   * Test the method that creates a new regular user with an invalid password no uppercase character
    *
    * @author Siger Ma
    */
@@ -286,9 +302,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          INVALID_PASSWORD_THREE,
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE,
+              INVALID_PASSWORD_THREE,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -298,9 +317,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid password no
-   * lowercase
-   * character
+   * Test the method that creates a new regular user with an invalid password no lowercase character
    *
    * @author Siger Ma
    */
@@ -309,9 +326,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_ONE,
-          INVALID_PASSWORD_FOUR,
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_ONE,
+              INVALID_PASSWORD_FOUR,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -321,8 +341,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new regular user with an invalid email that
-   * already exists
+   * Test the method that creates a new regular user with an invalid email that already exists
    *
    * @author Siger Ma
    */
@@ -331,8 +350,12 @@ public class TestAppUserService {
     // Create the regular user
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerRegularUser(VALID_REGULARUSER_EMAIL_TWO, VALID_PASSWORD,
-          VALID_REGULARUSER_FIRSTNAME_ONE, VALID_REGULARUSER_LASTNAME_ONE);
+      appUser =
+          appUserService.registerRegularUser(
+              VALID_REGULARUSER_EMAIL_TWO,
+              VALID_PASSWORD,
+              VALID_REGULARUSER_FIRSTNAME_ONE,
+              VALID_REGULARUSER_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("An account with this email address already exists", e.getMessage());
@@ -349,8 +372,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE,
-          VALID_PASSWORD, VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE,
+              VALID_PASSWORD,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       fail(e.getMessage());
     }
@@ -373,8 +400,9 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator("", VALID_PASSWORD, VALID_MODERATOR_FIRSTNAME_ONE,
-          VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              "", VALID_PASSWORD, VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid email. Email cannot be left empty", e.getMessage());
@@ -391,12 +419,13 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE, VALID_PASSWORD, "",
-          VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE, VALID_PASSWORD, "", VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid first name. First name cannot be left empty",
-          e.getMessage());
+      assertEquals(
+          "Please enter a valid first name. First name cannot be left empty", e.getMessage());
     }
   }
 
@@ -410,12 +439,13 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE, VALID_PASSWORD,
-          VALID_MODERATOR_LASTNAME_ONE, "");
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE, VALID_PASSWORD, VALID_MODERATOR_LASTNAME_ONE, "");
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid last name. Last name cannot be left empty",
-          e.getMessage());
+      assertEquals(
+          "Please enter a valid last name. Last name cannot be left empty", e.getMessage());
     }
   }
 
@@ -429,8 +459,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE, "",
-          VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE,
+              "",
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Please enter a valid password. Password cannot be left empty", e.getMessage());
@@ -447,18 +481,21 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(INVALID_EMAIL, VALID_PASSWORD,
-          VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              INVALID_EMAIL,
+              VALID_PASSWORD,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
-      assertEquals("Please enter a valid email. The email address you entered is not valid",
-          e.getMessage());
+      assertEquals(
+          "Please enter a valid email. The email address you entered is not valid", e.getMessage());
     }
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password too
-   * short
+   * Test the method that creates a new moderator with an invalid password too short
    *
    * @author Siger Ma
    */
@@ -467,8 +504,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE,
-          INVALID_PASSWORD_ONE, VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE,
+              INVALID_PASSWORD_ONE,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -478,8 +519,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password no
-   * number
+   * Test the method that creates a new moderator with an invalid password no number
    *
    * @author Siger Ma
    */
@@ -488,8 +528,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE, INVALID_PASSWORD_TWO,
-          VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE,
+              INVALID_PASSWORD_TWO,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -499,8 +543,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password no
-   * uppercase character
+   * Test the method that creates a new moderator with an invalid password no uppercase character
    *
    * @author Siger Ma
    */
@@ -509,8 +552,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE, INVALID_PASSWORD_THREE,
-          VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE,
+              INVALID_PASSWORD_THREE,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -520,8 +567,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid password no
-   * lowercase character
+   * Test the method that creates a new moderator with an invalid password no lowercase character
    *
    * @author Siger Ma
    */
@@ -530,8 +576,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_ONE, INVALID_PASSWORD_FOUR,
-          VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_ONE,
+              INVALID_PASSWORD_FOUR,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals(
@@ -541,8 +591,7 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that creates a new moderator with an invalid email that
-   * already exists
+   * Test the method that creates a new moderator with an invalid email that already exists
    *
    * @author Siger Ma
    */
@@ -551,8 +600,12 @@ public class TestAppUserService {
     // Create the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.registerModerator(VALID_MODERATOR_EMAIL_TWO, VALID_PASSWORD,
-          VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.registerModerator(
+              VALID_MODERATOR_EMAIL_TWO,
+              VALID_PASSWORD,
+              VALID_MODERATOR_FIRSTNAME_ONE,
+              VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("An account with this email address already exists", e.getMessage());
@@ -561,13 +614,16 @@ public class TestAppUserService {
 
   /**
    * Test the method to modify the AppUser last and first names
-   * 
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
   public void testModifyUserNames_success() {
-    AppUser appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_TWO,
-        VALID_MODERATOR_LASTNAME_TWO);
+    AppUser appUser =
+        appUserService.modifyUserNames(
+            VALID_REGULARUSER_EMAIL_TWO,
+            VALID_MODERATOR_FIRSTNAME_TWO,
+            VALID_MODERATOR_LASTNAME_TWO);
     assertEquals(VALID_MODERATOR_FIRSTNAME_TWO, appUser.getFirstname());
     assertEquals(VALID_MODERATOR_LASTNAME_TWO, appUser.getLastname());
   }
@@ -582,8 +638,9 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames("", VALID_MODERATOR_FIRSTNAME_ONE,
-          VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.modifyUserNames(
+              "", VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Email cannot be left empty! ", e.getMessage());
@@ -600,8 +657,9 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames(null, VALID_MODERATOR_FIRSTNAME_ONE,
-          VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.modifyUserNames(
+              null, VALID_MODERATOR_FIRSTNAME_ONE, VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Email cannot be left empty! ", e.getMessage());
@@ -618,8 +676,9 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, "",
-          VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.modifyUserNames(
+              VALID_REGULARUSER_EMAIL_TWO, "", VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("First name cannot be left empty! ", e.getMessage());
@@ -636,8 +695,9 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, "",
-          VALID_MODERATOR_LASTNAME_ONE);
+      appUser =
+          appUserService.modifyUserNames(
+              VALID_REGULARUSER_EMAIL_TWO, "", VALID_MODERATOR_LASTNAME_ONE);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("First name cannot be left empty! ", e.getMessage());
@@ -654,8 +714,9 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_ONE,
-          "");
+      appUser =
+          appUserService.modifyUserNames(
+              VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_ONE, "");
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Last name cannot be left empty! ", e.getMessage());
@@ -672,8 +733,9 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_ONE,
-          null);
+      appUser =
+          appUserService.modifyUserNames(
+              VALID_REGULARUSER_EMAIL_TWO, VALID_MODERATOR_FIRSTNAME_ONE, null);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("Last name cannot be left empty! ", e.getMessage());
@@ -681,9 +743,9 @@ public class TestAppUserService {
   }
 
   /**
-   * Test the method that modifies a new moderator with an invalid email, not
-   * existing int he database
-   * 
+   * Test the method that modifies a new moderator with an invalid email, not existing int he
+   * database
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -691,8 +753,11 @@ public class TestAppUserService {
     // Modify the moderator
     AppUser appUser = null;
     try {
-      appUser = appUserService.modifyUserNames(VALID_REGULARUSER_EMAIL_ONE, VALID_MODERATOR_FIRSTNAME_TWO,
-          VALID_MODERATOR_LASTNAME_TWO);
+      appUser =
+          appUserService.modifyUserNames(
+              VALID_REGULARUSER_EMAIL_ONE,
+              VALID_MODERATOR_FIRSTNAME_TWO,
+              VALID_MODERATOR_LASTNAME_TWO);
     } catch (Exception e) {
       assertNull(appUser);
       assertEquals("This account does not exist.", e.getMessage());
@@ -716,9 +781,9 @@ public class TestAppUserService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -735,9 +800,9 @@ public class TestAppUserService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -754,9 +819,9 @@ public class TestAppUserService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -773,9 +838,9 @@ public class TestAppUserService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password that is incorrect
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password that is
+   * incorrect
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -792,9 +857,9 @@ public class TestAppUserService {
   }
 
   /**
-   * Method to check that an error is thrown when we try to modify a moderator's
-   * password but the moderator does not exist
-   * 
+   * Method to check that an error is thrown when we try to modify a moderator's password but the
+   * moderator does not exist
+   *
    * @author Enzo Benoit-Jeannin
    */
   @Test
@@ -807,5 +872,4 @@ public class TestAppUserService {
     }
     fail();
   }
-
 }

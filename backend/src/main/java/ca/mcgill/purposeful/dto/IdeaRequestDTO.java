@@ -1,11 +1,8 @@
 package ca.mcgill.purposeful.dto;
 
-import ca.mcgill.purposeful.model.Domain;
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.model.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +26,7 @@ public class IdeaRequestDTO {
   private List<String> imgUrlIds;
   private String iconUrlId;
 
-  public IdeaRequestDTO() {
-  }
+  public IdeaRequestDTO() {}
 
   public IdeaRequestDTO(Idea idea) {
     this.id = idea.getId();
@@ -60,7 +56,6 @@ public class IdeaRequestDTO {
     }
 
     this.iconUrlId = idea.getIconUrl().getId();
-
   }
 
   public IdeaRequestDTO(

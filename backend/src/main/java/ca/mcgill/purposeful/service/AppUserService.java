@@ -10,8 +10,6 @@ import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.SecurityUser;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,31 +18,28 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * The AppUserService class, the business logic for managing AppUsers
- */
+import java.util.ArrayList;
+import java.util.List;
+
+/** The AppUserService class, the business logic for managing AppUsers */
 @Service
 public class AppUserService implements UserDetailsService {
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
-  @Autowired
-  RegularUserRepository regularUserRepository;
+  @Autowired RegularUserRepository regularUserRepository;
 
-  @Autowired
-  ModeratorRepository moderatorRepository;
+  @Autowired ModeratorRepository moderatorRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
   /**
    * Register a new regular user
    *
-   * @param email     - email of the user
-   * @param password  - password of the user
+   * @param email - email of the user
+   * @param password - password of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return AppUser - the newly created user
    * @author Siger Ma
    */
@@ -115,10 +110,10 @@ public class AppUserService implements UserDetailsService {
   /**
    * Register a new moderator user
    *
-   * @param email     - email of the user
-   * @param password  - password of the user
+   * @param email - email of the user
+   * @param password - password of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return AppUser - the newly created user
    * @author Siger Ma
    */
@@ -199,9 +194,9 @@ public class AppUserService implements UserDetailsService {
   /**
    * Modify the first name and last name of a user
    *
-   * @param email     - email of the user
+   * @param email - email of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return AppUser - the modified user
    * @auhtor Enzo Benoit-Jeannin
    */
@@ -240,7 +235,7 @@ public class AppUserService implements UserDetailsService {
    * least 8 characters long and contain at least one number, one lowercase character and one
    * uppercase character
    *
-   * @param email    The email of the user account to modify its password
+   * @param email The email of the user account to modify its password
    * @param password The new password of the user
    * @return The modified user
    * @author Enzo Benoit-Jeannin
@@ -258,7 +253,8 @@ public class AppUserService implements UserDetailsService {
         || !password.matches(".*[0-9].*")
         || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
+      error +=
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
     }
     if (error.length() > 0) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);
@@ -290,5 +286,4 @@ public class AppUserService implements UserDetailsService {
     }
     return resultList;
   }
-
 }

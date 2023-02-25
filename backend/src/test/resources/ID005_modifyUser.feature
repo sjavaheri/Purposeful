@@ -3,11 +3,11 @@ Feature: Modify Moderator
 
   Background:
     Given the database contains the following accounts:
-      | firstname | lastname       | email                    | password              | authorities |
-      | Enzo      | Benoit-Jeannin | enzo.benoit@gmail.com    | EnzoIsAwesome01       | User        |
-      | Wassim    | Jabbour        | wassim.jabbour@gmail.com | WassimIsAwesome01     | User        |
-      | Owner     | Steve          | owner.steve@gmail.com    | OwnerIsAwesome01      | Owner       |
-      | Moderator | Bob            | moderator.bob@gmail.com  | ModeratorIsAwesome01  | Moderator   |
+      | firstname | lastname       | email                    | password             | authorities |
+      | Enzo      | Benoit-Jeannin | enzo.benoit@gmail.com    | EnzoIsAwesome01      | User        |
+      | Wassim    | Jabbour        | wassim.jabbour@gmail.com | WassimIsAwesome01    | User        |
+      | Owner     | Steve          | owner.steve@gmail.com    | OwnerIsAwesome01     | Owner       |
+      | Moderator | Bob            | moderator.bob@gmail.com  | ModeratorIsAwesome01 | Moderator   |
 
   # Normal Flow
 
@@ -42,7 +42,7 @@ Feature: Modify Moderator
     Examples:
       | new_lastname   | new_firstname |
       | Benoit-Jeannin | Enzo          |
-      | Benoit          | Enzo-Jeannin  |
+      | Benoit         | Enzo-Jeannin  |
 
   Scenario Outline: Successfully update a user password (own account)
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
@@ -87,8 +87,8 @@ Feature: Modify Moderator
     Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
 
     Examples:
-      | email                    | new_lastname   | new_firstname | httpstatus |
-      | enzo.benoit@gmail.com    | Benoit         | NewEnzo       | 401        |
+      | email                 | new_lastname | new_firstname | httpstatus |
+      | enzo.benoit@gmail.com | Benoit       | NewEnzo       | 401        |
 
   Scenario Outline: Unsuccessfully update a user password because you are not logged in
     Given The user is not logged in
@@ -96,8 +96,8 @@ Feature: Modify Moderator
     Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
 
     Examples:
-      | email                    | new_password       | httpstatus |
-      | enzo.benoit@gmail.com    | NewEnzoIsAwesome01 | 401        |
+      | email                 | new_password       | httpstatus |
+      | enzo.benoit@gmail.com | NewEnzoIsAwesome01 | 401        |
 
   Scenario Outline: Unsuccessfully update a user account because you are not logged in with the correct account
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
@@ -105,8 +105,8 @@ Feature: Modify Moderator
     Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
 
     Examples:
-      | new_lastname   | new_firstname | httpstatus |
-      | Benoit         | NewEnzo       | 403        |
+      | new_lastname | new_firstname | httpstatus |
+      | Benoit       | NewEnzo       | 403        |
 
   Scenario Outline: Unsuccessfully update a user password because you are not logged in with the correct account
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
@@ -114,8 +114,8 @@ Feature: Modify Moderator
     Then the user should be denied permission to the requested resource with an HTTP status code of "<httpstatus>"
 
     Examples:
-      | new_password             | httpstatus |
-      | NewEnzoIsAwesome01       | 403        |
+      | new_password       | httpstatus |
+      | NewEnzoIsAwesome01 | 403        |
 
   Scenario Outline: Unsuccessfully update a user account because of wrong password
     Given that the user is logged as user with email "enzo.benoit@gmail.com" and password "EnzoIsAwesome01"
@@ -124,12 +124,12 @@ Feature: Modify Moderator
     Then the number of user accounts in the database shall be "4"
 
     Examples:
-      | newPassword    | error                                                                                                                              | httpstatus |
+      | newPassword    | error                                                                                                                             | httpstatus |
       | enzo           | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
-      | enzo           | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
-      | Enzo1          | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
-      | thisisenzo     | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
-      | 111111111      | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
-      | thispassword1  | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
-      | FFFFFFFFFFFFF8 | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
-      |                | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400       |
+      | enzo           | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
+      | Enzo1          | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
+      | thisisenzo     | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
+      | 111111111      | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
+      | thispassword1  | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
+      | FFFFFFFFFFFFF8 | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |
+      |                | Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! | 400        |

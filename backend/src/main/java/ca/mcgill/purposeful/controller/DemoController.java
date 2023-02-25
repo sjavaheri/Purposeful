@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * API for demonstrating how permissions work for access to endpoints
- */
-
+/** API for demonstrating how permissions work for access to endpoints */
 @RestController
 @RequestMapping({"/demo", "/demo/"})
 public class DemoController {
@@ -38,6 +35,5 @@ public class DemoController {
     // you add @PreAuthorize to decide if a user has a right to connect to a method
     // ( returns 403 forbidden )
     throw new GlobalException(HttpStatus.I_AM_A_TEAPOT, "You are a teapot");
-
   }
 }

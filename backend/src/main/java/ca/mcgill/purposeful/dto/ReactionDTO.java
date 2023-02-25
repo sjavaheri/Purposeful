@@ -3,6 +3,7 @@ package ca.mcgill.purposeful.dto;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ReactionDTO {

@@ -6,11 +6,12 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.Role;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * The services of the Moderator class
@@ -21,21 +22,19 @@ import org.springframework.stereotype.Service;
 public class ModeratorService {
 
   // CRUD Repositories
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
   /**
    * This service method modifies an exisiting moderator based on the given inputs
-   * <p>
-   * Note we do not modify the role of that app user, because we consider it to stay a moderator. We
-   * can use the modifyUser in the appUser service to change its role
    *
-   * @param email       new email of the moderator (must be unique)
-   * @param lastname    new last name of the moderator
-   * @param firstname   new first name of the moderator
+   * <p>Note we do not modify the role of that app user, because we consider it to stay a moderator.
+   * We can use the modifyUser in the appUser service to change its role
+   *
+   * @param email new email of the moderator (must be unique)
+   * @param lastname new last name of the moderator
+   * @param firstname new first name of the moderator
    * @param authorities new authorities of the moderator
    * @return the modified moderator
    */
@@ -54,15 +53,13 @@ public class ModeratorService {
       error += "Last name cannot be left empty! ";
     }
     if (error.length() > 0) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          error);
+      throw new GlobalException(HttpStatus.BAD_REQUEST, error);
     }
 
     // Check if the oderator we are trying to modify does indeed exist
     AppUser moderator = appUserRepository.findAppUserByEmail(email);
     if (moderator == null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "This account does not exist.");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
     }
 
     List<Role> roles = moderator.getRoles();
@@ -79,8 +76,7 @@ public class ModeratorService {
       }
     }
     if (!modified) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "User is not a moderator!");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not a moderator!");
     }
     return moderator;
   }
@@ -90,7 +86,7 @@ public class ModeratorService {
    * be at least 8 characters long and contain at least one number, one lowercase character and one
    * uppercase character
    *
-   * @param email    The email of the moderator account to modify its password
+   * @param email The email of the moderator account to modify its password
    * @param password The new password of the moderator
    * @return The modified moderator
    * @author Enzo Benoit-Jeannin
@@ -104,9 +100,12 @@ public class ModeratorService {
     }
     // Check that string is at least 8 characters long and contain at least one
     // number, one lowercase character and one uppercase character
-    if (password.length() < 8 || !password.matches(".*[0-9].*") || !password.matches(".*[A-Z].*")
+    if (password.length() < 8
+        || !password.matches(".*[0-9].*")
+        || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
+      error +=
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
     }
     if (error.length() > 0) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);
@@ -115,8 +114,7 @@ public class ModeratorService {
     // Check if the moderator we are trying to modify does indeed exist
     AppUser moderator = appUserRepository.findAppUserByEmail(email);
     if (moderator == null) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "This account does not exist.");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
     }
 
     List<Role> roles = moderator.getRoles();
@@ -131,8 +129,7 @@ public class ModeratorService {
       }
     }
     if (!modified) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST,
-          "User is not a moderator!");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not a moderator!");
     }
     return moderator;
   }

@@ -9,9 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * Main Application
- */
+/** Main Application */
 @SpringBootApplication
 public class PurposefulApplication {
 
@@ -23,13 +21,12 @@ public class PurposefulApplication {
    * Command Line Runner to initialize database if needed
    *
    * @param appUserRepository to create the user
-   * @param passwordEncoder   to encode the user's password
+   * @param passwordEncoder to encode the user's password
    * @return
    */
-
   @Bean
-  public CommandLineRunner commandLineRunner(AppUserRepository appUserRepository,
-      PasswordEncoder passwordEncoder) {
+  public CommandLineRunner commandLineRunner(
+      AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
     return args -> {
 
       // create a owner user
@@ -64,7 +61,6 @@ public class PurposefulApplication {
       appUser2.setPassword(encoded2);
       appUser2.getAuthorities().add(Authority.User);
       appUserRepository.save(appUser2);
-
     };
   }
 }

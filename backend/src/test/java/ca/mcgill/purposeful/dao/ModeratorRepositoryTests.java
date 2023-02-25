@@ -1,20 +1,20 @@
 package ca.mcgill.purposeful.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.util.DatabaseUtil;
-
-import java.util.HashSet;
-import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Moderator Repository testing class which initiates an moderator and an AppUser repository,
@@ -24,24 +24,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ModeratorRepositoryTests {
 
   // the repository we are testing
-  @Autowired
-  private ModeratorRepository moderatorRepository;
+  @Autowired private ModeratorRepository moderatorRepository;
 
   // also create an appUser
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();

@@ -1,9 +1,11 @@
 package ca.mcgill.purposeful.configuration;
 
-import java.security.KeyPairGenerator;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,37 +18,33 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
-/**
- * Configuration for all Spring Security Setttings
- */
+/** Configuration for all Spring Security Setttings */
 public class SecurityConfiguration {
 
-  /**
-   * Configures the filters between ther server layer and the controller
-   */
+  /** Configures the filters between ther server layer and the controller */
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-        .csrf()
+    return http.csrf()
         .disable() // csrf protection is an extra security layer - prevent cross site request
         // forgery. Adds extra complexity. For post requests, you need extra actions
-        .oauth2ResourceServer().jwt().jwtAuthenticationConverter(new AuthenticationConverter())
+        .oauth2ResourceServer()
+        .jwt()
+        .jwtAuthenticationConverter(new AuthenticationConverter())
         .and()
         .and() // configuring your project to accept jwt tokens as a method of authentication.
         // Jwt (Json Web Token) tokens are json objects as strings, with no spaces,
         // base64 encoded: headers, payhold, signature
-        .authorizeHttpRequests().requestMatchers("/api/appuser/regular")
+        .authorizeHttpRequests()
+        .requestMatchers("/api/appuser/regular")
         .permitAll() // Exclude this endpoint from authentication
-        .anyRequest().authenticated() // by default, all endpoints are authenticated
+        .anyRequest()
+        .authenticated() // by default, all endpoints are authenticated
         .and()
         // .oauth2Login().loginPage("/login")
         // .formLogin().and() // two ways to provide authentication to users. Users have
@@ -99,8 +97,8 @@ public class SecurityConfiguration {
    */
   @Bean
   JwtEncoder jwtEncoder() throws Exception {
-    JWK jwk = new RSAKey.Builder(rsaKeys().getPublicKey()).privateKey(rsaKeys().getPrivateKey())
-        .build();
+    JWK jwk =
+        new RSAKey.Builder(rsaKeys().getPublicKey()).privateKey(rsaKeys().getPrivateKey()).build();
     JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
   }
