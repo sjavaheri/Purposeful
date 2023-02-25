@@ -316,6 +316,20 @@ public class TestIdeaService {
     List<String> techIds = new ArrayList<String>();
     List<String> imgUrlIds = new ArrayList<String>();
 
+    // Retrieve Ids of all objects
+    for (Domain domain : MockDatabase.modifiableDomainGroup) {
+      domainIds.add(domain.getId());
+    }
+    for (Topic topic : MockDatabase.modifiableTopicGroup) {
+      topicIds.add(topic.getId());
+    }
+    for (Technology tech : MockDatabase.modifiableTechGroup) {
+      techIds.add(tech.getId());
+    }
+    for (URL url : MockDatabase.modifiableImgUrlGroup) {
+      imgUrlIds.add(url.getId());
+    }
+
     // Create an idea with an empty title
     Idea createdIdea = null;
     String message = "";
@@ -341,6 +355,20 @@ public class TestIdeaService {
     List<String> topicIds = new ArrayList<String>();
     List<String> techIds = new ArrayList<String>();
     List<String> imgUrlIds = new ArrayList<String>();
+
+    // Retrieve Ids of all objects
+    for (Domain domain : MockDatabase.modifiableDomainGroup) {
+      domainIds.add(domain.getId());
+    }
+    for (Topic topic : MockDatabase.modifiableTopicGroup) {
+      topicIds.add(topic.getId());
+    }
+    for (Technology tech : MockDatabase.modifiableTechGroup) {
+      techIds.add(tech.getId());
+    }
+    for (URL url : MockDatabase.modifiableImgUrlGroup) {
+      imgUrlIds.add(url.getId());
+    }
 
     String nonExistingId = "FakeImage";
 
