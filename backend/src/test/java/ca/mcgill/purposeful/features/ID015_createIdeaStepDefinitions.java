@@ -23,29 +23,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ID015_createIdeaStepDefinitions {
 
-  @Autowired
-  AppUserService appUserService;
+  @Autowired AppUserService appUserService;
 
-  @Autowired
-  DomainRepository domainRepository;
+  @Autowired DomainRepository domainRepository;
 
-  @Autowired
-  TechnologyRepository technologyRepository;
+  @Autowired TechnologyRepository technologyRepository;
 
-  @Autowired
-  TopicRepository topicRepository;
+  @Autowired TopicRepository topicRepository;
 
-  @Autowired
-  IdeaRepository ideaRepository;
+  @Autowired IdeaRepository ideaRepository;
 
-  @Autowired
-  URLRepository urlRepository;
+  @Autowired URLRepository urlRepository;
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
   private String jwtToken;
 
@@ -54,8 +46,8 @@ public class ID015_createIdeaStepDefinitions {
   @Given("the database contains the following user account:")
   public void the_database_contains_the_following_user_account(DataTable dataTable) {
     // create app user
-    appUserService.registerRegularUser(dataTable.cell(1, 2), dataTable.cell(1, 3),
-        dataTable.cell(1, 0), dataTable.cell(1, 1));
+    appUserService.registerRegularUser(
+        dataTable.cell(1, 2), dataTable.cell(1, 3), dataTable.cell(1, 0), dataTable.cell(1, 1));
   }
 
   @Given("the number of ideas in the database is {int}")
@@ -91,7 +83,7 @@ public class ID015_createIdeaStepDefinitions {
   }
 
   @Given("the database contains the following URLs:")
-  public void the_database_contains_the_following_ur_ls(DataTable dataTable) {
+  public void the_database_contains_the_following_urls(DataTable dataTable) {
     for (String url_str : dataTable.asList()) {
       URL url = new URL();
       url.setURL(url_str);
@@ -101,8 +93,8 @@ public class ID015_createIdeaStepDefinitions {
   }
 
   @Given("that the user is logged in with the email {string} and the password {string}")
-  public void that_the_user_is_logged_in_with_the_email_and_the_password(String string,
-      String string2) {
+  public void that_the_user_is_logged_in_with_the_email_and_the_password(
+      String string, String string2) {
     if (SecurityContextHolder.getContext().getAuthentication() == null) {
       // Login as the user
       HttpEntity<String> requestEntity =
@@ -117,11 +109,21 @@ public class ID015_createIdeaStepDefinitions {
     }
   }
 
-  @When("^the user creates an idea with title (.*), purpose (.*), description (.*), paid status (.*), progress status (.*), private status (.*), domains (.*), topics (.*), techs (.*), icon (.*), supporting images (.*)$")
-  public void the_user_creates_an_idea_with_title_purpose_description_paid_status_progress_status_private_status_domains_topics_techs_icon_supporting_images(
-      String title, String purpose, String description, String ispaid, String inprogress,
-      String isprivate, String domains, String topics, String techs, String iconurl,
-      String supportingimageurls) {
+  @When(
+      "the user creates an idea with title {string}, purpose {string}, description {string}, paid status {string}, progress status {string}, private status {string}, domains {string}, topics {string}, techs {string}, icon {string}, supporting images {string}")
+  public void
+      the_user_creates_an_idea_with_title_purpose_description_paid_status_progress_status_private_status_domains_topics_techs_icon_supporting_images(
+          String title,
+          String purpose,
+          String description,
+          String ispaid,
+          String inprogress,
+          String isprivate,
+          String domains,
+          String topics,
+          String techs,
+          String iconurl,
+          String supportingimageurls) {
     Boolean isPaid = Boolean.parseBoolean(ispaid);
     Boolean inProgress = Boolean.parseBoolean(inprogress);
     Boolean isPrivate = Boolean.parseBoolean(isprivate);
@@ -178,8 +180,21 @@ public class ID015_createIdeaStepDefinitions {
         break;
       }
     }
-    IdeaRequestDTO ideaDto = new IdeaRequestDTO(null, title, purpose, description, null, isPaid,
-        inProgress, isPrivate, domainIds, techIds, topicIds, supportingImgIds, iconUrlId);
+    IdeaRequestDTO ideaDto =
+        new IdeaRequestDTO(
+            null,
+            title,
+            purpose,
+            description,
+            null,
+            isPaid,
+            inProgress,
+            isPrivate,
+            domainIds,
+            techIds,
+            topicIds,
+            supportingImgIds,
+            iconUrlId);
 
     // make a post request to create the idea and store the response
     HttpEntity<IdeaRequestDTO> requestEntity =
@@ -193,9 +208,8 @@ public class ID015_createIdeaStepDefinitions {
     }
   }
 
-  @Then("^a new idea exists in the database with title (.*), icon (.*)$")
-  public void a_new_idea_exists_in_the_database_with_title_smart_schedule_manager_icon_schedule_png(
-      String title, String iconURL) {
+  @Then("a new idea exists in the database with title {string}, icon {string}")
+  public void a_new_idea_exists_in_the_database_with_title_icon(String title, String iconURL) {
     assertNotNull(this.response, "The response was null");
     Idea createdIdea = null;
     for (Idea idea : ideaRepository.findAll()) {
@@ -207,9 +221,9 @@ public class ID015_createIdeaStepDefinitions {
     assertNotNull(createdIdea);
   }
 
-  @Then("^the following error (.*) shall be raised with the status code (.*)$")
-  public void the_following_error_idea_titles_cannot_be_empty_shall_be_raised(String error,
-      Integer statusCode) {
+  @Then("the following error {string} shall be raised with the status code {int}")
+  public void the_following_error_shall_be_raised_with_the_status_code(
+      String error, Integer statusCode) {
     assertNotNull(this.response, "The response was null");
     assertEquals(statusCode, response.getStatusCode().value());
     assertEquals(error, response.getBody());
