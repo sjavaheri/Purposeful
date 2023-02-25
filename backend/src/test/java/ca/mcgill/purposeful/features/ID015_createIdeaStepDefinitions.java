@@ -81,7 +81,7 @@ public class ID015_createIdeaStepDefinitions {
       // Login as the user
       HttpEntity<String> requestEntity =
           new HttpEntity<>(cucumberUtil.basicAuthHeader(string, string2));
-      this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+      this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
 
       // check that the login was successful
       assertEquals(200, this.response.getStatusCode().value());
