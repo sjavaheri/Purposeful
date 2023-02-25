@@ -46,8 +46,7 @@ public class ID015_createIdeaStepDefinitions {
   @Given("the database contains the following user account:")
   public void the_database_contains_the_following_user_account(DataTable dataTable) {
     // create app user
-    appUserService.registerRegularUser(
-        dataTable.cell(1, 2), dataTable.cell(1, 3), dataTable.cell(1, 0), dataTable.cell(1, 1));
+     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, null);
   }
 
   @Given("the number of ideas in the database is {int}")
@@ -57,39 +56,22 @@ public class ID015_createIdeaStepDefinitions {
 
   @Given("the database contains the following domains:")
   public void the_database_contains_the_following_domains(DataTable dataTable) {
-    for (String domain_name : dataTable.asList()) {
-      Domain domain = new Domain();
-      domain.setName(domain_name);
-      domainRepository.save(domain);
-    }
+    cucumberUtil.createAndSaveDomainsFromTable(dataTable, null);
   }
 
   @Given("the database contains the following topics:")
   public void the_database_contains_the_following_topics(DataTable dataTable) {
-    for (String topic_name : dataTable.asList()) {
-      Topic topic = new Topic();
-      topic.setName(topic_name);
-      topicRepository.save(topic);
-    }
+    cucumberUtil.createAndSaveTopicsFromTable(dataTable, null); 
   }
 
   @Given("the database contains the following techs:")
   public void the_database_contains_the_following_techs(DataTable dataTable) {
-    for (String tech_name : dataTable.asList()) {
-      Technology tech = new Technology();
-      tech.setName(tech_name);
-      technologyRepository.save(tech);
-    }
+    cucumberUtil.createAndSaveTechsFromTable(dataTable, null);
   }
 
   @Given("the database contains the following URLs:")
   public void the_database_contains_the_following_urls(DataTable dataTable) {
-    for (String url_str : dataTable.asList()) {
-      URL url = new URL();
-      url.setURL(url_str);
-      url.setPresetIcon(true);
-      urlRepository.save(url);
-    }
+    cucumberUtil.createAndSaveURLsFromTable(dataTable, null);
   }
 
   @Given("that the user is logged in with the email {string} and the password {string}")
