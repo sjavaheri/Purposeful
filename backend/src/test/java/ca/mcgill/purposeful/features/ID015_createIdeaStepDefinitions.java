@@ -211,7 +211,7 @@ public class ID015_createIdeaStepDefinitions {
   public void the_following_error_idea_titles_cannot_be_empty_shall_be_raised(String error,
       Integer statusCode) {
     assertNotNull(this.response, "The response was null");
-    assertEquals(statusCode, response.getStatusCode().toString());
+    assertEquals(statusCode, response.getStatusCode().value());
     assertEquals(error, response.getBody());
   }
 }
