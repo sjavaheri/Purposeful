@@ -16,7 +16,6 @@ public class DtoUtility {
    * @return the converted AppUserDto
    * @author Siger Ma
    */
-
   public static AppUserDto convertToDto(AppUser appUser) {
     if (appUser == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "AppUser is null");

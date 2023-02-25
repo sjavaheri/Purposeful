@@ -6,32 +6,22 @@ import ca.mcgill.purposeful.dto.SearchFilterDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.service.IdeaService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-/**
- * API for demonstrating how permissions work for access to endpoints
- */
+import java.util.List;
 
+/** API for demonstrating how permissions work for access to endpoints */
 @RestController
 @RequestMapping({"api/idea", "api/idea/"})
 public class IdeaController {
 
-  @Autowired
-  IdeaService ideaService;
+  @Autowired IdeaService ideaService;
 
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
@@ -50,8 +40,12 @@ public class IdeaController {
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<IdeaDTO>> filterIdeas(@RequestBody SearchFilterDTO searchFilterDTO) {
     return ResponseEntity.status(HttpStatus.OK)
-        .body(IdeaDTO.convertToDto(ideaService.getIdeasByAllCriteria(searchFilterDTO.getDomains(),
-            searchFilterDTO.getTopics(), searchFilterDTO.getTechnologies())));
+        .body(
+            IdeaDTO.convertToDto(
+                ideaService.getIdeasByAllCriteria(
+                    searchFilterDTO.getDomains(),
+                    searchFilterDTO.getTopics(),
+                    searchFilterDTO.getTechnologies())));
   }
 
   /**
@@ -73,10 +67,20 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
 
-    Idea createdIdea = ideaService.createIdea(ideaDTO.getTitle(), ideaDTO.getPurpose(),
-        ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
-        ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(), ideaDTO.getTopicIds(),
-        ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId(), auth.getName());
+    Idea createdIdea =
+        ideaService.createIdea(
+            ideaDTO.getTitle(),
+            ideaDTO.getPurpose(),
+            ideaDTO.getDescription(),
+            ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(),
+            ideaDTO.getDomainIds(),
+            ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(),
+            ideaDTO.getImgUrlIds(),
+            ideaDTO.getIconUrlId(),
+            auth.getName());
 
     IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
 
@@ -87,24 +91,35 @@ public class IdeaController {
    * This method modifies an idea
    *
    * @return update idea
-   * @throws Exception
+   * @throws GlobalException if the ideaDTO is null
    * @author Ramin Akhavan
    */
-  @PutMapping(value = {"/edit", "/edit/"}, consumes = "application/json",
+  @PutMapping(
+      value = {"/edit", "/edit/"},
+      consumes = "application/json",
       produces = "application/json")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
-      throws Exception {
+      throws GlobalException {
     // Unpack the DTO
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
     }
 
     Idea modifiedIdea =
-        ideaService.modifyIdea(ideaDTO.getId(), ideaDTO.getTitle(), ideaDTO.getPurpose(),
-            ideaDTO.getDescription(), ideaDTO.getIsPaid(), ideaDTO.getInProgress(),
-            ideaDTO.getIsPrivate(), ideaDTO.getDomainIds(), ideaDTO.getTechIds(),
-            ideaDTO.getTopicIds(), ideaDTO.getImgUrlIds(), ideaDTO.getIconUrlId());
+        ideaService.modifyIdea(
+            ideaDTO.getId(),
+            ideaDTO.getTitle(),
+            ideaDTO.getPurpose(),
+            ideaDTO.getDescription(),
+            ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(),
+            ideaDTO.getDomainIds(),
+            ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(),
+            ideaDTO.getImgUrlIds(),
+            ideaDTO.getIconUrlId());
     IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
 
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);

@@ -1,9 +1,6 @@
 package ca.mcgill.purposeful.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import ca.mcgill.purposeful.model.Domain;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Domain Repository testing class which initiates a domain, executes the tests, then clears the
@@ -23,20 +20,15 @@ import ca.mcgill.purposeful.model.Domain;
 @SpringBootTest
 public class DomainRepositoryTests {
 
-  @Autowired
-  private DomainRepository domainRepository;
+  @Autowired private DomainRepository domainRepository;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
@@ -89,9 +81,7 @@ public class DomainRepositoryTests {
     domain2.setName(domainName);
 
     // assertions
-    assertThrows(
-        DataIntegrityViolationException.class,
-        () -> domainRepository.save(domain2));
+    assertThrows(DataIntegrityViolationException.class, () -> domainRepository.save(domain2));
   }
 
   /**
@@ -105,8 +95,6 @@ public class DomainRepositoryTests {
     Domain domain = new Domain();
 
     // assertions
-    assertThrows(
-        DataIntegrityViolationException.class,
-        () -> domainRepository.save(domain));
+    assertThrows(DataIntegrityViolationException.class, () -> domainRepository.save(domain));
   }
 }

@@ -2,16 +2,14 @@ package ca.mcgill.purposeful.dao;
 
 import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.util.DatabaseUtil;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * To test the URL CRUD repository methods.
@@ -21,20 +19,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class UrlRepositoryTests {
 
-  @Autowired
-  private URLRepository urlRepository;
+  @Autowired private URLRepository urlRepository;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
@@ -68,5 +61,4 @@ public class UrlRepositoryTests {
     assertEquals(str, url.getURL());
     assertEquals(id, url.getId());
   }
-
 }

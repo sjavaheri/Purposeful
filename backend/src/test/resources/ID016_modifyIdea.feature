@@ -45,18 +45,18 @@ Feature: Modify Idea
     Then the idea with id "<id>" will have value "<new_value>" for the field "<field>"
 
     Examples:
-      | id | title            | field       | new_value      |
-      | 18 | Music generation | title       | Health App     |
-      | 18 | Music generation | purpose     | For customer   |
-      | 19 | Techno boom      | description | new extra info |
-      | 18 | Music generation | isPaid      | True           |
-      | 18 | Music generation | inProgress  | True           |
-      | 19 | Techno boom      | isPrivate   | True           |
-      | 18 | Music generation | domains     | 3              |
-      | 19 | Techno boom      | topics      | 7              |
-      | 18 | Music generation | techs       | 8              |
-      | 19 | Techno boom      | image URLs  | 13             |
-      | 18 | Music generation | icon URL    | 13             |
+      | id | field       | new_value      |
+      | 18 | title       | Health App     |
+      | 18 | purpose     | For customer   |
+      | 19 | description | new extra info |
+      | 18 | isPaid      | True           |
+      | 18 | inProgress  | True           |
+      | 19 | isPrivate   | True           |
+      | 18 | domains     | 3              |
+      | 19 | topics      | 7              |
+      | 18 | techs       | 8              |
+      | 19 | image URLs  | 13             |
+      | 18 | icon URL    | 13             |
 
 	# Alternate Flow
 
@@ -65,11 +65,11 @@ Feature: Modify Idea
     Then the idea with id "<id>" will have empty for the field "<field>"
 
     Examples:
-      | id | title            | field      |
-      | 18 | Music generation | domains    |
-      | 18 | Music generation | topics     |
-      | 19 | Techno boom      | techs      |
-      | 19 | Techno boom      | image URLs |
+      | id | field      |
+      | 18 | domains    |
+      | 18 | topics     |
+      | 19 | techs      |
+      | 19 | image URLs |
 
 	# Error Flow
 
@@ -79,9 +79,9 @@ Feature: Modify Idea
     Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | title            | field   | old_value        | error                                 | Http_status |
-      | 18 | Music generation | title   | Music generation | Necessary fields have been left empty | 400         |
-      | 18 | Music generation | purpose | Open source      | Necessary fields have been left empty | 400         |
+      | id | field   | old_value        | error                                 | Http_status |
+      | 18 | title   | Music generation | Necessary fields have been left empty | 400         |
+      | 18 | purpose | Open source      | Necessary fields have been left empty | 400         |
 
 	# Error Flow
 
@@ -91,12 +91,12 @@ Feature: Modify Idea
     Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | title            | field      | old_value | new_value | error                                                                 | Http_status |
-      | 18 | Music generation | domains    | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 19 | Techno boom      | topics     | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 18 | Music generation | techs      | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 19 | Techno boom      | image URLs | 12        | 1         | You are attempting to link your idea to an object that does not exist | 400         |
-      | 18 | Music generation | icon URL   | 17        | 2         | You are attempting to link your idea to an object that does not exist | 400         |
+      | id | field      | old_value | new_value | error                                                                 | Http_status |
+      | 18 | domains    | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 19 | topics     | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 18 | techs      | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 19 | image URLs | 12        | 1         | You are attempting to link your idea to an object that does not exist | 400         |
+      | 18 | icon URL   | 17        | 2         | You are attempting to link your idea to an object that does not exist | 400         |
 
 
 
