@@ -1,6 +1,8 @@
 package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Set;
 
@@ -34,9 +36,12 @@ public class RegularUser extends Role {
       inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> interests;
 
-  @OneToOne(optional = true)
+  @OneToOne(optional = true, cascade = CascadeType.ALL)
   @JoinColumn(name = "verification_request_id", nullable = true, unique = true)
   private VerificationRequest verificationRequest;
+
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private AppUser appUser;
 
   // ------------------------
   // RegularUser Constructor

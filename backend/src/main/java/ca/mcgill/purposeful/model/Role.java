@@ -2,8 +2,6 @@ package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 /** The abstract Role class, the abstract model for all account roles in the database */
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -24,7 +22,6 @@ public abstract class Role {
   // ------------------------
 
   @ManyToOne(optional = false)
-  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "app_user_id", nullable = false)
   private AppUser appUser;
 

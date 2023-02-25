@@ -2,6 +2,8 @@ package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;
@@ -79,6 +81,7 @@ public class Idea {
   private List<URL> supportingImageUrls;
 
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
   private RegularUser user;
 
