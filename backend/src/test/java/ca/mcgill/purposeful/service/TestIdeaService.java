@@ -34,13 +34,15 @@ public class TestIdeaService {
   private static boolean NEW_PRIVACY = true;
   private static boolean NEW_PROGRESS = true;
 
-  private static Date NEW_DATE = new Date(16000);
-
   // Mocks
   @Mock private IdeaRepository ideaRepository;
+  
   @Mock private DomainRepository domainRepository;
+  
   @Mock private TopicRepository topicRepository;
+  
   @Mock private TechnologyRepository technologyRepository;
+  
   @Mock private URLRepository urlRepository;
 
   // Inject mocks
@@ -64,6 +66,8 @@ public class TestIdeaService {
         .when(technologyRepository.findTechnologyById(anyString()))
         .thenAnswer(MockRepository::findTechnologyById);
     lenient().when(urlRepository.findURLById(anyString())).thenAnswer(MockRepository::findURLById);
+    lenient().when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
+        .thenReturn(MockDatabase.user1);
   }
 
   /**
@@ -264,7 +268,7 @@ public class TestIdeaService {
               MockDatabase.newIconUrl.getId(),
               MockDatabase.user1);
     } catch (Exception e) {
-      String message = e.getMessage();
+
     }
 
     // Test all attributes of idea
@@ -643,6 +647,7 @@ public class TestIdeaService {
     static Idea modifiableIdea = new Idea();
 
     // Users
+    static AppUser appUser1 = new AppUser();
     static RegularUser user1 = new RegularUser();
 
     // Domains
@@ -706,6 +711,10 @@ public class TestIdeaService {
      * @author Wassim Jabbour
      */
     static {
+
+      // Initialize user
+      appUser1.setEmail("example@gmail.com");
+      user1.setAppUser(appUser1);
 
       // Initialize topics
       topic1.setId(UUID.randomUUID().toString());
@@ -826,8 +835,7 @@ public class TestIdeaService {
       // deprecated)
       modifiableIdea.setPaid(false);
       modifiableIdea.setPrivate(false);
-      modifiableIdea.setInProgress(false);
-      ;
+      modifiableIdea.setInProgress(false);;
       modifiableIdea.setDescription("Volatile application");
       modifiableIdea.setDomains(originalDomainGroup);
       modifiableIdea.setTopics(originalTopicGroup);
