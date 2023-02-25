@@ -40,6 +40,7 @@ public class RegularUser extends Role {
   @JoinColumn(name = "verification_request_id", nullable = true, unique = true)
   private VerificationRequest verificationRequest;
 
+  // Variable hiding (inherited from Role)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private AppUser appUser;
 

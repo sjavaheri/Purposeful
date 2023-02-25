@@ -16,6 +16,7 @@ public class Moderator extends Role {
   // Moderator Associations
   // ------------------------
 
+  // Variable hiding (inherited from Role)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private AppUser appUser;
 

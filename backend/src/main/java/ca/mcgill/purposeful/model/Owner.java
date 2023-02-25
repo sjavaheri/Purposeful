@@ -16,6 +16,7 @@ public class Owner extends Role {
   // Owner Associations
   // ------------------------
 
+  // Variable hiding (inherited from Role)
   @OnDelete(action = OnDeleteAction.CASCADE)
   private AppUser appUser;
 
