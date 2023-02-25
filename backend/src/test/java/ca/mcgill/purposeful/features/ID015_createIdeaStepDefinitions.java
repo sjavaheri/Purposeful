@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,8 +51,8 @@ public class ID015_createIdeaStepDefinitions {
   }
 
   @Given("the number of ideas in the database is {int}")
-  public void the_number_of_ideas_in_the_database_is(Integer int1) {
-    assertEquals(ideaRepository.count(), Optional.ofNullable(int1));
+  public void the_number_of_ideas_in_the_database_is(Long int1) {
+    assertEquals(ideaRepository.count(), int1);
   }
 
   @Given("the database contains the following domains:")

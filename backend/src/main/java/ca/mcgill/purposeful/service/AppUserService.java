@@ -25,25 +25,21 @@ import java.util.List;
 @Service
 public class AppUserService implements UserDetailsService {
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
-  @Autowired
-  RegularUserRepository regularUserRepository;
+  @Autowired RegularUserRepository regularUserRepository;
 
-  @Autowired
-  ModeratorRepository moderatorRepository;
+  @Autowired ModeratorRepository moderatorRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
   /**
    * Register a new regular user
    *
-   * @param email     - email of the user
-   * @param password  - password of the user
+   * @param email - email of the user
+   * @param password - password of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return {@link AppUser} - the newly created user
    * @author Siger Ma
    */
@@ -114,10 +110,10 @@ public class AppUserService implements UserDetailsService {
   /**
    * Register a new moderator user
    *
-   * @param email     - email of the user
-   * @param password  - password of the user
+   * @param email - email of the user
+   * @param password - password of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return {@link AppUser} - the newly created user
    * @author Siger Ma
    */
@@ -187,8 +183,7 @@ public class AppUserService implements UserDetailsService {
    * Method for spring to undersatnd how to find a user in the database
    *
    * @param email the email of the user
-   * @return an {@link AppUser} wrapped in the {@link SecurityUser} class, as
-   *         needed by sprint
+   * @return an {@link AppUser} wrapped in the {@link SecurityUser} class, as needed by sprint
    * @throws UsernameNotFoundException if the user is not found
    */
   @Override
@@ -206,9 +201,9 @@ public class AppUserService implements UserDetailsService {
   /**
    * Modify the first name and last name of a user
    *
-   * @param email     - email of the user
+   * @param email - email of the user
    * @param firstname - first name of the user
-   * @param lastname  - last name of the user
+   * @param lastname - last name of the user
    * @return {@link AppUser} - the modified user
    * @author Enzo Benoit-Jeannin
    */
@@ -243,13 +238,11 @@ public class AppUserService implements UserDetailsService {
   }
 
   /**
-   * This service method updates the user's password based on the given inputs.
-   * Passwords must be at
-   * least 8 characters long and contain at least one number, one lowercase
-   * character and one
+   * This service method updates the user's password based on the given inputs. Passwords must be at
+   * least 8 characters long and contain at least one number, one lowercase character and one
    * uppercase character
    *
-   * @param email    The email of the user account to modify its password
+   * @param email The email of the user account to modify its password
    * @param password The new password of the user
    * @return The modified user
    * @author Enzo Benoit-Jeannin
@@ -267,7 +260,8 @@ public class AppUserService implements UserDetailsService {
         || !password.matches(".*[0-9].*")
         || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
+      error +=
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
     }
     if (error.length() > 0) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);

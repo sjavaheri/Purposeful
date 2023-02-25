@@ -22,22 +22,18 @@ import java.util.List;
 public class ModeratorService {
 
   // CRUD Repositories
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
   /**
    * This service method modifies an exisiting moderator based on the given inputs
    *
-   * <p>
-   * Note we do not modify the role of that app user, because we consider it to
-   * stay a moderator.
+   * <p>Note we do not modify the role of that app user, because we consider it to stay a moderator.
    * We can use the modifyUser in the appUser service to change its role
    *
-   * @param email     new email of the moderator (must be unique)
-   * @param lastname  new last name of the moderator
+   * @param email new email of the moderator (must be unique)
+   * @param lastname new last name of the moderator
    * @param firstname new first name of the moderator
    * @return the modified moderator
    */
@@ -85,13 +81,11 @@ public class ModeratorService {
   }
 
   /**
-   * This service method updates the moderator's password based on the given
-   * inputs. Passwords must
-   * be at least 8 characters long and contain at least one number, one lowercase
-   * character and one
+   * This service method updates the moderator's password based on the given inputs. Passwords must
+   * be at least 8 characters long and contain at least one number, one lowercase character and one
    * uppercase character
    *
-   * @param email    The email of the moderator account to modify its password
+   * @param email The email of the moderator account to modify its password
    * @param password The new password of the moderator
    * @return The modified moderator
    * @author Enzo Benoit-Jeannin
@@ -109,7 +103,8 @@ public class ModeratorService {
         || !password.matches(".*[0-9].*")
         || !password.matches(".*[A-Z].*")
         || !password.matches(".*[a-z].*")) {
-      error += "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
+      error +=
+          "Password must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character! ";
     }
     if (error.length() > 0) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, error);

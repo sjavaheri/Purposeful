@@ -21,7 +21,7 @@ public class PurposefulApplication {
    * Command Line Runner to initialize database if needed
    *
    * @param appUserRepository to create the user
-   * @param passwordEncoder   to encode the user's password
+   * @param passwordEncoder to encode the user's password
    * @return
    */
   @Bean

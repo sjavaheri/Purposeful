@@ -19,23 +19,17 @@ public class IdeaService {
    * CRUD repos
    */
 
-  @Autowired
-  IdeaRepository ideaRepository;
+  @Autowired IdeaRepository ideaRepository;
 
-  @Autowired
-  DomainRepository domainRepository;
+  @Autowired DomainRepository domainRepository;
 
-  @Autowired
-  TechnologyRepository technologyRepository;
+  @Autowired TechnologyRepository technologyRepository;
 
-  @Autowired
-  TopicRepository topicRepository;
+  @Autowired TopicRepository topicRepository;
 
-  @Autowired
-  URLRepository urlRepository;
+  @Autowired URLRepository urlRepository;
 
-  @Autowired
-  RegularUserRepository regularUserRepository;
+  @Autowired RegularUserRepository regularUserRepository;
 
   /*
    * Service functions
@@ -70,19 +64,14 @@ public class IdeaService {
   // sort the ideas!
 
   /**
-   * Get all ideas with a set of domain names, topic names, and technology names.
-   * For now, we can
-   * just return all ideas upon a (null, null, null) call. Currently just sorts
-   * from newest to
+   * Get all ideas with a set of domain names, topic names, and technology names. For now, we can
+   * just return all ideas upon a (null, null, null) call. Currently just sorts from newest to
    * oldest.
    *
-   * @param domainNames The list of domain names that the idea must have one of
-   *                    (null if no filter)
-   * @param topicNames  The list of topic names that the idea must have one of
-   *                    (null if no filter)
-   * @param techNames   The list of technology names that the idea must have one
-   *                    of (null if no
-   *                    filter)
+   * @param domainNames The list of domain names that the idea must have one of (null if no filter)
+   * @param topicNames The list of topic names that the idea must have one of (null if no filter)
+   * @param techNames The list of technology names that the idea must have one of (null if no
+   *     filter)
    * @return A list of ideas that match all the criteria
    * @author Wassim Jabbour
    */
@@ -254,21 +243,20 @@ public class IdeaService {
   /**
    * Modify an idea based on id
    *
-   * @param id           id
-   * @param title        title
-   * @param purpose      purpose
+   * @param id id
+   * @param title title
+   * @param purpose purpose
    * @param descriptions description
-   * @param isPaid       paid or not paid idea
-   * @param inProgress   status of progress
-   * @param isPrivate    privacy of idea
-   * @param domainIds    domain Ids of domains
-   * @param techIds      tech Ids of idea
-   * @param topicIds     topic Ids of idea
-   * @param imgUrlIds    image url Ids of idea
-   * @param iconUrlId    icon url Ids of idea
+   * @param isPaid paid or not paid idea
+   * @param inProgress status of progress
+   * @param isPrivate privacy of idea
+   * @param domainIds domain Ids of domains
+   * @param techIds tech Ids of idea
+   * @param topicIds topic Ids of idea
+   * @param imgUrlIds image url Ids of idea
+   * @param iconUrlId icon url Ids of idea
    * @author Ramin Akhavan
-   * @throws GlobalException if necessary field are left empty or if an object
-   *                         does not exist
+   * @throws GlobalException if necessary field are left empty or if an object does not exist
    */
   @Transactional
   public Idea modifyIdea(
