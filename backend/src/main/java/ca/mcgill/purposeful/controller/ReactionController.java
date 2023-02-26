@@ -63,7 +63,10 @@ public class ReactionController {
     Reaction reaction = reactionService.react(date, reactionType, idea_id, user_id);
 
     // return the reaction
-    return new ResponseEntity<ReactionDTO>(
-        (reaction == null) ? null : new ReactionDTO(reaction), HttpStatus.CREATED);
+    if (reaction == null) {
+      return new ResponseEntity<ReactionDTO>(new ReactionDTO(), HttpStatus.FOUND);
+    } else {
+      return new ResponseEntity<ReactionDTO>(new ReactionDTO(reaction), HttpStatus.CREATED);
+    }
   }
 }

@@ -1,26 +1,24 @@
 package ca.mcgill.purposeful.features;
 
-import ca.mcgill.purposeful.configuration.Authority;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID017_removeIdea.feature file
@@ -29,13 +27,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class ID017_removeIdeaStepDefinitions {
 
-  @Autowired private TestRestTemplate client;
+  @Autowired
+  private TestRestTemplate client;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-  @Autowired private CucumberUtil cucumberUtil;
+  @Autowired
+  private CucumberUtil cucumberUtil;
 
-  @Autowired AppUserRepository appUserRepository;
+  @Autowired
+  AppUserRepository appUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
@@ -71,27 +73,19 @@ public class ID017_removeIdeaStepDefinitions {
     cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
   }
 
-  @And("I am logged in before removing an idea")
-  public void iAmLoggedInBeforeRemovingAnIdea() {
-    AppUser appUser = new AppUser();
-    String email = "luke.skywalker@spacemail.galaxy";
-    String password = "P@ssw0rd";
-    appUser.setFirstname("Luke");
-    appUser.setLastname("Skywalker");
-    appUser.setEmail(email);
-    appUser.setPassword(passwordEncoder.encode(password));
-    // set the authorities of the app user
-    Set<Authority> setOfAuthorities = new HashSet<Authority>();
-    Authority authority = Authority.valueOf("User");
-    setOfAuthorities.add(authority);
-    // add the app user to the list of app users
-    appUser.setAuthorities(setOfAuthorities);
-    appUserRepository.save(appUser);
+  @Given("the user is logged in with the email {string} and the password {string} before removing an idea")
+  public void theUserIsLoggedInWithTheEmailAndThePasswordBeforeRemovingAnIdea(String email,
+      String password) {
+    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+      // Login as the user
+      HttpEntity<String> requestEntity =
+          new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
+      this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
 
-    HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response =
-        client.exchange("/api/login", HttpMethod.POST, request, String.class);
-    authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
+      // check that the login was successful
+      assertEquals(200, this.response.getStatusCode().value());
+      authHeader = cucumberUtil.bearerAuthHeader(response.getBody().toString());
+    }
   }
 
   @When("the user requests to remove the idea with id {int}")
@@ -104,11 +98,11 @@ public class ID017_removeIdeaStepDefinitions {
 
   @Then("the idea entry with id {int} will no longer exist in the idea database")
   public void theIdeaEntryWithIdWillNoLongerExistInTheIdeaDatabase(Integer id) {
-    assertEquals(response.getStatusCode(), HttpStatus.OK);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
     String correctedId = idMap.get(id.toString());
     HttpEntity<String> request = new HttpEntity<>(authHeader);
     response = client.exchange("/api/idea/" + correctedId, HttpMethod.GET, request, String.class);
-    assertNotEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 
   @When("I request to remove the idea with the invalid UUID {string}")

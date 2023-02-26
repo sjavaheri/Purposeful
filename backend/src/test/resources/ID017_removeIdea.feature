@@ -35,7 +35,7 @@ Feature: Remove Idea
       | 2  | Football Game     | 2022-02-16 | Entertain | For fun          | False  | True       | False     | Software, Computer | Frontend Dev              | Python         | something.com, another.com | interest.com | 0    |
       | 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer           | Backend Dev, Frontend Dev | Python, C      | keepitup.com               | bestteam.com | 0    |
       | 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical         | Embedded Software         | Java, React, C | sayless.com                | bestteam.com | 0    |
-    And I am logged in before removing an idea
+    And the user is logged in with the email "steve.nash@gmail.com" and the password "SteveIsAwesome01" before removing an idea
 
   Scenario: Successfully remove an idea
     When the user requests to remove the idea with id 4
