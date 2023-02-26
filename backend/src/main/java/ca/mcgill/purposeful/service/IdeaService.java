@@ -163,6 +163,13 @@ public class IdeaService {
           "No ideas match the given criteria. Please try again with different criteria.");
     }
 
+    // Filter out private ideas
+    for(Idea idea : filteredIdeas) {
+      if(idea.isPrivate()) {
+        filteredIdeas.remove(idea);
+      }
+    }
+
     // Sort the ideas from newest to oldest
     // We flip the order so that the newest (bigger date) comes first
     filteredIdeas.sort((idea1, idea2) -> idea2.getDate().compareTo(idea1.getDate()));
