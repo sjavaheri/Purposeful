@@ -269,6 +269,9 @@ public class CucumberUtil {
       // Set purpose
       idea.setPurpose(row.get("purpose"));
 
+      // Set the private status
+      idea.setPrivate(Boolean.parseBoolean(row.get("private")));
+
       // Set the user
       AppUser appUser =
           appUserRepository.findAppUserById(idMap.get(row.get("author"))); // Extract app user saved

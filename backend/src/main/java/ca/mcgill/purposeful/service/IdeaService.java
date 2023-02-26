@@ -91,6 +91,13 @@ public class IdeaService {
     List<Idea> allIdeasList = new ArrayList<>();
     allIdeas.forEach(allIdeasList::add);
 
+    // Filter out private ideas from the list of all ideas
+    for(Idea idea : allIdeas) {
+      if(idea.isPrivate()) {
+        allIdeasList.remove(idea);
+      }
+    }
+
     // Create a list to hold the filtered ideas
     List<Idea> filteredIdeas = new ArrayList<>();
 
@@ -161,13 +168,6 @@ public class IdeaService {
       throw new GlobalException(
           HttpStatus.NOT_FOUND,
           "No ideas match the given criteria. Please try again with different criteria.");
-    }
-
-    // Filter out private ideas
-    for(Idea idea : filteredIdeas) {
-      if(idea.isPrivate()) {
-        filteredIdeas.remove(idea);
-      }
     }
 
     // Sort the ideas from newest to oldest
