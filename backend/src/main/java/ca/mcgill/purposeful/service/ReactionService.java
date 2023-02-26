@@ -3,8 +3,10 @@ package ca.mcgill.purposeful.service;
 import ca.mcgill.purposeful.dao.ReactionRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
+import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
+import ca.mcgill.purposeful.model.RegularUser;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +21,8 @@ import org.springframework.stereotype.Service;
 public class ReactionService {
 
   /*
-   CRUD repos
-  */
+   * CRUD repos
+   */
 
   @Autowired
   ReactionRepository reactionRepository;
@@ -28,8 +30,8 @@ public class ReactionService {
   RegularUserRepository regularUserRepository;
 
   /*
-   Service functions
-  */
+   * Service functions
+   */
 
   @Autowired
   IdeaService ideaService;
@@ -47,10 +49,11 @@ public class ReactionService {
   @Transactional
   public Reaction react(Date date, ReactionType reactionType, String idea_id, String user_id) {
 
-    // validate idea
+    // validate idea and user
     ideaService.getIdeaById(idea_id);
 
-    // TODO: replace user_id in the method below by a getter from RegularUserService to check for
+    // TODO: replace user_id in the method below by a getter from RegularUserService
+    // to check for
     // valid user
 
     // check if a previous reaction exists
@@ -59,7 +62,7 @@ public class ReactionService {
 
     // delete reaction if it exists and return null
     if (previousReaction != null) {
-      reactionRepository.deleteById(previousReaction.getId());
+      reactionRepository.deleteReactionById(previousReaction.getId());
       return null;
     }
     // create reaction if it doesn't exist and return reaction
@@ -107,10 +110,11 @@ public class ReactionService {
    */
   @Transactional
   public Reaction getReactionByIdeaAndRegularUser(String idea_id, String user_id) {
-    // validate idea
-    ideaService.getIdeaById(idea_id);
-    // TODO: replace user_id in the method below by a getter from RegularUserService to check for
-    // valid user
+    // validate idea and regularUser
+    Idea idea = ideaService.getIdeaById(idea_id);
+    RegularUser regularUser = regularUserRepository.findRegularUserById(user_id);
+    // TODO: replace user_id in the method below by a getter from RegularUserService
+    // to check for valid user
 
     Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
 
@@ -149,7 +153,8 @@ public class ReactionService {
   @Transactional
   public ArrayList<Reaction> getReactionsByRegularUser(String uuid) {
 
-    // TODO: validate regular user with a getRegularUserById method from its service class
+    // TODO: validate regular user with a getRegularUserById method from its service
+    // class
 
     ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUserId(uuid);
 
@@ -171,7 +176,7 @@ public class ReactionService {
   public void removeReaction(String uuid) {
     // validate reaction
     this.getReactionById(uuid);
-    reactionRepository.deleteById(uuid);
+    reactionRepository.deleteReactionById(uuid);
   }
 
   /**
