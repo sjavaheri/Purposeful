@@ -10,9 +10,9 @@ public interface ReactionRepository extends CrudRepository<Reaction, Integer> {
 
   Reaction findReactionById(String id);
 
-  Reaction findReactionByIdeaAndRegularUser(String idea_id, String user_id);
+  Reaction findReactionByIdea_IdAndRegularUser_Id(String idea_id, String regularUser_id);
 
-  Reaction deleteById(String id);
+  String deleteReactionById(String id);
 
   ArrayList<Reaction> findAllByIdeaId(String idea_id);
 
