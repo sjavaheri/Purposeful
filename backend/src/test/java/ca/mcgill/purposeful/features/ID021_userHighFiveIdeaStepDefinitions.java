@@ -164,12 +164,12 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     assertNull(reaction);
   }
 
-  @Given("the user reacts with a reaction {string} to an idea with id {int} on behalf of another user with email {string}")
-  public void iRequestToReactWithTheReactionOnBehalfOfAnotherUserWithEmail(String reactionType,
-      Integer idea_id, String email) {
+  @When("the user requests to react with the reactionType {string} to an idea with id {string} on behalf of another regular user with id {string}")
+  public void theUserRequestsToReactWithTheReactionTypeToAnIdeaWithIdOnBehalfOfAnotherRegularUserWithId(
+      String reactionType, String idea_id, String appUser_email) {
     String uuid_idea = idMap.get(idea_id.toString());
     String user_id = regularUserRepository.findRegularUserByApp_User_Id(
-        appUserRepository.findAppUserByEmail(email).getId()).getId();
+        appUserRepository.findAppUserByEmail(appUser_email).getId()).getId();
 
     ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
         uuid_idea,
@@ -179,8 +179,9 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
   }
 
-  @Then("the error message {string} will be thrown with status {int}")
-  public void theUserShallReceiveTheErrorMessageWithStatus(String errorMessage, int status) {
+  @Then("the error message {string} will be thrown with status code {string} and the reaction database will not be modified")
+  public void theErrorMessageWillBeThrownWithStatusCodeAndTheReactionDatabaseWillNotBeModified(
+      String errorMessage, String status) {
     assertEquals(HttpStatus.valueOf(status), response.getStatusCode());
   }
 }
