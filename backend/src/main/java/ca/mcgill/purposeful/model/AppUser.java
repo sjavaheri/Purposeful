@@ -1,21 +1,16 @@
 package ca.mcgill.purposeful.model;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.hibernate.annotations.GenericGenerator;
 
-/**
- * The AppUser class, the model for all accounts in the database
- */
+import java.util.HashSet;
+import java.util.Set;
+
+/** The AppUser class, the model for all accounts in the database */
 @Entity
 public class AppUser {
 
@@ -28,8 +23,6 @@ public class AppUser {
   @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String id;
 
-  //  @Column(unique = true, nullable = false)
-  //  private String username;
   @Column(nullable = false)
   private String firstname;
 
@@ -42,26 +35,14 @@ public class AppUser {
   @Column(nullable = false)
   private String password;
 
-  // ------------------------
-  // AppUser Associations
-  // ------------------------
-
   // Every AppUser has a set of Authorities that they can be granted
-  //  @ElementCollection(targetClass = Authority.class)
-  //  @CollectionTable(name = "app_user_authority", joinColumns = @JoinColumn(name = "app_user_id"))
-  //  @Enumerated(EnumType.STRING)
-  //  @Column(name = "authorities", nullable = false)
   private Set<Authority> authorities = new HashSet<Authority>();
-
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "appUser")
-  private List<Role> roles;
 
   // ------------------------
   // AppUser Constructor
   // ------------------------
 
-  public AppUser() {
-  }
+  public AppUser() {}
 
   // ------------------------
   // Getter/Setter Methods
@@ -113,13 +94,5 @@ public class AppUser {
 
   public void setAuthorities(Set<Authority> authorities) {
     this.authorities = authorities;
-  }
-
-  public List<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<Role> roles) {
-    this.roles = roles;
   }
 }

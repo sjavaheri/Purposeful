@@ -1,8 +1,5 @@
 package ca.mcgill.purposeful.features;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import ca.mcgill.purposeful.controller.IdeaController;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
@@ -20,20 +17,15 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+
+import java.util.*;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID019_BrowseIdea.feature file
@@ -108,7 +100,7 @@ public class ID019_browseIdeaStepDefinitions {
     // In this case we are testing whether the browse ideas response is correct so we only
     // need the token
     ResponseEntity<?> response =
-        client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+        client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
     assertEquals(HttpStatus.OK, response.getStatusCode()); // Making sure the login was successful
     jwtToken = response.getBody().toString(); // Extract the token for future requests
     assertNotNull(jwtToken); // Ensure the token is not null

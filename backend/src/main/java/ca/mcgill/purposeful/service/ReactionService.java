@@ -8,56 +8,53 @@ import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-/**
- * Service functions of the Reaction class
- */
+import java.util.ArrayList;
+import java.util.Date;
+
+/** Service functions of the Reaction class */
 @Service
 public class ReactionService {
 
   /*
-   CRUD repos
-  */
+   * CRUD repos
+   */
 
-  @Autowired
-  ReactionRepository reactionRepository;
-  @Autowired
-  RegularUserRepository regularUserRepository;
+  @Autowired ReactionRepository reactionRepository;
+  @Autowired RegularUserRepository regularUserRepository;
 
   /*
-   Service functions
-  */
+   * Service functions
+   */
 
-  @Autowired
-  IdeaService ideaService;
+  @Autowired IdeaService ideaService;
 
   /**
    * Method to create a reaction and fill its appropriate attributes if it doesn't exist. The method
    * will remove an existing reaction if it exists already
    *
-   * @param date         date of the reaction post
+   * @param date date of the reaction post
    * @param reactionType type of reaction
-   * @param idea_id      id of the idea being reacted to
-   * @param user_id      id of the regular user that reacts
+   * @param idea_id id of the idea being reacted to
+   * @param user_id id of the regular user that reacts
    * @return the reaction that has been created
    */
   @Transactional
-  public Reaction react(Date date, ReactionType reactionType, String idea_id,
-      String user_id) {
+  public Reaction react(Date date, ReactionType reactionType, String idea_id, String user_id) {
 
     // validate idea and user
     ideaService.getIdeaById(idea_id);
 
-    // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
+    // TODO: replace user_id in the method below by a getter from RegularUserService
+    // to check for
+    // valid user
 
     // check if a previous reaction exists
-    Reaction previousReaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id,
-        user_id);
+    Reaction previousReaction =
+        reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
 
     // delete reaction if it exists and return null
     if (previousReaction != null) {
@@ -112,10 +109,10 @@ public class ReactionService {
     // validate idea and regularUser
     Idea idea = ideaService.getIdeaById(idea_id);
     RegularUser regularUser = regularUserRepository.findRegularUserById(user_id);
-    // TODO: replace user_id in the method below by a getter from RegularUserService to check for valid user
+    // TODO: replace user_id in the method below by a getter from RegularUserService
+    // to check for valid user
 
-    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id,
-        user_id);
+    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
 
     return reaction;
   }
@@ -136,9 +133,7 @@ public class ReactionService {
 
     if (reactions.size() == 0) {
       throw new GlobalException(
-          HttpStatus.NOT_FOUND,
-          "Reactions associated with idea_id " + uuid
-              + " do not exist.");
+          HttpStatus.NOT_FOUND, "Reactions associated with idea_id " + uuid + " do not exist.");
     }
 
     return reactions;
@@ -154,15 +149,14 @@ public class ReactionService {
   @Transactional
   public ArrayList<Reaction> getReactionsByRegularUser(String uuid) {
 
-    // TODO: validate regular user with a getRegularUserById method from its service class
+    // TODO: validate regular user with a getRegularUserById method from its service
+    // class
 
     ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUserId(uuid);
 
     if (reactions.size() == 0) {
       throw new GlobalException(
-          HttpStatus.NOT_FOUND,
-          "Reactions associated with user_id " + uuid
-              + " do not exist.");
+          HttpStatus.NOT_FOUND, "Reactions associated with user_id " + uuid + " do not exist.");
     }
 
     return reactions;
@@ -193,7 +187,6 @@ public class ReactionService {
       this.removeReaction(reaction.getId());
     }
   }
-
 
   /**
    * DEPRECATED Remove all reactions by a regular user

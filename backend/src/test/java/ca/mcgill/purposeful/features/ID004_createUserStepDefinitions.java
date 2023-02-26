@@ -1,8 +1,5 @@
 package ca.mcgill.purposeful.features;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dto.AppUserDto;
@@ -13,13 +10,17 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Step definitions for the ID004_CreateUser.feature file
@@ -99,11 +100,9 @@ public class ID004_createUserStepDefinitions {
   }
 
   @Then("the number of regular user accounts in the database is {string}")
-  public void theNumberOfRegularUserAccountsInTheDatabaseIs(String number) {
-    // get all the app users from the database
-    ArrayList<AppUser> appUsers = appUserRepository.findAll();
-    // assert that the number of app users is correct
-    assertEquals(Integer.parseInt(number), appUsers.size());
+  public void theNumberOfRegularUserAccountsInTheDatabaseIs(String count) {
+    // Assert that the number of user accounts in the database is equal to the count
+    assertEquals(Integer.parseInt(count), appUserRepository.count());
   }
 
   @Then("the following error {string} shall be raised with http status {string}")

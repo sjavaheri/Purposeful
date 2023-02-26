@@ -2,6 +2,7 @@ package ca.mcgill.purposeful.dto;
 
 import ca.mcgill.purposeful.model.Idea;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,8 +28,7 @@ public class IdeaDTO {
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
-  public IdeaDTO() {
-  }
+  public IdeaDTO() {}
 
   public IdeaDTO(Idea idea) {
     this.isPaid = idea.isPaid();

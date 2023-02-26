@@ -1,27 +1,15 @@
 package ca.mcgill.purposeful.service;
 
-import ca.mcgill.purposeful.dao.DomainRepository;
-import ca.mcgill.purposeful.dao.IdeaRepository;
-import ca.mcgill.purposeful.dao.TechnologyRepository;
-import ca.mcgill.purposeful.dao.TopicRepository;
-import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.exception.GlobalException;
-import ca.mcgill.purposeful.model.Domain;
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.model.*;
 import jakarta.transaction.Transactional;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.*;
 
 /** Service functions of the Idea class */
 @Service
@@ -41,6 +29,8 @@ public class IdeaService {
 
   @Autowired URLRepository urlRepository;
 
+  @Autowired RegularUserRepository regularUserRepository;
+
   /*
    * Service functions
    */
@@ -49,7 +39,7 @@ public class IdeaService {
    * Get an idea by its UUID
    *
    * @param uuid UUID of the idea
-   * @return The idea with the given UUID
+   * @return The {@link Idea} with the given UUID
    * @author Wassim Jabbour
    */
   @Transactional
@@ -70,7 +60,7 @@ public class IdeaService {
     return idea;
   }
 
-  // TODO: For the second sprint, we will implement a recommendations engine to
+  // TODO: For in a future sprint, we will implement a recommendations engine to
   // sort the ideas!
 
   /**
@@ -82,7 +72,7 @@ public class IdeaService {
    * @param topicNames The list of topic names that the idea must have one of (null if no filter)
    * @param techNames The list of technology names that the idea must have one of (null if no
    *     filter)
-   * @return The set of ideas that match all the criteria
+   * @return A list of ideas that match all the criteria
    * @author Wassim Jabbour
    */
   @Transactional
@@ -182,9 +172,9 @@ public class IdeaService {
   }
 
   /**
-   * Create an idea
+   * Method to create an idea
    *
-   * @return The newly created idea
+   * @return The newly created {@link Idea}
    * @author Adam Kazma
    */
   @Transactional
@@ -200,18 +190,35 @@ public class IdeaService {
       List<String> topicIds,
       List<String> imgUrlIds,
       String iconUrlId,
-      RegularUser user) {
+      String regularUsername) {
     // Check parameters are not empty
     checkEmptyAttributeViolation(title);
+    if (title.length() > 100) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "Idea titles cannot exceed 100 characters");
+    }
     checkEmptyAttributeViolation(description);
     checkEmptyAttributeViolation(purpose);
 
     // Check to see if all given objects exist
+    if (domainIds.size() == 0
+        || domainIds == null
+        || (domainIds.size() == 1 && (domainIds.get(0) == null || domainIds.get(0).isEmpty()))) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "You must specify at least 1 domain");
+    }
     Set<Domain> domains = checkDomains(domainIds);
     Set<Technology> techs = checkTechs(techIds);
+    if (topicIds == null
+        || topicIds.size() == 0
+        || (topicIds.size() == 1 && (topicIds.get(0) == null || topicIds.get(0).isEmpty()))) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "You must specify at least 1 topic");
+    }
     Set<Topic> topics = checkTopics(topicIds);
     List<URL> imgUrls = checkImgURLS(imgUrlIds);
+    if (iconUrlId == null || iconUrlId.isEmpty()) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "An idea icon is required");
+    }
     URL iconUrl = checkURL(iconUrlId);
+    RegularUser user = regularUserRepository.findRegularUserByAppUserEmail(regularUsername);
     Idea idea = new Idea();
     idea.setDate(Date.from(Instant.now()));
     idea.setTitle(title);
@@ -233,17 +240,28 @@ public class IdeaService {
     return idea;
   }
 
-  @Transactional
   /**
    * Modify an idea based on id
    *
+   * @param id id
+   * @param title title
+   * @param purpose purpose
+   * @param descriptions description
+   * @param isPaid paid or not paid idea
+   * @param inProgress status of progress
+   * @param isPrivate privacy of idea
+   * @param domainIds domain Ids of domains
+   * @param techIds tech Ids of idea
+   * @param topicIds topic Ids of idea
+   * @param imgUrlIds image url Ids of idea
+   * @param iconUrlId icon url Ids of idea
    * @author Ramin Akhavan
    * @throws GlobalException if necessary field are left empty or if an object does not exist
    */
+  @Transactional
   public Idea modifyIdea(
       String id,
       String title,
-      Date date,
       String purpose,
       String descriptions,
       boolean isPaid,
@@ -293,19 +311,22 @@ public class IdeaService {
       idea.setPurpose(purpose);
     }
 
-    // See if date changed
-    if (date.compareTo(idea.getDate()) != 0) {
-      idea.setDate(date);
+    if (domainIds != null) {
+      idea.setDomains(domains);
     }
-    idea.setDomains(domains);
-    idea.setTechs(techs);
-    idea.setTopics(topics);
-    idea.setSupportingImageUrls(imgUrls);
+    if (techIds != null) {
+      idea.setTechs(techs);
+    }
+    if (topicIds != null) {
+      idea.setTopics(topics);
+    }
+    if (imgUrlIds != null) {
+      idea.setSupportingImageUrls(imgUrls);
+    }
     idea.setIconUrl(iconUrl);
 
     // Save updated idea in the repository
     ideaRepository.save(idea);
-
     return idea;
   }
 
@@ -317,7 +338,7 @@ public class IdeaService {
    */
   public void checkEmptyAttributeViolation(String newValue) {
     if (newValue != null) {
-      if (newValue.isEmpty()) {
+      if (newValue.equalsIgnoreCase("")) {
         throw new GlobalException(HttpStatus.BAD_REQUEST, "Necessary fields have been left empty");
       }
     }
@@ -402,7 +423,10 @@ public class IdeaService {
     List<URL> urls = new ArrayList<URL>();
     if (imgUrlIds != null) {
       for (String id : imgUrlIds) {
-        urls.add(checkURL(id));
+        URL urlCheck = checkURL(id);
+        if (urlCheck != null) {
+          urls.add(urlCheck);
+        }
       }
     }
     return urls;
@@ -439,6 +463,6 @@ public class IdeaService {
     this.getIdeaById(uuid);
 
     // remove idea
-    ideaRepository.deleteIdeaById(uuid);
+    ideaRepository.deleteById(uuid);
   }
 }

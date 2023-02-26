@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * API for demonstrating how permissions work for access to endpoints
- */
-
+/** API for demonstrating how permissions work for access to endpoints */
 @RestController
 @RequestMapping({"/demo", "/demo/"})
 public class DemoController {
@@ -18,11 +15,11 @@ public class DemoController {
   /**
    * Method to demonstrate how to restrict access to an endpoint
    *
-   * @return a demo string
+   * @throws GlobalException with http status 418 and message "You are a teapot", for demo purposes
    */
   @GetMapping
   @PreAuthorize("hasAuthority('Owner')")
-  public String createIdea() {
+  public String createIdea() throws GlobalException {
     // Concept #1 - controllers don't need to take usernames as parameters - you get
     // them with the .getName() method of the token
     // all endpoints are secured by default - someone only gets to an endpoint if
@@ -38,6 +35,5 @@ public class DemoController {
     // you add @PreAuthorize to decide if a user has a right to connect to a method
     // ( returns 403 forbidden )
     throw new GlobalException(HttpStatus.I_AM_A_TEAPOT, "You are a teapot");
-
   }
 }

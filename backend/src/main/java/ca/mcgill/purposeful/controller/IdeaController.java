@@ -1,24 +1,20 @@
 package ca.mcgill.purposeful.controller;
 
 import ca.mcgill.purposeful.dto.IdeaDTO;
+import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
+import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.service.IdeaService;
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /** API for demonstrating how permissions work for access to endpoints */
 @RestController
@@ -53,44 +49,95 @@ public class IdeaController {
   }
 
   /**
+   * This method creates an idea
+   *
+   * @return created idea
+   * @throws GlobalException if user is not authenticated or ideaDTO is null
+   * @author Adam Kazma
+   */
+  @PostMapping(value = {"/create", "/create/"})
+  @PreAuthorize("hasAuthority('User')")
+  public ResponseEntity<IdeaRequestDTO> createIdea(@RequestBody IdeaRequestDTO ideaDTO)
+      throws GlobalException {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
+    }
+    if (ideaDTO == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
+    }
+
+    Idea createdIdea =
+        ideaService.createIdea(
+            ideaDTO.getTitle(),
+            ideaDTO.getPurpose(),
+            ideaDTO.getDescription(),
+            ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(),
+            ideaDTO.getDomainIds(),
+            ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(),
+            ideaDTO.getImgUrlIds(),
+            ideaDTO.getIconUrlId(),
+            auth.getName());
+
+    IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
+
+    return ResponseEntity.status(HttpStatus.OK).body(createdIdeaDTO);
+  }
+
+  /**
    * This method modifies an idea
    *
    * @return update idea
-   * @throws Exception
+   * @throws GlobalException if the ideaDTO is null
    * @author Ramin Akhavan
    */
-  @PutMapping(value = {"/idea/edit", "/idea/edit/"})
-  public IdeaDTO modifyIdea(
-      @RequestParam("id") String id,
-      @RequestParam("title") String title,
-      @RequestParam("purpose") String purpose,
-      @RequestParam("descriptions") String descriptions,
-      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME, pattern = "yyyy-mm-dd")
-          Date date,
-      @RequestParam("isPaid") boolean isPaid,
-      @RequestParam("inProgress") boolean inProgress,
-      @RequestParam("isPrivate") boolean isPrivate,
-      @RequestParam("domains") List<String> domainIds,
-      @RequestParam("techs") List<String> techIds,
-      @RequestParam("topics") List<String> topicIds,
-      @RequestParam("imgUrls") List<String> imgUrlIds,
-      @RequestParam("iconUrl") String iconUrlId)
-      throws Exception {
+  @PutMapping(
+      value = {"/edit", "/edit/"},
+      consumes = "application/json",
+      produces = "application/json")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
+      throws GlobalException {
+    // Unpack the DTO
+    if (ideaDTO == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
+    }
+
     Idea modifiedIdea =
         ideaService.modifyIdea(
-            id,
-            title,
-            date,
-            descriptions,
-            purpose,
-            isPaid,
-            inProgress,
-            isPrivate,
-            domainIds,
-            techIds,
-            topicIds,
-            imgUrlIds,
-            iconUrlId);
-    return new IdeaDTO(modifiedIdea);
+            ideaDTO.getId(),
+            ideaDTO.getTitle(),
+            ideaDTO.getPurpose(),
+            ideaDTO.getDescription(),
+            ideaDTO.getIsPaid(),
+            ideaDTO.getInProgress(),
+            ideaDTO.getIsPrivate(),
+            ideaDTO.getDomainIds(),
+            ideaDTO.getTechIds(),
+            ideaDTO.getTopicIds(),
+            ideaDTO.getImgUrlIds(),
+            ideaDTO.getIconUrlId());
+    IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
+
+    return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
+  }
+
+  /**
+   * Remove an idea by its id
+   *
+   * @param id the idea's id
+   * @return a response entity with a message instance and the HttpStatus
+   * @author Athmane Benarous
+   */
+  @DeleteMapping({"/{id}", "/{id}/"})
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<String> removeIdea(@PathVariable String id) {
+    // call service layer
+    ideaService.removeIdeaById(id);
+    // return response status with confirmation message
+    return new ResponseEntity<String>("Idea successfully deleted", HttpStatus.OK);
   }
 }

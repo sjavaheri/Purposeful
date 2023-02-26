@@ -18,6 +18,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /** The AppUserService class, the business logic for managing AppUsers */
 @Service
 public class AppUserService implements UserDetailsService {
@@ -37,7 +40,7 @@ public class AppUserService implements UserDetailsService {
    * @param password - password of the user
    * @param firstname - first name of the user
    * @param lastname - last name of the user
-   * @return AppUser - the newly created user
+   * @return {@link AppUser} - the newly created user
    * @author Siger Ma
    */
   @Transactional
@@ -111,7 +114,7 @@ public class AppUserService implements UserDetailsService {
    * @param password - password of the user
    * @param firstname - first name of the user
    * @param lastname - last name of the user
-   * @return AppUser - the newly created user
+   * @return {@link AppUser} - the newly created user
    * @author Siger Ma
    */
   @Transactional
@@ -176,9 +179,15 @@ public class AppUserService implements UserDetailsService {
     return appUser;
   }
 
+  /**
+   * Method for spring to undersatnd how to find a user in the database
+   *
+   * @param email the email of the user
+   * @return an {@link AppUser} wrapped in the {@link SecurityUser} class, as needed by sprint
+   * @throws UsernameNotFoundException if the user is not found
+   */
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
     // look for user in database. Tell spring how to get the user
     AppUser appUser = appUserRepository.findAppUserByEmail(email);
     if (appUser == null) {
@@ -188,14 +197,15 @@ public class AppUserService implements UserDetailsService {
     // check the password and whether it matches the given username
     return new SecurityUser(appUser);
   }
+
   /**
    * Modify the first name and last name of a user
    *
    * @param email - email of the user
    * @param firstname - first name of the user
    * @param lastname - last name of the user
-   * @return AppUser - the modified user
-   * @auhtor Enzo Benoit-Jeannin
+   * @return {@link AppUser} - the modified user
+   * @author Enzo Benoit-Jeannin
    */
   @Transactional
   public AppUser modifyUserNames(String email, String firstname, String lastname) {
@@ -228,13 +238,13 @@ public class AppUserService implements UserDetailsService {
   }
 
   /**
-   * This service method updates the moderator's password based on the givenm inputs asswords must
-   * be at least 8 characters long and contain at least one number, one lowercase character and one
+   * This service method updates the user's password based on the given inputs. Passwords must be at
+   * least 8 characters long and contain at least one number, one lowercase character and one
    * uppercase character
    *
-   * @param email The email of the moderator account to modify its password
-   * @param password The new password of the moderator
-   * @return The modified moderator
+   * @param email The email of the user account to modify its password
+   * @param password The new password of the user
+   * @return The modified user
    * @author Enzo Benoit-Jeannin
    */
   @Transactional
@@ -266,5 +276,21 @@ public class AppUserService implements UserDetailsService {
     user.setPassword(passwordEncoder.encode(password));
     appUserRepository.save(user);
     return user;
+  }
+
+  /**
+   * This service method returns all the users in the database
+   *
+   * @return List <{@link AppUser}> - the list of all the users in the database
+   * @author Enzo Benoit-Jeannin
+   */
+  @Transactional
+  public List<AppUser> getAllUsers() {
+    Iterable<AppUser> iterable = appUserRepository.findAll();
+    List<AppUser> resultList = new ArrayList<AppUser>();
+    for (AppUser t : iterable) {
+      resultList.add(t);
+    }
+    return resultList;
   }
 }

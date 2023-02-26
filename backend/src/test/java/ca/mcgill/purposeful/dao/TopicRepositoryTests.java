@@ -1,8 +1,6 @@
 package ca.mcgill.purposeful.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,7 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ca.mcgill.purposeful.model.Topic;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * To test the Topic CRUD repository methods.
@@ -21,20 +20,15 @@ import ca.mcgill.purposeful.model.Topic;
 public class TopicRepositoryTests {
 
   // Create the repository we are testing
-  @Autowired
-  private TopicRepository topicRepository;
+  @Autowired private TopicRepository topicRepository;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
@@ -43,8 +37,8 @@ public class TopicRepositoryTests {
   /**
    * Topic testing method which creates, populates the attributes and saves a topic in the database.
    * Then checks that the same topic is correctly retrieved by the repository.
-   * <p>
-   * It tests the findTopicById(String id) for the topic
+   *
+   * <p>It tests the findTopicById(String id) for the topic
    *
    * @author Enzo Benoit-Jeannin
    */
