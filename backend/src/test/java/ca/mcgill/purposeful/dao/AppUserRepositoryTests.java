@@ -1,23 +1,22 @@
 package ca.mcgill.purposeful.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Role;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.DatabaseUtil;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * AppUser Repository testing class which initiates an appUser with all its attributes, executes the
@@ -28,31 +27,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootTest
 public class AppUserRepositoryTests {
 
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
   // Associations
-  @Autowired
-  private DomainRepository domainRepository;
-  @Autowired
-  private TopicRepository topicRepository;
-  @Autowired
-  private RegularUserRepository regularUserRepository;
+  @Autowired private DomainRepository domainRepository;
+  @Autowired private TopicRepository topicRepository;
+  @Autowired private RegularUserRepository regularUserRepository;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();
@@ -78,12 +68,11 @@ public class AppUserRepositoryTests {
     // Create a regular user
     var regularUser = new RegularUser();
     regularUser.setVerifiedCompany(false);
-    var regularUserList = new ArrayList<Role>();
-    regularUserList.add(regularUser);
+    regularUser.setAppUser(appUser);
 
     // Create and persist multiple domains
     var domainSet = new HashSet<Domain>();
-    var domainNames = new String[]{"hello", "world", "science"};
+    var domainNames = new String[] {"hello", "world", "science"};
     for (String name : domainNames) {
       var domain = new Domain();
       domain.setName(name);
@@ -95,7 +84,7 @@ public class AppUserRepositoryTests {
 
     // Create and persist multiple topics
     var topicSet = new HashSet<Topic>();
-    var topicNames = new String[]{"hello", "world", "science"};
+    var topicNames = new String[] {"hello", "world", "science"};
     for (String name : topicNames) {
       var topic = new Topic();
       topic.setName(name);
@@ -104,9 +93,6 @@ public class AppUserRepositoryTests {
       topicSet.add(topic);
     }
     regularUser.setInterests(topicSet);
-
-    regularUser.setAppUser(appUser);
-    appUser.setRoles(regularUserList);
 
     // save the appUser
     appUser = appUserRepository.save(appUser);

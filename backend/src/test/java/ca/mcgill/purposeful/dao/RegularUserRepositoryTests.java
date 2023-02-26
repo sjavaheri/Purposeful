@@ -4,7 +4,6 @@ import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.util.DatabaseUtil;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,23 +22,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 public class RegularUserRepositoryTests {
 
-  @Autowired
-  private RegularUserRepository regularUserRepository;
+  @Autowired private RegularUserRepository regularUserRepository;
 
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
-  /**
-   * Clear the database before all tests
-   */
+  /** Clear the database before all tests */
   @BeforeAll
   public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
     util.clearDatabase();
   }
 
-  /**
-   * Clear the database after each test
-   */
+  /** Clear the database after each test */
   @AfterEach
   public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
     util.clearDatabase();

@@ -44,7 +44,7 @@ public class ID003_loginStepDefinitions {
     // Add the Basic Auth header to the request
     HttpEntity<String> requestEntity =
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+    this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
   }
 
   @Then("I should receive a valid JWT token and a HTTP status code {string}")
@@ -62,7 +62,7 @@ public class ID003_loginStepDefinitions {
     // Add the Basic Auth header to the request
     HttpEntity<String> requestEntity =
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    this.response = client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+    this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
   }
 
   @Then("I should receive a HTTP status code {string}")

@@ -48,32 +48,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ID016_modifyIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  @Autowired private PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired
-  private DomainRepository domainRepository;
+  @Autowired private DomainRepository domainRepository;
 
-  @Autowired
-  private TopicRepository topicRepository;
+  @Autowired private TopicRepository topicRepository;
 
-  @Autowired
-  private TechnologyRepository technologyRepository;
+  @Autowired private TechnologyRepository technologyRepository;
 
-  @Autowired
-  private IdeaRepository ideaRepository;
+  @Autowired private IdeaRepository ideaRepository;
 
-  @Autowired
-  private URLRepository urlRepository;
+  @Autowired private URLRepository urlRepository;
 
   private ResponseEntity<?> response;
 
@@ -113,8 +104,7 @@ public class ID016_modifyIdeaStepDefinitions {
   }
 
   @And("I am successfully logged in as the user with email {string} and password {string}")
-  public void iAmSuccessfullyLoggedInAsTheUserWithEmailAndPassword(String email,
-      String password) {
+  public void iAmSuccessfullyLoggedInAsTheUserWithEmailAndPassword(String email, String password) {
     HttpEntity<String> requestEntity =
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
 
@@ -122,17 +112,16 @@ public class ID016_modifyIdeaStepDefinitions {
     // In this case we are testing whether the browse ideas response is correct so we only
     // need the token
     ResponseEntity<?> response =
-        client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
-    assertEquals(HttpStatus.OK,
-        response.getStatusCode()); // Making sure the login was successful
+        client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
+    assertEquals(HttpStatus.OK, response.getStatusCode()); // Making sure the login was successful
     jwtToken = response.getBody().toString(); // Extract the token for future requests
     assertNotNull(jwtToken); // Ensure the token is not null
   }
 
-  @When("the user requests to modify the field {string} to become new value {string} for idea with id {string}")
-  public void theUserRequestsToModifyTheFieldToBecomeNewValueForIdeaWithId(String field,
-      String new_value, String id)
-      throws JsonProcessingException, JSONException {
+  @When(
+      "the user requests to modify the field {string} to become new value {string} for idea with id {string}")
+  public void theUserRequestsToModifyTheFieldToBecomeNewValueForIdeaWithId(
+      String field, String new_value, String id) throws JsonProcessingException, JSONException {
     Idea idea = ideaRepository.findIdeaById(idMap.get(id));
 
     // Not required fields
@@ -196,14 +185,26 @@ public class ID016_modifyIdeaStepDefinitions {
     if (field.equalsIgnoreCase("image URLs")) {
       imgUrlIds = new ArrayList<>();
       for (String single_id : List.of(new_value.split(","))) {
-        //assertEquals(1, single_id);
+        // assertEquals(1, single_id);
         imgUrlIds.add(idMap.get(single_id));
       }
     }
 
-    IdeaRequestDTO ideaDTO = new IdeaRequestDTO(idMap.get(id), title, purpose, description,
-        Date.from(Instant.now()), isPaid, inProgress, isPrivate, domainIds, techIds, topicIds,
-        imgUrlIds, iconUrlId);
+    IdeaRequestDTO ideaDTO =
+        new IdeaRequestDTO(
+            idMap.get(id),
+            title,
+            purpose,
+            description,
+            Date.from(Instant.now()),
+            isPaid,
+            inProgress,
+            isPrivate,
+            domainIds,
+            techIds,
+            topicIds,
+            imgUrlIds,
+            iconUrlId);
 
     this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
     this.authHeader.setContentType(MediaType.APPLICATION_JSON);
@@ -212,20 +213,12 @@ public class ID016_modifyIdeaStepDefinitions {
     HttpEntity<?> requestEntity = new HttpEntity<>(ideaDTO, this.authHeader);
 
     try {
-      this.response = client.exchange(
-          "/api/idea/edit/",
-          HttpMethod.PUT,
-          requestEntity,
-          IdeaRequestDTO.class);
+      this.response =
+          client.exchange("/api/idea/edit/", HttpMethod.PUT, requestEntity, IdeaRequestDTO.class);
     } catch (Exception e) {
-      this.response = client.exchange(
-          "/api/idea/edit/",
-          HttpMethod.PUT,
-          requestEntity,
-          String.class);
+      this.response =
+          client.exchange("/api/idea/edit/", HttpMethod.PUT, requestEntity, String.class);
     }
-
-
   }
 
   @Then("the idea with id {string} will have value {string} for the field {string}")
@@ -283,8 +276,10 @@ public class ID016_modifyIdeaStepDefinitions {
       }
     }
 
-    if (field.equalsIgnoreCase("image URLs") || field.equalsIgnoreCase("topics")
-        || field.equalsIgnoreCase("techs") || field.equalsIgnoreCase("domains")) {
+    if (field.equalsIgnoreCase("image URLs")
+        || field.equalsIgnoreCase("topics")
+        || field.equalsIgnoreCase("techs")
+        || field.equalsIgnoreCase("domains")) {
       List<String> newObjIds = List.of(value.split(","));
 
       for (String newObjId : newObjIds) {
@@ -336,9 +331,21 @@ public class ID016_modifyIdeaStepDefinitions {
       imgUrlIds = new ArrayList<>();
     }
 
-    IdeaRequestDTO ideaDTO = new IdeaRequestDTO(idMap.get(id), title, purpose, description,
-        Date.from(Instant.now()), isPaid, inProgress, isPrivate, domainIds, techIds, topicIds,
-        imgUrlIds, iconUrlId);
+    IdeaRequestDTO ideaDTO =
+        new IdeaRequestDTO(
+            idMap.get(id),
+            title,
+            purpose,
+            description,
+            Date.from(Instant.now()),
+            isPaid,
+            inProgress,
+            isPrivate,
+            domainIds,
+            techIds,
+            topicIds,
+            imgUrlIds,
+            iconUrlId);
 
     this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
     this.authHeader.setContentType(MediaType.APPLICATION_JSON);
@@ -347,17 +354,11 @@ public class ID016_modifyIdeaStepDefinitions {
     HttpEntity<?> requestEntity = new HttpEntity<>(ideaDTO, this.authHeader);
 
     try {
-      this.response = client.exchange(
-          "/api/idea/edit/",
-          HttpMethod.PUT,
-          requestEntity,
-          IdeaRequestDTO.class);
+      this.response =
+          client.exchange("/api/idea/edit/", HttpMethod.PUT, requestEntity, IdeaRequestDTO.class);
     } catch (Exception e) {
-      this.response = client.exchange(
-          "/api/idea/edit/",
-          HttpMethod.PUT,
-          requestEntity,
-          String.class);
+      this.response =
+          client.exchange("/api/idea/edit/", HttpMethod.PUT, requestEntity, String.class);
     }
   }
 

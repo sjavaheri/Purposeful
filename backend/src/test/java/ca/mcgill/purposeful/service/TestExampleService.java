@@ -1,7 +1,7 @@
 package ca.mcgill.purposeful.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.model.AppUser;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,26 +9,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.model.AppUser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * This is an example class to provide a template for all service tests
- *
- * @Author Shidan Javaheri
- */
+/** This is an example class to provide a template for all service tests @Author Shidan Javaheri */
 @ExtendWith(MockitoExtension.class)
 public class TestExampleService {
 
   // mock all the repositories that the service uses (and any other dependancies
   // handled by spring)
   // i.e. mock everything that is @Autowired in the service
-  @Mock
-  private AppUserRepository exampleRepository;
+  @Mock private AppUserRepository exampleRepository;
 
   // inject mocks into the service you are testing
-  @InjectMocks
-  private LoginService exampleService;
+  @InjectMocks private LoginService exampleService;
 
   // create objects you will use in your test
   private AppUser user;
@@ -40,11 +33,7 @@ public class TestExampleService {
     this.user.setEmail("regular.user.one@email.com");
   }
 
-  /**
-   * A postive outcome example test method
-   *
-   * @Author Shidan Javaheri
-   */
+  /** A postive outcome example test method @Author Shidan Javaheri */
   @Test
   public void poistiveOutcomeTest() {
 
@@ -73,11 +62,7 @@ public class TestExampleService {
 
   }
 
-  /**
-   * A negative outcome example test method
-   *
-   * @Author Shidan Javaheri
-   */
+  /** A negative outcome example test method @Author Shidan Javaheri */
   @Test
   public void negativeOutcomeTest() {
 

@@ -97,7 +97,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
     ResponseEntity<String> response =
-        client.exchange("/login", HttpMethod.POST, request, String.class);
+        client.exchange("/api/login", HttpMethod.POST, request, String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 

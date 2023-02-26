@@ -1,64 +1,37 @@
 package ca.mcgill.purposeful.util;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.dao.DomainRepository;
-import ca.mcgill.purposeful.dao.IdeaRepository;
-import ca.mcgill.purposeful.dao.RegularUserRepository;
-import ca.mcgill.purposeful.dao.TechnologyRepository;
-import ca.mcgill.purposeful.dao.TopicRepository;
-import ca.mcgill.purposeful.dao.URLRepository;
-import ca.mcgill.purposeful.model.AppUser;
-import ca.mcgill.purposeful.model.Domain;
-import ca.mcgill.purposeful.model.Idea;
-import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Role;
-import ca.mcgill.purposeful.model.Technology;
-import ca.mcgill.purposeful.model.Topic;
-import ca.mcgill.purposeful.model.URL;
+import ca.mcgill.purposeful.dao.*;
+import ca.mcgill.purposeful.model.*;
 import ca.mcgill.purposeful.service.AppUserService;
 import io.cucumber.datatable.DataTable;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.*;
+
 @Configuration
 public class CucumberUtil {
 
-  @Autowired
-  private TopicRepository topicRepository;
+  @Autowired private TopicRepository topicRepository;
 
-  @Autowired
-  private TechnologyRepository technologyRepository;
+  @Autowired private TechnologyRepository technologyRepository;
 
-  @Autowired
-  private URLRepository urlRepository;
+  @Autowired private URLRepository urlRepository;
 
-  @Autowired
-  private IdeaRepository ideaRepository;
+  @Autowired private IdeaRepository ideaRepository;
 
-  @Autowired
-  private DomainRepository domainRepository;
+  @Autowired private DomainRepository domainRepository;
 
-  @Autowired
-  private AppUserService appUserService;
+  @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private RegularUserRepository regularUserRepository;
 
-  @Autowired
-  private RegularUserRepository regularUserRepository;
+  @Autowired private AppUserService appUserService;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  @Autowired private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -144,34 +117,13 @@ public class CucumberUtil {
     for (var row : rows) {
 
       // create an instance of App User from the table values
-      AppUser appUser = new AppUser();
-      appUser.setFirstname(row.get("firstname"));
-      appUser.setLastname(row.get("lastname"));
-      appUser.setEmail(row.get("email"));
-      appUser.setPassword(passwordEncoder.encode(row.get("password")));
-
-      // Set the user to be regular
-      Set<Authority> setOfAuthorities = new HashSet<Authority>();
-      setOfAuthorities.add(Authority.User);
-
-      // Create a regular user class
-      RegularUser regularUser = new RegularUser();
-      regularUser.setAppUser(appUser);
-
-      // Add the regular user to a list of roles
-      List<Role> roles = new ArrayList<Role>();
-      roles.add(regularUser);
-
-      // Make the appuser instance point to the regular user
-      appUser.setRoles(roles);
-      appUser.setAuthorities(setOfAuthorities);
-
-      // Save both in the database
-      appUserRepository.save(appUser);
-      regularUserRepository.save(regularUser);
+      AppUser appUser =
+          appUserService.registerRegularUser(
+              row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
 
       // Add the regular user to the map if it was passed
-      // Note: no need to add the app user to the map since we only will be manipulating the regular
+      // Note: no need to add the app user to the map since we only will be
+      // manipulating the regular
       // user instance later on
       if (idMap != null) {
         idMap.put(row.get("id"), appUser.getId());
@@ -183,7 +135,7 @@ public class CucumberUtil {
    * This method creates and saves domains from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveDomainsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -210,7 +162,7 @@ public class CucumberUtil {
    * This method creates and saves topics from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTopicsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -237,7 +189,7 @@ public class CucumberUtil {
    * This method creates and saves technologies from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTechsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -264,7 +216,7 @@ public class CucumberUtil {
    * This method creates and saves ideas from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveIdeasFromTable1(DataTable dataTable, Map<String, String> idMap) {
@@ -339,7 +291,7 @@ public class CucumberUtil {
    * This method creates and saves Ideas from a data table
    *
    * @param dataTable a data table containing the ideas to be created
-   * @param idMap     a map containing the ids of the users and domains
+   * @param idMap a map containing the ids of the users and domains
    * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
@@ -358,8 +310,8 @@ public class CucumberUtil {
 
       // user
       AppUser user = appUserRepository.findAppUserById(idMap.get(row.get("user")));
-      Role role = user.getRoles().get(0);
-      idea.setUser((RegularUser) role);
+      RegularUser role = regularUserRepository.findRegularUserByAppUserEmail(user.getEmail());
+      idea.setUser(role);
 
       // domains
       Set<Domain> domains = new HashSet<Domain>();
@@ -416,7 +368,7 @@ public class CucumberUtil {
    * This method creates and saves URLs from a data table
    *
    * @param dataTable a data table containing the URLs to be created
-   * @param idMap     a map containing the ids of the users and domains
+   * @param idMap a map containing the ids of the users and domains
    * @author Thibaut Baguette
    */
   public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {

@@ -108,7 +108,7 @@ public class ID019_browseIdeaStepDefinitions {
     // In this case we are testing whether the browse ideas response is correct so we only
     // need the token
     ResponseEntity<?> response =
-        client.exchange("/login", HttpMethod.POST, requestEntity, String.class);
+        client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
     assertEquals(HttpStatus.OK, response.getStatusCode()); // Making sure the login was successful
     jwtToken = response.getBody().toString(); // Extract the token for future requests
     assertNotNull(jwtToken); // Ensure the token is not null
