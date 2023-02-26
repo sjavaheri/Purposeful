@@ -3,7 +3,6 @@ package ca.mcgill.purposeful.dto;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 
 public class ReactionDTO {
@@ -17,7 +16,8 @@ public class ReactionDTO {
   private String idea_id;
   private String user_id;
 
-  public ReactionDTO() {}
+  public ReactionDTO() {
+  }
 
   public ReactionDTO(Reaction reaction) {
     this.reactionType = reaction.getReactionType();
@@ -27,8 +27,7 @@ public class ReactionDTO {
   }
 
   public ReactionDTO(
-      String id, ReactionType reactionType, Date date, String idea_id, String user_id) {
-    this.id = id;
+      Date date, ReactionType reactionType, String idea_id, String user_id) {
     this.reactionType = reactionType;
     this.date = date;
     this.idea_id = idea_id;

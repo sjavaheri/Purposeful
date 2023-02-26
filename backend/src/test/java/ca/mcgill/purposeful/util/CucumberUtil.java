@@ -1,37 +1,69 @@
 package ca.mcgill.purposeful.util;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.*;
-import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.DomainRepository;
+import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.ReactionRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Reaction;
+import ca.mcgill.purposeful.model.Reaction.ReactionType;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.service.AppUserService;
 import io.cucumber.datatable.DataTable;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
-
 @Configuration
 public class CucumberUtil {
 
-  @Autowired private TopicRepository topicRepository;
+  @Autowired
+  private TopicRepository topicRepository;
 
-  @Autowired private TechnologyRepository technologyRepository;
+  @Autowired
+  private TechnologyRepository technologyRepository;
 
-  @Autowired private URLRepository urlRepository;
+  @Autowired
+  private URLRepository urlRepository;
 
-  @Autowired private IdeaRepository ideaRepository;
+  @Autowired
+  private IdeaRepository ideaRepository;
 
-  @Autowired private DomainRepository domainRepository;
+  @Autowired
+  private DomainRepository domainRepository;
 
-  @Autowired private AppUserRepository appUserRepository;
+  @Autowired
+  private AppUserRepository appUserRepository;
 
-  @Autowired private RegularUserRepository regularUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
-  @Autowired private AppUserService appUserService;
+  @Autowired
+  private ReactionRepository reactionRepository;
 
-  @Autowired private PasswordEncoder passwordEncoder;
+  @Autowired
+  private AppUserService appUserService;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -135,7 +167,7 @@ public class CucumberUtil {
    * This method creates and saves domains from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveDomainsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -162,7 +194,7 @@ public class CucumberUtil {
    * This method creates and saves topics from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTopicsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -189,7 +221,7 @@ public class CucumberUtil {
    * This method creates and saves technologies from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTechsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -216,7 +248,7 @@ public class CucumberUtil {
    * This method creates and saves ideas from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveIdeasFromTable1(DataTable dataTable, Map<String, String> idMap) {
@@ -291,7 +323,7 @@ public class CucumberUtil {
    * This method creates and saves Ideas from a data table
    *
    * @param dataTable a data table containing the ideas to be created
-   * @param idMap a map containing the ids of the users and domains
+   * @param idMap     a map containing the ids of the users and domains
    * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
@@ -368,7 +400,7 @@ public class CucumberUtil {
    * This method creates and saves URLs from a data table
    *
    * @param dataTable a data table containing the URLs to be created
-   * @param idMap a map containing the ids of the users and domains
+   * @param idMap     a map containing the ids of the users and domains
    * @author Thibaut Baguette
    */
   public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -413,5 +445,31 @@ public class CucumberUtil {
     var authHeader = "Bearer " + jwtToken;
     headers.add("Authorization", authHeader);
     return headers;
+  }
+
+  /**
+   * This method creates and saves reactions from a data table
+   *
+   * @param dataTable
+   * @param idMap
+   * @author Athmane Benarous
+   */
+  public void createAndSaveReactionsFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Reaction reaction = new Reaction();
+      reaction.setReactionType(ReactionType.valueOf(row.get("reactionType")));
+      Date date = new Date();
+      date.setHours(0);
+      reaction.setDate(date);
+      reaction.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("idea_id"))));
+      reaction.setRegularUser(
+          regularUserRepository.findRegularUserByApp_User_Id(idMap.get(row.get("user"))));
+
+      reactionRepository.save(reaction);
+      idMap.put(row.get("id"), reaction.getId());
+    }
   }
 }
