@@ -193,14 +193,30 @@ public class IdeaService {
       String regularUsername) {
     // Check parameters are not empty
     checkEmptyAttributeViolation(title);
+    if (title.length() > 100) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "Idea titles cannot exceed 100 characters");
+    }
     checkEmptyAttributeViolation(description);
     checkEmptyAttributeViolation(purpose);
 
     // Check to see if all given objects exist
+    if (domainIds.size() == 0
+        || domainIds == null
+        || (domainIds.size() == 1 && (domainIds.get(0) == null || domainIds.get(0).isEmpty()))) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "You must specify at least 1 domain");
+    }
     Set<Domain> domains = checkDomains(domainIds);
     Set<Technology> techs = checkTechs(techIds);
+    if (topicIds == null
+        || topicIds.size() == 0
+        || (topicIds.size() == 1 && (topicIds.get(0) == null || topicIds.get(0).isEmpty()))) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "You must specify at least 1 topic");
+    }
     Set<Topic> topics = checkTopics(topicIds);
     List<URL> imgUrls = checkImgURLS(imgUrlIds);
+    if (iconUrlId == null || iconUrlId.isEmpty()) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "An idea icon is required");
+    }
     URL iconUrl = checkURL(iconUrlId);
     RegularUser user = regularUserRepository.findRegularUserByAppUserEmail(regularUsername);
     Idea idea = new Idea();
