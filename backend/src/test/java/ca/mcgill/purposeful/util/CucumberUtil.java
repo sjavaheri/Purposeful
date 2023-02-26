@@ -464,7 +464,7 @@ public class CucumberUtil {
       reaction.setDate(date);
       reaction.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("idea_id"))));
       reaction.setRegularUser(
-          regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("appUser_id"))));
+          regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("user"))));
 
       reactionRepository.save(reaction);
       idMap.put(row.get("id"), reaction.getId());

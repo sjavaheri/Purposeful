@@ -8,6 +8,7 @@ import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.service.ReactionService;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +20,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-
-/** API for accessing the endpoints of Reaction */
+/**
+ * API for accessing the endpoints of Reaction
+ */
 @RestController
 @RequestMapping({"/api/reaction", "/api/reaction/"})
 public class ReactionController {
 
-  @Autowired private ReactionService reactionService;
-  @Autowired private RegularUserRepository regularUserRepository;
+  @Autowired
+  private ReactionService reactionService;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
   /**
    * POST method to react
@@ -61,6 +64,6 @@ public class ReactionController {
 
     // return the reaction
     return new ResponseEntity<ReactionDTO>(
-        (reaction == null) ? new ReactionDTO() : new ReactionDTO(reaction), HttpStatus.CREATED);
+        (reaction == null) ? null : new ReactionDTO(reaction), HttpStatus.CREATED);
   }
 }

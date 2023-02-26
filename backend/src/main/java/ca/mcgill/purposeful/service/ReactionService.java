@@ -8,14 +8,15 @@ import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-/** Service functions of the Reaction class */
+/**
+ * Service functions of the Reaction class
+ */
 @Service
 public class ReactionService {
 
@@ -23,23 +24,26 @@ public class ReactionService {
    * CRUD repos
    */
 
-  @Autowired ReactionRepository reactionRepository;
-  @Autowired RegularUserRepository regularUserRepository;
+  @Autowired
+  ReactionRepository reactionRepository;
+  @Autowired
+  RegularUserRepository regularUserRepository;
 
   /*
    * Service functions
    */
 
-  @Autowired IdeaService ideaService;
+  @Autowired
+  IdeaService ideaService;
 
   /**
    * Method to create a reaction and fill its appropriate attributes if it doesn't exist. The method
    * will remove an existing reaction if it exists already
    *
-   * @param date date of the reaction post
+   * @param date         date of the reaction post
    * @param reactionType type of reaction
-   * @param idea_id id of the idea being reacted to
-   * @param user_id id of the regular user that reacts
+   * @param idea_id      id of the idea being reacted to
+   * @param user_id      id of the regular user that reacts
    * @return the reaction that has been created
    */
   @Transactional
@@ -152,7 +156,7 @@ public class ReactionService {
     // TODO: validate regular user with a getRegularUserById method from its service
     // class
 
-    ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUserId(uuid);
+    ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUser_Id(uuid);
 
     if (reactions.size() == 0) {
       throw new GlobalException(

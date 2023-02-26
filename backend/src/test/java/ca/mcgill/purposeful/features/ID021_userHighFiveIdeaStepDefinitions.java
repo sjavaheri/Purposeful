@@ -17,11 +17,13 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -92,7 +94,7 @@ public class ID021_userHighFiveIdeaStepDefinitions {
 
   @Given("the database contains the following reactions before high fiving an idea:")
   public void theDatabaseContainsTheFollowingReactions(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
+    cucumberUtil.createAndSaveReactionsFromTable(dataTable, idMap);
   }
 
   @Given("I am logged in before high fiving an idea")
@@ -118,70 +120,87 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
-  @When("the user with email {string} reacts with a reaction {string} to an idea with id {string}")
-  public void theUserWithEmailReactsWithAReactionToAnIdeaWithId(
-      String email, String reactionType, String idea_id) {
+  @When("the user with id {string} reacts with a reaction {string} to an idea with id {string} on the date {string}")
+  public void theUserWithIdReactsWithAReactionToAnIdeaWithIdOnTheDate(
+      String user, String reactionType, String idea_id, String date) throws ParseException {
+    String correctedUser = idMap.get(user);
+    String correctedIdea = idMap.get(idea_id);
     String user_id = regularUserRepository
-        .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+        .findRegularUserByAppUser_Id(correctedUser)
         .getId();
 
-    ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
-        idea_id, user_id);
-
+    ReactionDTO reactionDTO = new ReactionDTO(new SimpleDateFormat("dd-MM-yyyy").parse(date),
+        ReactionType.valueOf(reactionType),
+        correctedIdea, user_id);
     // make a post request to create the user and store the response
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
   }
 
   @Then("a new reaction of idea {string} and user {string} shall be added to the reaction database")
-  public void aNewEntryOfTypeShallBeAddedToTheReactionDatabase(String idea_id, String email) {
+  public void aNewEntryOfTypeShallBeAddedToTheReactionDatabase(String idea_id, String user) {
+    Assertions.assertNotNull(response, "The response was null");
+    System.out.println(response.getStatusCode());
+
+    String correctedIdea = idMap.get(idea_id);
+    String correctedUser = idMap.get(user);
     String user_id = regularUserRepository
-        .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+        .findRegularUserByAppUser_Id(correctedUser)
         .getId();
-    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
+    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(correctedIdea,
+        user_id);
     assertNotNull(reaction);
   }
 
-  @When("the user with email {string} reacts again with a reaction {string} to an idea with id {string}")
-  public void theUserWithEmailReactsAgainWithAReactionToAnIdeaWithId(
-      String email, String reactionType, String idea_id) {
+  @When("the user with id {string} reacts again with a reaction {string} to an idea with id {string} on the date {string}")
+  public void theUserWithIdReactsAgainWithAReactionToAnIdeaWithIdOnTheDate(
+      String user, String reactionType, String idea_id, String date) throws ParseException {
+    String correctedUser = idMap.get(user);
+    String correctedIdea = idMap.get(idea_id);
     String user_id = regularUserRepository
-        .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+        .findRegularUserByAppUser_Id(correctedUser)
         .getId();
 
-    ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
-        idea_id, user_id);
-
+    ReactionDTO reactionDTO = new ReactionDTO(new SimpleDateFormat("dd-MM-yyyy").parse(date),
+        ReactionType.valueOf(reactionType),
+        correctedIdea, user_id);
     // make a post request to create the user and store the response
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
   }
 
   @Then("the reaction entry of idea {string} and user {string} shall be removed from the reaction database")
   public void theReactionEntryOfIdShallBeRemovedFromTheReactionDatabase(
-      String idea_id, String email) {
+      String idea_id, String user) {
+    Assertions.assertNotNull(response, "The response was null");
+
+    String correctedIdea = idMap.get(idea_id);
+    String correctedUser = idMap.get(user);
     String user_id = regularUserRepository
-        .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+        .findRegularUserByAppUser_Id(correctedUser)
         .getId();
-    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
+    Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(correctedIdea,
+        user_id);
     assertNull(reaction);
   }
 
-  @When("the user requests to react with the reactionType {string} to an idea with id {string} on behalf of another regular user with id {string}")
-  public void theUserRequestsToReactWithTheReactionTypeToAnIdeaWithIdOnBehalfOfAnotherRegularUserWithId(
-      String reactionType, String idea_id, String appUser_email) {
-    String uuid_idea = idMap.get(idea_id.toString());
-    String user_id = regularUserRepository.findRegularUserByAppUser_Id(
-        appUserRepository.findAppUserByEmail(appUser_email).getId()).getId();
-
-    ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
-        uuid_idea, user_id);
+  @When("the user with id {string} requests to react with the reaction {string} to the idea with the invalid UUID {string} on the date {string}")
+  public void theUserWithIdRequestsToReactWithTheReactionToTheIdeaWithTheInvalidUUIDOnTheDate(
+      String user, String reactionType, String invalidId, String date) throws ParseException {
+    HttpEntity<String> request = new HttpEntity<>(authHeader);
+    String correctedUser = idMap.get(user);
+    String user_id = regularUserRepository
+        .findRegularUserByAppUser_Id(correctedUser)
+        .getId();
+    ReactionDTO reactionDTO = new ReactionDTO(new SimpleDateFormat("dd-MM-yyyy").parse(date),
+        ReactionType.valueOf(reactionType),
+        invalidId, user_id);
 
     // make a post request to create the user and store the response
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
   }
 
-  @Then("the error message {string} will be thrown with status code {string} and the reaction database will not be modified")
-  public void theErrorMessageWillBeThrownWithStatusCodeAndTheReactionDatabaseWillNotBeModified(
-      String errorMessage, String status) {
-    assertEquals(HttpStatus.valueOf(status), response.getStatusCode());
+  @Then("the error message {string} will be thrown with status code {int} after attempting to react")
+  public void theErrorMessageWillBeThrownWithStatusCodeAfterAttemptingToReact(String msg,
+      Integer code) {
+    assertEquals(HttpStatus.valueOf(code), response.getStatusCode());
   }
 }
