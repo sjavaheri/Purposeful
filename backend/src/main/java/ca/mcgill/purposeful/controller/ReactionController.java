@@ -1,13 +1,11 @@
 package ca.mcgill.purposeful.controller;
 
-import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dto.ReactionDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.service.AppUserService;
 import ca.mcgill.purposeful.service.ReactionService;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +29,7 @@ public class ReactionController {
   @Autowired
   private ReactionService reactionService;
   @Autowired
-  private AppUserRepository appUserRepository;
-  @Autowired
   private RegularUserRepository regularUserRepository;
-  @Autowired
-  private AppUserService appUserService;
 
   /**
    * POST method to react
@@ -57,7 +51,7 @@ public class ReactionController {
     String email = authentication.getName();
 
     RegularUser user = regularUserRepository.findRegularUserById(reactionDTO.getId());
-    
+
     if (!user.getAppUser().getEmail().equals(email)) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized");
     }
