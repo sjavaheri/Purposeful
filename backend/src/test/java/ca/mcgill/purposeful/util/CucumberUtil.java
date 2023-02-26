@@ -149,9 +149,8 @@ public class CucumberUtil {
     for (var row : rows) {
 
       // create an instance of App User from the table values
-      AppUser appUser =
-          appUserService.registerRegularUser(
-              row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
+      AppUser appUser = appUserService.registerRegularUser(
+          row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
 
       // Add the regular user to the map if it was passed
       // Note: no need to add the app user to the map since we only will be
@@ -302,11 +301,10 @@ public class CucumberUtil {
       idea.setPurpose(row.get("purpose"));
 
       // Set the user
-      AppUser appUser =
-          appUserRepository.findAppUserById(idMap.get(row.get("author"))); // Extract app user saved
-      RegularUser regularUser =
-          regularUserRepository.findRegularUserByAppUserEmail(
-              appUser.getEmail()); // Extract regular user from app user
+      AppUser appUser = appUserRepository.findAppUserById(
+          idMap.get(row.get("author"))); // Extract app user saved
+      RegularUser regularUser = regularUserRepository.findRegularUserByAppUserEmail(
+          appUser.getEmail()); // Extract regular user from app user
       idea.setUser(regularUser);
 
       // Save the domain in memory
@@ -466,7 +464,7 @@ public class CucumberUtil {
       reaction.setDate(date);
       reaction.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("idea_id"))));
       reaction.setRegularUser(
-          regularUserRepository.findRegularUserByApp_User_Id(idMap.get(row.get("appUser_id"))));
+          regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("appUser_id"))));
 
       reactionRepository.save(reaction);
       idMap.put(row.get("id"), reaction.getId());
