@@ -46,7 +46,7 @@ public class ID015_createIdeaStepDefinitions {
   @Given("the database contains the following user account:")
   public void the_database_contains_the_following_user_account(DataTable dataTable) {
     // create app user
-     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, null);
+    cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, null);
   }
 
   @Given("the number of ideas in the database is {int}")
@@ -61,7 +61,7 @@ public class ID015_createIdeaStepDefinitions {
 
   @Given("the database contains the following topics:")
   public void the_database_contains_the_following_topics(DataTable dataTable) {
-    cucumberUtil.createAndSaveTopicsFromTable(dataTable, null); 
+    cucumberUtil.createAndSaveTopicsFromTable(dataTable, null);
   }
 
   @Given("the database contains the following techs:")

@@ -1,9 +1,5 @@
 package ca.mcgill.purposeful.features;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.ReactionRepository;
@@ -17,19 +13,16 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.*;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID021_userHighFiveIdea.feature file
@@ -38,23 +31,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ID021_userHighFiveIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
-  @Autowired
-  ReactionRepository reactionRepository;
+  @Autowired ReactionRepository reactionRepository;
 
-  @Autowired
-  RegularUserRepository regularUserRepository;
+  @Autowired RegularUserRepository regularUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
@@ -118,16 +105,16 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
-
   @When("the user with email {string} reacts with a reaction {string} to an idea with id {string}")
-  public void theUserWithEmailReactsWithAReactionToAnIdeaWithId(String email, String reactionType,
-      String idea_id) {
-    String user_id = regularUserRepository.findRegularUserByApp_User_Id(
-        appUserRepository.findAppUserByEmail(email).getId()).getId();
+  public void theUserWithEmailReactsWithAReactionToAnIdeaWithId(
+      String email, String reactionType, String idea_id) {
+    String user_id =
+        regularUserRepository
+            .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+            .getId();
 
-    ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
-        idea_id,
-        user_id);
+    ReactionDTO reactionDTO =
+        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), idea_id, user_id);
 
     // make a post request to create the user and store the response
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
@@ -135,45 +122,54 @@ public class ID021_userHighFiveIdeaStepDefinitions {
 
   @Then("a new reaction of idea {string} and user {string} shall be added to the reaction database")
   public void aNewEntryOfTypeShallBeAddedToTheReactionDatabase(String idea_id, String email) {
-    String user_id = regularUserRepository.findRegularUserByApp_User_Id(
-        appUserRepository.findAppUserByEmail(email).getId()).getId();
+    String user_id =
+        regularUserRepository
+            .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+            .getId();
     Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
     assertNotNull(reaction);
   }
 
-  @When("the user with email {string} reacts again with a reaction {string} to an idea with id {string}")
-  public void theUserWithEmailReactsAgainWithAReactionToAnIdeaWithId(String email,
-      String reactionType, String idea_id) {
-    String user_id = regularUserRepository.findRegularUserByApp_User_Id(
-        appUserRepository.findAppUserByEmail(email).getId()).getId();
+  @When(
+      "the user with email {string} reacts again with a reaction {string} to an idea with id {string}")
+  public void theUserWithEmailReactsAgainWithAReactionToAnIdeaWithId(
+      String email, String reactionType, String idea_id) {
+    String user_id =
+        regularUserRepository
+            .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+            .getId();
 
-    ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
-        idea_id,
-        user_id);
+    ReactionDTO reactionDTO =
+        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), idea_id, user_id);
 
     // make a post request to create the user and store the response
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
   }
 
-  @Then("the reaction entry of idea {string} and user {string} shall be removed from the reaction database")
-  public void theReactionEntryOfIdShallBeRemovedFromTheReactionDatabase(String idea_id,
-      String email) {
-    String user_id = regularUserRepository.findRegularUserByApp_User_Id(
-        appUserRepository.findAppUserByEmail(email).getId()).getId();
+  @Then(
+      "the reaction entry of idea {string} and user {string} shall be removed from the reaction database")
+  public void theReactionEntryOfIdShallBeRemovedFromTheReactionDatabase(
+      String idea_id, String email) {
+    String user_id =
+        regularUserRepository
+            .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+            .getId();
     Reaction reaction = reactionRepository.findReactionByIdea_IdAndRegularUser_Id(idea_id, user_id);
     assertNull(reaction);
   }
 
-  @Given("the user reacts with a reaction {string} to an idea with id {int} on behalf of another user with email {string}")
-  public void iRequestToReactWithTheReactionOnBehalfOfAnotherUserWithEmail(String reactionType,
-      Integer idea_id, String email) {
+  @Given(
+      "the user reacts with a reaction {string} to an idea with id {int} on behalf of another user with email {string}")
+  public void iRequestToReactWithTheReactionOnBehalfOfAnotherUserWithEmail(
+      String reactionType, Integer idea_id, String email) {
     String uuid_idea = idMap.get(idea_id.toString());
-    String user_id = regularUserRepository.findRegularUserByApp_User_Id(
-        appUserRepository.findAppUserByEmail(email).getId()).getId();
+    String user_id =
+        regularUserRepository
+            .findRegularUserByAppUser_Id(appUserRepository.findAppUserByEmail(email).getId())
+            .getId();
 
-    ReactionDTO reactionDTO = new ReactionDTO(new Date(), ReactionType.valueOf(reactionType),
-        uuid_idea,
-        user_id);
+    ReactionDTO reactionDTO =
+        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), uuid_idea, user_id);
 
     // make a post request to create the user and store the response
     this.response = client.postForEntity("/api/reaction/react", reactionDTO, ReactionDTO.class);
