@@ -75,7 +75,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
 
   @Given("the database contains the following ideas \\(Strategy2):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
 
   @Given("I am logged in")

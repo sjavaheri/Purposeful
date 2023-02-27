@@ -100,7 +100,7 @@ public class ID016_modifyIdeaStepDefinitions {
 
   @And("the database contains the following idea objects:")
   public void theDatabaseContainsTheFollowingIdeaObjects(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
 
   @And("I am successfully logged in as the user with email {string} and password {string}")

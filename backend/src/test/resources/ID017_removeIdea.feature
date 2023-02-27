@@ -30,11 +30,11 @@ Feature: Remove Idea
       | interest.com  |
       | bestteam.com  |
     And the database contains the following ideas before removing an idea:
-      | id | title             | date       | purpose   | descriptions     | isPaid | inProgress | isPrivate | domains            | topics                    | techs          | image_urls                 | icon_url     | user |
-      | 1  | Home Care App     | 2022-02-15 | Health    | Quality app      | True   | True       | False     | Software           | Frontend Dev              | Python         | something.com              | interest.com | 0    |
-      | 2  | Football Game     | 2022-02-16 | Entertain | For fun          | False  | True       | False     | Software, Computer | Frontend Dev              | Python         | something.com, another.com | interest.com | 0    |
-      | 3  | Car Detection App | 2022-02-17 | Police    | Effective app    | True   | False      | False     | Computer           | Backend Dev, Frontend Dev | Python, C      | keepitup.com               | bestteam.com | 0    |
-      | 4  | Circuit Design    | 2022-02-18 | Electric  | Silicon photonic | True   | False      | True      | Electrical         | Embedded Software         | Java, React, C | sayless.com                | bestteam.com | 0    |
+      | id | title             | date | purpose   | descriptions     | isPaid | inProgress | isPrivate | domains            | topics                    | techs          | image_urls                 | icon_url     | user |
+      | 1  | Home Care App     | 1000 | Health    | Quality app      | True   | True       | False     | Software           | Frontend Dev              | Python         | something.com              | interest.com | 0    |
+      | 2  | Football Game     | 1100 | Entertain | For fun          | False  | True       | False     | Software, Computer | Frontend Dev              | Python         | something.com, another.com | interest.com | 0    |
+      | 3  | Car Detection App | 1200 | Police    | Effective app    | True   | False      | False     | Computer           | Backend Dev, Frontend Dev | Python, C      | keepitup.com               | bestteam.com | 0    |
+      | 4  | Circuit Design    | 1300 | Electric  | Silicon photonic | True   | False      | True      | Electrical         | Embedded Software         | Java, React, C | sayless.com                | bestteam.com | 0    |
     And I am logged in before removing an idea
 
   Scenario: Successfully remove an idea
