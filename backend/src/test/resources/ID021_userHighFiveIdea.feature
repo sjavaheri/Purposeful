@@ -1,4 +1,4 @@
-Feature: Modify Moderator
+Feature: User high five an Idea
   As a user, I want to be able to express my support for an idea by giving it a "high five," so that I can express my positive sentiment for an idea without adding to a numerical score or ranking.
 
     # reaction database
@@ -58,5 +58,5 @@ Feature: Modify Moderator
     # Error Flow
 
   Scenario: Unsuccessfully react to an idea on behalf of another user
-    When the user with id "22" requests to react with the reaction "HighFive" to the idea with id "8" on behalf of the user with id "21"
-    Then the error message "User not authorized" will be thrown with status code 401 after attempting to react
+    When the user with id "21" requests to react with the reaction "HighFive" to the idea with id "8" on behalf of the user with id "22"
+    Then the error message "User not authorized" will be thrown with status code 403 after attempting to react

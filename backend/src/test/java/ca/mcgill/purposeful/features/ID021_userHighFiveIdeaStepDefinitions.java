@@ -183,9 +183,8 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     ReactionDTO reactionDTO =
         new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), correctedIdea, user_id);
     // make a post request to create the user and store the response
-    HttpEntity<ReactionDTO> requestEntity = new HttpEntity<>(reactionDTO);
-    this.response =
-        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionDTO.class);
+    HttpEntity<ReactionDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
+    this.response = client.exchange("/api/reaction", HttpMethod.POST, requestEntity, String.class);
   }
 
   @Then(
@@ -193,5 +192,6 @@ public class ID021_userHighFiveIdeaStepDefinitions {
   public void theErrorMessageWillBeThrownWithStatusCodeAfterAttemptingToReact(
       String msg, Integer code) {
     assertEquals(HttpStatus.valueOf(code), response.getStatusCode());
+    assertEquals(msg, response.getBody().toString());
   }
 }
