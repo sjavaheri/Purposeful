@@ -1,24 +1,21 @@
 package ca.mcgill.purposeful.features;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID017_removeIdea.feature file
@@ -27,17 +24,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class ID017_removeIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
@@ -73,9 +66,10 @@ public class ID017_removeIdeaStepDefinitions {
     cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
   }
 
-  @Given("the user is logged in with the email {string} and the password {string} before removing an idea")
-  public void theUserIsLoggedInWithTheEmailAndThePasswordBeforeRemovingAnIdea(String email,
-      String password) {
+  @Given(
+      "the user is logged in with the email {string} and the password {string} before removing an idea")
+  public void theUserIsLoggedInWithTheEmailAndThePasswordBeforeRemovingAnIdea(
+      String email, String password) {
     if (SecurityContextHolder.getContext().getAuthentication() == null) {
       // Login as the user
       HttpEntity<String> requestEntity =
