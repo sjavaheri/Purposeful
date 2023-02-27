@@ -64,7 +64,7 @@ public class ID017_removeIdeaStepDefinitions {
 
   @And("the database contains the following ideas before removing an idea:")
   public void theDatabaseContainsTheFollowingIdeasBeforeRemovingAnIdea(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
 
   @And(
