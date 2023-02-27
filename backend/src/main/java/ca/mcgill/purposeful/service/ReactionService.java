@@ -152,7 +152,7 @@ public class ReactionService {
     // TODO: validate regular user with a getRegularUserById method from its service
     // class
 
-    ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUserId(uuid);
+    ArrayList<Reaction> reactions = reactionRepository.findAllByRegularUser_Id(uuid);
 
     if (reactions.size() == 0) {
       throw new GlobalException(

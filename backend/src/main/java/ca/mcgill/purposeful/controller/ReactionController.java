@@ -53,14 +53,17 @@ public class ReactionController {
     String email = authentication.getName();
     RegularUser user = regularUserRepository.findRegularUserById(user_id);
     if (!user.getAppUser().getEmail().equals(email)) {
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized");
+      throw new GlobalException(HttpStatus.FORBIDDEN, "User not authorized");
     }
 
     // react
     Reaction reaction = reactionService.react(date, reactionType, idea_id, user_id);
 
     // return the reaction
-    return new ResponseEntity<ReactionDTO>(
-        (reaction == null) ? new ReactionDTO() : new ReactionDTO(reaction), HttpStatus.CREATED);
+    if (reaction == null) {
+      return new ResponseEntity<ReactionDTO>(new ReactionDTO(), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<ReactionDTO>(new ReactionDTO(reaction), HttpStatus.OK);
+    }
   }
 }

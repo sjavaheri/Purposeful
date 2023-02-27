@@ -26,9 +26,7 @@ public class ReactionDTO {
     this.user_id = reaction.getRegularUser().getId();
   }
 
-  public ReactionDTO(
-      String id, ReactionType reactionType, Date date, String idea_id, String user_id) {
-    this.id = id;
+  public ReactionDTO(Date date, ReactionType reactionType, String idea_id, String user_id) {
     this.reactionType = reactionType;
     this.date = date;
     this.idea_id = idea_id;

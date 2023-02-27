@@ -1,8 +1,6 @@
 package ca.mcgill.purposeful.features;
 
-import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
-import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -12,14 +10,12 @@ import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
@@ -46,52 +42,45 @@ public class ID017_removeIdeaStepDefinitions {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following domains before removing an idea:")
+  @And("the database contains the following domains before removing an idea:")
   public void theDatabaseContainsTheFollowingDomainsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following topics before removing an idea:")
+  @And("the database contains the following topics before removing an idea:")
   public void theDatabaseContainsTheFollowingTopicsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following techs before removing an idea:")
+  @And("the database contains the following techs before removing an idea:")
   public void theDatabaseContainsTheFollowingTechsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following URLs before removing an idea:")
+  @And("the database contains the following URLs before removing an idea:")
   public void theDatabaseContainsTheFollowingURLsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following ideas before removing an idea:")
+  @And("the database contains the following ideas before removing an idea:")
   public void theDatabaseContainsTheFollowingIdeasBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
 
-  @And("I am logged in before removing an idea")
-  public void iAmLoggedInBeforeRemovingAnIdea() {
-    AppUser appUser = new AppUser();
-    String email = "luke.skywalker@spacemail.galaxy";
-    String password = "P@ssw0rd";
-    appUser.setFirstname("Luke");
-    appUser.setLastname("Skywalker");
-    appUser.setEmail(email);
-    appUser.setPassword(passwordEncoder.encode(password));
-    // set the authorities of the app user
-    Set<Authority> setOfAuthorities = new HashSet<Authority>();
-    Authority authority = Authority.valueOf("User");
-    setOfAuthorities.add(authority);
-    // add the app user to the list of app users
-    appUser.setAuthorities(setOfAuthorities);
-    appUserRepository.save(appUser);
+  @And(
+      "the user is logged in with the email {string} and the password {string} before removing an idea")
+  public void theUserIsLoggedInWithTheEmailAndThePasswordBeforeRemovingAnIdea(
+      String email, String password) {
+    if (SecurityContextHolder.getContext().getAuthentication() == null) {
+      // Login as the user
+      HttpEntity<String> requestEntity =
+          new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
+      this.response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
 
-    HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response =
-        client.exchange("/api/login", HttpMethod.POST, request, String.class);
-    authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
+      // check that the login was successful
+      assertEquals(200, this.response.getStatusCode().value());
+      authHeader = cucumberUtil.bearerAuthHeader(response.getBody().toString());
+    }
   }
 
   @When("the user requests to remove the idea with id {int}")
@@ -104,11 +93,11 @@ public class ID017_removeIdeaStepDefinitions {
 
   @Then("the idea entry with id {int} will no longer exist in the idea database")
   public void theIdeaEntryWithIdWillNoLongerExistInTheIdeaDatabase(Integer id) {
-    assertEquals(response.getStatusCode(), HttpStatus.OK);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
     String correctedId = idMap.get(id.toString());
     HttpEntity<String> request = new HttpEntity<>(authHeader);
     response = client.exchange("/api/idea/" + correctedId, HttpMethod.GET, request, String.class);
-    assertNotEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
   }
 
   @When("I request to remove the idea with the invalid UUID {string}")

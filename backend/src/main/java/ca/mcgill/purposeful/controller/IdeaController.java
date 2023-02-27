@@ -125,6 +125,7 @@ public class IdeaController {
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
   }
 
+
   /**
    * Remove an idea by its id
    *
@@ -135,6 +136,13 @@ public class IdeaController {
   @DeleteMapping({"/{id}", "/{id}/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<String> removeIdea(@PathVariable String id) {
+    // Check if the user is authorized
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String requestEmail = authentication.getName();
+    String ownerEmail = ideaService.getIdeaById(id).getUser().getAppUser().getEmail();
+    if (!requestEmail.equals(ownerEmail) && !authentication.getAuthorities().contains("Owner") && !authentication.getAuthorities().contains("Moderator")) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized");
+    }
     // call service layer
     ideaService.removeIdeaById(id);
     // return response status with confirmation message

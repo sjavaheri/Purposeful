@@ -3,6 +3,7 @@ package ca.mcgill.purposeful.util;
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.service.AppUserService;
 import io.cucumber.datatable.DataTable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class CucumberUtil {
   @Autowired private AppUserRepository appUserRepository;
 
   @Autowired private RegularUserRepository regularUserRepository;
+
+  @Autowired private ReactionRepository reactionRepository;
 
   @Autowired private AppUserService appUserService;
 
@@ -345,5 +348,31 @@ public class CucumberUtil {
     var authHeader = "Bearer " + jwtToken;
     headers.add("Authorization", authHeader);
     return headers;
+  }
+
+  /**
+   * This method creates and saves reactions from a data table
+   *
+   * @param dataTable
+   * @param idMap
+   * @author Athmane Benarous
+   */
+  public void createAndSaveReactionsFromTable(DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      Reaction reaction = new Reaction();
+      reaction.setReactionType(ReactionType.valueOf(row.get("reactionType")));
+      Date date = new Date();
+      date.setHours(0);
+      reaction.setDate(date);
+      reaction.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("idea_id"))));
+      reaction.setRegularUser(
+          regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("user"))));
+
+      reactionRepository.save(reaction);
+      idMap.put(row.get("id"), reaction.getId());
+    }
   }
 }

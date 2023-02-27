@@ -9,4 +9,6 @@ public interface RegularUserRepository extends CrudRepository<RegularUser, Integ
   RegularUser findRegularUserById(String id);
 
   RegularUser findRegularUserByAppUserEmail(String email);
+
+  RegularUser findRegularUserByAppUser_Id(String app_user_id);
 }
