@@ -8,6 +8,7 @@ import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -54,37 +55,32 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following domains before high fiving an idea:")
+  @And("the database contains the following domains before high fiving an idea:")
   public void theDatabaseContainsTheFollowingDomains(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following topics before high fiving an idea:")
+  @And("the database contains the following topics before high fiving an idea:")
   public void theDatabaseContainsTheFollowingTopics(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following techs before high fiving an idea:")
+  @And("the database contains the following techs before high fiving an idea:")
   public void theDatabaseContainsTheFollowingTechs(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following URLs before high fiving an idea:")
+  @And("the database contains the following URLs before high fiving an idea:")
   public void theDatabaseContainsTheFollowingURLs(DataTable dataTable) {
     cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following ideas before high fiving an idea:")
+  @And("the database contains the following ideas before high fiving an idea:")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
     cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
   }
 
-  @Given("the database contains the following reactions before high fiving an idea:")
-  public void theDatabaseContainsTheFollowingReactions(DataTable dataTable) {
-    cucumberUtil.createAndSaveReactionsFromTable(dataTable, idMap);
-  }
-
-  @Given(
+  @And(
       "the user is logged in with the email {string} and the password {string} before high fiving an idea")
   public void theUserIsLoggedInWithTheEmailAndThePasswordBeforeHighFivingAnIdea(
       String email, String password) {
@@ -142,7 +138,7 @@ public class ID021_userHighFiveIdeaStepDefinitions {
         client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionDTO.class);
   }
 
-  @Then(
+  @And(
       "the user with id {string} reacts again with a reaction {string} to an idea with id {string}")
   public void theUserWithIdReactsAgainWithAReactionToAnIdeaWithId(
       String user, String reactionType, String idea_id) {

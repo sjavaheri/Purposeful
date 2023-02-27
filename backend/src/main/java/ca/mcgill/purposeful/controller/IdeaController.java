@@ -125,6 +125,7 @@ public class IdeaController {
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
   }
 
+
   /**
    * Remove an idea by its id
    *
@@ -139,9 +140,7 @@ public class IdeaController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String requestEmail = authentication.getName();
     String ownerEmail = ideaService.getIdeaById(id).getUser().getAppUser().getEmail();
-    System.out.println(requestEmail);
-    System.out.println(ownerEmail);
-    if (!requestEmail.equals(ownerEmail)) {
+    if (!requestEmail.equals(ownerEmail) && !authentication.getAuthorities().contains("Owner") && !authentication.getAuthorities().contains("Moderator")) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized");
     }
     // call service layer

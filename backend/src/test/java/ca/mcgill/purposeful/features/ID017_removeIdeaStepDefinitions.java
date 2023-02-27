@@ -3,6 +3,7 @@ package ca.mcgill.purposeful.features;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -41,32 +42,32 @@ public class ID017_removeIdeaStepDefinitions {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following domains before removing an idea:")
+  @And("the database contains the following domains before removing an idea:")
   public void theDatabaseContainsTheFollowingDomainsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following topics before removing an idea:")
+  @And("the database contains the following topics before removing an idea:")
   public void theDatabaseContainsTheFollowingTopicsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following techs before removing an idea:")
+  @And("the database contains the following techs before removing an idea:")
   public void theDatabaseContainsTheFollowingTechsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following URLs before removing an idea:")
+  @And("the database contains the following URLs before removing an idea:")
   public void theDatabaseContainsTheFollowingURLsBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following ideas before removing an idea:")
+  @And("the database contains the following ideas before removing an idea:")
   public void theDatabaseContainsTheFollowingIdeasBeforeRemovingAnIdea(DataTable dataTable) {
     cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
   }
 
-  @Given(
+  @And(
       "the user is logged in with the email {string} and the password {string} before removing an idea")
   public void theUserIsLoggedInWithTheEmailAndThePasswordBeforeRemovingAnIdea(
       String email, String password) {

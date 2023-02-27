@@ -28,9 +28,6 @@ Feature: User high five an Idea
       | id | title            | purpose                                           | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate | user |
       | 8  | Music generation | Open sourced software to generate classical music | 1       | 2      | 4, 5  | 7                   | 6       | false  | false        | false     | 21   |
       | 9  | Techno boom      | Open sourced software to generate techno music    | 1       | 2      | 4     |                     | 6       | false  | false        | false     | 21   |
-    And the database contains the following reactions before high fiving an idea:
-      | id | reactionType | idea_id | user |
-      | 10 | HighFive     | 8       | 21   |
     And the user is logged in with the email "steve.nash@gmail.com" and the password "SteveIsAwesome01" before high fiving an idea
 
     # Normal Flow
@@ -40,20 +37,21 @@ Feature: User high five an Idea
     Then a new reaction of idea "<idea_id>" and user "<user>" shall be added to the reaction database
 
     Examples:
-      | id | idea_id | user | reactionType |
-      | 11 | 9       | 21   | HighFive     |
+      | idea_id | user | reactionType |
+      | 9       | 21   | HighFive     |
+      | 8       | 21   | HighFive     |
 
     # Alternate Flow
 
   Scenario Outline: Successfully high five an idea which I already high fived to remove the high five
     When the user with id "<user>" reacts a first time with a reaction "<reactionType>" to an idea with id "<idea_id>"
-    Then the user with id "<user>" reacts again with a reaction "<reactionType>" to an idea with id "<idea_id>"
+    And the user with id "<user>" reacts again with a reaction "<reactionType>" to an idea with id "<idea_id>"
     Then the reaction entry of idea "<idea_id>" and user "<user>" shall be removed from the reaction database
 
     Examples:
-      | id | idea_id | user | reactionType | exists |
-      | 11 | 9       | 21   | HighFive     | false  |
-      | 11 | 9       | 21   | HighFive     | false  |
+      | idea_id | user | reactionType |
+      | 9       | 21   | HighFive     |
+      | 9       | 21   | HighFive     |
 
     # Error Flow
 
