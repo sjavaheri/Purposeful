@@ -1,9 +1,11 @@
 package ca.mcgill.purposeful.configuration;
 
-import java.security.KeyPairGenerator;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,37 +18,42 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
-/**
- * Configuration for all Spring Security Setttings
- */
+/** Configuration for all Spring Security Setttings */
 public class SecurityConfiguration {
 
-  /**
-   * Configures the filters between ther server layer and the controller
-   */
+  /** Configures the filters between the server layer and the controller */
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-        .csrf()
-        .disable() // csrf protection is an extra security layer - prevent cross site request forgery. Adds extra complexity. For post requests, you need extra actions
-        .oauth2ResourceServer().jwt().jwtAuthenticationConverter(new AuthenticationConverter())
+    return http.csrf()
+        .disable() // csrf protection is an extra security layer - prevent cross site request
+        // forgery. Adds extra complexity. For post requests, you need extra actions
+        .oauth2ResourceServer()
+        .jwt()
+        .jwtAuthenticationConverter(new AuthenticationConverter())
         .and()
-        .and() // configuring your project to accept jwt tokens as a method of authentication. Jwt (Json Web Token) tokens are json objects as strings, with no spaces, base64 encoded: headers, payhold, signature
-        .authorizeHttpRequests().anyRequest().authenticated()
-        .and() // by default, all endpoints are authenticated
+        .and() // configuring your project to accept jwt tokens as a method of authentication.
+        // Jwt (Json Web Token) tokens are json objects as strings, with no spaces,
+        // base64 encoded: headers, payhold, signature
+        .authorizeHttpRequests()
+        .requestMatchers("/api/appuser/regular")
+        .permitAll() // Exclude this endpoint from authentication
+        .anyRequest()
+        .authenticated() // by default, all endpoints are authenticated
+        .and()
         // .oauth2Login().loginPage("/login")
-        // .formLogin().and() // two ways to provide authentication to users. Users have username and password - way they provide is either through a form or ( see next )
+        // .formLogin().and() // two ways to provide authentication to users. Users have
+        // username and password - way they provide is either through a form or ( see
+        // next )
         .httpBasic()
-        .and() // another way - in hhtp request that the backend sends, in headers there is "Authorization":"Basic encodeBase64(username:password)" ( encodebase64 is a method in javascript method that does base 64 encoding )
+        .and() // another way - in hhtp request that the backend sends, in headers there is
+        // "Authorization":"Basic encodeBase64(username:password)" ( encodebase64 is a
+        // method in javascript method that does base 64 encoding )
         .build(); // you build the object and return a securityFilterChain object
   }
 
@@ -86,12 +93,12 @@ public class SecurityConfiguration {
    * Takes json objects and converts it to JWT token format - with a signature and base64 encoding
    *
    * @return a NimbusJWT Encoder object
-   * @throws Exception
+   * @throws Exception if the keys are not valid
    */
   @Bean
   JwtEncoder jwtEncoder() throws Exception {
-    JWK jwk = new RSAKey.Builder(rsaKeys().getPublicKey()).privateKey(rsaKeys().getPrivateKey())
-        .build();
+    JWK jwk =
+        new RSAKey.Builder(rsaKeys().getPublicKey()).privateKey(rsaKeys().getPrivateKey()).build();
     JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
     return new NimbusJwtEncoder(jwks);
   }
@@ -101,38 +108,39 @@ public class SecurityConfiguration {
    * be validated
    *
    * @return a Nimbus JWT Decoder object
-   * @throws Exception
+   * @throws Exception if the keys are not valid
    */
   @Bean
   JwtDecoder jwtDecoder() throws Exception {
     return NimbusJwtDecoder.withPublicKey(rsaKeys().getPublicKey()).build();
   }
 
-     /*
-
-If we use javascript, this is the code for the frontend to encode the username and password upon sending to get the token
-
-    import * as crypto from 'crypto-js';
-    import Base64 from 'crypto-js/enc-base64';
-
-    const base64Url = (str) => {
-    return str.toString(Base64).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-}
-
-const encodeBase64 = (str) => {
-    let encodedWord = crypto.enc.Utf8.parse(str)
-    return base64Url(crypto.enc.Base64.stringify(encodedWord));
-}
-
-
-      
-
-
-
-
-
-      
-      */
-
+  /*
+   *
+   * If we use javascript, this is the code for the frontend to encode the
+   * username and password upon sending to get the token
+   *
+   * import * as crypto from 'crypto-js';
+   * import Base64 from 'crypto-js/enc-base64';
+   *
+   * const base64Url = (str) => {
+   * return str.toString(Base64).replace(/=/g, '').replace(/\+/g,
+   * '-').replace(/\//g, '_');
+   * }
+   *
+   * const encodeBase64 = (str) => {
+   * let encodedWord = crypto.enc.Utf8.parse(str)
+   * return base64Url(crypto.enc.Base64.stringify(encodedWord));
+   * }
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   *
+   */
 
 }

@@ -1,0 +1,67 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres_db:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: purposeful
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "adopt"
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Make the application.properties from application.properties.example
+        run: cp backend/src/main/resources/application.properties.example backend/src/main/resources/application.properties
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Execute Gradle test
+        run: ./gradlew test
+
+      - name: Execute Gradle build
+        run: ./gradlew build
+
+      - name: Execute Test Coverage
+        run: ./gradlew jacocoTestReport
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          badges-directory: backend/src/test/badges
+          coverage-badge-filename: coverage.svg
+          branches-badge-filename: branches.svg
+          generate-branches-badge: true
+          generate-summary: true
+          jacoco-csv-file: backend/build/customJacocoReportDir/test/jacocoTestReport.csv

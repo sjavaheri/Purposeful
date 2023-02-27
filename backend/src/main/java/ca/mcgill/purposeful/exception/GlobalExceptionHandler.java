@@ -17,8 +17,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
    * @author Shidan Javaheri This method handles all the times we throw an Global Exception
    */
   @ExceptionHandler(GlobalException.class)
-  public ResponseEntity<String> handleMmssException(GlobalException ex) {
+  public ResponseEntity<String> handleGlobalException(GlobalException ex) {
     return new ResponseEntity<String>(ex.getMessage(), ex.getStatus());
   }
-
 }

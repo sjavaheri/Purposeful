@@ -1,62 +1,66 @@
 package ca.mcgill.purposeful.dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Moderator;
-import java.util.HashSet;
-import java.util.Set;
+import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Moderator Repository testing class which initiates an moderator and an AppUser repository, executes the tests, then clears each instance from the database.
+ * Moderator Repository testing class which initiates an moderator and an AppUser repository,
+ * executes the tests, then clears each instance from the database.
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ModeratorRepositoryTests {
 
   // the repository we are testing
-  @Autowired
-  private ModeratorRepository moderatorRepository;
+  @Autowired private ModeratorRepository moderatorRepository;
 
   // also create an appUser
-  @Autowired
-  private AppUserRepository appUserRepository;
-  /**
-   * Clear the database before all tests
-   * @author Athmane Benarous
-   */
+  @Autowired private AppUserRepository appUserRepository;
+
+  /** Clear the database before all tests */
+  @BeforeAll
+  public static void clearDatabaseBefore(@Autowired DatabaseUtil util) {
+    util.clearDatabase();
+  }
+
+  /** Clear the database after each test */
   @AfterEach
-  public void clearDatabase() {
-    moderatorRepository.deleteAll();
-    appUserRepository.deleteAll();
+  public void clearDatabaseAfter(@Autowired DatabaseUtil util) {
+    util.clearDatabase();
   }
 
   /**
-   * Moderator testing method which creates, populates the attributes, sets associations, and saves each moderator and appUser object and identifier.
-   * It can then test to make sure each object reached from the moderator found in the repository is not null and that each initially saved Id corresponds to the one
-   * reached from the repository.
+   * Moderator testing method which creates, populates the attributes, sets associations, and saves
+   * each moderator and appUser object and identifier. It can then test to make sure each object
+   * reached from the moderator found in the repository is not null and that each initially saved Id
+   * corresponds to the one reached from the repository.
    */
   @Test
   public void testPersistAndLoadModerator() {
 
-// MANDATORY CLASS TESTS
+    // MANDATORY CLASS TESTS
 
     // create the appUser and fill its properties
-    AppUser appUser = new AppUser() ;
+    AppUser appUser = new AppUser();
 
     Set<Authority> authorities = new HashSet<Authority>();
     authorities.add(Authority.Owner);
 
     appUser.setEmail("stewie.griffin@mcgill.ca");
-    appUser.setUsername("stewieGriffin456");
+    appUser.setFirstname("Stewie");
+    appUser.setLastname("Griffin");
     appUser.setPassword("verySecurePassword456");
     appUser.setAuthorities(authorities);
 
@@ -64,7 +68,7 @@ public class ModeratorRepositoryTests {
     appUserRepository.save(appUser);
 
     // create the moderator
-    Moderator moderator = new Moderator() ;
+    Moderator moderator = new Moderator();
     moderator.setAppUser(appUser);
 
     // save the moderator

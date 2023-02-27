@@ -1,28 +1,17 @@
 package ca.mcgill.purposeful.model;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-//import java.sql.Date;
-//import java.sql.Time;
+// import java.sql.Date;
+// import java.sql.Time;
 
-/**
- * The Idea class, the model for all ideas in the database
- */
+/** The Idea class, the model for all ideas in the database */
 @Entity
 public class Idea {
 
@@ -62,26 +51,37 @@ public class Idea {
   // Idea Associations
   // ------------------------
 
-  @ManyToMany
-  @JoinTable(name = "idea_domain", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "url_id"))
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "idea_domain",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "url_id"))
   private Set<Domain> domains;
 
-  @ManyToMany
-  @JoinTable(name = "idea_topic", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "idea_topic",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> topics;
 
-  @ManyToMany
-  @JoinTable(name = "idea_technology", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "technology_id"))
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "idea_technology",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "technology_id"))
   private Set<Technology> techs;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "icon_url_id", nullable = false)
   private URL iconUrl;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "idea")
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "supported_idea_id", nullable = true)
   private List<URL> supportingImageUrls;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
   private RegularUser user;
 
@@ -89,8 +89,7 @@ public class Idea {
   // Idea Constructor
   // ------------------------
 
-  public Idea() {
-  }
+  public Idea() {}
 
   // ------------------------
   // Getter/Setter Methods

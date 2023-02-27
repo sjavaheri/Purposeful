@@ -1,20 +1,13 @@
 package ca.mcgill.purposeful.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.util.Date;
-//import java.sql.Date;
-//import java.sql.Time;
-
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-/**
- * The Reaction class, the model for all reactions in the database
- */
+import java.util.Date;
+
+/** The Reaction class, the model for all reactions in the database */
 @Entity
 public class Reaction {
 
@@ -48,10 +41,12 @@ public class Reaction {
   // ------------------------
 
   @ManyToOne(optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "idea_id", nullable = false)
   private Idea idea;
 
   @ManyToOne(optional = false)
+  @OnDelete(action = OnDeleteAction.CASCADE)
   @JoinColumn(name = "user_id", nullable = false)
   private RegularUser regularUser;
 
@@ -59,8 +54,7 @@ public class Reaction {
   // Reaction Constructor
   // ------------------------
 
-  public Reaction() {
-  }
+  public Reaction() {}
 
   // ------------------------
   // Getter/Setter Methods

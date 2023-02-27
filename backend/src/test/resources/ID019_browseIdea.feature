@@ -1,42 +1,74 @@
-#Author: your.email@your.domain.com
-#Keywords Summary :
-#Feature: List of scenarios.
-#Scenario: Business rule through list of steps with arguments.
-#Given: Some precondition step
-#When: Some key actions
-#Then: To observe outcomes or validation
-#And,But: To enumerate more Given,When,Then steps
-#Scenario Outline: List of steps for data-driven as an Examples and <placeholder>
-#Examples: Container for s table
-#Background: List of steps run before each of the scenarios
-#""" (Doc Strings)
-#| (Data Tables)
-#@ (Tags/Labels):To group Scenarios
-#<> (placeholder)
-#""
-## (Comments)
-#Sample Feature Definition Template
-@tag
-Feature: Title of your feature
-  I want to use this template for my feature file
+Feature: Browse ideas by domain by Domain, Topic, or Tech
+  As a user, I want to be able to browse public ideas that are linked to a specific domain, so that I can find and learn about new and innovative ideas in my area of interest.
 
-  @tag1
-  Scenario: Title of your scenario
-    Given I want to write a step with precondition
-    And some other precondition
-    When I complete action
-    And some other action
-    And yet another action
-    Then I validate the outcomes
-    And check more outcomes
+  Background:
+    Given the id map is initialized
+    And the database contains the following RegularUser accounts (Strategy1):
+      | id | firstname | lastname | email                   | password     |
+      | 1  | John      | Goblikon | john.goblikon@gmail.com | P@ssWord1234 |
+    And the database contains the following domains (Strategy1):
+      | id | name       |
+      | 2  | Software   |
+      | 3  | English    |
+      | 4  | Electrical |
+    And the database contains the following topics (Strategy1):
+      | id | name              |
+      | 5  | Web Dev           |
+      | 6  | Game Dev          |
+      | 7  | Embedded Software |
+      | 8  | CLI Tool          |
+      | 9  | Other             |
+    And the database contains the following techs (Strategy1):
+      | id | name       |
+      | 10 | Rust       |
+      | 11 | TypeScript |
+      | 12 | Go         |
+      | 13 | C++        |
+      | 14 | Other      |
+    And the database contains the following urls (Strategy1):
+      | id | url      |
+      | 15 | test.com |
+    And the database contains the following ideas (Strategy1):
+      # Date in ms from the unix epoch (Other constructors are deprecated)
+      | id | title             | domains | topics | techs    | date | description | iconUrl | purpose    | author | isPrivate | user |
+      | 16 | Website Idea      | 2       | 5      | 10,11,12 | 1500 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
+      | 17 | Video Game        | 2       | 6      | 13       | 1400 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
+      | 18 | Microcontroller   | 2,4     | 7      | 10,13    | 1300 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
+      | 19 | Command-Line tool | 2       | 8      | 10       | 1200 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
+      | 20 | Novel             | 3       | 9      | 14       | 1100 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
+      | 21 | Circuit           | 4       | 9      | 14       | 1000 | Cool idea   | 15      | Great idea | 1      | True      | 1    |
+    And I am logged in as the user with email "john.goblikon@gmail.com" and password "P@ssWord1234"
 
-  @tag2
-  Scenario Outline: Title of your scenario outline
-    Given I want to write a step with <name>
-    When I check for the <value> in step
-    Then I verify the <status> in step
+  # Normal/alternate flows
+
+  Scenario Outline: Successfully browse ideas by domain, topic, and tech
+    When the user requests to browse ideas by domains "<domain_ids>", topics "<topic_ids>", and techs "<techs_ids>"
+    Then the user shall have access to the ideas with ids "<idea_ids>"
 
     Examples:
-      | name  | value | status  |
-      | name1 | 5     | success |
-      | name2 | 7     | Fail    |
+      | domain_ids | topic_ids | techs_ids | idea_ids       |
+      | null       | null      | null      | 16,17,18,19,20 |
+      | 2          | null      | null      | 16,17,18,19    |
+      | 3          | null      | null      | 20             |
+      | 4          | null      | null      | 18             |
+      | null       | 5         | null      | 16             |
+      | null       | 6         | null      | 17             |
+      | null       | 7         | null      | 18             |
+      | null       | 8         | null      | 19             |
+      | null       | 9         | null      | 20             |
+      | null       | null      | 10        | 16,18,19       |
+      | null       | null      | 11        | 16             |
+      | null       | null      | 12        | 16             |
+      | null       | null      | 13        | 17,18          |
+      | null       | null      | 14        | 20             |
+      | 2,3        | null      | null      | 16,17,18,19,20 |
+      | 3,4        | null      | null      | 18,20          |
+      | 2,4        | null      | null      | 16,17,18,19    |
+      | 2,3,4      | null      | null      | 16,17,18,19,20 |
+      | 2          | 5         | null      | 16             |
+      | 4          | null      | 10        | 18             |
+
+  # Error flow
+  Scenario: No idea exists with the given filter
+    When the user erroneously requests to browse ideas by domains with id "2", topic with id "6", and tech with id "10"
+    Then the user shall receive the error message "No ideas match the given criteria. Please try again with different criteria." with status "404"
