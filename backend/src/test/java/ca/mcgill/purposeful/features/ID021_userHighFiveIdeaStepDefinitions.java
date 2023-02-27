@@ -77,7 +77,7 @@ public class ID021_userHighFiveIdeaStepDefinitions {
 
   @And("the database contains the following ideas before high fiving an idea:")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable2(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
 
   @And(
