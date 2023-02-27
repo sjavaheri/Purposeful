@@ -52,3 +52,16 @@ jobs:
 
       - name: Execute Gradle build
         run: ./gradlew build
+
+      - name: Execute Test Coverage
+        run: ./gradlew jacocoTestReport
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          badges-directory: backend/src/test/badges
+          coverage-badge-filename: coverage.svg
+          branches-badge-filename: branches.svg
+          generate-branches-badge: true
+          generate-summary: true
+          jacoco-csv-file: backend/build/customJacocoReportDir/test/jacocoTestReport.csv

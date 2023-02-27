@@ -1,7 +1,8 @@
 plugins {
-  id 'java'
-  id 'org.springframework.boot' version '3.0.2'
-  id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'jacoco'
 }
 
 group = 'ca.mcgill'
@@ -9,49 +10,71 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-  implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-  implementation 'org.springframework.boot:spring-boot-starter-web'
-  runtimeOnly 'org.postgresql:postgresql'
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-  //cucumber dependancies
-  testImplementation 'io.cucumber:cucumber-java:6.10.4'
-  testImplementation 'io.cucumber:cucumber-junit:6.10.4'
-  testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
-  testImplementation 'io.cucumber:cucumber-spring:6.10.4'
+    //cucumber dependancies
+    testImplementation 'io.cucumber:cucumber-java:6.10.4'
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
+    testImplementation 'io.cucumber:cucumber-spring:6.10.4'
 }
 
 
 tasks.named('test') {
-  useJUnitPlatform()
-  testLogging {
-    exceptionFormat "full"
-  }
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat "full"
+    }
 }
 
+jacoco {
+    toolVersion = "0.8.8"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+}
+
+
 configurations {
-  cucumberRuntime {
-    extendsFrom testImplementation
-  }
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
 }
 
 task cucumberCli() {
-  outputs.upToDateWhen { false }
-  dependsOn assemble, testClasses
-  doLast {
-    javaexec {
-      main = "io.cucumber.core.cli.Main"
-      classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-      args = [
-          '--plugin', 'pretty',
-          '--plugin', 'html:target/cucumber-report.html',
-          '--glue', 'com.baeldung.cucumber',
-          'src/test/resources']
+    outputs.upToDateWhen { false }
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'html:target/cucumber-report.html',
+                    '--glue', 'com.baeldung.cucumber',
+                    'src/test/resources']
+        }
     }
-  }
 }
