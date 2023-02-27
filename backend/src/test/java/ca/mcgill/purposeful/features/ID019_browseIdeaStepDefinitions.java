@@ -88,7 +88,7 @@ public class ID019_browseIdeaStepDefinitions {
 
   @And("the database contains the following ideas \\(Strategy1):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
-    cucumberUtil.createAndSaveIdeasFromTable1(dataTable, idMap);
+    cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
 
   @And("I am logged in as the user with email {string} and password {string}")
@@ -225,5 +225,10 @@ public class ID019_browseIdeaStepDefinitions {
   public void theUserShallReceiveTheErrorMessageWithStatus(String error, String status) {
     assertEquals(HttpStatus.valueOf(Integer.parseInt(status)), erroneousResponse.getStatusCode());
     assertEquals(error, erroneousResponse.getBody());
+  }
+
+  @And("the database contains the following urls \\(Strategy1):")
+  public void theDatabaseContainsTheFollowingUrlsStrategy(DataTable dataTable) {
+    cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 }

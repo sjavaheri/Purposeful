@@ -213,81 +213,6 @@ public class CucumberUtil {
   }
 
   /**
-   * This method creates and saves ideas from a data table
-   *
-   * @param dataTable The table
-   * @param idMap The map of ids
-   * @author Wassim Jabbour
-   */
-  public void createAndSaveIdeasFromTable1(DataTable dataTable, Map<String, String> idMap) {
-
-    // get access to the data table
-    List<Map<String, String>> rows = dataTable.asMaps();
-
-    for (var row : rows) {
-
-      // Create idea
-      Idea idea = new Idea();
-
-      // Set title
-      idea.setTitle(row.get("title"));
-
-      // Set date
-      idea.setDate(new Date(Integer.parseInt(row.get("date"))));
-
-      // Set domains
-      Set<Domain> domainSet = new HashSet<>();
-      for (String domainId : row.get("domains").split(",")) {
-        domainSet.add(domainRepository.findDomainById(idMap.get(domainId)));
-      }
-      idea.setDomains(domainSet);
-
-      // Set topics
-      Set<Topic> topicSet = new HashSet<>();
-      for (String topicId : row.get("topics").split(",")) {
-        topicSet.add(topicRepository.findTopicById(idMap.get(topicId)));
-      }
-      idea.setTopics(topicSet);
-
-      // Set technologies
-      Set<Technology> techSet = new HashSet<>();
-      for (String techId : row.get("techs").split(",")) {
-        techSet.add(technologyRepository.findTechnologyById(idMap.get(techId)));
-      }
-      idea.setTechs(techSet);
-
-      // Set description
-      idea.setDescription(row.get("description"));
-
-      // Set icon
-      URL iconUrl = new URL();
-      iconUrl.setURL(row.get("iconUrl"));
-      iconUrl.setPresetIcon(false);
-      urlRepository.save(iconUrl);
-      idea.setIconUrl(iconUrl);
-
-      // Set purpose
-      idea.setPurpose(row.get("purpose"));
-
-      // Set the user
-      AppUser appUser =
-          appUserRepository.findAppUserById(idMap.get(row.get("author"))); // Extract app user saved
-      RegularUser regularUser =
-          regularUserRepository.findRegularUserByAppUserEmail(
-              appUser.getEmail()); // Extract regular user from app user
-      idea.setUser(regularUser);
-
-      // Save the domain in memory
-      ideaRepository.save(idea);
-
-      // Save the domain in the map if it exists
-      if (idMap != null) {
-        idMap.put(row.get("id"), idea.getId());
-      }
-    }
-  }
-
-  /**
    * This method creates and saves Ideas from a data table
    *
    * @param dataTable a data table containing the ideas to be created
@@ -295,7 +220,7 @@ public class CucumberUtil {
    * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
-  public void createAndSaveIdeasFromTable2(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveIdeasFromTable(DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
@@ -305,7 +230,14 @@ public class CucumberUtil {
       idea.setPurpose(row.get("purpose"));
       Date date = new Date();
       date.setHours(0);
-      idea.setDate(date);
+
+      // set date to a value if the idea table has date column
+      if (row.get("date") != null) {
+        idea.setDate(new Date(Integer.parseInt(row.get("date"))));
+      } else {
+        // otherwise current date
+        idea.setDate(date);
+      }
       idea.setDescription("");
 
       // user
