@@ -91,7 +91,7 @@ public class CollaborationConfirmationRepositoryTests {
 
     // Create collaboration request
     CollaborationRequest request = new CollaborationRequest();
-    request.setStatus(VerificationRequest.Status.Pending);
+    request.setStatus(Status.Pending);
     request.setAdditionalContact("Chat me on Slack URL");
     request.setMessage("I would like to collaborate with you on this idea");
     request.setIdea(idea);
@@ -109,7 +109,7 @@ public class CollaborationConfirmationRepositoryTests {
     // Assert that the collaboration request is saved
     request = collaborationRequestRepository.findCollaborationRequestById(request.getId());
     assertNotNull(request);
-    assertEquals(VerificationRequest.Status.Pending, request.getStatus());
+    assertEquals(Status.Pending, request.getStatus());
     assertEquals("Chat me on Slack URL", request.getAdditionalContact());
     assertEquals("I would like to collaborate with you on this idea", request.getMessage());
     assertEquals(idea.getId(), request.getIdea().getId());
@@ -123,7 +123,7 @@ public class CollaborationConfirmationRepositoryTests {
 
     // Update collaboration request
     request.setCollaborationConfirmation(confirmation);
-    request.setStatus(VerificationRequest.Status.Approved);
+    request.setStatus(Status.Approved);
     collaborationRequestRepository.save(request);
 
     // Assert that the collaboration confirmation is saved
@@ -136,7 +136,7 @@ public class CollaborationConfirmationRepositoryTests {
     // Assert that the collaboration request is updated
     request = collaborationRequestRepository.findCollaborationRequestById(request.getId());
     assertNotNull(request);
-    assertEquals(VerificationRequest.Status.Approved, request.getStatus());
+    assertEquals(Status.Approved, request.getStatus());
     assertEquals(confirmation.getId(), request.getCollaborationConfirmation().getId());
   }
 }
