@@ -9,16 +9,6 @@ import jakarta.persistence.Id;
 public class VerificationRequest {
 
   // ------------------------
-  // Enumerations
-  // ------------------------
-
-  public enum Status {
-    Pending,
-    Approved,
-    Declined
-  }
-
-  // ------------------------
   // VerificationRequest Attributes
   // ------------------------
 
