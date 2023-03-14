@@ -15,7 +15,7 @@ public class VerificationRequest {
   public enum Status {
     Pending,
     Approved,
-    Refused
+    Declined
   }
 
   // ------------------------

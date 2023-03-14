@@ -1,15 +1,14 @@
 package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 // import java.sql.Date;
 // import java.sql.Time;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /** The Idea class, the model for all ideas in the database */
 @Entity
