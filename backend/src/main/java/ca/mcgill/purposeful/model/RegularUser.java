@@ -1,10 +1,9 @@
 package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.*;
+import java.util.Set;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.Set;
 
 /** The RegularUser class, the model for accounts with regular user authority in the database */
 @Entity

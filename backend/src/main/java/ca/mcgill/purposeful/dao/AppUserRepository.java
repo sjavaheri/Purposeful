@@ -1,9 +1,8 @@
 package ca.mcgill.purposeful.dao;
 
 import ca.mcgill.purposeful.model.AppUser;
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.ArrayList;
+import org.springframework.data.repository.CrudRepository;
 
 /** Repository for AppUser */
 public interface AppUserRepository extends CrudRepository<AppUser, Integer> {
