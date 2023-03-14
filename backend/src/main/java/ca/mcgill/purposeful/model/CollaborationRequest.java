@@ -1,6 +1,5 @@
 package ca.mcgill.purposeful.model;
 
-import ca.mcgill.purposeful.model.VerificationRequest.Status;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
@@ -28,7 +27,7 @@ public class CollaborationRequest {
   @Column(nullable = true)
   private String additionalContact;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String message;
 
   // ------------------------

@@ -25,7 +25,7 @@ public class CollaborationConfirmation {
   @Column(nullable = true)
   private String additionalContact;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private String message;
 
   // ------------------------
