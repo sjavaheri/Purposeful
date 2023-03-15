@@ -4,10 +4,10 @@ Feature: Browse ideas by collaboration request.
   Background:
     Given the id map is initialized
     And the database contains the following RegularUser accounts (Strategy1):
-      | id | firstname | lastname | email                   | password     |
-      | 1  | John      | Goblikon | john.goblikon@gmail.com | P@ssWord1234 |
-      | 2  | Jane      | Doe      | jane.doe@gmail.com      | P@ssWord1234 |
-      | 3  | Wassim    | Jabbour  | wassim.jabbour@gmail.com| P@ssWord1234 |
+      | id | firstname | lastname | email                    | password     |
+      | 1  | John      | Goblikon | john.goblikon@gmail.com  | P@ssWord1234 |
+      | 2  | Jane      | Doe      | jane.doe@gmail.com       | P@ssWord1234 |
+      | 3  | Wassim    | Jabbour  | wassim.jabbour@gmail.com | P@ssWord1234 |
     And the database contains the following domains (Strategy1):
       | id | name       |
       | 3  | Software   |
@@ -19,7 +19,7 @@ Feature: Browse ideas by collaboration request.
       | 7  | Game Dev          |
       | 8  | Embedded Software |
       | 9  | CLI Tool          |
-      | 10  | Other            |
+      | 10 | Other             |
     And the database contains the following techs (Strategy1):
       | id | name       |
       | 11 | Rust       |
@@ -39,25 +39,21 @@ Feature: Browse ideas by collaboration request.
       | 20 | Command-Line tool | 2       | 8      | 10       | 1200 | Cool idea   | 15      | Great idea | 2      | False     | 2    |
       | 21 | Novel             | 3       | 9      | 14       | 1100 | Cool idea   | 15      | Great idea | 3      | False     | 3    |
     And the database contains the following collaboration request:
-      | id | ideaId | userId | status       | additionalContact | message                                                                          |
-      | 23  | 17    | 2      | Pending      | "438-764-1940"    | "Hi, I would like to join this project!"                                         |
-      | 24  | 18    | 2      | Declined     | null              | "Hi, I have experience in that field and I am interested in working on this!"    |
-      | 25  | 20    | 3      | Accepted     | null              | "Hi, I have experience in that field and I am interested in working on this!"    |
-      | 26  | 21    | 2      | Pending      | null              | "Hi, I have experience in that field and I am interested in working on this!"    |
+      | id | ideaId | userId | status   | additionalContact | message                                                                       |
+      | 23 | 17     | 2      | Pending  | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
+      | 24 | 18     | 2      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 25 | 20     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 26 | 21     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
 
   # Normal/alternate flows
 
   Scenario Outline: Successfully browse ideas by collaboration request
-    Given I am logged in as the user with email "jane.doe@gmail.com" and password "P@ssWord1234"
+    Given I am logged in as the user with email "<email>" and password "<password>"
     When the user requests to browse ideas by collaboration request
     Then the user shall have access to the ideas with ids "<idea_ids>"
 
     Examples:
-      | idea_ids       |
-      | 17,18          |
-
-  # Error flow
-  Scenario: The user doesn't have any collaboration requests
-    Given I am logged in as the user with email "john.goblikon@gmail.com" and password "P@ssWord1234"
-    When the user erroneously requests to browse ideas by collaboration request
-    Then the user shall receive the error message "There are no ideas in which you expressed interest in." with status "404"
+      | email                    | password     | idea_ids |
+      | wassim.jabbour@gmail.com | P@ssWord1234 | 20       |
+      | jane.doe@gmail.com       | P@ssWord1234 | 23,24,26 |
+      | john.goblikon@gmail.com  | P@ssWord1234 |          |
