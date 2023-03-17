@@ -70,14 +70,15 @@ Feature: Send a collaboration request
         When I request to send a collaboration request to the creator of the idea with id "<idea_id>" with message "<message>" and additionalContact "<additionalContact>"
         Then the number of collaboration requests in the database should be "4"
         And the number of incoming collaboration requests for the creator of the idea with id "<idea_id>" shall be "<num_incoming_requests>"
-        And the number of outgoing collaboration requests for the user with id "<user_id>" shall be "<num_outgoing_requests>"
+        And the number of outgoing collaboration requests for the user with email "email" shall be "<num_outgoing_requests>"
         And the following error message shall be returned "<errorMessage>"
 
         Examples:
-            | email                    | password     | idea_id | user_id | message                               | additionalContact | num_incoming_requests | num_outgoing_requests | errorMessage                                                                                              |
-            | jane.doe@gmail.com       | P@ssWord1234 | 17      | 3       | "Hi, please let me join your project" | null              | 2                     | 3                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
-            | jane.doe@gmail.com       | P@ssWord1234 | 18      | 3       | "Hi, please let me join your project" | null              | 2                     | 3                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
-            | wassim.jabbour@gmail.com | P@ssWord1234 | 20      | 2       | "Hi, please let me join your project" | "428-8794-4237"   | 1                     | 1                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
-            | jane.doe@gmail.com       | P@ssWord1234 | 21      | 3       | "Hi, please let me join your project" | "428-8794-4238"   | 1                     | 3                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
-
-# TODO: Add flow where send to yourself as example
+            | email                    | password     | idea_id | message                               | additionalContact | num_incoming_requests | num_outgoing_requests | errorMessage                                                                                              |
+            | jane.doe@gmail.com       | P@ssWord1234 | 17      | "Hi, please let me join your project" | null              | 2                     | 3                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
+            | jane.doe@gmail.com       | P@ssWord1234 | 18      | "Hi, please let me join your project" | null              | 2                     | 3                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
+            | wassim.jabbour@gmail.com | P@ssWord1234 | 20      | "Hi, please let me join your project" | "428-8794-4237"   | 1                     | 1                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
+            | jane.doe@gmail.com       | P@ssWord1234 | 21      | "Hi, please let me join your project" | "428-8794-4238"   | 1                     | 3                     | Cannot send another collaboration requests to the same person before they respond to the previous request |
+            | wassim.jabbour@gmail.com | P@ssWord1234 | 21      | "Hi, please let me join your project" | "428-8794-4239"   | 1                     | 3                     | Cannot send a collaboration request to oneself                                                            |
+            | jane.doe@gmail.com       | P@ssWord1234 | 20      | "Hi, please let me join your project" | "428-8794-4230"   | 1                     | 1                     | Cannot send a collaboration request to oneself                                                            |
+            | john.goblikon@gmail.com  | P@ssWord1234 | 17      | "Hi, please let me join your project" | "428-8794-4231"   | 2                     | 0                     | Cannot send a collaboration request to oneself                                                            |
