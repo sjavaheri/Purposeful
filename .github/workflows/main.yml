@@ -72,7 +72,7 @@ jobs:
           jacoco-csv-file: backend/build/customJacocoReportDir/test/jacocoTestReport.csv
 
       - name: Installing Node.js dependencies
-        run: npm ci
+        run: npm ci --prefix ./frontend/purposeful-frontend
 
       - name: Execute Node.js build
         run: npm run build --if-present --prefix ./frontend/purposeful-frontend
