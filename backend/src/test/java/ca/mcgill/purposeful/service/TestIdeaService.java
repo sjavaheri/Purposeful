@@ -74,6 +74,39 @@ public class TestIdeaService {
   }
 
   /**
+   * @author Ramin Akhavan Test access all user's created ideas
+   */
+  @Test
+  public void testGetCreatedIdeas_Success() {
+    String testUserEmail = MockDatabase.user1.getAppUser().getEmail();
+
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
+
+    assertTrue(!createdIdeas.isEmpty());
+    assertTrue(createdIdeas.contains(MockDatabase.idea1));
+    assertTrue(createdIdeas.contains(MockDatabase.idea2));
+
+  }
+
+  /**
+   * @author Ramin Akhavan Test access all user's created ideas
+   * Fail case where email is empty or null
+   */
+  @Test
+  public void testGetCreatedIdeas_NullEmail() {
+    String testUserEmail = null;
+
+    try {
+      List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
+    }
+    catch(Exception e){
+      assertEquals("Email cannot be empty to get the user's created ideas!", e.getMessage());
+    }
+
+  }
+
+  
+  /**
    * Test the getIdeaById method (Success case)
    *
    * @author Wassim Jabbour
