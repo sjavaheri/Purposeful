@@ -9,18 +9,24 @@ import {
   useColorModeValue,
   FormHelperText,
   FormErrorMessage,
-  HStack,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Field, Form, Formik } from "formik";
 
 export default function Registration() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isError, setIsError] = useState(false); // TODO: Connect this to the error handling from the backend
-  // TODO: Might need different error states for different fields
-  // TODO: Connect the fields to the API form submission
+
+  // Function to validate the confirm password field
+  const validateConfirmPassword = (value, password) => {
+    let error;
+    if (value !== password) {
+      error = "Passwords do not match.";
+    }
+    return error;
+  };
 
   return (
     <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
@@ -30,91 +36,189 @@ export default function Registration() {
         boxShadow={"lg"}
         p={8}
       >
-        <Stack spacing={4}>
-          <HStack>
-            <Box>
-              <FormControl id="firstName" isInvalid={isError}>
-                <FormLabel>First Name</FormLabel>
-                <Input type="text" />
-                {!isError ? null : (
-                  <FormErrorMessage>First name is required.</FormErrorMessage> // TODO: Connect this to the error handling from the backend
-                )}
-              </FormControl>
-            </Box>
-            <Box>
-              <FormControl id="lastName" isInvalid={isError}>
-                <FormLabel>Last Name</FormLabel>
-                <Input type="text" />
-                {!isError ? null : (
-                  <FormErrorMessage>Last name is required.</FormErrorMessage> // TODO: Connect this to the error handling from the backend
-                )}
-              </FormControl>
-            </Box>
-          </HStack>
-          <FormControl id="email" isInvalid={isError}>
-            <FormLabel>Username</FormLabel>
-            <Input type="email" placeholder="your-email@example.com" />
-            {!isError ? null : (
-              <FormErrorMessage>Email is required.</FormErrorMessage> // TODO: Connect this to the error handling from the backend
-            )}
-          </FormControl>
-          <Stack>
-            <Box>
-              <FormControl id="password" isInvalid={isError}>
-                <FormLabel>Password</FormLabel>
-                <FormHelperText mb={4}>
-                  Passwords must be at least 8 characters long and contain at
-                  least one number, one lowercase character and one uppercase
-                  character.
-                </FormHelperText>
-                <InputGroup>
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                  />
-                  <InputRightElement h={"full"}>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        setShowPassword((showPassword) => !showPassword)
+        <Formik
+          initialValues={{
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }}
+          onSubmit={(values, actions) => {
+            setTimeout(async () => {
+              console.log(values); // TODO: To be removed once the API is connected
+              // TODO: Set the error messages for the fields according to the API response
+              // TODO: Differentiate API methods depending on authentication status
+              actions.setSubmitting(false);
+              // TODO: Redirect to the login page
+            }, 1000);
+          }}
+        >
+          {(props) => (
+            <Form>
+              <Stack spacing={4}>
+                <Box>
+                  <Field name="firstname">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={
+                          form.errors.firstname && form.touched.firstname
+                        }
+                      >
+                        <FormLabel>First Name</FormLabel>
+                        <Input {...field} type="text" />
+                        <FormErrorMessage>
+                          {form.errors.firstname}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Box>
+                <Box>
+                  <Field name="lastname">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="lastName"
+                        isInvalid={
+                          form.errors.lastname && form.touched.lastname
+                        }
+                      >
+                        <FormLabel>Last Name</FormLabel>
+                        <Input {...field} type="text" />
+                        <FormErrorMessage>
+                          {form.errors.lastname}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Box>
+                <Box>
+                  <Field name="email">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="email"
+                        isInvalid={form.errors.email && form.touched.email}
+                      >
+                        <FormLabel>Username</FormLabel>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="email@example.com"
+                        />
+                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Box>
+                <Stack>
+                  <Box>
+                    <Field name="password">
+                      {({ field, form }) => (
+                        <FormControl
+                          id="password"
+                          isInvalid={
+                            form.errors.password && form.touched.password
+                          }
+                        >
+                          <FormLabel>Password</FormLabel>
+                          <FormHelperText mb={4}>
+                            Passwords must be at least 8 characters long and
+                            contain at least one number, one lowercase character
+                            and one uppercase character.
+                          </FormHelperText>
+                          <InputGroup>
+                            <Input
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Password"
+                            />
+                            <InputRightElement h={"full"}>
+                              <Button
+                                variant={"ghost"}
+                                onClick={() =>
+                                  setShowPassword(
+                                    (showPassword) => !showPassword
+                                  )
+                                }
+                              >
+                                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {form.errors.password}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                  </Box>
+                  <Box>
+                    <Field
+                      name="confirmPassword"
+                      validate={(value) =>
+                        validateConfirmPassword(value, props.values.password)
                       }
                     >
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                {isError ? (
-                  <FormErrorMessage>Password is required.</FormErrorMessage> // TODO: Connect this to the error handling from the backend
-                ) : null}
-              </FormControl>
-            </Box>
-            <Box>
-              <FormControl id="confirmPassword" isInvalid={isError}>
-                <InputGroup>
-                  <Input
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirm password"
-                  />
-                  <InputRightElement h={"full"}>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        setShowConfirmPassword(
-                          (showConfirmPassword) => !showConfirmPassword
-                        )
-                      }
-                    >
-                      {showConfirmPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                {!isError ? null : (
-                  <FormErrorMessage>Passwords do not match.</FormErrorMessage> // TODO: Connect this to the error handling from the backend
-                )}
-              </FormControl>
-            </Box>
-          </Stack>
-        </Stack>
+                      {({ field, form }) => (
+                        <FormControl
+                          id="confirmPassword"
+                          isInvalid={
+                            form.errors.confirmPassword &&
+                            form.touched.confirmPassword
+                          }
+                        >
+                          <InputGroup>
+                            <Input
+                              {...field}
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder="Confirm password"
+                            />
+                            <InputRightElement h={"full"}>
+                              <Button
+                                variant={"ghost"}
+                                onClick={() =>
+                                  setShowConfirmPassword(
+                                    (showConfirmPassword) =>
+                                      !showConfirmPassword
+                                  )
+                                }
+                              >
+                                {showConfirmPassword ? (
+                                  <ViewIcon />
+                                ) : (
+                                  <ViewOffIcon />
+                                )}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {form.errors.confirmPassword}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                  </Box>
+                </Stack>
+                <Stack align={"center"}>
+                  <Button
+                    size="lg"
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                    w={"50%"}
+                    loadingText="Submitting"
+                    isLoading={props.isSubmitting}
+                    type="submit"
+                  >
+                    Register
+                  </Button>
+                </Stack>
+              </Stack>
+            </Form>
+          )}
+        </Formik>
       </Box>
     </Stack>
   );
