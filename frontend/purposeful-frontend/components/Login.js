@@ -25,7 +25,7 @@ export default function Login() {
     alert(`Email: ${username} & Password: ${password}`);
     let success = await login(username, password);
     // logout();
-    console.log(verifyToken());
+    // console.log(verifyToken());
     // what to do if verify is false?
   };
 
