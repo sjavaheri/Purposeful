@@ -29,7 +29,7 @@ export default function ModeratorRegistrationPage() {
         Toggle {colorMode === "light" ? "Dark" : "Light"}
       </Button>
       <Stack spacing={4} mx={"auto"} maxW={"2xl"} py={12} px={6}>
-        <Heading as="h2" size="2xl">
+        <Heading as="h1" size="2xl" align="center">
           Register a new moderator account below
         </Heading>
         <Registration />
