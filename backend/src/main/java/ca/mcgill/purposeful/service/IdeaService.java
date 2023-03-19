@@ -487,7 +487,7 @@ public class IdeaService {
     if (email == null || email.isEmpty()){
       throw new GlobalException(
         HttpStatus.BAD_REQUEST,
-        "Email cannot be empty to get the user's created ideas!");
+        "Please enter a valid email. Email cannot be left empty");
     }
 
     List<Idea> createdIdeas = new ArrayList<>();

@@ -34,6 +34,7 @@ public class TestIdeaService {
   private static boolean NEW_PRIVACY = true;
   private static boolean NEW_PROGRESS = true;
 
+
   // Mocks
   @Mock private IdeaRepository ideaRepository;
 
@@ -100,8 +101,22 @@ public class TestIdeaService {
       List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
     }
     catch(Exception e){
-      assertEquals("Email cannot be empty to get the user's created ideas!", e.getMessage());
+      assertEquals("Please enter a valid email. Email cannot be left empty", e.getMessage());
     }
+
+  }
+
+  /**
+   * @author Ramin Akhavan Test access all user's created ideas
+   * Empty list is returned if email is not associated to an idea
+   */
+  @Test
+  public void testGetCreatedIdeas_EmptyList() {
+    String testUserEmail = "example2@gmail.com";
+
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
+
+    assertTrue(createdIdeas.isEmpty());
 
   }
 
