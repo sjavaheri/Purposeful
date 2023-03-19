@@ -6,7 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import org.springframework.context.annotation.Bean;
+import java.util.Arrays;import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
+import java.security.interfaces.RSAPublicKey;import org.springframework.web.cors.CorsConfiguration;import org.springframework.web.cors.CorsConfigurationSource;import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
@@ -33,6 +33,7 @@ public class SecurityConfiguration {
     return http.csrf()
         .disable() // csrf protection is an extra security layer - prevent cross site request
         // forgery. Adds extra complexity. For post requests, you need extra actions
+        .cors().configurationSource(corsConfigurationSource()).and()
         .oauth2ResourceServer()
         .jwt()
         .jwtAuthenticationConverter(new AuthenticationConverter())
@@ -113,6 +114,24 @@ public class SecurityConfiguration {
   @Bean
   JwtDecoder jwtDecoder() throws Exception {
     return NimbusJwtDecoder.withPublicKey(rsaKeys().getPublicKey()).build();
+  }
+
+  /**
+   * Allows localhost:3000 to access the backend,
+   * Allows GET and POST requests, add others if necessary
+   * Allows Authorization header (Basic, Bearer)
+   * @return
+   */
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
+    configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+    configuration.addAllowedHeader("Authorization");
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
   }
 
   /*
