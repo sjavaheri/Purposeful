@@ -37,6 +37,7 @@ public class TestIdeaService {
   private static boolean NEW_PRIVACY = true;
   private static boolean NEW_PROGRESS = true;
 
+
   // Mocks
   @Mock private IdeaRepository ideaRepository;
 
@@ -80,6 +81,53 @@ public class TestIdeaService {
         .when(collaborationRequestRepository.findAll()).thenAnswer(MockRepository::findAllRequests);
   }
 
+  /**
+   * @author Ramin Akhavan Test access all user's created ideas
+   */
+  @Test
+  public void testGetCreatedIdeas_Success() {
+    String testUserEmail = MockDatabase.user1.getAppUser().getEmail();
+
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
+
+    assertTrue(!createdIdeas.isEmpty());
+    assertTrue(createdIdeas.contains(MockDatabase.idea1));
+    assertTrue(createdIdeas.contains(MockDatabase.idea2));
+
+  }
+
+  /**
+   * @author Ramin Akhavan Test access all user's created ideas
+   * Fail case where email is empty or null
+   */
+  @Test
+  public void testGetCreatedIdeas_NullEmail() {
+    String testUserEmail = null;
+
+    try {
+      List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
+    }
+    catch(Exception e){
+      assertEquals("Please enter a valid email. Email cannot be left empty", e.getMessage());
+    }
+
+  }
+
+  /**
+   * @author Ramin Akhavan Test access all user's created ideas
+   * Empty list is returned if email is not associated to an idea
+   */
+  @Test
+  public void testGetCreatedIdeas_EmptyList() {
+    String testUserEmail = "example2@gmail.com";
+
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
+
+    assertTrue(createdIdeas.isEmpty());
+
+  }
+
+  
   /**
    * Test the getIdeaById method (Success case)
    *

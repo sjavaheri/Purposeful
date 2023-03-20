@@ -475,6 +475,37 @@ public class IdeaService {
     ideaRepository.deleteById(uuid);
   }
 
+
+
+  /**
+   * Check to make sure a url exists
+   *
+   * @param  email - the email of the user trying to access their created ideas
+   * @throws GlobalException if an object does not exist
+   * @return List of created Idea objects made by the user
+   * @author Ramin Akhavan
+   */
+  public List<Idea> getCreatedIdeas(String email) {
+
+    if (email == null || email.isEmpty()){
+      throw new GlobalException(
+        HttpStatus.BAD_REQUEST,
+        "Please enter a valid email. Email cannot be left empty");
+    }
+
+    List<Idea> createdIdeas = new ArrayList<>();
+    for (Idea idea: ideaRepository.findAll()){
+      String ideaEmail = idea.getUser().getAppUser().getEmail();
+      if (ideaEmail.equalsIgnoreCase(email)){
+        createdIdeas.add(idea);
+      } 
+    }
+
+
+    return createdIdeas;
+  }
+
+
   /**
    * Retrieve all the ideas that a user expressed interest in.
    *
@@ -526,4 +557,5 @@ public class IdeaService {
 
     return allRequestedIdeas;
     }
+
 }
