@@ -44,6 +44,7 @@ Feature: Respond to Collaboration Requests
       | 24 | 18     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
       | 25 | 20     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
       | 26 | 21     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 27 | 20     | 1      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
 
     And the database contains the following collaboration confirmation:
       | id | collaborationRequestId | additionalContact                 | message                                                          |
@@ -71,3 +72,22 @@ Feature: Respond to Collaboration Requests
     Examples:
       | email                    | password     | collaboration_request_id |
       | wassim.jabbour@gmail.com | P@ssWord1234 | 26                       |
+
+    # Error flows
+  Scenario Outline: User tries to accept a collaboration request for an idea that was already Accepted
+    Given I am logged in as the user with email "<email>" and password "<password>"
+    When the user erroneously accepts the collaboration request with id "<collaboration_request_id>"
+    Then the user shall receive the error message "This collaboration request has already been accepted and its status cannot be changed" with status 409
+
+    Examples:
+      | email              | password     | collaboration_request_id |
+      | jane.doe@gmail.com | P@ssWord1234 | 25                       |
+
+  Scenario Outline: User tries to accept a collaboration request for an idea that was already Declined
+    Given I am logged in as the user with email "<email>" and password "<password>"
+    When the user erroneously accepts the collaboration request with id "<collaboration_request_id>"
+    Then the user shall receive the error message "This collaboration request has already been declined and its status cannot be changed" with status 409
+
+    Examples:
+      | email                   | password     | collaboration_request_id |
+      | john.goblikon@gmail.com | P@ssWord1234 | 27                       |
