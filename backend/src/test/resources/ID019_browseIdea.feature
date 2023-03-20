@@ -3,32 +3,32 @@ Feature: Browse ideas by domain by Domain, Topic, or Tech
 
   Background:
     Given the id map is initialized
-    And the database contains the following RegularUser accounts (Strategy1):
+    And the database contains the following RegularUser accounts (ID019):
       | id | firstname | lastname | email                   | password     |
       | 1  | John      | Goblikon | john.goblikon@gmail.com | P@ssWord1234 |
-    And the database contains the following domains (Strategy1):
+    And the database contains the following domains (ID019):
       | id | name       |
       | 2  | Software   |
       | 3  | English    |
       | 4  | Electrical |
-    And the database contains the following topics (Strategy1):
+    And the database contains the following topics (ID019):
       | id | name              |
       | 5  | Web Dev           |
       | 6  | Game Dev          |
       | 7  | Embedded Software |
       | 8  | CLI Tool          |
       | 9  | Other             |
-    And the database contains the following techs (Strategy1):
+    And the database contains the following techs (ID019):
       | id | name       |
       | 10 | Rust       |
       | 11 | TypeScript |
       | 12 | Go         |
       | 13 | C++        |
       | 14 | Other      |
-    And the database contains the following urls (Strategy1):
+    And the database contains the following urls (ID019):
       | id | url      |
       | 15 | test.com |
-    And the database contains the following ideas (Strategy1):
+    And the database contains the following ideas (ID019):
       # Date in ms from the unix epoch (Other constructors are deprecated)
       | id | title             | domains | topics | techs    | date | description | iconUrl | purpose    | author | isPrivate | user |
       | 16 | Website Idea      | 2       | 5      | 10,11,12 | 1500 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
