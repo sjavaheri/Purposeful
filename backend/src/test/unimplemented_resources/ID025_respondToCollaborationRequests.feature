@@ -45,11 +45,14 @@ Feature: Respond to Collaboration Requests
       | 25 | 20     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
       | 26 | 21     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
       | 27 | 20     | 1      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 28 | 17     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 29 | 18     | 3      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 30 | 19     | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
 
     And the database contains the following collaboration confirmation:
       | id | collaborationRequestId | additionalContact                 | message                                                          |
-      | 27 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
-      | 28 | 24                     | ""                                | ""                                                               |
+      | 31 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
+      | 32 | 24                     | ""                                | ""                                                               |
 
   # Normal/alternate flows
   Scenario Outline: User successfully accepts collaboration request for their created idea
@@ -61,8 +64,8 @@ Feature: Respond to Collaboration Requests
 
     Examples:
       | email                   | password     | collaboration_request_id | collaboration_confirmation_id | message                                                          | user_id |
-      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | 27                            | "Hi, could you develop on your experience in that field please." | 2       |
-      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | 28                            | ""                                                               | 2       |
+      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | 31                            | "Hi, could you develop on your experience in that field please." | 2       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | 32                            | ""                                                               | 2       |
 
   Scenario Outline: User successfully declines collaboration request for their created idea
     Given I am logged in as the user with email "<email>" and password "<password>"
@@ -72,16 +75,19 @@ Feature: Respond to Collaboration Requests
     Examples:
       | email                    | password     | collaboration_request_id |
       | wassim.jabbour@gmail.com | P@ssWord1234 | 26                       |
+      | jane.doe@gmail.          | P@ssWord1234 | 30                       |
 
-    # Error flows
-  Scenario Outline: User tries to accept a collaboration request for an idea that was already Accepted
+
+  # Error flows
+  Scenario Outline: User tries to decline a collaboration request for an idea that was already Accepted
     Given I am logged in as the user with email "<email>" and password "<password>"
-    When the user erroneously accepts the collaboration request with id "<collaboration_request_id>"
+    When the user erroneously declines the collaboration request with id "<collaboration_request_id>"
     Then the user shall receive the error message "This collaboration request has already been accepted and its status cannot be changed" with status 409
 
     Examples:
-      | email              | password     | collaboration_request_id |
-      | jane.doe@gmail.com | P@ssWord1234 | 25                       |
+      | email                   | password     | collaboration_request_id |
+      | jane.doe@gmail.com      | P@ssWord1234 | 25                       |
+      | john.goblikon@gmail.com | P@ssWord1234 | 28                       |
 
   Scenario Outline: User tries to accept a collaboration request for an idea that was already Declined
     Given I am logged in as the user with email "<email>" and password "<password>"
@@ -90,4 +96,5 @@ Feature: Respond to Collaboration Requests
 
     Examples:
       | email                   | password     | collaboration_request_id |
-      | john.goblikon@gmail.com | P@ssWord1234 | 27                       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 27                       |
+      | john.goblikon@gmail.com | P@ssWord1234 | 29                       |
