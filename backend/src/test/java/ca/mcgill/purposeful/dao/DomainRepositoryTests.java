@@ -1,5 +1,7 @@
 package ca.mcgill.purposeful.dao;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.util.DatabaseUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Domain Repository testing class which initiates a domain, executes the tests, then clears the

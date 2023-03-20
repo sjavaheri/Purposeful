@@ -1,11 +1,10 @@
 package ca.mcgill.purposeful.model;
 
 import jakarta.persistence.*;
+import java.util.Date;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.Date;
 
 /** The Reaction class, the model for all reactions in the database */
 @Entity

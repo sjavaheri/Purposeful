@@ -1,73 +1,71 @@
-// This code was copied from
-// https://gist.github.com/vaish567/861e88d0e7f13cb00ef88767cd2f8d0f
+// Copied from: https://chakra-templates.dev/forms/authentication
 import {
-  Grid,
-  Paper,
-  Avatar,
-  TextField,
-  Button,
-  Typography,
-  Link,
-  FormControlLabel,
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
   Checkbox,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+  Stack,
+  Link,
+  Button,
+  Heading,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
-function Login() {
-  const paperStyle = {
-    padding: 20,
-    height: "70vh",
-    width: 280,
-    margin: "20px auto",
-  };
-  const avatarStyle = { backgroundColor: "#1bbd7e" };
-  const btnstyle = { margin: "8px 0" };
+export default function Login() {
   return (
-    <Grid>
-      <Paper elevation={10} style={paperStyle}>
-        <Grid align="center">
-          <Avatar style={avatarStyle}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <h2>Sign In</h2>
-        </Grid>
-        <TextField
-          label="Username"
-          placeholder="Enter username"
-          variant="outlined"
-          fullWidth
-          required
-        />
-        <TextField
-          label="Password"
-          placeholder="Enter password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          required
-        />
-        <FormControlLabel
-          control={<Checkbox name="checkedB" color="primary" />}
-          label="Remember me"
-        />
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          style={btnstyle}
-          fullWidth>
-          Sign in
-        </Button>
-        <Typography>
-          <Link href="#">Forgot password ?</Link>
-        </Typography>
-        <Typography>
-          {" "}
-          Do you have an account ?<Link href="#">Sign Up</Link>
-        </Typography>
-      </Paper>
-    </Grid>
+    <Flex
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+          <Text fontSize={"lg"} color={"gray.600"}>
+            to enjoy all of our cool <Link color={"blue.400"}>features</Link> ✌️
+          </Text>
+        </Stack>
+        <Box
+          rounded={"lg"}
+          bg={useColorModeValue("white", "gray.700")}
+          boxShadow={"lg"}
+          p={8}
+        >
+          <Stack spacing={4}>
+            <FormControl id="email">
+              <FormLabel>Email address</FormLabel>
+              <Input type="email" />
+            </FormControl>
+            <FormControl id="password">
+              <FormLabel>Password</FormLabel>
+              <Input type="password" />
+            </FormControl>
+            <Stack spacing={10}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              >
+                <Checkbox>Remember me</Checkbox>
+                <Link color={"blue.400"}>Forgot password?</Link>
+              </Stack>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                _hover={{
+                  bg: "blue.500",
+                }}
+              >
+                Sign in
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
   );
 }
-
-export default Login;

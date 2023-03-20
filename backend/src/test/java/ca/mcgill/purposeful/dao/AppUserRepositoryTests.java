@@ -1,22 +1,21 @@
 package ca.mcgill.purposeful.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.util.DatabaseUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * AppUser Repository testing class which initiates an appUser with all its attributes, executes the

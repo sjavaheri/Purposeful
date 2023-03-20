@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: CI with Gradle, Node.js, and JaCoCo
 
 on:
   push:
@@ -41,6 +41,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+
       - name: Make the application.properties from application.properties.example
         run: cp backend/src/main/resources/application.properties.example backend/src/main/resources/application.properties
 
@@ -65,3 +70,9 @@ jobs:
           generate-branches-badge: true
           generate-summary: true
           jacoco-csv-file: backend/build/customJacocoReportDir/test/jacocoTestReport.csv
+
+      - name: Installing Node.js dependencies
+        run: npm ci --prefix ./frontend/purposeful-frontend
+
+      - name: Execute Node.js build
+        run: npm run build --if-present --prefix ./frontend/purposeful-frontend

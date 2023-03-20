@@ -1,18 +1,17 @@
 package ca.mcgill.purposeful.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import ca.mcgill.purposeful.model.*;
 import ca.mcgill.purposeful.util.DatabaseUtil;
+import java.time.Instant;
+import java.util.Date;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.time.Instant;
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class ReactionRepositoryTests {
@@ -53,7 +52,6 @@ public class ReactionRepositoryTests {
     idea.setPurpose("huge learning experience");
     idea.setDescription("It's a good idea");
     idea.setIconUrl(url);
-    ;
 
     // Create reaction
     Reaction reaction = new Reaction();
