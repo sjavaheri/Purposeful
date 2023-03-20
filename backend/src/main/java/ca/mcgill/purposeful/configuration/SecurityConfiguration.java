@@ -118,7 +118,7 @@ public class SecurityConfiguration {
 
   /**
    * Allows localhost:3000 to access the backend,
-   * Allows GET and POST requests, add others if necessary
+   * Allows GET, POST, PUT, DELETE
    * Allows Authorization header (Basic, Bearer)
    * @return
    */
@@ -126,7 +126,7 @@ public class SecurityConfiguration {
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
-    configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+    configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
     configuration.addAllowedHeader("Authorization");
     configuration.setAllowCredentials(true);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
