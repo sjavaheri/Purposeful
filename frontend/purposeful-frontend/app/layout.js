@@ -2,6 +2,7 @@
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./theme";
 
 export default function RootLayout({ children }) {
   return (
@@ -9,7 +10,7 @@ export default function RootLayout({ children }) {
       <head />
       <body>
         <CacheProvider>
-          <ChakraProvider>{children}</ChakraProvider>
+          <ChakraProvider theme={theme}>{children}</ChakraProvider>
         </CacheProvider>
       </body>
     </html>

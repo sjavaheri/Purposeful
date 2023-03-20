@@ -2,6 +2,7 @@ package ca.mcgill.purposeful.service;
 
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.model.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -48,6 +51,8 @@ public class TestIdeaService {
 
   @Mock private RegularUserRepository regularUserRepository;
 
+  @Mock private CollaborationRequestRepository collaborationRequestRepository;
+
   // Inject mocks
   @InjectMocks private IdeaService ideaService;
 
@@ -71,7 +76,9 @@ public class TestIdeaService {
     lenient().when(urlRepository.findURLById(anyString())).thenAnswer(MockRepository::findURLById);
     lenient()
         .when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
-        .thenReturn(MockDatabase.user1);
+        .thenAnswer(MockRepository::findRegularUserByAppUserEmail);
+    lenient()
+        .when(collaborationRequestRepository.findAll()).thenAnswer(MockRepository::findAllRequests);
   }
 
   /**
@@ -192,6 +199,8 @@ public class TestIdeaService {
 
     // Check that the ideas are from most recent to oldest
     Iterator<Idea> iterator = fetchedIdeas.iterator();
+    assertEquals(MockDatabase.idea3, iterator.next());
+    assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea2, iterator.next());
     assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea1, iterator.next());
@@ -244,7 +253,10 @@ public class TestIdeaService {
     Iterable<Idea> fetchedIdeas = ideaService.getIdeasByAllCriteria(null, null, null);
     Iterator<Idea> iterator = fetchedIdeas.iterator();
 
-    // Check that the ideas list fetched has only 1 idea, that is idea 1
+    // Check that the ideas list fetched has all 3 ideas
+    assertNotNull(fetchedIdeas);
+    assertEquals(MockDatabase.idea3, iterator.next());
+    assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea2, iterator.next());
     assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea1, iterator.next());
@@ -599,6 +611,94 @@ public class TestIdeaService {
   }
 
   /**
+   * Test getting ideas by Collaboration Request (Success case 1). The user made collaboration requests before
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testGetIdeasByCollaborationRequest_Success1() {
+
+    // Try to get the ideas by all criteria
+    List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest(MockDatabase.appUser2.getEmail());
+
+    // Check that the ideas list fetched isn't null
+    assertNotNull(fetchedIdeas);
+
+    // Check that the ideas are from most recent to oldest
+    Iterator<Idea> iterator = fetchedIdeas.iterator();
+    assertEquals(MockDatabase.modifiableIdea, iterator.next());
+    assertTrue(iterator.hasNext());
+    assertEquals(MockDatabase.idea3, iterator.next());
+    assertFalse(iterator.hasNext()); // Check only the 2 ideas are in the list
+  }
+
+  /**
+   * Test getting ideas by Collaboration Request (Success case 2). The user did not make collaboration requests before
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testGetIdeasByCollaborationRequest_Success2() {
+
+    // Try to get the ideas by all criteria
+    List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest(MockDatabase.appUser1.getEmail());
+
+    // Check that the ideas list fetched isn't null
+    assertNotNull(fetchedIdeas);
+
+    // Check that the ideas are from most recent to oldest
+    Iterator<Idea> iterator = fetchedIdeas.iterator();
+    assertTrue(fetchedIdeas.isEmpty());
+  }
+
+  /**
+   * Test getting ideas by Collaboration Request empty email (Failure case)
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testGetIdeasByCollaborationRequest_EmptyEmail() {
+
+    try{
+      // Try to get the ideas by all criteria using an empty email
+      List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest("");
+    } catch (Exception e) {
+      assertEquals("Email cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test getting ideas by Collaboration Request null email (Failure case)
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Test
+  public void testGetIdeasByCollaborationRequest_NullEmail() {
+    try{
+      // Try to get the ideas by all criteria using a null email
+      List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest(null);
+    } catch (Exception e) {
+      assertEquals("Email cannot be left empty! ", e.getMessage());
+    }
+  }
+
+  /**
+   * Test getting ideas by Collaboration Request non-existing email (Failure case)
+   *
+   * @author Enzo Benoit-Jeannin
+  */
+    @Test
+    public void testGetIdeasByCollaborationRequest_NonExistingEmail() {
+      try{
+        // Try to get the ideas by all criteria using a non-existing email
+        List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest("nonexistingemail@email.com");
+      } catch (Exception e) {
+        assertEquals("This account does not exist.", e.getMessage());
+      }
+    }
+
+
+  /**
    * This class holds all of the mock methods of the CRUD repositories
    *
    * @author Wassim Jabbour
@@ -613,6 +713,8 @@ public class TestIdeaService {
         return MockDatabase.idea2;
       } else if (id.equals(MockDatabase.modifiableIdea.getId())) {
         return MockDatabase.modifiableIdea;
+      } else if (id.equals(MockDatabase.idea3.getId())) {
+        return MockDatabase.idea3;
       } else {
         return null;
       }
@@ -692,7 +794,26 @@ public class TestIdeaService {
       HashSet<Idea> ideas = new HashSet<>();
       ideas.add(MockDatabase.idea1);
       ideas.add(MockDatabase.idea2);
+      ideas.add(MockDatabase.idea3);
       return ideas;
+    }
+
+    static Iterable<CollaborationRequest> findAllRequests (InvocationOnMock invocation) {
+      HashSet<CollaborationRequest> requests = new HashSet<>();
+      requests.add(MockDatabase.collaborationRequest1);
+      requests.add(MockDatabase.collaborationRequest2);
+      return requests;
+    }
+
+    static RegularUser findRegularUserByAppUserEmail (InvocationOnMock invocation){
+      String email = invocation.getArgument(0);
+      if (email.equals(MockDatabase.appUser1.getEmail())) {
+        return MockDatabase.user1;
+      } else if (email.equals(MockDatabase.appUser2.getEmail())) {
+        return MockDatabase.user2;
+      } else {
+        return null;
+      }
     }
   }
 
@@ -723,11 +844,19 @@ public class TestIdeaService {
 
     static Idea idea2 = new Idea();
 
+    static Idea idea3 = new Idea();
+
     static Idea modifiableIdea = new Idea();
 
     // Users
     static AppUser appUser1 = new AppUser();
     static RegularUser user1 = new RegularUser();
+    static AppUser appUser2 = new AppUser();
+    static RegularUser user2 = new RegularUser();
+
+    // Collaboration requests
+    static CollaborationRequest collaborationRequest1 = new CollaborationRequest();
+    static CollaborationRequest collaborationRequest2 = new CollaborationRequest();
 
     // Domains
     static Domain domain1 = new Domain();
@@ -791,9 +920,11 @@ public class TestIdeaService {
      */
     static {
 
-      // Initialize user
+      // Initialize users
       appUser1.setEmail("example@gmail.com");
       user1.setAppUser(appUser1);
+      appUser2.setEmail("example2@gmail.com");
+      user2.setAppUser(appUser2);
 
       // Initialize topics
       topic1.setId(UUID.randomUUID().toString());
@@ -909,6 +1040,18 @@ public class TestIdeaService {
       idea2.setTechs(techGroup2);
       idea2.setUser(user1);
 
+      idea3.setId(UUID.randomUUID().toString());
+      idea3.setDate(new Date(13000)); // 13000 seconds since 1970 (Other constructors are
+      // deprecated)
+      idea3.setPaid(false);
+      idea3.setPrivate(false);
+      idea3.setInProgress(false);
+      idea3.setDescription("Cool web application for playing piano");
+      idea3.setDomains(domainGroup2);
+      idea3.setTopics(topicGroup2);
+      idea3.setTechs(techGroup2);
+      idea3.setUser(user1);
+
       modifiableIdea.setId(UUID.randomUUID().toString());
       modifiableIdea.setDate(new Date(14000)); // 14000 seconds since 1970 (Other constructors are
       // deprecated)
@@ -920,6 +1063,12 @@ public class TestIdeaService {
       modifiableIdea.setTopics(originalTopicGroup);
       modifiableIdea.setTechs(originalTechGroup);
       modifiableIdea.setUser(user1);
+
+      // Initialize Collaboration requests
+      collaborationRequest1.setRequester(user2);
+      collaborationRequest1.setIdea(idea3);
+      collaborationRequest2.setRequester(user2);
+      collaborationRequest2.setIdea(modifiableIdea);
     }
   }
 }
