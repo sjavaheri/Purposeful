@@ -11,9 +11,12 @@ import {
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
-import Registration from "@/components/Registration";
+import {
+  ModifyDetails,
+  ModifyPassword,
+} from "@/components/ModifyAccountDetails";
 
-export default function ModeratorRegistrationPage() {
+export default function ModifyAccountDetailsPage() {
   const { colorMode, toggleColorMode } = useColorMode(); // TODO: Move the light/dark mode toggle button to the navigation header
   // TODO: Add the header and the navigation bar
 
@@ -29,9 +32,10 @@ export default function ModeratorRegistrationPage() {
       </Button>
       <Stack spacing={4} mx={"auto"} maxW={"2xl"} py={12} px={6}>
         <Heading as="h1" size="2xl" align="center">
-          Register a new moderator account below
+          Modify your account information below
         </Heading>
-        <Registration />
+        <ModifyDetails />
+        <ModifyPassword />
       </Stack>
     </Flex>
   );
