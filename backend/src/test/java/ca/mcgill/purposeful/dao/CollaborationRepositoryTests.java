@@ -7,6 +7,7 @@ import ca.mcgill.purposeful.model.*;
 import ca.mcgill.purposeful.util.DatabaseUtil;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author Siger Ma
  */
 @SpringBootTest
-public class CollaborationConfirmationRepositoryTests {
+public class CollaborationRepositoryTests {
 
   @Autowired private AppUserRepository appUserRepository;
 
@@ -138,5 +139,69 @@ public class CollaborationConfirmationRepositoryTests {
     assertNotNull(request);
     assertEquals(Status.Approved, request.getStatus());
     assertEquals(confirmation.getId(), request.getCollaborationConfirmation().getId());
+  }
+
+  @Test
+  public void testFindCollaborationRequestsByRequesterAndIdea() {
+
+    // Create app user 1
+    AppUser user1 = new AppUser();
+    user1.setEmail("prof@gmail.com");
+    user1.setFirstname("Rob");
+    user1.setLastname("Sab");
+    user1.setPassword(passwordEncoder.encode("password"));
+
+    // Create corresponding regular user
+    RegularUser regUser1 = new RegularUser();
+    regUser1.setAppUser(user1);
+    regUser1.setVerifiedCompany(false);
+
+    // Create app user 2
+    AppUser user2 = new AppUser();
+    user2.setEmail("ta@gmail.com");
+    user2.setFirstname("Neeraj");
+    user2.setLastname("Katiyar");
+    user2.setPassword(passwordEncoder.encode("password"));
+
+    // Create corresponding regular user
+    RegularUser regUser2 = new RegularUser();
+    regUser2.setAppUser(user2);
+    regUser2.setVerifiedCompany(false);
+
+    // create basic URL
+    URL url = new URL();
+    url.setURL("www.url.com");
+
+    // Create basic idea
+    Idea idea = new Idea();
+    idea.setDate(Date.from(Instant.now()));
+    idea.setTitle("Brilliant Idea");
+    idea.setPurpose("huge learning experience");
+    idea.setDescription("It's a good idea");
+    idea.setIconUrl(url);
+    idea.setUser(regUser1);
+
+    // Create collaboration request
+    CollaborationRequest request = new CollaborationRequest();
+    request.setStatus(Status.Pending);
+    request.setAdditionalContact("Chat me on Slack URL");
+    request.setMessage("I would like to collaborate with you on this idea");
+    request.setIdea(idea);
+    request.setRequester(regUser2);
+
+    // Save objects to database
+    urlRepository.save(url);
+    appUserRepository.save(user1);
+    regularUserRepository.save(regUser1);
+    appUserRepository.save(user2);
+    regularUserRepository.save(regUser2);
+    ideaRepository.save(idea);
+    collaborationRequestRepository.save(request);
+
+    // Assert that the collaboration request can be retrieved by user and idea
+    List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(regUser2, idea);
+    assertNotNull(requests);
+    assertEquals(1, requests.size());
+    assertEquals(request.getId(), requests.get(0).getId());
   }
 }
