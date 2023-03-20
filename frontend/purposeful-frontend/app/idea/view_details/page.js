@@ -27,25 +27,6 @@ export default function Simple() {
                 spacing={{ base: 8, md: 10 }}
                 py={{ base: 18, md: 24 }}>
                 <Stack>
-                    <Heading
-                        lineHeight={1.1}
-                        fontWeight={600}
-                        fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-                        Peter Parker
-                    </Heading>
-                    <Image
-                        rounded={'md'}
-                        alt={'product image'}
-                        src={
-                            'https://i.stack.imgur.com/5Kgaq.jpg?s=256&g=1'
-                        }
-                        fit={'cover'}
-                        align={'center'}
-                        w={'80%'}
-                        h={{ base: '100%', sm: '400px', lg: '500px' }}
-                    />
-                </Stack>
-                <Stack spacing={{ base: 6, md: 10 }}>
                     <Box as={'header'}>
                         <Heading
                             lineHeight={1.1}
@@ -60,6 +41,41 @@ export default function Simple() {
                             Let people fly in cars
                         </Text>
                     </Box>
+                    <Image
+                        rounded={'md'}
+                        alt={'product image'}
+                        src={
+                            'https://c.files.bbci.co.uk/9942/production/_119143293_flying-car.jpg'
+                        }
+                        fit={'cover'}
+                        align={'center'}
+                        w={'100%'}
+                        h={{ base: '100%', sm: '400px', lg: '500px' }}
+                    />
+                    {/* <Text
+                        color={useColorModeValue('gray.900', 'gray.400')}
+                        fontWeight={300}
+                        fontSize={'3xl'}>
+                        Author:
+                    </Text>
+                    <Text
+                        color={useColorModeValue('white.900', 'white.400')}
+                        fontWeight={500}
+                        fontSize={'3xl'}>
+                        Peter Parker
+                    </Text>
+                    <Image
+                        rounded={'md'}
+                        src={
+                            'https://i.stack.imgur.com/5Kgaq.jpg?s=256&g=1'
+                        }
+                        fit={'cover'}
+                        align={'center'}
+                        w={'100%'}
+                        h={{ base: '100%', sm: '400px', lg: '500px' }}
+                    /> */}
+                </Stack>
+                <Stack spacing={{ base: 6, md: 10 }}>
 
                     <Stack
                         spacing={{ base: 4, sm: 6 }}
@@ -172,27 +188,6 @@ export default function Simple() {
                                     <ListItem>Gherkin</ListItem>
                                 </List>
                             </SimpleGrid>
-                        </Box>
-                        <Box>
-                            <Text
-                                fontSize={{ base: '16px', lg: '18px' }}
-                                color={useColorModeValue('yellow.500', 'yellow.300')}
-                                fontWeight={'500'}
-                                textTransform={'uppercase'}
-                                mb={'4'}>
-                                Concept Image
-                            </Text>
-                            <Image
-                                rounded={'md'}
-                                alt={'product image'}
-                                src={
-                                    'https://c.files.bbci.co.uk/9942/production/_119143293_flying-car.jpg'
-                                }
-                                fit={'cover'}
-                                align={'center'}
-                                w={'100%'}
-                                h={{ base: '100%', sm: '400px', lg: '500px' }}
-                            />
                         </Box>
                         <Button
                             rounded={'none'}
