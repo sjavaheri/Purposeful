@@ -46,7 +46,6 @@ Feature: Browse ideas by collaboration request.
       | 26 | 21     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
 
   # Normal/alternate flows
-
   Scenario Outline: Successfully browse ideas by collaboration request
     Given I am logged in as the user with email "<email>" and password "<password>"
     When the user requests to browse ideas by collaboration request
