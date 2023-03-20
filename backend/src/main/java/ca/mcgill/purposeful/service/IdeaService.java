@@ -478,8 +478,10 @@ public class IdeaService {
   /**
    * Retrieve all the ideas that a user expressed interest in.
    *
-   * @param email EMail of the user to retrieve the ideas for
+   * @param email Email of the user to retrieve the ideas for
    * @return List of ideas that the user expressed interest in
+   *
+   * @author Enzo Benoit-Jeannin
    */
   @Transactional
   public List<Idea> getIdeasByCollaborationRequest(String email) {
@@ -500,11 +502,6 @@ public class IdeaService {
 
     // Get all Collaboration Requests ever sent
     Iterable<CollaborationRequest> allRequests = collaborationRequestRepository.findAll();
-
-    // Check whether the request was successful
-    if (allRequests == null) {
-      throw new GlobalException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not retrieve requests.");
-    }
 
     // Convert the iterable object to a list
     List<CollaborationRequest> allRequestsList = new ArrayList<>();
