@@ -24,8 +24,10 @@ export default function Login() {
     event.preventDefault();
     alert(`Email: ${username} & Password: ${password}`);
     let success = await login(username, password);
-    // logout();
+    verifyToken();
+    logout();
     // console.log(verifyToken());
+    alert(`AppUser: ${JSON.parse(localStorage.getItem("appUser")).firstname}`);
     // what to do if verify is false?
   };
 

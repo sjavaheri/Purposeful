@@ -48,20 +48,17 @@ export async function verifyToken() {
   // Problem with the request
   if (!appUserDTO) return false;
   // Populate local storage with user info
-  localStorage.setItem("email", appUserDTO.email);
-  localStorage.setItem("firstname", appUserDTO.firstname);
-  localStorage.setItem("lastname", appUserDTO.lastname);
+  // Use JSON.parse() to convert string into object in other files
+  localStorage.setItem("appUser", JSON.stringify(appUserDTO));
   return true;
 }
 
 /**
  * Method to logout a user by clearing local storage.
  */
-export function logout() {
+export async function logout() {
+  localStorage.removeItem("appUser");
   localStorage.removeItem("token");
-  localStorage.removeItem("email");
-  localStorage.removeItem("firstname");
-  localStorage.removeItem("lastname");
 }
 
 /**
