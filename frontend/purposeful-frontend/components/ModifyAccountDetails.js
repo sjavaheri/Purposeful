@@ -15,18 +15,18 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
 
-export default function Registration() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+export function ModifyDetails() {
+  //   const [showPassword, setShowPassword] = useState(false);
+  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Function to validate the confirm password field
-  const validateConfirmPassword = (value, password) => {
-    let error;
-    if (value !== password) {
-      error = "Passwords do not match.";
-    }
-    return error;
-  };
+  //   // Function to validate the confirm password field
+  //   const validateConfirmPassword = (value, password) => {
+  //     let error;
+  //     if (value !== password) {
+  //       error = "Passwords do not match.";
+  //     }
+  //     return error;
+  //   };
 
   return (
     <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
@@ -40,8 +40,8 @@ export default function Registration() {
             firstname: "",
             lastname: "",
             email: "",
-            password: "",
-            confirmPassword: "",
+            // password: "",
+            // confirmPassword: "",
           }}
           onSubmit={(values, actions) => {
             setTimeout(async () => {
@@ -105,6 +105,70 @@ export default function Registration() {
                     )}
                   </Field>
                 </Box>
+                <Stack align={"center"}>
+                  <Button
+                    size="lg"
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                    w={"50%"}
+                    loadingText="Submitting"
+                    isLoading={props.isSubmitting}
+                    type="submit">
+                    Update
+                  </Button>
+                </Stack>
+              </Stack>
+            </Form>
+          )}
+        </Formik>
+      </Box>
+    </Stack>
+  );
+}
+
+export function ModifyPassword() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Function to validate the confirm password field
+  const validateConfirmPassword = (value, password) => {
+    let error;
+    if (value !== password) {
+      error = "Passwords do not match.";
+    }
+    return error;
+  };
+
+  return (
+    <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}>
+        <Formik
+          initialValues={{
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }}
+          onSubmit={(values, actions) => {
+            setTimeout(async () => {
+              console.log(values); // TODO: To be removed once the API is connected
+              // TODO: Set the error messages for the fields according to the API response
+              // TODO: Differentiate API methods depending on authentication status
+              actions.setSubmitting(false);
+              // TODO: Redirect to the login page
+            }, 1000);
+          }}>
+          {(props) => (
+            <Form>
+              <Stack spacing={4}>
                 <Stack>
                   <Box>
                     <Field name="password">
@@ -124,7 +188,7 @@ export default function Registration() {
                             <Input
                               {...field}
                               type={showPassword ? "text" : "password"}
-                              placeholder="Password"
+                              placeholder="New Password"
                             />
                             <InputRightElement h={"full"}>
                               <Button
@@ -162,7 +226,7 @@ export default function Registration() {
                             <Input
                               {...field}
                               type={showConfirmPassword ? "text" : "password"}
-                              placeholder="Confirm password"
+                              placeholder="Confirm new password"
                             />
                             <InputRightElement h={"full"}>
                               <Button
@@ -201,7 +265,7 @@ export default function Registration() {
                     loadingText="Submitting"
                     isLoading={props.isSubmitting}
                     type="submit">
-                    Register
+                    Update
                   </Button>
                 </Stack>
               </Stack>
