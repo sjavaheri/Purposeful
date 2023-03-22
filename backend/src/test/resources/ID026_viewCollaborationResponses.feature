@@ -57,29 +57,29 @@ As a user, I want to be able to view the response from the idea creator to the c
 
   Scenario Outline: successfully view collaboration responses for a collaboration request
     Given I am logged in as the user with email "<email>" and password "<password>"
-    When the user requests to access the collaboration responses for the collaboration request with id "<collaborationRequestId>"
-    Then the user shall have access to the collaboration responses with ids "<collaborationResponseIds>"
+    When the user requests to access the collaboration responses for the idea with id "<ideaId>"
+    Then the user shall have access to the collaboration response with id "<collaborationResponseIds>"
 
     Examples:
-      | email              | password     | collaborationRequestId | collaborationResponseIds |
-      | jane.doe@gmail.com | P@ssWord1234 | 23                     | 31                       |
-      | jane.doe@gmail.com | P@ssWord1234 | 24                     | 32                       |
+      | email              | password     | ideaId | collaborationResponseIds |
+      | jane.doe@gmail.com | P@ssWord1234 | 17     | 31                       |
+      | jane.doe@gmail.com | P@ssWord1234 | 28     | 32                       |
 
   # alternate flow
 
-  Scenario Outline: try to access collaboration responses for a collaboration request that does not have any responses
+  Scenario Outline: try to access collaboration responses for an idea that does not have any responses yet
     Given I am logged in as the user with email "<email>" and password "<password>"
-    When the user requests to access the collaboration responses for the collaboration request with id "<collaborationRequestId>"
+    When the user requests to access the collaboration responses for the idea with id "<ideaId>"
     Then the user shall not have access to any collaboration responses
 
     Examples:
-      | email                   | password     | collaborationRequestId |
-      | jane.doe@gmail.com      | P@ssword1234 | 26                     |
-      | john.goblikon@gmail.com | P@ssword1234 | 30                     |
+      | email                   | password     | ideaId |
+      | jane.doe@gmail.com      | P@ssword1234 | 21     |
+      | john.goblikon@gmail.com | P@ssword1234 | 19     |
 
   # error flow
 
-  Scenario: try to access collaboration responses for a collaboration request that does not belong to the user
+  Scenario: try to access collaboration responses for an idea on which the user has not made a collaboration request
     Given I am logged in as the user with email "john.goblikon@gmail.com" and password "P@ssword1234"
-    When the user requests to access the collaboration responses for the collaboration request with id "23"
-    Then the user shall receive the error message "You do not have permission to access this collaboration request." with status "401"
+    When the user requests to access the collaboration responses for the idea with id "17"
+    Then the user shall receive the error message "You did not send a collaboration request for this idea." with status "400"
