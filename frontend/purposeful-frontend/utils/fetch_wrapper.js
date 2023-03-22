@@ -56,7 +56,7 @@ export async function verifyToken() {
 /**
  * Method to logout a user by clearing local storage.
  */
-export async function logout() {
+export function logout() {
   localStorage.removeItem("appUser");
   localStorage.removeItem("token");
 }
