@@ -10,7 +10,7 @@ public class DatabaseUtil {
 
   @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired private CollaborationConfirmationRepository collaborationConfirmationRepository;
+  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
 
   @Autowired private CollaborationRequestRepository collaborationRequestRepository;
 
@@ -37,7 +37,7 @@ public class DatabaseUtil {
   /** Method to clear the database completely @Author Shidan Javaheri */
   public void clearDatabase() {
     collaborationRequestRepository.deleteAll();
-    collaborationConfirmationRepository.deleteAll();
+    collaborationResponseRepository.deleteAll();
     reactionRepository.deleteAll();
     ideaRepository.deleteAll();
     moderatorRepository.deleteAll();

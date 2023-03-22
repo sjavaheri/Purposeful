@@ -22,11 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author Siger Ma
  */
 @SpringBootTest
-public class CollaborationConfirmationRepositoryTests {
+public class CollaborationResponseRepositoryTests {
 
   @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired private CollaborationConfirmationRepository collaborationConfirmationRepository;
+  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
 
   @Autowired private CollaborationRequestRepository collaborationRequestRepository;
 
@@ -116,19 +116,19 @@ public class CollaborationConfirmationRepositoryTests {
     assertEquals(regUser2.getId(), request.getRequester().getId());
 
     // Create collaboration confirmation
-    CollaborationConfirmation confirmation = new CollaborationConfirmation();
+    CollaborationResponse confirmation = new CollaborationResponse();
     confirmation.setAdditionalContact("I prefer Discord URL");
     confirmation.setMessage("Welcome to the team!");
-    collaborationConfirmationRepository.save(confirmation);
+    collaborationResponseRepository.save(confirmation);
 
     // Update collaboration request
-    request.setCollaborationConfirmation(confirmation);
+    request.setCollaborationResponse(confirmation);
     request.setStatus(Status.Approved);
     collaborationRequestRepository.save(request);
 
     // Assert that the collaboration confirmation is saved
     confirmation =
-        collaborationConfirmationRepository.findCollaborationConfirmationById(confirmation.getId());
+        collaborationResponseRepository.findCollaborationResponseById(confirmation.getId());
     assertNotNull(confirmation);
     assertEquals("I prefer Discord URL", confirmation.getAdditionalContact());
     assertEquals("Welcome to the team!", confirmation.getMessage());
@@ -137,6 +137,6 @@ public class CollaborationConfirmationRepositoryTests {
     request = collaborationRequestRepository.findCollaborationRequestById(request.getId());
     assertNotNull(request);
     assertEquals(Status.Approved, request.getStatus());
-    assertEquals(confirmation.getId(), request.getCollaborationConfirmation().getId());
+    assertEquals(confirmation.getId(), request.getCollaborationResponse().getId());
   }
 }
