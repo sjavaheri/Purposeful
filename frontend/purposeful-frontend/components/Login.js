@@ -22,11 +22,11 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    alert(`Email: ${username} & Password: ${password}`);
+    // alert(`Email: ${username} & Password: ${password}`);
     let success = await login(username, password);
     await verifyToken();
-    alert(`AppUser: ${JSON.parse(localStorage.getItem("appUser")).firstname}`);
-    logout();
+    // alert(`AppUser: ${JSON.parse(localStorage.getItem("appUser")).firstname}`);
+    // logout();
     // console.log(verifyToken());
     // what to do if verify is false?
   };
