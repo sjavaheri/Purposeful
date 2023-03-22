@@ -125,7 +125,7 @@ public class TestCollaborationRequestService {
     } catch (GlobalException e) {
       // Check the correct error message is returned
       assertEquals(
-          "Cannot send another collaboration request to the same person before they respond to the previous request",
+          "You can only send one collaboration request to this user for this idea",
           e.getMessage());
     }
   }

@@ -76,7 +76,7 @@ public class CollaborationRequestService {
     List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(requester, targetIdea);
     if(requests != null && requests.size() > 0) {
       throw new GlobalException(
-          HttpStatus.BAD_REQUEST, "Cannot send another collaboration request to the same person before they respond to the previous request");
+          HttpStatus.BAD_REQUEST, "You can only send one collaboration request to this user for this idea");
     }
 
     // Create & populate the new collaboration request
