@@ -31,6 +31,8 @@ public class IdeaService {
 
   @Autowired RegularUserRepository regularUserRepository;
 
+  @Autowired CollaborationRequestRepository collaborationRequestRepository;
+
   /*
    * Service functions
    */
@@ -472,4 +474,88 @@ public class IdeaService {
     // remove idea
     ideaRepository.deleteById(uuid);
   }
+
+
+
+  /**
+   * Check to make sure a url exists
+   *
+   * @param  email - the email of the user trying to access their created ideas
+   * @throws GlobalException if an object does not exist
+   * @return List of created Idea objects made by the user
+   * @author Ramin Akhavan
+   */
+  public List<Idea> getCreatedIdeas(String email) {
+
+    if (email == null || email.isEmpty()){
+      throw new GlobalException(
+        HttpStatus.BAD_REQUEST,
+        "Please enter a valid email. Email cannot be left empty");
+    }
+
+    List<Idea> createdIdeas = new ArrayList<>();
+    for (Idea idea: ideaRepository.findAll()){
+      String ideaEmail = idea.getUser().getAppUser().getEmail();
+      if (ideaEmail.equalsIgnoreCase(email)){
+        createdIdeas.add(idea);
+      } 
+    }
+
+
+    return createdIdeas;
+  }
+
+
+  /**
+   * Retrieve all the ideas that a user expressed interest in.
+   *
+   * @param email Email of the user to retrieve the ideas for
+   * @return List of ideas that the user expressed interest in
+   *
+   * @author Enzo Benoit-Jeannin
+   */
+  @Transactional
+  public List<Idea> getIdeasByCollaborationRequest(String email) {
+    // Input validation
+    String error = "";
+    if (email == null || email.trim().length() == 0) {
+      error += "Email cannot be left empty! ";
+    }
+    if (error.length() > 0) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, error);
+    }
+
+    // Check if the user we are trying to modify does indeed exist
+    RegularUser user = regularUserRepository.findRegularUserByAppUserEmail(email);
+    if (user == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "This account does not exist.");
+    }
+
+    // Get all Collaboration Requests ever sent
+    Iterable<CollaborationRequest> allRequests = collaborationRequestRepository.findAll();
+
+    // Convert the iterable object to a list
+    List<CollaborationRequest> allRequestsList = new ArrayList<>();
+    allRequests.forEach(allRequestsList::add);
+
+    // Remove collaboration requests that are not linked to given regularUser, compare emails
+    allRequestsList.removeIf(request -> !(request.getRequester().getAppUser().getEmail().equals(user.getAppUser().getEmail())));
+
+    // Get all ideas that were ever requested
+    List<Idea> allRequestedIdeas = new ArrayList<>();
+    for (CollaborationRequest request : allRequestsList) {
+        allRequestedIdeas.add(request.getIdea());
+      }
+
+    // Filter out private ideas from the list of all ideas
+    // In case the user expressed interest in an idea that was turned private later on
+    allRequestedIdeas.removeIf(Idea::isPrivate);
+
+    // Sort the ideas from newest to oldest
+    // We flip the order so that the newest (bigger date) comes first
+    allRequestedIdeas.sort((idea1, idea2) -> idea2.getDate().compareTo(idea1.getDate()));
+
+    return allRequestedIdeas;
+    }
+
 }

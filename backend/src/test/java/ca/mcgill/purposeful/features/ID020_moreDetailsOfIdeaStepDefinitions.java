@@ -28,44 +28,48 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ID020_moreDetailsOfIdeaStepDefinitions {
 
-  @Autowired private TestRestTemplate client;
+  @Autowired
+  private TestRestTemplate client;
 
-  @Autowired PasswordEncoder passwordEncoder;
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
-  @Autowired private CucumberUtil cucumberUtil;
+  @Autowired
+  private CucumberUtil cucumberUtil;
 
-  @Autowired AppUserRepository appUserRepository;
+  @Autowired
+  AppUserRepository appUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
   private Map<String, String> idMap = new HashMap<String, String>();
 
-  @Given("the database contains the following users:")
+  @Given("the database contains the following users \\(ID020):")
   public void theDatabaseContainsTheFollowingUsers(DataTable dataTable) {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following domains \\(Strategy2):")
+  @Given("the database contains the following domains \\(ID020):")
   public void theDatabaseContainsTheFollowingDomains(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following topics \\(Strategy2):")
+  @Given("the database contains the following topics \\(ID020):")
   public void theDatabaseContainsTheFollowingTopics(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following techs \\(Strategy2):")
+  @Given("the database contains the following techs \\(ID020):")
   public void theDatabaseContainsTheFollowingTechs(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following URLs \\(Strategy2):")
+  @Given("the database contains the following URLs \\(ID020):")
   public void theDatabaseContainsTheFollowingURLs(DataTable dataTable) {
     cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following ideas \\(Strategy2):")
+  @Given("the database contains the following ideas \\(ID020):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
     cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
@@ -88,8 +92,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     appUserRepository.save(appUser);
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response =
-        client.exchange("/api/login", HttpMethod.POST, request, String.class);
+    ResponseEntity<String> response = client.exchange("/api/login", HttpMethod.POST, request, String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
@@ -118,8 +121,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
             domain -> {
               domains.add(domain.asObject().get("name").asString());
             });
-    Set<String> domainsExpected =
-        new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
+    Set<String> domainsExpected = new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
     assertEquals(domainsExpected, domains);
 
     // topics
@@ -131,8 +133,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
             topic -> {
               topics.add(topic.asObject().get("name").asString());
             });
-    Set<String> topicsExpected =
-        new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
+    Set<String> topicsExpected = new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
     assertEquals(topicsExpected, topics);
 
     // techs
@@ -144,8 +145,7 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
             tech -> {
               techs.add(tech.asObject().get("name").asString());
             });
-    Set<String> techsExpected =
-        new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
+    Set<String> techsExpected = new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
     assertEquals(techsExpected, techs);
 
     assertEquals(Boolean.parseBoolean(dataTable.get("isPaid")), json.get("isPaid").asBoolean());
