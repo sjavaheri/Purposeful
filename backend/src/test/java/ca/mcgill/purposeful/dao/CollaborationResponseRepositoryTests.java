@@ -15,8 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Class for testing the CollaborationConfirmationRepository and the persistence of
- * CollaborationConfirmation. CollaborationRequestRepository and CollaborationRequest are tested at
+ * Class for testing the CollaborationResponseRepository and the persistence of
+ * CollaborationResponse. CollaborationRequestRepository and CollaborationRequest are tested at
  * the same time
  *
  * @author Siger Ma
@@ -51,7 +51,7 @@ public class CollaborationResponseRepositoryTests {
   }
 
   @Test
-  public void testPersistAndLoadCollaborationConfirmation() {
+  public void testPersistAndLoadCollaborationResponse() {
     // Create app user 1
     AppUser user1 = new AppUser();
     user1.setEmail("prof@gmail.com");
@@ -115,28 +115,28 @@ public class CollaborationResponseRepositoryTests {
     assertEquals(idea.getId(), request.getIdea().getId());
     assertEquals(regUser2.getId(), request.getRequester().getId());
 
-    // Create collaboration confirmation
-    CollaborationResponse confirmation = new CollaborationResponse();
-    confirmation.setAdditionalContact("I prefer Discord URL");
-    confirmation.setMessage("Welcome to the team!");
-    collaborationResponseRepository.save(confirmation);
+    // Create collaboration response
+    CollaborationResponse response = new CollaborationResponse();
+    response.setAdditionalContact("I prefer Discord URL");
+    response.setMessage("Welcome to the team!");
+    collaborationResponseRepository.save(response);
 
     // Update collaboration request
-    request.setCollaborationResponse(confirmation);
+    request.setCollaborationResponse(response);
     request.setStatus(Status.Approved);
     collaborationRequestRepository.save(request);
 
-    // Assert that the collaboration confirmation is saved
-    confirmation =
-        collaborationResponseRepository.findCollaborationResponseById(confirmation.getId());
-    assertNotNull(confirmation);
-    assertEquals("I prefer Discord URL", confirmation.getAdditionalContact());
-    assertEquals("Welcome to the team!", confirmation.getMessage());
+    // Assert that the collaboration response is saved
+    response =
+        collaborationResponseRepository.findCollaborationResponseById(response.getId());
+    assertNotNull(response);
+    assertEquals("I prefer Discord URL", response.getAdditionalContact());
+    assertEquals("Welcome to the team!", response.getMessage());
 
     // Assert that the collaboration request is updated
     request = collaborationRequestRepository.findCollaborationRequestById(request.getId());
     assertNotNull(request);
     assertEquals(Status.Approved, request.getStatus());
-    assertEquals(confirmation.getId(), request.getCollaborationResponse().getId());
+    assertEquals(response.getId(), request.getCollaborationResponse().getId());
   }
 }

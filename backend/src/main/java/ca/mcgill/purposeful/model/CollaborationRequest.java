@@ -45,7 +45,7 @@ public class CollaborationRequest {
   private Idea idea;
 
   @OneToOne(cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "collaboration_confirmation_id", nullable = true)
+  @JoinColumn(name = "collaboration_response_id", nullable = true)
   private CollaborationResponse collaborationResponse;
 
   // ------------------------

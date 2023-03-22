@@ -49,7 +49,7 @@ Feature: Respond to Collaboration Requests
       | 29 | 18     | 3      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
       | 30 | 19     | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
 
-    And the database contains the following collaboration confirmation:
+    And the database contains the following collaboration response:
       | id | collaborationRequestId | additionalContact                 | message                                                          |
       | 31 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
       | 32 | 24                     | ""                                | ""                                                               |
@@ -59,11 +59,11 @@ Feature: Respond to Collaboration Requests
     Given I am logged in as the user with email "<email>" and password "<password>"
     When the user accepts the collaboration request with id "<collaboration_request_id>"
     Then the collaboration request with id "<collaboration_request_id>" has status "Accepted"
-    Then the collaboration confirmation with id "<collaboration_confirmation_id>" is created and the message "<message>" is sent to the user with id "<user_id>"
+    Then the collaboration response with id "<collaboration_response_id>" is created and the message "<message>" is sent to the user with id "<user_id>"
     And the person who sent the request receives a custom message from the user with their contact information
 
     Examples:
-      | email                   | password     | collaboration_request_id | collaboration_confirmation_id | message                                                          | user_id |
+      | email                   | password     | collaboration_request_id | collaboration_response_id | message                                                          | user_id |
       | john.goblikon@gmail.com | P@ssWord1234 | 23                       | 31                            | "Hi, could you develop on your experience in that field please." | 2       |
       | jane.doe@gmail.com      | P@ssWord1234 | 24                       | 32                            | ""                                                               | 2       |
 

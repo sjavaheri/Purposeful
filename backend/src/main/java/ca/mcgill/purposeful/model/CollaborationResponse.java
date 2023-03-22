@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * The CollaborationResponse class, the model for regular user's collaboration confirmation to a
+ * The CollaborationResponse class, the model for regular user's collaboration response to a
  * request in the database
  */
 @Entity
