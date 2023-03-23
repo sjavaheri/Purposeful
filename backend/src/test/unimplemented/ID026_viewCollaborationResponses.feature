@@ -52,11 +52,11 @@ As a user, I want to be able to view the response from the idea creator to the c
       | id | collaborationRequestId | additionalContact                 | message                                                          |
       | 31 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
       | 32 | 24                     | ""                                | ""                                                               |
+    And I am logged in as the user with email "jane.doe@gmail.com" and password "P@ssword1234"
 
   # normal flow
 
   Scenario Outline: successfully view collaboration responses for a collaboration request
-    Given I am logged in as the user with email "<email>" and password "<password>"
     When the user requests to access the collaboration responses for the idea with id "<ideaId>"
     Then the user shall have access to the collaboration response with id "<collaborationResponseIds>"
 
@@ -67,19 +67,12 @@ As a user, I want to be able to view the response from the idea creator to the c
 
   # alternate flow
 
-  Scenario Outline: try to access collaboration responses for an idea that does not have any responses yet
-    Given I am logged in as the user with email "<email>" and password "<password>"
-    When the user requests to access the collaboration responses for the idea with id "<ideaId>"
-    Then the user shall not have access to any collaboration responses
-
-    Examples:
-      | email                   | password     | ideaId |
-      | jane.doe@gmail.com      | P@ssword1234 | 21     |
-      | john.goblikon@gmail.com | P@ssword1234 | 19     |
+  Scenario: try to access collaboration responses for an idea that does not have any responses yet
+    When the user requests to access the collaboration responses for the idea with id "21"
+    Then the user shall receive an empty list of collaboration responses
 
   # error flow
 
   Scenario: try to access collaboration responses for an idea on which the user has not made a collaboration request
-    Given I am logged in as the user with email "john.goblikon@gmail.com" and password "P@ssword1234"
-    When the user requests to access the collaboration responses for the idea with id "17"
+    When the user requests to access the collaboration responses for the idea with id "19"
     Then the user shall receive the error message "You did not send a collaboration request for this idea." with status "400"
