@@ -38,20 +38,20 @@ As a user, I want to be able to view the response from the idea creator to the c
       | 19 | Microcontroller   | 2,4     | 7      | 10,13    | 1300 | Cool idea   | 15      | Great idea | 2      | False     | 2    |
       | 20 | Command-Line tool | 2       | 8      | 10       | 1200 | Cool idea   | 15      | Great idea | 2      | False     | 2    |
       | 21 | Novel             | 3       | 9      | 14       | 1100 | Cool idea   | 15      | Great idea | 3      | False     | 3    |
-    And the database contains the following CollaborationRequests:
-      | id | ideaId | userId | status   | additionalContact | message                                                                       |
-      | 23 | 17     | 2      | Pending  | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
-      | 24 | 18     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 25 | 20     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 26 | 21     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 27 | 20     | 1      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 28 | 17     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 29 | 18     | 3      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 30 | 19     | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
     And the database contains the following CollaborationResponses:
-      | id | collaborationRequestId | additionalContact                 | message                                                          |
-      | 31 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
-      | 32 | 24                     | ""                                | ""                                                               |
+      | id | additionalContact                 | message                                                          |
+      | 31 | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
+      | 32 | ""                                | ""                                                               |
+    And the database contains the following CollaborationRequests:
+      | id | ideaId | collaborationResponseId | userId | status   | additionalContact | message                                                                       |
+      | 23 | 17     | 31                      | 2      | Pending  | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
+      | 24 | 18     | 32                      | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 25 | 20     | null                    | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 26 | 21     | null                    | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 27 | 20     | null                    | 1      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 28 | 17     | null                    | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 29 | 18     | null                    | 3      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 30 | 19     | null                    | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
     And I am logged in as the user with email "jane.doe@gmail.com" and password "P@ssword1234"
 
   # normal flow
@@ -63,16 +63,16 @@ As a user, I want to be able to view the response from the idea creator to the c
     Examples:
       | email              | password     | ideaId | collaborationResponseIds |
       | jane.doe@gmail.com | P@ssWord1234 | 17     | 31                       |
-      | jane.doe@gmail.com | P@ssWord1234 | 28     | 32                       |
+      | jane.doe@gmail.com | P@ssWord1234 | 18     | 32                       |
 
   # alternate flow
 
   Scenario: try to access collaboration responses for an idea that does not have any responses yet
     When the user requests to access the collaboration responses for the idea with id "21"
-    Then the user shall receive an empty list of collaboration responses
+    Then the user shall receive an null value for the collaboration response
 
   # error flow
 
   Scenario: try to access collaboration responses for an idea on which the user has not made a collaboration request
     When the user requests to access the collaboration responses for the idea with id "19"
-    Then the user shall receive the error message "You did not send a collaboration request for this idea." with status "400"
+    Then the user shall receive the error message "You did not send a collaboration request for this idea" with status "400"
