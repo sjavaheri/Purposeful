@@ -34,7 +34,7 @@ public class CollaborationResponseService {
         List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByIdea(idea);
 
         if (requests.isEmpty()) {
-            throw new GlobalException(HttpStatus.BAD_REQUEST, "No collaboration request for this idea");
+            throw new GlobalException(HttpStatus.BAD_REQUEST, "You did not send a collaboration request for this idea");
         }
 
         CollaborationRequest request = requests.get(0);
