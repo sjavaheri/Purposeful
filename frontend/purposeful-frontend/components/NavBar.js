@@ -220,7 +220,7 @@ export default function NavBar() {
                               My Interests
                             </Text>
                             <Text fontSize={"sm"}>
-                              Track ideas you're interested in.
+                              Track ideas you&apos;re interested in.
                             </Text>
                           </Box>
                           <Flex
