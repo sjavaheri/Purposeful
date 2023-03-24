@@ -56,7 +56,7 @@ As a user, I want to be able to view the response from the idea creator to the c
 
   # normal flow
 
-  Scenario Outline: successfully view collaboration responses for a collaboration request
+  Scenario Outline: successfully view collaboration response for a collaboration request
     When the user requests to access the collaboration responses for the idea with id "<ideaId>"
     Then the user shall have access to the collaboration response with id "<collaborationResponseIds>"
 
@@ -67,12 +67,12 @@ As a user, I want to be able to view the response from the idea creator to the c
 
   # alternate flow
 
-  Scenario: try to access collaboration responses for an idea that does not have any responses yet
+  Scenario: try to access collaboration response for an idea that does not have any responses yet
     When the user requests to access the collaboration responses for the idea with id "21"
     Then the user shall receive an null value for the collaboration response
 
   # error flow
 
-  Scenario: try to access collaboration responses for an idea on which the user has not made a collaboration request
+  Scenario: try to access collaboration response for an idea on which the user has not made a collaboration request
     When the user requests to access the collaboration responses for the idea with id "19"
     Then the user shall receive the error message "You did not send a collaboration request for this idea" with status "400"
