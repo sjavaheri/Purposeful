@@ -15,8 +15,6 @@ import jakarta.transaction.Transactional;
 
 /**
  * Collaboration response service functions
- * 
- * @author Thibaut Baguette
  */
 public class CollaborationResponseService {
     @Autowired
@@ -28,8 +26,17 @@ public class CollaborationResponseService {
     @Autowired
     IdeaService ideaService;
 
+    /**
+     * Get the collaboration response for a given idea
+     * 
+     * @param ideaUuid the UUID of the idea
+     * @return the collaboration response (or null if there is none)
+     * @throws GlobalException if the idea does not have a collaboration request from the user
+     * 
+     * @author Thibaut Baguette
+     */
     @Transactional
-    public CollaborationResponse getCollaborationResponseListForIdea(String ideaUuid) {
+    public CollaborationResponse getCollaborationResponseForIdea(String ideaUuid) {
         Idea idea = ideaService.getIdeaById(ideaUuid);
         List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByIdea(idea);
 
