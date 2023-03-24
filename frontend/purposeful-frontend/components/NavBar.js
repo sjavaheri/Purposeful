@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -23,9 +24,15 @@ import {
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { RiAccountCircleLine, RiLogoutBoxRLine } from "react-icons/ri";
+import { logout, verifyToken } from "../utils/fetch_wrapper";
 
 export default function NavBar() {
   const { colorMode, toggleColorMode } = useColorMode();
+
+  const [appUser, setAppUser] = useState(null);
+  useEffect(() => {
+    setAppUser(localStorage.getItem("appUser"));
+  }, []);
 
   return (
     <>
@@ -336,8 +343,11 @@ export default function NavBar() {
                     <Avatar
                       size={"md"}
                       src={
-                        // TODO: Replace with user's username for their own random avatar
-                        "https://avatars.dicebear.com/api/big-smile/{username}.svg"
+                        appUser
+                          ? `https://avatars.dicebear.com/api/big-smile/${
+                              JSON.parse(appUser).email
+                            }.svg`
+                          : "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
                       }
                     />
                   </MenuButton>
@@ -351,15 +361,23 @@ export default function NavBar() {
                       <Avatar
                         size={"2xl"}
                         src={
-                          // TODO: Replace with user's username for their own random avatar
-                          "https://avatars.dicebear.com/api/big-smile/{username}.svg"
+                          appUser
+                            ? `https://avatars.dicebear.com/api/big-smile/${
+                                JSON.parse(appUser).email
+                              }.svg`
+                            : "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
                         }
                       />
                     </Center>
                     <br />
                     <Center>
-                      {/* TODO: Replace with user's name */}
-                      <p>Name</p>
+                      <Text fontWeight={600}>
+                        {appUser
+                          ? JSON.parse(appUser).firstname +
+                            " " +
+                            JSON.parse(appUser).lastname
+                          : "Not logged in"}
+                      </Text>
                     </Center>
                     <br />
                     <MenuDivider />
@@ -370,7 +388,6 @@ export default function NavBar() {
                       }}
                       icon={<RiAccountCircleLine />}
                       onClick={() => {
-                        // TODO: Change this to the correct link
                         window.location.href = "/account";
                       }}
                     >
@@ -384,7 +401,7 @@ export default function NavBar() {
                       icon={<RiLogoutBoxRLine />}
                       color={"red.400"}
                       onClick={() => {
-                        // TODO: Add logout functionality
+                        logout();
                       }}
                     >
                       Logout
