@@ -19,10 +19,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.CollaborationRequest;
 import ca.mcgill.purposeful.model.CollaborationResponse;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
 
 /**
  * Tests for the collaboration response service
@@ -36,26 +38,38 @@ public class TestCollaborationResponseService {
     @Mock
     private IdeaService ideaService;
 
+    @Mock
+    private RegularUserRepository regularUserRepository;
+
     @InjectMocks
     private CollaborationResponseService collaborationResponseService;
 
-    private static final String IDEA_ID = "1";
+    private static final String REQUESTER_ID = "REQUESTER_ID";
+    private static final String IDEA_ID = "IDEA_ID";
     private static final Idea IDEA = new Idea();
+    private static final RegularUser REQUESTER = new RegularUser();
     private static final String RESPONSE_MESSAGE = "This is a response message.";
     private static final String ADDITIONAL_CONTACT = "123-456-7890";
 
-    private static final String IDEA_ID_NO_RESPONSE = "2";
+    private static final String REQUESTER_ID_NO_RESPONSE = "REQUESTER_ID_NO_RESPONSE";
+    private static final String IDEA_ID_NO_RESPONSE = "IDEA_ID_NO_RESPONSE";
+    private static final RegularUser REQUESTER_NO_RESPONSE = new RegularUser();
     private static final Idea IDEA_NO_RESPONSE = new Idea();
-    private static final String IDEA_ID_NO_REQUEST = "3";
+
+    private static final String REQUESTER_ID_NO_REQUEST = "REQUESTER_ID_NO_REQUEST";
+    private static final String IDEA_ID_NO_REQUEST = "IDEA_ID_NO_REQUEST";
+    private static final RegularUser REQUESTER_NO_REQUEST = new RegularUser();
     private static final Idea IDEA_NO_REQUEST = new Idea();
 
     @BeforeEach
     public void setMockOutput() {
         lenient()
-                .when(collaborationRequestRepository.findCollaborationRequestsByIdea(any(Idea.class)))
+                .when(collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(any(RegularUser.class),
+                        any(Idea.class)))
                 .thenAnswer((InvocationOnMock invocation) -> {
-                    Idea arg = invocation.getArgument(0);
-                    if (arg.equals(IDEA)) {
+                    RegularUser user = invocation.getArgument(0);
+                    Idea idea = invocation.getArgument(1);
+                    if (user.equals(REQUESTER) && idea.equals(IDEA)) {
                         CollaborationResponse response = new CollaborationResponse();
                         response.setMessage(RESPONSE_MESSAGE);
                         response.setAdditionalContact(ADDITIONAL_CONTACT);
@@ -64,12 +78,12 @@ public class TestCollaborationResponseService {
                         ArrayList<CollaborationRequest> requests = new ArrayList<>();
                         requests.add(request);
                         return requests;
-                    } else if (arg.equals(IDEA_NO_RESPONSE)) {
+                    } else if (user.equals(REQUESTER_NO_RESPONSE) && idea.equals(IDEA_NO_RESPONSE)) {
                         CollaborationRequest request = new CollaborationRequest();
                         ArrayList<CollaborationRequest> requests = new ArrayList<>();
                         requests.add(request);
                         return requests;
-                    } else if (arg.equals(IDEA_NO_REQUEST)) {
+                    } else if (user.equals(REQUESTER_NO_REQUEST) && idea.equals(IDEA_NO_REQUEST)) {
                         return new ArrayList<>();
                     }
                     return null;
@@ -88,6 +102,20 @@ public class TestCollaborationResponseService {
                             return null;
                     }
                 });
+        lenient()
+                .when(regularUserRepository.findRegularUserById(anyString()))
+                .thenAnswer((InvocationOnMock invocation) -> {
+                    switch (invocation.getArgument(0).toString()) {
+                        case REQUESTER_ID:
+                            return REQUESTER;
+                        case REQUESTER_ID_NO_RESPONSE:
+                            return REQUESTER_NO_RESPONSE;
+                        case REQUESTER_ID_NO_REQUEST:
+                            return REQUESTER_NO_REQUEST;
+                        default:
+                            return null;
+                    }
+                });
     }
 
     /**
@@ -97,7 +125,8 @@ public class TestCollaborationResponseService {
      */
     @Test
     public void testViewCollaborationResponse_successful() {
-        CollaborationResponse response = collaborationResponseService.getCollaborationResponseForIdea(IDEA_ID);
+        CollaborationResponse response = collaborationResponseService
+                .getCollaborationResponseForRequesterAndIdea(REQUESTER_ID, IDEA_ID);
 
         assertNotNull(response);
         assertEquals(RESPONSE_MESSAGE, response.getMessage());
@@ -112,7 +141,7 @@ public class TestCollaborationResponseService {
     @Test
     public void testViewCollaborationResponse_alternate() {
         CollaborationResponse response = collaborationResponseService
-                .getCollaborationResponseForIdea(IDEA_ID_NO_RESPONSE);
+                .getCollaborationResponseForRequesterAndIdea(REQUESTER_ID_NO_RESPONSE, IDEA_ID_NO_RESPONSE);
 
         assertNull(response);
     }
@@ -126,6 +155,7 @@ public class TestCollaborationResponseService {
     public void testViewCollaborationResponse_error() {
         assertThrows(
                 GlobalException.class,
-                () -> collaborationResponseService.getCollaborationResponseForIdea(IDEA_ID_NO_REQUEST));
+                () -> collaborationResponseService.getCollaborationResponseForRequesterAndIdea(REQUESTER_ID_NO_REQUEST,
+                        IDEA_ID_NO_REQUEST));
     }
 }

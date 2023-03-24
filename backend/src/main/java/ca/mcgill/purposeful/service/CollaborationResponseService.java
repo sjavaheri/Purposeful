@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 
 import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
 import ca.mcgill.purposeful.dao.CollaborationResponseRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.CollaborationRequest;
 import ca.mcgill.purposeful.model.CollaborationResponse;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
 import jakarta.transaction.Transactional;
 
 /**
@@ -26,6 +28,9 @@ public class CollaborationResponseService {
     @Autowired
     IdeaService ideaService;
 
+    @Autowired 
+    RegularUserRepository regularUserRepository;
+
     /**
      * Get the collaboration response for a given idea
      * 
@@ -36,9 +41,15 @@ public class CollaborationResponseService {
      * @author Thibaut Baguette
      */
     @Transactional
-    public CollaborationResponse getCollaborationResponseForIdea(String ideaUuid) {
+    public CollaborationResponse getCollaborationResponseForRequesterAndIdea(String requesterUuid, String ideaUuid) {
         Idea idea = ideaService.getIdeaById(ideaUuid);
-        List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByIdea(idea);
+        RegularUser requester = regularUserRepository.findRegularUserById(requesterUuid);
+
+        if (requester == null) {
+            throw new GlobalException(HttpStatus.BAD_REQUEST, "Requester does not exist");
+        }
+
+        List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(requester, idea);
 
         if (requests.isEmpty()) {
             throw new GlobalException(HttpStatus.BAD_REQUEST, "You did not send a collaboration request for this idea");

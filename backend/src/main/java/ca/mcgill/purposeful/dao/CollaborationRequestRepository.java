@@ -12,5 +12,4 @@ public interface CollaborationRequestRepository
 
   CollaborationRequest findCollaborationRequestById(String id);
   List<CollaborationRequest> findCollaborationRequestsByRequesterAndIdea(RegularUser requester, Idea idea);
-  List<CollaborationRequest> findCollaborationRequestsByIdea(Idea idea);
 }
