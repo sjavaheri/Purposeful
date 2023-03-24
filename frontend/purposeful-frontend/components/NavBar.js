@@ -24,19 +24,29 @@ import {
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { RiAccountCircleLine, RiLogoutBoxRLine } from "react-icons/ri";
-import { logout, verifyToken } from "../utils/fetch_wrapper";
+import { logout, verifyToken, getAuthorities } from "../utils/fetch_wrapper";
 
 export default function NavBar() {
+  // Colors and theme
   const { colorMode, toggleColorMode } = useColorMode();
+  const bgColorBase = useColorModeValue("gray.100", "gray.900");
+  const bgColorBaseHover = useColorModeValue("gray.200", "gray.800");
+  const textColorBase = useColorModeValue("gray.600", "gray.200");
+  const textColorBaseHover = useColorModeValue("gray.800", "gray.400");
 
+  // User and authentication info
   const [appUser, setAppUser] = useState(null);
+  const [GrantedAuth, setGrantedAuth] = useState([]);
+  const [verified, setVerified] = useState(false);
   useEffect(() => {
     setAppUser(localStorage.getItem("appUser"));
+    setGrantedAuth(getAuthorities());
+    setVerified(verifyToken());
   }, []);
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box bg={bgColorBase} px={4}>
         <Flex h={24} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
             <VStack
@@ -67,10 +77,10 @@ export default function NavBar() {
                 p={2}
                 fontSize={"2xl"}
                 fontWeight={350}
-                color={useColorModeValue("gray.600", "gray.200")}
+                color={textColorBase}
                 _hover={{
                   textDecoration: "underline",
-                  color: useColorModeValue("gray.800", "gray.400"),
+                  color: textColorBaseHover,
                 }}
                 onClick={() => {
                   window.location.href = "/";
@@ -85,10 +95,10 @@ export default function NavBar() {
                       p={2}
                       fontSize={"2xl"}
                       fontWeight={350}
-                      color={useColorModeValue("gray.600", "gray.200")}
+                      color={textColorBase}
                       _hover={{
                         textDecoration: "underline",
-                        color: useColorModeValue("gray.800", "gray.400"),
+                        color: textColorBaseHover,
                       }}
                     >
                       Ideas
@@ -97,7 +107,7 @@ export default function NavBar() {
                   <PopoverContent
                     border={0}
                     boxShadow={"xl"}
-                    bg={useColorModeValue("gray.100", "gray.900")}
+                    bg={bgColorBase}
                     p={4}
                     rounded={"xl"}
                     minW={"sm"}
@@ -110,7 +120,7 @@ export default function NavBar() {
                         p={2}
                         rounded={"md"}
                         _hover={{
-                          bg: useColorModeValue("gray.200", "gray.800"),
+                          bg: bgColorBaseHover,
                         }}
                       >
                         <Stack direction={"row"} align={"center"}>
@@ -152,7 +162,7 @@ export default function NavBar() {
                         p={2}
                         rounded={"md"}
                         _hover={{
-                          bg: useColorModeValue("gray.200", "gray.800"),
+                          bg: bgColorBaseHover,
                         }}
                       >
                         <Stack direction={"row"} align={"center"}>
@@ -196,7 +206,7 @@ export default function NavBar() {
                         p={2}
                         rounded={"md"}
                         _hover={{
-                          bg: useColorModeValue("gray.200", "gray.800"),
+                          bg: bgColorBaseHover,
                         }}
                       >
                         <Stack direction={"row"} align={"center"}>
@@ -244,10 +254,10 @@ export default function NavBar() {
                       p={2}
                       fontSize={"2xl"}
                       fontWeight={350}
-                      color={useColorModeValue("gray.600", "gray.200")}
+                      color={textColorBase}
                       _hover={{
                         textDecoration: "underline",
-                        color: useColorModeValue("gray.800", "gray.400"),
+                        color: textColorBaseHover,
                       }}
                     >
                       Domain
@@ -256,7 +266,7 @@ export default function NavBar() {
                   <PopoverContent
                     border={0}
                     boxShadow={"xl"}
-                    bg={useColorModeValue("gray.100", "gray.900")}
+                    bg={bgColorBase}
                     p={4}
                     rounded={"xl"}
                     minW={"sm"}
@@ -270,7 +280,7 @@ export default function NavBar() {
                         p={2}
                         rounded={"md"}
                         _hover={{
-                          bg: useColorModeValue("gray.200", "gray.800"),
+                          bg: bgColorBaseHover,
                         }}
                       >
                         <Stack direction={"row"} align={"center"}>
@@ -308,21 +318,23 @@ export default function NavBar() {
                   </PopoverContent>
                 </Popover>
               </Box>
-              <Link
-                p={2}
-                fontSize={"2xl"}
-                fontWeight={350}
-                color={useColorModeValue("gray.600", "gray.200")}
-                _hover={{
-                  textDecoration: "underline",
-                  color: useColorModeValue("gray.800", "gray.400"),
-                }}
-                onClick={() => {
-                  window.location.href = "/register/moderator";
-                }}
-              >
-                Admin
-              </Link>
+              {verified && GrantedAuth.includes("Owner") && (
+                <Link
+                  p={2}
+                  fontSize={"2xl"}
+                  fontWeight={350}
+                  color={textColorBase}
+                  _hover={{
+                    textDecoration: "underline",
+                    color: textColorBaseHover,
+                  }}
+                  onClick={() => {
+                    window.location.href = "/register/moderator";
+                  }}
+                >
+                  Admin
+                </Link>
+              )}
             </HStack>
           </HStack>
 
@@ -331,84 +343,84 @@ export default function NavBar() {
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
-              <Box>
-                <Menu autoSelect={false}>
-                  <MenuButton
-                    as={Button}
-                    rounded={"full"}
-                    variant={"link"}
-                    cursor={"pointer"}
-                    minW={0}
-                  >
-                    <Avatar
-                      size={"md"}
-                      src={
-                        appUser
-                          ? `https://avatars.dicebear.com/api/big-smile/${
-                              JSON.parse(appUser).email
-                            }.svg`
-                          : "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
-                      }
-                    />
-                  </MenuButton>
-                  <MenuList
-                    bg={useColorModeValue("gray.100", "gray.900")}
-                    border={0}
-                    boxShadow={"xl"}
-                  >
-                    <br />
-                    <Center>
+              {verified && appUser ? (
+                <Box>
+                  <Menu autoSelect={false}>
+                    <MenuButton
+                      as={Button}
+                      rounded={"full"}
+                      variant={"link"}
+                      cursor={"pointer"}
+                      minW={0}
+                    >
                       <Avatar
-                        size={"2xl"}
-                        src={
-                          appUser
-                            ? `https://avatars.dicebear.com/api/big-smile/${
-                                JSON.parse(appUser).email
-                              }.svg`
-                            : "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
-                        }
+                        size={"md"}
+                        src={`https://avatars.dicebear.com/api/big-smile/${
+                          JSON.parse(appUser).email
+                        }.svg`}
                       />
-                    </Center>
-                    <br />
-                    <Center>
-                      <Text fontWeight={600}>
-                        {appUser
-                          ? JSON.parse(appUser).firstname +
+                    </MenuButton>
+                    <MenuList bg={bgColorBase} border={0} boxShadow={"xl"}>
+                      <br />
+                      <Center>
+                        <Avatar
+                          size={"2xl"}
+                          src={`https://avatars.dicebear.com/api/big-smile/${
+                            JSON.parse(appUser).email
+                          }.svg`}
+                        />
+                      </Center>
+                      <br />
+                      <Center>
+                        <Text fontWeight={600}>
+                          {JSON.parse(appUser).firstname +
                             " " +
-                            JSON.parse(appUser).lastname
-                          : "Not logged in"}
-                      </Text>
-                    </Center>
-                    <br />
-                    <MenuDivider />
-                    <MenuItem
-                      bg={useColorModeValue("gray.100", "gray.900")}
-                      _hover={{
-                        bg: useColorModeValue("gray.200", "gray.800"),
-                      }}
-                      icon={<RiAccountCircleLine />}
-                      onClick={() => {
-                        window.location.href = "/account";
-                      }}
-                    >
-                      Account
-                    </MenuItem>
-                    <MenuItem
-                      bg={useColorModeValue("gray.100", "gray.900")}
-                      _hover={{
-                        bg: useColorModeValue("gray.200", "gray.800"),
-                      }}
-                      icon={<RiLogoutBoxRLine />}
-                      color={"red.400"}
-                      onClick={() => {
-                        logout();
-                      }}
-                    >
-                      Logout
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-              </Box>
+                            JSON.parse(appUser).lastname}
+                        </Text>
+                      </Center>
+                      <br />
+                      <MenuDivider />
+                      <MenuItem
+                        bg={bgColorBase}
+                        _hover={{
+                          bg: bgColorBaseHover,
+                        }}
+                        icon={<RiAccountCircleLine />}
+                        onClick={() => {
+                          window.location.href = "/account";
+                        }}
+                      >
+                        Account
+                      </MenuItem>
+                      <MenuItem
+                        bg={bgColorBase}
+                        _hover={{
+                          bg: bgColorBaseHover,
+                        }}
+                        icon={<RiLogoutBoxRLine />}
+                        color={"red.400"}
+                        onClick={() => {
+                          logout();
+                          window.location.href = "/login";
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Box>
+              ) : (
+                <Avatar
+                  as={"button"}
+                  size={"md"}
+                  src={
+                    "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
+                  }
+                  onClick={() => {
+                    window.location.href = "/login";
+                  }}
+                />
+              )}
             </Stack>
           </Flex>
         </Flex>

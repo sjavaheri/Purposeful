@@ -1,5 +1,7 @@
 // This file contains the fetch wrapper functions
 
+import jwt_decode from "jwt-decode";
+
 // Backend URL
 const BACKEND = "http://127.0.0.1:8080";
 
@@ -59,6 +61,18 @@ export async function verifyToken() {
 export function logout() {
   localStorage.removeItem("appUser");
   localStorage.removeItem("token");
+}
+
+/**
+ * Method to get the grandted authorities of a user.
+ * @returns a list of authorities
+ * @author Siger Ma
+ */
+export function getAuthorities() {
+  const token = localStorage.getItem("token");
+  if (!token) return [];
+  const decoded = jwt_decode(token);
+  return decoded.grantedAuthorities;
 }
 
 /**
