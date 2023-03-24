@@ -18,6 +18,7 @@ import {
   PopoverTrigger,
   Stack,
   Text,
+  Tooltip,
   useColorMode,
   useColorModeValue,
   VStack,
@@ -410,16 +411,18 @@ export default function NavBar() {
                   </Menu>
                 </Box>
               ) : (
-                <Avatar
-                  as={"button"}
-                  size={"md"}
-                  src={
-                    "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
-                  }
-                  onClick={() => {
-                    window.location.href = "/login";
-                  }}
-                />
+                <Tooltip hasArrow label="Log in" fontSize="md">
+                  <Avatar
+                    as={"button"}
+                    size={"md"}
+                    src={
+                      "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
+                    }
+                    onClick={() => {
+                      window.location.href = "/login";
+                    }}
+                  />
+                </Tooltip>
               )}
             </Stack>
           </Flex>
