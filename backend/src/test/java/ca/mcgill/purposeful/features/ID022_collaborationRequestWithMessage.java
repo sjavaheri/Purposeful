@@ -160,9 +160,9 @@ public class ID022_collaborationRequestWithMessage {
       String ideaId, String userId) {
     List<CollaborationRequest> list =
         collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(
-            regularUserRepository.findRegularUserById(idMap.get(userId)),
+            regularUserRepository.findRegularUserByAppUser_Id(idMap.get(userId)),
             ideaRepository.findIdeaById(idMap.get(ideaId)));
-    assert (list.size() == 1);
+    assertEquals(1, list.size());
   }
 
   @When(
