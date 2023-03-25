@@ -39,43 +39,41 @@ Feature: Respond to Collaboration Requests
       | 20 | Command-Line tool | 2       | 8      | 10       | 1200 | Cool idea   | 15      | Great idea | 2      | False     | 2    |
       | 21 | Novel             | 3       | 9      | 14       | 1100 | Cool idea   | 15      | Great idea | 3      | False     | 3    |
     And the database contains the following collaboration requests (ID025):
-      | id | ideaId | userId | status   | additionalContact | message                                                                       |
-      | 23 | 17     | 2      | Pending  | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
-      | 24 | 18     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 25 | 20     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 26 | 21     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 27 | 20     | 1      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 28 | 17     | 3      | Accepted | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 29 | 18     | 3      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 30 | 19     | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-
+      | id | ideaId | userId | additionalContact | message                                                                     |
+      | 23 | 17     | 2      | 438-764-1940      | Hi, I would like to join this project!                                      |
+      | 24 | 18     | 2      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 25 | 20     | 3      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 26 | 21     | 2      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 27 | 20     | 1      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 28 | 17     | 3      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 29 | 18     | 3      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
     And the database contains the following collaboration responses (ID025):
-      | id | collaborationRequestId | additionalContact                 | message                                                          |
-      | 31 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
-      | 32 | 24                     | ""                                | ""                                                               |
+    # No need for contact info if rejected
+      | id | additionalContact                 | message                                                        | status   | collaborationRequestId |
+      | 31 | "Hi, my contact is +438-764-1940" | Hi, could you develop on your experience in that field please. | Accepted | 23                     |
+      | 32 | "Hi, my contact is +438-764-1940" | Hi, could you develop on your experience in that field please. | Accepted | 24                     |
+      | 33 |                                   | No sorry :(                                                    | Rejected | 25                     |
 
   # Normal/alternate flows
   Scenario Outline: User successfully accepts collaboration request for their created idea
     Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
-    When the user accepts the collaboration request with id "<collaboration_request_id>"
-    Then the collaboration request with id "<collaboration_request_id>" has status "Accepted"
-    Then the collaboration response with id "<collaboration_response_id>" is created and the message "<message>" is sent to the user with id "<user_id>"
-    And the person who sent the request receives a custom message from the user with their contact information
+    When the user approves the collaboration request with id "<collaboration_request_id>" using message "<message>" and additional contact "<additional_contact>"
+    Then the collaboration request with id "<collaboration_request_id>" has an associated collaboration response with status "Approved", message "<message>" and additional contact "<additional_contact>"
 
     Examples:
-      | email                   | password     | collaboration_request_id | collaboration_response_id | message                                                          | user_id |
-      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | 31                        | "Hi, could you develop on your experience in that field please." | 2       |
-      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | 32                        | ""                                                               | 2       |
+      | email                   | password     | collaboration_request_id | message                                                        | additional_contact |
+      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | Hi, could you develop on your experience in that field please. | 438-764-1940       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | Hi, could you develop on your experience in that field please. | 438-764-1940       |
 
   Scenario Outline: User successfully declines collaboration request for their created idea
     Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
-    When the user declines the collaboration request with id "<collaboration_request_id>"
-    Then the collaboration request with id "<collaboration_request_id>" has status "Declined"
+    When the user declines the collaboration request with id "<collaboration_request_id>" using message "<message>" and additional contact "<additional_contact>"
+    Then the collaboration request with id "<collaboration_request_id>" has an associated collaboration response with status "Declined", message "<message>" and additional contact "<additional_contact>"
 
     Examples:
-      | email                    | password     | collaboration_request_id |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 26                       |
-      | jane.doe@gmail.          | P@ssWord1234 | 30                       |
+      | email                   | password     | collaboration_request_id | message                                                        | additional_contact |
+      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | Hi, could you develop on your experience in that field please. | 438-764-1940       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | Hi, could you develop on your experience in that field please. | 438-764-1940       |
 
 
   # Error flows
