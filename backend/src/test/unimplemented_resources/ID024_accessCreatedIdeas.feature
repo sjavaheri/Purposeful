@@ -59,14 +59,3 @@ Feature: Access Created Ideas
         | Http_status   | message                    |
         | 401           | User is not authenticated. |
     
-        # Error Flow
-
-    Scenario Outline: Unsuccessfully provide null or empty email
-        When the user requests to access all ideas associated to them using email "<empty_email>"
-        Then the status code "<Http_status>" and error "<message>" will be received
-
-        Examples:
-        | empty_email   | Http_status   | message                                                |
-        | null          | 401           | Please enter a valid email. Email cannot be left empty |
-        |               | 401           | Please enter a valid email. Email cannot be left empty |
-    
