@@ -44,6 +44,7 @@ public class CollaborationResponseDTO {
     this.id = collaborationResponse.getId();
     this.message = collaborationResponse.getMessage();
     this.additionalContact = collaborationResponse.getAdditionalContact();
+    this.status = collaborationResponse.getStatus();
   }
 
   public String getId() {
@@ -68,5 +69,13 @@ public class CollaborationResponseDTO {
 
   public void setAdditionalContact(String additionalContact) {
     this.additionalContact = additionalContact;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
   }
 }
