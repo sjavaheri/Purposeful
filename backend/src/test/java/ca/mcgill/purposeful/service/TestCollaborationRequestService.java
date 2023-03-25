@@ -15,7 +15,6 @@ import ca.mcgill.purposeful.model.CollaborationRequest;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.RegularUser;
-import ca.mcgill.purposeful.model.Status;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import java.util.Date;
@@ -125,8 +124,7 @@ public class TestCollaborationRequestService {
     } catch (GlobalException e) {
       // Check the correct error message is returned
       assertEquals(
-          "You can only send one collaboration request to this user for this idea",
-          e.getMessage());
+          "You can only send one collaboration request to this user for this idea", e.getMessage());
     }
   }
 
@@ -227,7 +225,6 @@ public class TestCollaborationRequestService {
       collaborationRequest1.setId(UUID.randomUUID().toString());
       collaborationRequest1.setRequester(user1);
       collaborationRequest1.setIdea(idea2);
-      collaborationRequest1.setStatus(Status.Pending);
       collaborationRequest1.setAdditionalContact("123-123-1234");
       collaborationRequest1.setMessage("Hi, let me collaborate with you please!");
     }
