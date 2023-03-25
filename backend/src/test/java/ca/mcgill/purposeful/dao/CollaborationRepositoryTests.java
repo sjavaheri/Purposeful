@@ -3,7 +3,13 @@ package ca.mcgill.purposeful.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.CollaborationRequest;
+import ca.mcgill.purposeful.model.CollaborationResponse;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Status;
+import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.util.DatabaseUtil;
 import java.time.Instant;
 import java.util.Date;
@@ -17,8 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Class for testing the CollaborationResponseRepository and the persistence of
- * CollaborationResponse. CollaborationRequestRepository and CollaborationRequest are tested at
- * the same time
+ * CollaborationResponse. CollaborationRequestRepository and CollaborationRequest are tested at the
+ * same time
  *
  * @author Siger Ma
  */
@@ -92,7 +98,6 @@ public class CollaborationRepositoryTests {
 
     // Create collaboration request
     CollaborationRequest request = new CollaborationRequest();
-    request.setStatus(Status.Pending);
     request.setAdditionalContact("Chat me on Slack URL");
     request.setMessage("I would like to collaborate with you on this idea");
     request.setIdea(idea);
@@ -110,7 +115,6 @@ public class CollaborationRepositoryTests {
     // Assert that the collaboration request is saved
     request = collaborationRequestRepository.findCollaborationRequestById(request.getId());
     assertNotNull(request);
-    assertEquals(Status.Pending, request.getStatus());
     assertEquals("Chat me on Slack URL", request.getAdditionalContact());
     assertEquals("I would like to collaborate with you on this idea", request.getMessage());
     assertEquals(idea.getId(), request.getIdea().getId());
@@ -120,16 +124,15 @@ public class CollaborationRepositoryTests {
     CollaborationResponse response = new CollaborationResponse();
     response.setAdditionalContact("I prefer Discord URL");
     response.setMessage("Welcome to the team!");
+    response.setStatus(Status.Approved);
     collaborationResponseRepository.save(response);
 
     // Update collaboration request
     request.setCollaborationResponse(response);
-    request.setStatus(Status.Approved);
     collaborationRequestRepository.save(request);
 
     // Assert that the collaboration response is saved
-    response =
-        collaborationResponseRepository.findCollaborationResponseById(response.getId());
+    response = collaborationResponseRepository.findCollaborationResponseById(response.getId());
     assertNotNull(response);
     assertEquals("I prefer Discord URL", response.getAdditionalContact());
     assertEquals("Welcome to the team!", response.getMessage());
@@ -137,7 +140,6 @@ public class CollaborationRepositoryTests {
     // Assert that the collaboration request is updated
     request = collaborationRequestRepository.findCollaborationRequestById(request.getId());
     assertNotNull(request);
-    assertEquals(Status.Approved, request.getStatus());
     assertEquals(response.getId(), request.getCollaborationResponse().getId());
   }
 
@@ -183,7 +185,6 @@ public class CollaborationRepositoryTests {
 
     // Create collaboration request
     CollaborationRequest request = new CollaborationRequest();
-    request.setStatus(Status.Pending);
     request.setAdditionalContact("Chat me on Slack URL");
     request.setMessage("I would like to collaborate with you on this idea");
     request.setIdea(idea);
@@ -199,7 +200,8 @@ public class CollaborationRepositoryTests {
     collaborationRequestRepository.save(request);
 
     // Assert that the collaboration request can be retrieved by user and idea
-    List<CollaborationRequest> requests = collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(regUser2, idea);
+    List<CollaborationRequest> requests =
+        collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(regUser2, idea);
     assertNotNull(requests);
     assertEquals(1, requests.size());
     assertEquals(request.getId(), requests.get(0).getId());

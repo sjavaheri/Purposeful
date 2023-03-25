@@ -1,6 +1,13 @@
 package ca.mcgill.purposeful.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -20,9 +27,6 @@ public class CollaborationRequest {
   @GeneratedValue(generator = "uuid")
   @GenericGenerator(name = "uuid", strategy = "uuid2")
   private String id;
-
-  @Column(nullable = false)
-  private Status status;
 
   @Column(nullable = true)
   private String additionalContact;
@@ -64,14 +68,6 @@ public class CollaborationRequest {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public Status getStatus() {
-    return status;
-  }
-
-  public void setStatus(Status status) {
-    this.status = status;
   }
 
   public String getAdditionalContact() {
