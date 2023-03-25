@@ -478,7 +478,7 @@ public class IdeaService {
 
 
   /**
-   * Check to make sure a url exists
+   * Get's all of a user's created ideas
    *
    * @param  email - the email of the user trying to access their created ideas
    * @throws GlobalException if an object does not exist

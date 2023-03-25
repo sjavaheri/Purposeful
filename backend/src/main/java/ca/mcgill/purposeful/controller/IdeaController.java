@@ -5,6 +5,7 @@ import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.service.AppUserService;
 import ca.mcgill.purposeful.service.IdeaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ import java.util.List;
 public class IdeaController {
 
   @Autowired IdeaService ideaService;
+
+  @Autowired AppUserService appUserService;
 
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
@@ -147,5 +150,25 @@ public class IdeaController {
     ideaService.removeIdeaById(id);
     // return response status with confirmation message
     return new ResponseEntity<String>("Idea successfully deleted", HttpStatus.OK);
+  }
+
+    /**
+   * Remove an idea by its id
+   *
+   * @return a response entity with a list of ideas and the HttpStatus
+   * @author Ramin Akhavan
+   */
+  @PostMapping({"/user", "/user/"})
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<List<IdeaDTO>> getUserCreatedIdeas() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
+    }
+    String requestEmail = authentication.getName();
+
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(requestEmail);
+
+    return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(createdIdeas));
   }
 }
