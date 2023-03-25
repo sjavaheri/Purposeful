@@ -155,24 +155,20 @@ public class IdeaController {
     /**
    * Remove an idea by its id
    *
-   * @param email - user that wants to get their ideas
-   * @return a response entity with a message instance and the HttpStatus
+   * @return a response entity with a list of ideas and the HttpStatus
    * @author Ramin Akhavan
    */
-  @GetMapping({"/user/{email}", "/user/{email}/"})
+  @PostMapping({"/user", "/user/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
-  public ResponseEntity<List<IdeaDTO>> getUserCreatedIdeas(@PathVariable String email) {
+  public ResponseEntity<List<IdeaDTO>> getUserCreatedIdeas() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String requestEmail = authentication.getName();
-    if (!requestEmail.equalsIgnoreCase(email)){
-      throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized.");
+    if (authentication == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
     }
+    String requestEmail = authentication.getName();
 
-    List<Idea> createdIdeas = ideaService.getCreatedIdeas(email);
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(requestEmail);
 
-    List<IdeaDTO> ideaDTOs = IdeaDTO.convertToDto(createdIdeas);
-
-
-    return ResponseEntity.status(HttpStatus.OK).body(ideaDTOs);
+    return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(createdIdeas));
   }
 }
