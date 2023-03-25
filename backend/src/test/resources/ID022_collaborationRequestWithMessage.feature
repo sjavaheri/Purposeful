@@ -39,25 +39,25 @@ Feature: Send a collaboration request
       | 21 | Command-Line tool | 4       | 10     | 12       | 1200 | Cool idea   | 17      | Great idea | False     | 2    |
       | 22 | Novel             | 5       | 11     | 16       | 1100 | Cool idea   | 17      | Great idea | False     | 3    |
     And the database contains the following collaboration requests (ID022):
-      | id | ideaId | userId | status   | additionalContact | message                                                                     |
-      | 23 | 18     | 2      | Pending  | 438-764-1940      | Hi, I would like to join this project!                                      |
-      | 24 | 19     | 2      | Declined | null              | Hi, I have experience in that field and I am interested in working on this! |
-      | 25 | 21     | 3      | Accepted | null              | Hi, I have experience in that field and I am interested in working on this! |
-      | 26 | 22     | 2      | Pending  | null              | Hi, I have experience in that field and I am interested in working on this! |
+      | id | ideaId | userId | additionalContact | message                                                                     |
+      | 23 | 18     | 2      | 438-764-1940      | Hi, I would like to join this project!                                      |
+      | 24 | 19     | 2      | null              | Hi, I have experience in that field and I am interested in working on this! |
+      | 25 | 21     | 3      | null              | Hi, I have experience in that field and I am interested in working on this! |
+      | 26 | 22     | 2      | null              | Hi, I have experience in that field and I am interested in working on this! |
 
     # Normal/alternate flows
   Scenario Outline: Successfully send collaboration request
-    Given I am logged in as the user with email "<email>" and password "<password>"
+    Given I am logged in as the user with email "<email>" and password "<password>" (ID022)
     When I successfully request to send a collaboration request to the creator of the idea with id "<idea_id>" with message "<message>" and additionalContact "<additionalContact>"
-    Then the number of collaboration requests in the database should be "<total_num_requests>"
+    Then the number of collaboration requests in the database should be "5"
     And the collaboration request with idea_id "<idea_id>" and user_id "<user_id>" shall exist in the system
 
     Examples:
-      | email                    | password     | idea_id | user_id | total_num_requests | message                             | additionalContact |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 18      | 3       | 5                  | Hi, please let me join your project | null              |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 19      | 3       | 5                  | Hi, please let me join your project | null              |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 22      | 1       | 5                  | Hi, please let me join your project | 428-8794-4237     |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 21      | 1       | 5                  | Hi, please let me join your project | 428-8794-4238     |
+      | email                    | password     | idea_id | user_id | message                             | additionalContact |
+      | wassim.jabbour@gmail.com | P@ssWord1234 | 18      | 3       | Hi, please let me join your project | null              |
+      | wassim.jabbour@gmail.com | P@ssWord1234 | 19      | 3       | Hi, please let me join your project | null              |
+      | john.goblikon@gmail.com  | P@ssWord1234 | 22      | 1       | Hi, please let me join your project | 428-8794-4237     |
+      | john.goblikon@gmail.com  | P@ssWord1234 | 21      | 1       | Hi, please let me join your project | 428-8794-4238     |
 
 
     # Error flows

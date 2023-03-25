@@ -19,7 +19,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +116,10 @@ public class ID022_collaborationRequestWithMessage {
     // Send the request
     var response =
         client.exchange(
-            "/api/collaborationRequest", HttpMethod.POST, requestEntity, ArrayList.class);
+            "/api/collaborationRequest",
+            HttpMethod.POST,
+            requestEntity,
+            CollaborationRequestDTO.class);
 
     // Extract returned DTO
     ObjectMapper mapper = new ObjectMapper();
@@ -127,7 +129,7 @@ public class ID022_collaborationRequestWithMessage {
 
   @Then("the number of collaboration requests in the database should be {string}")
   public void theNumberOfCollaborationRequestsInTheDatabaseShouldBe(String number) {
-    assert (collaborationRequestRepository.count() == Integer.parseInt(number));
+    assertEquals(Integer.parseInt(number), collaborationRequestRepository.count());
   }
 
   @And("the following error message shall be returned {string}")
