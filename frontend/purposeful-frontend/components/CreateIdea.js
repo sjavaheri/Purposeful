@@ -15,49 +15,53 @@ import {
   InputGroup,
   InputRightElement,
   Select,
+  Flex,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
-import { getDomains, getTopics } from "@/utils/fetch_wrapper";
+import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
+import ContainerLabel from "./ContainerLabel";
 var fullfilled = 0;
+var field_name = "domains";
+var c_domains = [];
+var c_topics = [];
+var c_techs = [];
+
 export default function CreateIdea() {
   (async () => {
     let domains = await getDomains();
     let topics = await getTopics();
+    let techs = await getTechs();
     if(fullfilled == 0){
       fullfilled++;
-      domains.map(MakeDomains);
+      domains.map(MakeOption);
     }
     if(fullfilled == 1){
       fullfilled++;
-      topics.map(MakeTopics);
+      field_name = "topics";
+      topics.map(MakeOption);
+    }
+    if(fullfilled == 2){
+      fullfilled++;
+      field_name = "techs";
+      techs.map(MakeOption);
     }
   })()
 
-  var MakeDomains = function(X) {
+  var MakeOption = function(X) {
     const el = document.createElement('option');
     el.setAttribute('value',X.id);
     el.textContent = X.name;
-    document.getElementById("domains").appendChild(el);
+    document.getElementById(field_name).appendChild(el);
   };
-  var MakeTopics = function(X) {
-    const el = document.createElement('option');
-    el.setAttribute('value',X.id);
-    el.textContent = X.name;
-    document.getElementById("topics").appendChild(el);
-  };
-  //const [showPassword, setShowPassword] = useState(false);
-  //const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Function to validate the confirm password field
-  /*
-  const validateConfirmPassword = (value, password) => {
-    let error;
-    if (value !== password) {
-      error = "Passwords do not match.";
+  var PushObj = function(name,arr,c_arr,elem) {
+    if(find_name_in_arr(name,c_arr) == -1){
+    const el = <ContainerLabel innerTxt={name} index={c_arr.length}/>;
+    c_arr.push(find_name_in_arr(name,arr));
+    elem.appendChild(el);
     }
-    return error;
   };
-  */
+
   return (
     <Stack width={"70%"}>
       <Box
@@ -148,7 +152,7 @@ export default function CreateIdea() {
                         isInvalid={
                           form.errors.domain && form.touched.domain
                         }>
-                        <FormLabel>Domain</FormLabel>
+                        <FormLabel>Domains</FormLabel>
                         <Select id="domains"></Select>
                         <FormErrorMessage>
                           {form.errors.domain}
@@ -157,6 +161,9 @@ export default function CreateIdea() {
                     )}
                   </Field>
                 </Box>
+                <Flex id="chosenDomains">
+                  <ContainerLabel innerTxt={"Software"}/>
+                </Flex>
                 <Box>
                   <Field name="Topic">
                     {({ field, form }) => (
@@ -165,10 +172,27 @@ export default function CreateIdea() {
                         isInvalid={
                           form.errors.topic && form.touched.topic
                         }>
-                        <FormLabel>Topic</FormLabel>
+                        <FormLabel>Topics</FormLabel>
                         <Select id="topics"></Select>
                         <FormErrorMessage>
                           {form.errors.topic}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Box>
+                <Box>
+                  <Field name="Tech">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="tech"
+                        isInvalid={
+                          form.errors.tech && form.touched.tech
+                        }>
+                        <FormLabel>Technologies</FormLabel>
+                        <Select id="techs"></Select>
+                        <FormErrorMessage>
+                          {form.errors.tech}
                         </FormErrorMessage>
                       </FormControl>
                     )}
@@ -182,4 +206,13 @@ export default function CreateIdea() {
       </Box>
     </Stack>
   );
+}
+
+export function find_name_in_arr(name,arr){
+  for(var i = 0; i < arr.length; i++){
+    if((arr[i].name).localCompare(name) == 0){
+      return i;
+    }
+    return -1;
+  }
 }

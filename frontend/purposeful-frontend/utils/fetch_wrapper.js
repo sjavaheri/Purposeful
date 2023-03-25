@@ -127,26 +127,14 @@ export default async function fetchWrapper(
 }
 
 export async function getDomains(){
-  let domains = await fetchWrapper( `${BACKEND}/api/domain`);
+  let domains = await fetchWrapper(`${BACKEND}/api/domain`);
   return domains;
-  /*
-  var domain_names = new Array(domains.length);
-  for(var i = 0; i < domains.length;i++){
-    domain_names[i] = domains[i].name;
-  }
-  console.log(domain_names);
-  return domain_names;
-  */
 }
 export async function getTopics(){
-  let topics = await fetchWrapper( `${BACKEND}/api/topic`);
+  let topics = await fetchWrapper(`${BACKEND}/api/topic`);
   return topics;
-  /*
-  var topic_names = new Array(topics.length);
-  for(var i = 0; i < topics.length;i++){
-    topic_names[i] = topics[i].name;
-  }
-  console.log(topic_names);
-  return topic_names;
-  */
+}
+export async function getTechs(){
+  let techs = await fetchWrapper(`${BACKEND}/api/tech`);
+  return techs;
 }
