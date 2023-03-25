@@ -38,6 +38,7 @@ export async function login(username, password) {
     return false;
   }
 }
+
 /**
  * Method to verify the validity of a token.
  * @returns true if token is valid, false otherwise
@@ -83,6 +84,7 @@ export function getAuthorities() {
  * @param {*} payload - anything meant to be passed in the body
  * @param {*} headers - headers
  * @param {*} method - ["GET", "POST", "PUT", "DELETE"]
+ * @returns response object from fetch or error
  */
 export default async function fetchWrapper(
   endpoint,
