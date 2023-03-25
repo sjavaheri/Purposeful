@@ -29,10 +29,10 @@ public class CollaborationResponseController {
      * @param id the idea's id
      * @return collaboration response
      */
-    @GetMapping("/{id}/collaborationResponse")
+    @GetMapping("/forRequesterAndIdea/{ideaId}")
     @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
     public ResponseEntity<CollaborationResponseDTO> getCollaborationResponseForRequesterAndIdea(
-            @PathVariable String id) {
+            @PathVariable String ideaId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null) {
             throw new GlobalException(HttpStatus.UNAUTHORIZED, "User is not authenticated.");
@@ -40,7 +40,7 @@ public class CollaborationResponseController {
 
         CollaborationResponse response = collaborationResponseService.getCollaborationResponseForRequesterAndIdea(
                 auth.getName(),
-                id);
+                ideaId);
         CollaborationResponseDTO responseDTO = new CollaborationResponseDTO(response);
 
         return new ResponseEntity<CollaborationResponseDTO>(responseDTO, HttpStatus.OK);
