@@ -44,19 +44,19 @@ public class TestCollaborationResponseService {
     @InjectMocks
     private CollaborationResponseService collaborationResponseService;
 
-    private static final String REQUESTER_ID = "REQUESTER_ID";
+    private static final String REQUESTER_EMAIL = "REQUESTER_EMAIL";
     private static final String IDEA_ID = "IDEA_ID";
     private static final Idea IDEA = new Idea();
     private static final RegularUser REQUESTER = new RegularUser();
     private static final String RESPONSE_MESSAGE = "This is a response message.";
     private static final String ADDITIONAL_CONTACT = "123-456-7890";
 
-    private static final String REQUESTER_ID_NO_RESPONSE = "REQUESTER_ID_NO_RESPONSE";
+    private static final String REQUESTER_EMAIL_NO_RESPONSE = "REQUESTER_EMAIL_NO_RESPONSE";
     private static final String IDEA_ID_NO_RESPONSE = "IDEA_ID_NO_RESPONSE";
     private static final RegularUser REQUESTER_NO_RESPONSE = new RegularUser();
     private static final Idea IDEA_NO_RESPONSE = new Idea();
 
-    private static final String REQUESTER_ID_NO_REQUEST = "REQUESTER_ID_NO_REQUEST";
+    private static final String REQUESTER_EMAIL_NO_REQUEST = "REQUESTER_EMAIL_NO_REQUEST";
     private static final String IDEA_ID_NO_REQUEST = "IDEA_ID_NO_REQUEST";
     private static final RegularUser REQUESTER_NO_REQUEST = new RegularUser();
     private static final Idea IDEA_NO_REQUEST = new Idea();
@@ -106,11 +106,11 @@ public class TestCollaborationResponseService {
                 .when(regularUserRepository.findRegularUserById(anyString()))
                 .thenAnswer((InvocationOnMock invocation) -> {
                     switch (invocation.getArgument(0).toString()) {
-                        case REQUESTER_ID:
+                        case REQUESTER_EMAIL:
                             return REQUESTER;
-                        case REQUESTER_ID_NO_RESPONSE:
+                        case REQUESTER_EMAIL_NO_RESPONSE:
                             return REQUESTER_NO_RESPONSE;
-                        case REQUESTER_ID_NO_REQUEST:
+                        case REQUESTER_EMAIL_NO_REQUEST:
                             return REQUESTER_NO_REQUEST;
                         default:
                             return null;
@@ -126,7 +126,7 @@ public class TestCollaborationResponseService {
     @Test
     public void testViewCollaborationResponse_successful() {
         CollaborationResponse response = collaborationResponseService
-                .getCollaborationResponseForRequesterAndIdea(REQUESTER_ID, IDEA_ID);
+                .getCollaborationResponseForRequesterAndIdea(REQUESTER_EMAIL, IDEA_ID);
 
         assertNotNull(response);
         assertEquals(RESPONSE_MESSAGE, response.getMessage());
@@ -141,7 +141,7 @@ public class TestCollaborationResponseService {
     @Test
     public void testViewCollaborationResponse_alternate() {
         CollaborationResponse response = collaborationResponseService
-                .getCollaborationResponseForRequesterAndIdea(REQUESTER_ID_NO_RESPONSE, IDEA_ID_NO_RESPONSE);
+                .getCollaborationResponseForRequesterAndIdea(REQUESTER_EMAIL_NO_RESPONSE, IDEA_ID_NO_RESPONSE);
 
         assertNull(response);
     }
@@ -155,7 +155,7 @@ public class TestCollaborationResponseService {
     public void testViewCollaborationResponse_error() {
         assertThrows(
                 GlobalException.class,
-                () -> collaborationResponseService.getCollaborationResponseForRequesterAndIdea(REQUESTER_ID_NO_REQUEST,
+                () -> collaborationResponseService.getCollaborationResponseForRequesterAndIdea(REQUESTER_EMAIL_NO_REQUEST,
                         IDEA_ID_NO_REQUEST));
     }
 }

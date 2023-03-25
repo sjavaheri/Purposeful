@@ -41,9 +41,9 @@ public class CollaborationResponseService {
      * @author Thibaut Baguette
      */
     @Transactional
-    public CollaborationResponse getCollaborationResponseForRequesterAndIdea(String requesterUuid, String ideaUuid) {
+    public CollaborationResponse getCollaborationResponseForRequesterAndIdea(String requesterEmail, String ideaUuid) {
         Idea idea = ideaService.getIdeaById(ideaUuid);
-        RegularUser requester = regularUserRepository.findRegularUserById(requesterUuid);
+        RegularUser requester = regularUserRepository.findRegularUserByAppUserEmail(requesterEmail);
 
         if (requester == null) {
             throw new GlobalException(HttpStatus.BAD_REQUEST, "Requester does not exist");
