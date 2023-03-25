@@ -3,34 +3,34 @@ Feature: Respond to Collaboration Requests
 
   Background:
     Given the id map is initialized
-    And the database contains the following RegularUser accounts (Strategy1):
+    And the database contains the following RegularUser accounts (ID025):
       | id | firstname | lastname | email                    | password     |
       | 1  | John      | Goblikon | john.goblikon@gmail.com  | P@ssWord1234 |
       | 2  | Jane      | Doe      | jane.doe@gmail.com       | P@ssWord1234 |
       | 3  | Wassim    | Jabbour  | wassim.jabbour@gmail.com | P@ssWord1234 |
-    And the database contains the following domains (Strategy1):
+    And the database contains the following domains (ID025):
       | id | name       |
       | 3  | Software   |
       | 4  | English    |
       | 5  | Electrical |
-    And the database contains the following topics (Strategy1):
+    And the database contains the following topics (ID025):
       | id | name              |
       | 6  | Web Dev           |
       | 7  | Game Dev          |
       | 8  | Embedded Software |
       | 9  | CLI Tool          |
       | 10 | Other             |
-    And the database contains the following techs (Strategy1):
+    And the database contains the following techs (ID025):
       | id | name       |
       | 11 | Rust       |
       | 12 | TypeScript |
       | 13 | Go         |
       | 14 | C++        |
       | 15 | Other      |
-    And the database contains the following urls (Strategy1):
+    And the database contains the following urls (ID025):
       | id | url      |
       | 16 | test.com |
-    And the database contains the following ideas (Strategy1):
+    And the database contains the following ideas (ID025):
       # Date in ms from the unix epoch (Other constructors are deprecated)
       | id | title             | domains | topics | techs    | date | description | iconUrl | purpose    | author | isPrivate | user |
       | 17 | Website Idea      | 2       | 5      | 10,11,12 | 1500 | Cool idea   | 15      | Great idea | 1      | False     | 1    |
@@ -38,7 +38,7 @@ Feature: Respond to Collaboration Requests
       | 19 | Microcontroller   | 2,4     | 7      | 10,13    | 1300 | Cool idea   | 15      | Great idea | 2      | False     | 2    |
       | 20 | Command-Line tool | 2       | 8      | 10       | 1200 | Cool idea   | 15      | Great idea | 2      | False     | 2    |
       | 21 | Novel             | 3       | 9      | 14       | 1100 | Cool idea   | 15      | Great idea | 3      | False     | 3    |
-    And the database contains the following collaboration request:
+    And the database contains the following collaboration requests (ID025):
       | id | ideaId | userId | status   | additionalContact | message                                                                       |
       | 23 | 17     | 2      | Pending  | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
       | 24 | 18     | 2      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
@@ -49,14 +49,14 @@ Feature: Respond to Collaboration Requests
       | 29 | 18     | 3      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
       | 30 | 19     | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
 
-    And the database contains the following collaboration response:
+    And the database contains the following collaboration responses (ID025):
       | id | collaborationRequestId | additionalContact                 | message                                                          |
       | 31 | 23                     | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
       | 32 | 24                     | ""                                | ""                                                               |
 
   # Normal/alternate flows
   Scenario Outline: User successfully accepts collaboration request for their created idea
-    Given I am logged in as the user with email "<email>" and password "<password>"
+    Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
     When the user accepts the collaboration request with id "<collaboration_request_id>"
     Then the collaboration request with id "<collaboration_request_id>" has status "Accepted"
     Then the collaboration response with id "<collaboration_response_id>" is created and the message "<message>" is sent to the user with id "<user_id>"
@@ -64,11 +64,11 @@ Feature: Respond to Collaboration Requests
 
     Examples:
       | email                   | password     | collaboration_request_id | collaboration_response_id | message                                                          | user_id |
-      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | 31                            | "Hi, could you develop on your experience in that field please." | 2       |
-      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | 32                            | ""                                                               | 2       |
+      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | 31                        | "Hi, could you develop on your experience in that field please." | 2       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 24                       | 32                        | ""                                                               | 2       |
 
   Scenario Outline: User successfully declines collaboration request for their created idea
-    Given I am logged in as the user with email "<email>" and password "<password>"
+    Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
     When the user declines the collaboration request with id "<collaboration_request_id>"
     Then the collaboration request with id "<collaboration_request_id>" has status "Declined"
 
@@ -80,7 +80,7 @@ Feature: Respond to Collaboration Requests
 
   # Error flows
   Scenario Outline: User tries to decline a collaboration request for an idea that was already Accepted
-    Given I am logged in as the user with email "<email>" and password "<password>"
+    Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
     When the user erroneously declines the collaboration request with id "<collaboration_request_id>"
     Then the user shall receive the error message "This collaboration request has already been accepted and its status cannot be changed" with status 409
 
@@ -90,7 +90,7 @@ Feature: Respond to Collaboration Requests
       | john.goblikon@gmail.com | P@ssWord1234 | 28                       |
 
   Scenario Outline: User tries to accept a collaboration request for an idea that was already Declined
-    Given I am logged in as the user with email "<email>" and password "<password>"
+    Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
     When the user erroneously accepts the collaboration request with id "<collaboration_request_id>"
     Then the user shall receive the error message "This collaboration request has already been declined and its status cannot be changed" with status 409
 
