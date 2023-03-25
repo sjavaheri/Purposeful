@@ -415,9 +415,6 @@ export default function NavBar() {
                   <Avatar
                     as={"button"}
                     size={"md"}
-                    src={
-                      "https://api.dicebear.com/5.x/big-smile/svg?accessories[]&accessoriesProbability=0&eyes=confused&hair[]&hairColor[]&mouth=unimpressed&skinColor=efcc9f"
-                    }
                     onClick={() => {
                       window.location.href = "/login";
                     }}

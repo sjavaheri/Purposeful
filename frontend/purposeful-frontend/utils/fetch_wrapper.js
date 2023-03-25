@@ -46,7 +46,8 @@ export async function verifyToken() {
   const token = localStorage.getItem("token");
   // Check if there is a token
   if (!token) return false;
-  let appUserDTO = await fetchWrapper(`${BACKEND}/api/login`);
+  const res = await fetchWrapper(`${BACKEND}/api/login`);
+  const appUserDTO = await res.json();
   // Problem with the request
   if (!appUserDTO) return false;
   // Populate local storage with user info
@@ -89,7 +90,6 @@ export default async function fetchWrapper(
   method = "GET",
   payload = null
 ) {
-  // let json = false;
   // Valid HTTP methods
   if (!["GET", "POST", "PUT", "DELETE"].includes(method)) {
     console.error(
@@ -125,17 +125,12 @@ export default async function fetchWrapper(
       console.error(
         `Bad request. Status Code: ${status} Message: ${res.statusText}`
       );
-      return;
     }
-    // if (json) {
-    //   // want json
-    //   return await res.json();
-    // }
-    return res.json();
+    return res;
   } catch (err) {
     console.error(
       `Unable to make ${method} request to ${endpoint} endpoint. ${err}`
     );
-    return;
+    return err;
   }
 }
