@@ -17,19 +17,13 @@ import {
 } from "@/components/ModifyAccountDetails";
 
 export default function ModifyAccountDetailsPage() {
-  const { colorMode, toggleColorMode } = useColorMode(); // TODO: Move the light/dark mode toggle button to the navigation header
-  // TODO: Add the header and the navigation bar
-
   return (
     <Flex
       minH={"100vh"}
       align={"center"}
       justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}>
-      {/* TODO: Move the light/dark mode toggle button to the navigation header */}
-      <Button onClick={toggleColorMode}>
-        Toggle {colorMode === "light" ? "Dark" : "Light"}
-      </Button>
+      bg={useColorModeValue("gray.50", "gray.800")}
+    >
       <Stack spacing={4} mx={"auto"} maxW={"2xl"} py={12} px={6}>
         <Heading as="h1" size="2xl" align="center">
           Modify your account information below

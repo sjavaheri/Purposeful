@@ -34,7 +34,8 @@ export default function Registration() {
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
         boxShadow={"lg"}
-        p={8}>
+        p={8}
+      >
         <Formik
           initialValues={{
             firstname: "",
@@ -51,7 +52,8 @@ export default function Registration() {
               actions.setSubmitting(false);
               // TODO: Redirect to the login page
             }, 1000);
-          }}>
+          }}
+        >
           {(props) => (
             <Form>
               <Stack spacing={4}>
@@ -61,7 +63,8 @@ export default function Registration() {
                       <FormControl
                         isInvalid={
                           form.errors.firstname && form.touched.firstname
-                        }>
+                        }
+                      >
                         <FormLabel>First Name</FormLabel>
                         <Input {...field} type="text" />
                         <FormErrorMessage>
@@ -78,7 +81,8 @@ export default function Registration() {
                         id="lastName"
                         isInvalid={
                           form.errors.lastname && form.touched.lastname
-                        }>
+                        }
+                      >
                         <FormLabel>Last Name</FormLabel>
                         <Input {...field} type="text" />
                         <FormErrorMessage>
@@ -93,7 +97,8 @@ export default function Registration() {
                     {({ field, form }) => (
                       <FormControl
                         id="email"
-                        isInvalid={form.errors.email && form.touched.email}>
+                        isInvalid={form.errors.email && form.touched.email}
+                      >
                         <FormLabel>Username</FormLabel>
                         <Input
                           {...field}
@@ -113,7 +118,8 @@ export default function Registration() {
                           id="password"
                           isInvalid={
                             form.errors.password && form.touched.password
-                          }>
+                          }
+                        >
                           <FormLabel>Password</FormLabel>
                           <FormHelperText mb={4}>
                             Passwords must be at least 8 characters long and
@@ -133,7 +139,8 @@ export default function Registration() {
                                   setShowPassword(
                                     (showPassword) => !showPassword
                                   )
-                                }>
+                                }
+                              >
                                 {showPassword ? <ViewIcon /> : <ViewOffIcon />}
                               </Button>
                             </InputRightElement>
@@ -150,14 +157,16 @@ export default function Registration() {
                       name="confirmPassword"
                       validate={(value) =>
                         validateConfirmPassword(value, props.values.password)
-                      }>
+                      }
+                    >
                       {({ field, form }) => (
                         <FormControl
                           id="confirmPassword"
                           isInvalid={
                             form.errors.confirmPassword &&
                             form.touched.confirmPassword
-                          }>
+                          }
+                        >
                           <InputGroup>
                             <Input
                               {...field}
@@ -172,7 +181,8 @@ export default function Registration() {
                                     (showConfirmPassword) =>
                                       !showConfirmPassword
                                   )
-                                }>
+                                }
+                              >
                                 {showConfirmPassword ? (
                                   <ViewIcon />
                                 ) : (
@@ -200,7 +210,8 @@ export default function Registration() {
                     w={"50%"}
                     loadingText="Submitting"
                     isLoading={props.isSubmitting}
-                    type="submit">
+                    type="submit"
+                  >
                     Register
                   </Button>
                 </Stack>
