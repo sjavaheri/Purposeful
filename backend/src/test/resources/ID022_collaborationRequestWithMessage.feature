@@ -41,9 +41,9 @@ Feature: Send a collaboration request
     And the database contains the following collaboration requests (ID022):
       | id | ideaId | userId | additionalContact | message                                                                     |
       | 23 | 18     | 2      | 438-764-1940      | Hi, I would like to join this project!                                      |
-      | 24 | 19     | 2      | null              | Hi, I have experience in that field and I am interested in working on this! |
-      | 25 | 21     | 3      | null              | Hi, I have experience in that field and I am interested in working on this! |
-      | 26 | 22     | 2      | null              | Hi, I have experience in that field and I am interested in working on this! |
+      | 24 | 19     | 2      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 25 | 21     | 3      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
+      | 26 | 22     | 2      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
 
     # Normal/alternate flows
   Scenario Outline: Successfully send collaboration request
@@ -54,8 +54,8 @@ Feature: Send a collaboration request
 
     Examples:
       | email                    | password     | idea_id | user_id | message                             | additionalContact |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 18      | 3       | Hi, please let me join your project | null              |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 19      | 3       | Hi, please let me join your project | null              |
+      | wassim.jabbour@gmail.com | P@ssWord1234 | 18      | 3       | Hi, please let me join your project | 438-764-1940      |
+      | wassim.jabbour@gmail.com | P@ssWord1234 | 19      | 3       | Hi, please let me join your project | 438-764-1940      |
       | john.goblikon@gmail.com  | P@ssWord1234 | 22      | 1       | Hi, please let me join your project | 428-8794-4237     |
       | john.goblikon@gmail.com  | P@ssWord1234 | 21      | 1       | Hi, please let me join your project | 428-8794-4238     |
 
@@ -69,8 +69,8 @@ Feature: Send a collaboration request
 
     Examples:
       | email                    | password     | idea_id | message                             | additionalContact | errorMessage                                                           |
-      | jane.doe@gmail.com       | P@ssWord1234 | 18      | Hi, please let me join your project | null              | You can only send one collaboration request to this user for this idea |
-      | jane.doe@gmail.com       | P@ssWord1234 | 19      | Hi, please let me join your project | null              | You can only send one collaboration request to this user for this idea |
+      | jane.doe@gmail.com       | P@ssWord1234 | 18      | Hi, please let me join your project | 438-764-1940      | You can only send one collaboration request to this user for this idea |
+      | jane.doe@gmail.com       | P@ssWord1234 | 19      | Hi, please let me join your project | 438-764-1940      | You can only send one collaboration request to this user for this idea |
       | wassim.jabbour@gmail.com | P@ssWord1234 | 21      | Hi, please let me join your project | 428-8794-4237     | You can only send one collaboration request to this user for this idea |
       | jane.doe@gmail.com       | P@ssWord1234 | 22      | Hi, please let me join your project | 428-8794-4238     | You can only send one collaboration request to this user for this idea |
       | wassim.jabbour@gmail.com | P@ssWord1234 | 22      | Hi, please let me join your project | 428-8794-4239     | Cannot send a collaboration request to oneself                         |
