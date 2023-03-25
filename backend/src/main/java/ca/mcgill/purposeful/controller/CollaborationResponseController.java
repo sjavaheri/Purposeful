@@ -29,7 +29,7 @@ public class CollaborationResponseController {
      * @param id the idea's id
      * @return collaboration response
      */
-    @GetMapping("/forRequesterAndIdea/{ideaId}")
+    @GetMapping({"/{ideaId}", "/{ideaId}/"})
     @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
     public ResponseEntity<CollaborationResponseDTO> getCollaborationResponseForRequesterAndIdea(
             @PathVariable String ideaId) {
