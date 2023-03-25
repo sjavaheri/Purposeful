@@ -44,10 +44,15 @@ export async function login(username, password) {
  * @returns true if token is valid, false otherwise
  */
 export async function verifyToken() {
+  localStorage.removeItem("appUser");
   const token = localStorage.getItem("token");
   // Check if there is a token
   if (!token) return false;
   const res = await fetchWrapper(`${BACKEND}/api/login`);
+  if (!res.ok) {
+    logout();
+    return false;
+  }
   const appUserDTO = await res.json();
   // Problem with the request
   if (!appUserDTO) return false;

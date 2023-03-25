@@ -40,9 +40,11 @@ export default function NavBar() {
   const [GrantedAuth, setGrantedAuth] = useState([]);
   const [verified, setVerified] = useState(false);
   useEffect(() => {
-    setAppUser(localStorage.getItem("appUser"));
-    setGrantedAuth(getAuthorities());
-    setVerified(verifyToken());
+    verifyToken().then((res) => {
+      setVerified(res);
+      setAppUser(localStorage.getItem("appUser"));
+      setGrantedAuth(getAuthorities());
+    });
   }, []);
 
   return (
