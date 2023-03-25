@@ -16,25 +16,41 @@ import java.util.*;
 @Configuration
 public class CucumberUtil {
 
-  @Autowired private TopicRepository topicRepository;
+  @Autowired
+  private TopicRepository topicRepository;
 
-  @Autowired private TechnologyRepository technologyRepository;
+  @Autowired
+  private TechnologyRepository technologyRepository;
 
-  @Autowired private URLRepository urlRepository;
+  @Autowired
+  private URLRepository urlRepository;
 
-  @Autowired private IdeaRepository ideaRepository;
+  @Autowired
+  private IdeaRepository ideaRepository;
 
-  @Autowired private DomainRepository domainRepository;
+  @Autowired
+  private DomainRepository domainRepository;
 
-  @Autowired private AppUserRepository appUserRepository;
+  @Autowired
+  private AppUserRepository appUserRepository;
 
-  @Autowired private RegularUserRepository regularUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
-  @Autowired private ReactionRepository reactionRepository;
+  @Autowired
+  private ReactionRepository reactionRepository;
 
-  @Autowired private AppUserService appUserService;
+  @Autowired
+  private AppUserService appUserService;
 
-  @Autowired private PasswordEncoder passwordEncoder;
+  @Autowired
+  private CollaborationResponseRepository collaborationResponseRepository;
+
+  @Autowired
+  private CollaborationRequestRepository collaborationRequestRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -120,9 +136,8 @@ public class CucumberUtil {
     for (var row : rows) {
 
       // create an instance of App User from the table values
-      AppUser appUser =
-          appUserService.registerRegularUser(
-              row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
+      AppUser appUser = appUserService.registerRegularUser(
+          row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
 
       // Add the regular user to the map if it was passed
       // Note: no need to add the app user to the map since we only will be
@@ -138,7 +153,7 @@ public class CucumberUtil {
    * This method creates and saves domains from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveDomainsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -165,7 +180,7 @@ public class CucumberUtil {
    * This method creates and saves topics from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTopicsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -192,7 +207,7 @@ public class CucumberUtil {
    * This method creates and saves technologies from a data table
    *
    * @param dataTable The table
-   * @param idMap The map of ids
+   * @param idMap     The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTechsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -219,7 +234,7 @@ public class CucumberUtil {
    * This method creates and saves Ideas from a data table
    *
    * @param dataTable a data table containing the ideas to be created
-   * @param idMap a map containing the ids of the users and domains
+   * @param idMap     a map containing the ids of the users and domains
    * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
@@ -303,7 +318,7 @@ public class CucumberUtil {
    * This method creates and saves URLs from a data table
    *
    * @param dataTable a data table containing the URLs to be created
-   * @param idMap a map containing the ids of the users and domains
+   * @param idMap     a map containing the ids of the users and domains
    * @author Thibaut Baguette
    */
   public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -322,7 +337,8 @@ public class CucumberUtil {
   }
 
   /**
-   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first authenticate
+   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first
+   * authenticate
    *
    * @param email
    * @param password
@@ -337,7 +353,8 @@ public class CucumberUtil {
   }
 
   /**
-   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is already
+   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is
+   * already
    * authenticated
    *
    * @param jwtToken
@@ -373,6 +390,54 @@ public class CucumberUtil {
 
       reactionRepository.save(reaction);
       idMap.put(row.get("id"), reaction.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves CollaborationResponses from a data table
+   * 
+   * @param dataTable
+   * @param idMap
+   * 
+   * @author Thibaut Baguette
+   */
+  public void createAndSaveCollaborationResponsesFromTable(DataTable dataTable, Map<String, String> idMap) {
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      CollaborationResponse collaborationResponse = new CollaborationResponse();
+      collaborationResponse.setMessage(row.get("message"));
+      collaborationResponse.setAdditionalContact(row.get("additionalContact"));
+
+      collaborationResponseRepository.save(collaborationResponse);
+      idMap.put(row.get("id"), collaborationResponse.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves CollaborationRequests from a data table
+   * 
+   * @param dataTable
+   * @param idMap
+   * 
+   * @author Thibaut Baguette
+   */
+  public void createAndSaveCollaborationRequestsFromTable(DataTable dataTable, Map<String, String> idMap) {
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      CollaborationRequest collaborationRequest = new CollaborationRequest();
+      collaborationRequest.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("ideaId"))));
+      collaborationRequest.setCollaborationResponse(collaborationResponseRepository
+          .findCollaborationResponseById(idMap.get(row.get("collaborationResponseId"))));
+      collaborationRequest.setRequester(regularUserRepository
+          .findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
+      collaborationRequest.setStatus(Status.valueOf(row.get("status")));
+      collaborationRequest.setAdditionalContact(row.get("additionalContact"));
+      collaborationRequest.setMessage(row.get("message"));
+      
+      collaborationRequestRepository.save(collaborationRequest);
+      idMap.put(row.get("id"), collaborationRequest.getId());
     }
   }
 }

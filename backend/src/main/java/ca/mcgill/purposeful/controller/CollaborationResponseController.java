@@ -41,6 +41,10 @@ public class CollaborationResponseController {
         CollaborationResponse response = collaborationResponseService.getCollaborationResponseForRequesterAndIdea(
                 auth.getName(),
                 ideaId);
+        
+        if (response == null)
+            return null;
+
         CollaborationResponseDTO responseDTO = new CollaborationResponseDTO(response);
 
         return new ResponseEntity<CollaborationResponseDTO>(responseDTO, HttpStatus.OK);
