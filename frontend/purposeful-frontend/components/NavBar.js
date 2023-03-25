@@ -52,6 +52,7 @@ export default function NavBar() {
       <Box bg={bgColorBase} px={4}>
         <Flex h={24} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
+            {/* Share. Create. Purposefully. */}
             <VStack
               as={"button"}
               spacing={0.5}
@@ -76,6 +77,7 @@ export default function NavBar() {
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
+              {/* Home nav */}
               <Link
                 p={2}
                 fontSize={"2xl"}
@@ -91,6 +93,7 @@ export default function NavBar() {
               >
                 Home
               </Link>
+              {/* Ideas nav */}
               <Box>
                 <Popover trigger="hover" placement="bottom-start">
                   <PopoverTrigger>
@@ -116,6 +119,7 @@ export default function NavBar() {
                     minW={"sm"}
                   >
                     <Stack>
+                      {/* Create Idea nav option */}
                       <Link
                         href="/create"
                         role={"group"}
@@ -158,6 +162,7 @@ export default function NavBar() {
                           </Flex>
                         </Stack>
                       </Link>
+                      {/* My Ideas nav option */}
                       <Link
                         href="/myideas"
                         role={"group"}
@@ -202,6 +207,7 @@ export default function NavBar() {
                           </Flex>
                         </Stack>
                       </Link>
+                      {/* My Interests nav option */}
                       <Link
                         href="/myideasofinterest"
                         role={"group"}
@@ -250,6 +256,7 @@ export default function NavBar() {
                   </PopoverContent>
                 </Popover>
               </Box>
+              {/* Domain nav */}
               <Box>
                 <Popover trigger="hover" placement="bottom-start">
                   <PopoverTrigger>
@@ -275,6 +282,7 @@ export default function NavBar() {
                     minW={"sm"}
                   >
                     <Stack>
+                      {/* Software nav option */}
                       <Link
                         // TODO: Add link to domain page
                         href="#"
@@ -321,6 +329,7 @@ export default function NavBar() {
                   </PopoverContent>
                 </Popover>
               </Box>
+              {/* Admin nav */}
               {verified && GrantedAuth.includes("Owner") && (
                 <Link
                   p={2}
@@ -343,11 +352,13 @@ export default function NavBar() {
 
           <Flex alignItems={"center"}>
             <Stack direction={"row"} spacing={7}>
+              {/* Light/Dark Mode Toggle */}
               <Button onClick={toggleColorMode}>
                 {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
               </Button>
               {verified && appUser ? (
                 <Box>
+                  {/* Account Menu */}
                   <Menu autoSelect={false}>
                     <MenuButton
                       as={Button}
@@ -356,6 +367,7 @@ export default function NavBar() {
                       cursor={"pointer"}
                       minW={0}
                     >
+                      {/* Avatar button */}
                       <Avatar
                         size={"md"}
                         src={`https://avatars.dicebear.com/api/big-smile/${
@@ -366,6 +378,7 @@ export default function NavBar() {
                     <MenuList bg={bgColorBase} border={0} boxShadow={"xl"}>
                       <br />
                       <Center>
+                        {/* Avatar in big inside account menu */}
                         <Avatar
                           size={"2xl"}
                           src={`https://avatars.dicebear.com/api/big-smile/${
@@ -375,6 +388,7 @@ export default function NavBar() {
                       </Center>
                       <br />
                       <Center>
+                        {/* Name in account menu */}
                         <Text fontWeight={600}>
                           {JSON.parse(appUser).firstname +
                             " " +
@@ -383,6 +397,7 @@ export default function NavBar() {
                       </Center>
                       <br />
                       <MenuDivider />
+                      {/* Account Settings */}
                       <MenuItem
                         bg={bgColorBase}
                         _hover={{
@@ -395,6 +410,7 @@ export default function NavBar() {
                       >
                         Account
                       </MenuItem>
+                      {/* Logout */}
                       <MenuItem
                         bg={bgColorBase}
                         _hover={{
@@ -414,6 +430,7 @@ export default function NavBar() {
                 </Box>
               ) : (
                 <Tooltip hasArrow label="Log in" fontSize="md">
+                  {/* Login button / avatar when not logged in */}
                   <Avatar
                     as={"button"}
                     size={"md"}
