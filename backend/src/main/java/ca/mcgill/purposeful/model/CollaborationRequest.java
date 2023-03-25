@@ -45,8 +45,8 @@ public class CollaborationRequest {
   private Idea idea;
 
   @OneToOne(cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "collaboration_confirmation_id", nullable = true)
-  private CollaborationConfirmation collaborationConfirmation;
+  @JoinColumn(name = "collaboration_response_id", nullable = true)
+  private CollaborationResponse collaborationResponse;
 
   // ------------------------
   // CollaborationRequest Constructor
@@ -106,11 +106,11 @@ public class CollaborationRequest {
     this.idea = idea;
   }
 
-  public CollaborationConfirmation getCollaborationConfirmation() {
-    return collaborationConfirmation;
+  public CollaborationResponse getCollaborationResponse() {
+    return collaborationResponse;
   }
 
-  public void setCollaborationConfirmation(CollaborationConfirmation collaborationConfirmation) {
-    this.collaborationConfirmation = collaborationConfirmation;
+  public void setCollaborationResponse(CollaborationResponse collaborationResponse) {
+    this.collaborationResponse = collaborationResponse;
   }
 }

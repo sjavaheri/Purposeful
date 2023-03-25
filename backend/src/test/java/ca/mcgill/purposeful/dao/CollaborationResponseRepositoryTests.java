@@ -23,7 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author Siger Ma
  */
 @SpringBootTest
-public class CollaborationRepositoryTests {
+public class CollaborationResponseRepositoryTests {
 
   @Autowired private AppUserRepository appUserRepository;
 
