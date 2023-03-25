@@ -38,19 +38,19 @@ As a user, I want to be able to view the response from the idea creator to the c
       | 20 | Command-Line tool | 2       | 8      | 10       | 1200 | Cool idea   | 16      | Great idea | False     | 1    |
       | 21 | Novel             | 3       | 9      | 14       | 1100 | Cool idea   | 16      | Great idea | False     | 2    |
     And the database contains the following CollaborationResponses:
-      | id | additionalContact                 | message                                                          |
-      | 31 | "Hi, my contact is +438-764-1940" | "Hi, could you develop on your experience in that field please." |
-      | 32 | ""                                | ""                                                               |
+      | id | additionalContact                 | status   | message                                                          |
+      | 31 | ""                                | Declined | "Hi, could you develop on your experience in that field please." |
+      | 32 | "Hi, my contact is +438-764-1940" | Approved | "I'd love to work with you!"                                     |
     And the database contains the following CollaborationRequests:
-      | id | ideaId | collaborationResponseId | userId | status   | additionalContact | message                                                                       |
-      | 23 | 17     | 31                      | 1      | Pending  | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
-      | 24 | 18     | 32                      | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 25 | 20     | null                    | 2      | Approved | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 26 | 21     | null                    | 1      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 27 | 20     | null                    | 0      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 28 | 17     | null                    | 2      | Approved | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 29 | 18     | null                    | 2      | Declined | null              | "Hi, I have experience in that field and I am interested in working on this!" |
-      | 30 | 19     | null                    | 0      | Pending  | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | id | ideaId | collaborationResponseId | userId | additionalContact | message                                                                       |
+      | 23 | 17     | 31                      | 1      | "438-764-1940"    | "Hi, I would like to join this project!"                                      |
+      | 24 | 18     | 32                      | 1      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 25 | 20     | null                    | 2      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 26 | 21     | null                    | 1      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 27 | 20     | null                    | 0      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 28 | 17     | null                    | 2      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 29 | 18     | null                    | 2      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
+      | 30 | 19     | null                    | 0      | null              | "Hi, I have experience in that field and I am interested in working on this!" |
     And I am logged in as the user with the email "jane.doe@gmail.com" and password "P@ssWord1234"
 
   # normal flow

@@ -408,6 +408,7 @@ public class CucumberUtil {
       CollaborationResponse collaborationResponse = new CollaborationResponse();
       collaborationResponse.setMessage(row.get("message"));
       collaborationResponse.setAdditionalContact(row.get("additionalContact"));
+      collaborationResponse.setStatus(Status.valueOf(row.get("status")));
 
       collaborationResponseRepository.save(collaborationResponse);
       idMap.put(row.get("id"), collaborationResponse.getId());
@@ -432,7 +433,6 @@ public class CucumberUtil {
           .findCollaborationResponseById(idMap.get(row.get("collaborationResponseId"))));
       collaborationRequest.setRequester(regularUserRepository
           .findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
-      collaborationRequest.setStatus(Status.valueOf(row.get("status")));
       collaborationRequest.setAdditionalContact(row.get("additionalContact"));
       collaborationRequest.setMessage(row.get("message"));
       
