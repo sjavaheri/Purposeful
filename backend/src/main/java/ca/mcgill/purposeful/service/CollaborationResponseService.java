@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
 import ca.mcgill.purposeful.dao.CollaborationResponseRepository;
@@ -18,6 +19,7 @@ import jakarta.transaction.Transactional;
 /**
  * Collaboration response service functions
  */
+@Service
 public class CollaborationResponseService {
     @Autowired
     CollaborationResponseRepository collaborationResponseRepository;

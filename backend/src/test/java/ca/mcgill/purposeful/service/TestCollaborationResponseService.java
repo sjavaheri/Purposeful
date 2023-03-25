@@ -103,7 +103,7 @@ public class TestCollaborationResponseService {
                     }
                 });
         lenient()
-                .when(regularUserRepository.findRegularUserById(anyString()))
+                .when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
                 .thenAnswer((InvocationOnMock invocation) -> {
                     switch (invocation.getArgument(0).toString()) {
                         case REQUESTER_EMAIL:
