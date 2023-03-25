@@ -7,14 +7,13 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * The CollaborationConfirmation class, the model for regular user's collaboration confirmation to a
+ * The CollaborationResponse class, the model for regular user's collaboration response to a
  * request in the database
  */
 @Entity
-public class CollaborationConfirmation {
-
+public class CollaborationResponse {
   // ------------------------
-  // CollaborationConfirmation Attributes
+  // CollaborationResponse Attributes
   // ------------------------
 
   @Id
@@ -29,10 +28,10 @@ public class CollaborationConfirmation {
   private String message;
 
   // ------------------------
-  // CollaborationConfirmation Constructor
+  // CollaborationResponse Constructor
   // ------------------------
 
-  public CollaborationConfirmation() {}
+  public CollaborationResponse() {}
 
   // ------------------------
   // Getter/Setter Methods
