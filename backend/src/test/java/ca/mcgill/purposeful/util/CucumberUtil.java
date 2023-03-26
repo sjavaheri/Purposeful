@@ -58,6 +58,8 @@ public class CucumberUtil {
 
   @Autowired private ReactionRepository reactionRepository;
 
+  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
+
   @Autowired private AppUserService appUserService;
 
   @Autowired private CollaborationRequestRepository collaborationRequestRepository;
@@ -407,6 +409,28 @@ public class CucumberUtil {
   }
 
   /**
+   * This method creates and saves CollaborationResponses from a data table
+   *
+   * @param dataTable
+   * @param idMap
+   * @author Thibaut Baguette
+   */
+  public void createAndSaveCollaborationResponsesFromTable(
+      DataTable dataTable, Map<String, String> idMap) {
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      CollaborationResponse collaborationResponse = new CollaborationResponse();
+      collaborationResponse.setMessage(row.get("message"));
+      collaborationResponse.setAdditionalContact(row.get("additionalContact"));
+      collaborationResponse.setStatus(Status.valueOf(row.get("status")));
+
+      collaborationResponseRepository.save(collaborationResponse);
+      idMap.put(row.get("id"), collaborationResponse.getId());
+    }
+  }
+
+  /**
    * This method creates and saves collaboration requests from a data table
    *
    * @param dataTable The table
@@ -425,6 +449,9 @@ public class CucumberUtil {
           regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
       collaborationRequest.setMessage(row.get("message"));
       collaborationRequest.setAdditionalContact(row.get("additionalContact"));
+      collaborationRequest.setCollaborationResponse(
+          collaborationResponseRepository.findCollaborationResponseById(
+              idMap.get(row.get("collaborationResponseId"))));
 
       collaborationRequestRepository.save(collaborationRequest);
 

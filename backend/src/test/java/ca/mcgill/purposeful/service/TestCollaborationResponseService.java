@@ -290,12 +290,12 @@ public class TestCollaborationResponseService {
    * @author Thibaut Baguette
    */
   @Test
-  public void testViewCollaborationResponse_alternate() {
-    CollaborationResponse response =
-        collaborationResponseService.getCollaborationResponseForRequesterAndIdea(
-            REQUESTER_EMAIL_NO_RESPONSE, IDEA_ID_NO_RESPONSE);
-
-    assertNull(response);
+  public void testViewCollaborationResponse_error1() {
+    assertThrows(
+        GlobalException.class,
+        () ->
+            collaborationResponseService.getCollaborationResponseForRequesterAndIdea(
+                REQUESTER_EMAIL_NO_RESPONSE, IDEA_ID_NO_RESPONSE));
   }
 
   /**
@@ -304,7 +304,7 @@ public class TestCollaborationResponseService {
    * @author Thibaut Baguette
    */
   @Test
-  public void testViewCollaborationResponse_error() {
+  public void testViewCollaborationResponse_error2() {
     assertThrows(
         GlobalException.class,
         () ->

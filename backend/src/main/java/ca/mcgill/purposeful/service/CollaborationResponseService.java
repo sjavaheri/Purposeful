@@ -56,6 +56,11 @@ public class CollaborationResponseService {
 
     CollaborationResponse response = request.getCollaborationResponse();
 
+    if (response == null) {
+      throw new GlobalException(
+          HttpStatus.NOT_FOUND, "There is no response for this collaboration request");
+    }
+
     return response;
   }
 
@@ -91,7 +96,8 @@ public class CollaborationResponseService {
     // Find the handler account
     RegularUser handler = regularUserRepository.findRegularUserByAppUserEmail(handlerEmail);
 
-    // Check it's valid (Should never be false since the user is logged in and we retrieve the email
+    // Check it's valid (Should never be false since the user is logged in and we
+    // retrieve the email
     // from the token)
     // Just included for safety
     if (handler == null) {
@@ -160,7 +166,8 @@ public class CollaborationResponseService {
     // Find the handler account
     RegularUser handler = regularUserRepository.findRegularUserByAppUserEmail(handlerEmail);
 
-    // Check it's valid (Should never be false since the user is logged in and we retrieve the email
+    // Check it's valid (Should never be false since the user is logged in and we
+    // retrieve the email
     // from the token)
     // Just included for safety
     if (handler == null) {
