@@ -149,16 +149,3 @@ export default async function fetchWrapper(
     return err;
   }
 }
-
-export async function getDomains(){
-  let domains = await fetchWrapper(`${BACKEND}/api/domain`);
-  return domains;
-}
-export async function getTopics(){
-  let topics = await fetchWrapper(`${BACKEND}/api/topic`);
-  return topics;
-}
-export async function getTechs(){
-  let techs = await fetchWrapper(`${BACKEND}/api/tech`);
-  return techs;
-}
