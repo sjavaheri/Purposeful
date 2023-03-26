@@ -67,41 +67,56 @@ public class TestCollaborationResponseService {
   // Fields pertaining to testing handling a collaboration request
 
   // Ideas
-  static Idea idea1 = new Idea();
-  static Idea idea2 = new Idea();
+  static Idea idea1;
+  static Idea idea2;
 
   // Users
-  static AppUser appUser1 = new AppUser();
-  static RegularUser user1 = new RegularUser();
+  static AppUser appUser1;
+  static RegularUser user1;
   static final String USER1_EMAIL = "example1@gmail.com";
 
-  static AppUser appUser2 = new AppUser();
-  static RegularUser user2 = new RegularUser();
+  static AppUser appUser2;
+  static RegularUser user2;
   static final String USER2_EMAIL = "example2@gmail.com";
 
   // Domains
-  static Domain domain1 = new Domain();
+  static Domain domain1;
 
   // Domain groups (A set of multiple of the above domains)
-  static HashSet<Domain> domainGroup1 = new HashSet<>();
+  static HashSet<Domain> domainGroup1;
 
   // Topics
-  static Topic topic1 = new Topic();
+  static Topic topic1;
 
   // Topic groups (A set of multiple of the above topics)
-  static HashSet<Topic> topicGroup1 = new HashSet<>();
+  static HashSet<Topic> topicGroup1;
 
   // Techs
-  static Technology tech1 = new Technology();
+  static Technology tech1;
 
   // Tech groups (A set of multiple of the above techs)
-  static HashSet<Technology> techGroup1 = new HashSet<>();
+  static HashSet<Technology> techGroup1;
 
   // Collaboration requests
-  static CollaborationRequest collaborationRequest1 = new CollaborationRequest();
+  static CollaborationRequest collaborationRequest1;
 
-  // Field initializations
-  static {
+  @BeforeEach
+  public void resetFields() {
+
+    // Create everything
+    idea1 = new Idea();
+    idea2 = new Idea();
+    appUser1 = new AppUser();
+    appUser2 = new AppUser();
+    user1 = new RegularUser();
+    user2 = new RegularUser();
+    domain1 = new Domain();
+    domainGroup1 = new HashSet<>();
+    topic1 = new Topic();
+    topicGroup1 = new HashSet<>();
+    tech1 = new Technology();
+    techGroup1 = new HashSet<>();
+    collaborationRequest1 = new CollaborationRequest();
 
     // Initialize user
     appUser1.setEmail(USER1_EMAIL);
