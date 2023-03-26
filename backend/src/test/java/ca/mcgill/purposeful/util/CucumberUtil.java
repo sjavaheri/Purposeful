@@ -445,6 +445,9 @@ public class CucumberUtil {
           regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
       collaborationRequest.setMessage(row.get("message"));
       collaborationRequest.setAdditionalContact(row.get("additionalContact"));
+      collaborationRequest.setCollaborationResponse(
+          collaborationResponseRepository.findCollaborationResponseById(
+              idMap.get(row.get("collaborationResponseId"))));
 
       collaborationRequestRepository.save(collaborationRequest);
 
