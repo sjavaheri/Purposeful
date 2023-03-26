@@ -1,17 +1,18 @@
 import { Fragment, useState } from "react";
 import {
   Box,
-  FormControl,
-  FormLabel,
-  Input,
   Stack,
-  HStack,
-  Checkbox,
-  Textarea,
+  SimpleGrid,
   Button,
   useColorModeValue,
   FormErrorMessage,
   Select,
+  Input,
+  Text,
+  Flex,
+  Image,
+  Tag,
+  TagLabel, 
   IconButton,
   Accordion,
   AccordionItem,
@@ -21,7 +22,8 @@ import {
 } from "@chakra-ui/react";
 
 import {
-    DeleteIcon
+    EditIcon,
+    SearchIcon
   } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
 import { RxPlus } from "react-icons/rx";
@@ -29,47 +31,151 @@ import { RxPlus } from "react-icons/rx";
 
 export default function MyIdeas() {
 
-    function AccordionList({ data }) {
-        return (
-            <Accordion>
-            {data.map((item, index) => (
-                <AccordionItem key={index}>
-                <h2>
-                    <AccordionButton>
-                    {item.title}
-                    </AccordionButton>
-                </h2>
-                <AccordionPanel>
-                    {item.content}
-                </AccordionPanel>
-                </AccordionItem>
-            ))}
-            </Accordion>
-        );
+    //KEEPING THIS IN CASE WE WANT TO CHANGE DESIGN IN WEEK 3
+    // function AccordionList({ data }) {
+    //     return (
+    //         <Accordion>
+    //         {data.map((item, index) => (
+    //             <AccordionItem key={index}>
+    //             <h2>
+    //                 <Flex alignItems="center">
+    //                 <AccordionButton>
+    //                     {item.title}
+    //                 </AccordionButton>
+    //                 <Button size="sm">
+    //                     <EditIcon w={4} h={4} color="gray.700" />
+    //                 </Button>
+    //                 </Flex>
+    //             </h2>
+    //             <AccordionPanel>
+    //                 {item.content}
+    //             </AccordionPanel>
+    //             </AccordionItem>
+    //         ))}
+    //         </Accordion>
+    //     );
+    //     }
+
+        function TagList({ tags }) {
+            return (
+            <>
+                {tags.map((tag, index) => (
+                <Tag
+                    key={index}
+                    size="md"
+                    borderRadius="full"
+                    variant="solid"
+                    bg={"blue.400"}
+                    color={"white"}
+                    mr={2}
+                >
+                    <TagLabel>{tag}</TagLabel>
+                </Tag>
+                ))}
+            </>
+            );
         }
+
+        function IdeaBoxes({ list }) {
+            return (
+                <SimpleGrid columns={4} spacing={7}>
+                {list.map((item, index) => (
+                    <Box
+                    rounded={"lg"}
+                    bg={useColorModeValue("white", "gray.700")}
+                    boxShadow={"lg"}
+                    borderWidth="1px" 
+                    borderRadius="lg" 
+                    overflow="hidden" 
+                    p={4}
+                    m={4}>
+                    <Flex alignItems="center" justifyContent="space-between">
+                    <Text mt={4} fontWeight="bold">
+                        {item.title}
+                    </Text>
+                    <Button size="sm">
+                        <EditIcon w={4} h={4} color="gray.700" />
+                    </Button>
+                    </Flex>
+                    <Text mt={2}>{item.purpose}</Text>
+                    <br></br>
+                    <Image src={item.imageUrl} height="100px"/>
+                    <br></br>
+                    <TagList tags={item.topics}></TagList>
+                  </Box>
+                  
+                ))}
+              </SimpleGrid>
+            )
+          }
     
-    function IdeaList({ideaList}){
-        var ideas = []
-        for (let i = 0; i < ideaList; i++) {
-            const idea = ideaList[i];
-            ideas.push({title: idea.title, content: idea.description});
-        }
-        <AccordionList data={[
-            { title: "Item 1", content: "Lorem ipsum dolor sit amet." },
-            { title: "Item 2", content: "Consectetur adipiscing elit." },
-            { title: "Item 3", content: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }
-        ]} 
-        />
-    }
-  (async () => {
-    var hello = []
-  })()
+    //TODO: Connect this function to the backend and get list of ideas
+    // function IdeaList({ideaList}){
+    //     var ideas = []
+    //     for (let i = 0; i < ideaList; i++) {
+    //         const idea = ideaList[i];
+    //         const title = "Placeholder #" + String.valueOf(i);
+    //         ideas.push({title: title, purpose: "Description of idea and data"});
+    //     }
+    //     return (ideas);
+    // }
 
   return (
-    <AccordionList data={[
-    { title: "Item 1", content: "Lorem ipsum dolor sit amet." },
-    { title: "Item 2", content: "Consectetur adipiscing elit." },
-    { title: "Item 3", content: "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." }
-    ]} />
+    <Stack minWidth="1100px" spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
+        <Flex alignItems="center">
+            <Input 
+            placeholder="Search..."
+            rounded={"lg"}
+            bg={useColorModeValue("white", "gray.700")}
+            boxShadow={"lg"}
+            borderWidth="1px" 
+            borderRadius="lg" 
+            overflow="hidden" 
+            p={4}
+            m={4}>
+            </Input>
+            <Button size="md">
+                <SearchIcon w={4} h={4} color="gray.700" />
+            </Button>
+            </Flex>
+        <IdeaBoxes list={[
+            {
+                title: "Idea 1",
+                purpose: "This is the purpose for Idea 1",
+                imageUrl: "https://images.pexels.com/photos/8145352/pexels-photo-8145352.jpeg",
+                topics: ["topic 1", "topic 2"]
+            },
+            {
+                title: "Idea 2",
+                purpose: "This is the purpose for Idea 2",
+                imageUrl: "https://images.pexels.com/photos/7413915/pexels-photo-7413915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                topics: ["topic 1", "topic 2"]
+            },
+            {
+                title: "Idea 3",
+                purpose: "This is the purpose for Idea 3",
+                imageUrl: "https://images.pexels.com/photos/6238186/pexels-photo-6238186.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                topics: ["topic 1", "topic 2"]
+            },
+            {
+                title: "Idea 4",
+                purpose: "This is the purpose for Idea 4",
+                imageUrl: "https://images.pexels.com/photos/6476783/pexels-photo-6476783.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                topics: ["topic 1", "topic 2"]
+            },
+            {
+                title: "Idea 5",
+                purpose: "This is the purpose for Idea 5",
+                imageUrl: "https://images.pexels.com/photos/4344860/pexels-photo-4344860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                topics: ["topic 1", "topic 2"]
+            },
+            {
+                title: "Idea 6",
+                purpose: "This is the purpose for Idea 6",
+                imageUrl: "https://images.pexels.com/photos/3727463/pexels-photo-3727463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                topics: ["topic 1", "topic 2"]
+            },
+        ]} />
+    </Stack>
   );
 }
