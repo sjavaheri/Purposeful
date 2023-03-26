@@ -54,7 +54,7 @@ export default function ModifyIdea() {
     domains = await getDomains();
     topics = await getTopics();
     techs = await getTechs();
-    if(fullfilled == 1){
+    if(fullfilled == 0){
       fullfilled++;
       domains.map(MakeOption);
     }
