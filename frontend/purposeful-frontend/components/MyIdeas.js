@@ -4,7 +4,6 @@ import {
   Stack,
   SimpleGrid,
   Button,
-  useColorModeValue,
   FormErrorMessage,
   Select,
   Input,
@@ -21,6 +20,7 @@ import {
   AccordionIcon,
 } from "@chakra-ui/react";
 
+import { useColorModeValue } from "@chakra-ui/color-mode";
 import {
     EditIcon,
     SearchIcon
@@ -53,7 +53,12 @@ export default function MyIdeas() {
     //         </Accordion>
     //     );
     //     }
-
+    const tagColor = useColorModeValue("blue.400", "gray.900");
+    const boxColor = useColorModeValue("gray.50", "gray.800");
+    const editColor = useColorModeValue("gray.50", "gray.800");
+    const searchColor = useColorModeValue("gray.50", "gray.800");
+    const searchIconColor = useColorModeValue("gray.20", "gray.750");
+    
         function TagList({ tags }) {
             return (
             <>
@@ -63,8 +68,7 @@ export default function MyIdeas() {
                     size="md"
                     borderRadius="full"
                     variant="solid"
-                    bg={"blue.400"}
-                    color={"white"}
+                    bg={tagColor}
                     mr={2}
                 >
                     <TagLabel>{tag}</TagLabel>
@@ -81,8 +85,7 @@ export default function MyIdeas() {
                     <Box
                     key={index}
                     rounded={"lg"}
-                    bg={"gray.700"}
-                    color={"white"}
+                    bg={boxColor}
                     boxShadow={"lg"}
                     borderWidth="1px" 
                     borderRadius="lg" 
@@ -94,7 +97,7 @@ export default function MyIdeas() {
                         {item.title}
                     </Text>
                     <Button size="sm">
-                        <EditIcon w={4} h={4} color="gray.700" />
+                        <EditIcon w={4} h={4} bg={editColor} />
                     </Button>
                     </Flex>
                     <Text mt={2}>{item.purpose}</Text>
@@ -126,7 +129,7 @@ export default function MyIdeas() {
             <Input 
             placeholder="Search..."
             rounded={"lg"}
-            bg={"gray.700"}
+            bg={searchColor}
             color={"white"}
             boxShadow={"lg"}
             borderWidth="1px" 
@@ -136,7 +139,7 @@ export default function MyIdeas() {
             m={4}>
             </Input>
             <Button size="md">
-                <SearchIcon w={4} h={4} color="gray.700" />
+                <SearchIcon w={4} h={4} bg={searchIconColor} />
             </Button>
             </Flex>
         <IdeaBoxes list={[
