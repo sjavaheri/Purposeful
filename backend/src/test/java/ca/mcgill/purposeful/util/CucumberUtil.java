@@ -66,7 +66,6 @@ public class CucumberUtil {
 
   @Autowired private PasswordEncoder passwordEncoder;
 
-  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -468,7 +467,7 @@ public class CucumberUtil {
    * @param idMap The id map
    * @author Wassim Jabbour
    */
-  public void createAndSaveCollaborationResponsesFromTable(
+  public void createAndSaveCollaborationResponsesFromTableID025(
       DataTable dataTable, Map<String, String> idMap) {
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();

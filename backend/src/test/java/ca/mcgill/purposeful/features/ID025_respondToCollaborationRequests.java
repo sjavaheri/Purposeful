@@ -93,7 +93,7 @@ public class ID025_respondToCollaborationRequests {
 
   @And("the database contains the following collaboration responses \\(ID025):")
   public void theDatabaseContainsTheFollowingCollaborationResponses(DataTable dataTable) {
-    cucumberUtil.createAndSaveCollaborationResponsesFromTable(dataTable, idMap);
+    cucumberUtil.createAndSaveCollaborationResponsesFromTableID025(dataTable, idMap);
   }
 
   @Given("I am logged in as the user with email {string} and password {string} \\(ID025)")
