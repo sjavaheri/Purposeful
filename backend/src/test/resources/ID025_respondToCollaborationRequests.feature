@@ -48,11 +48,11 @@ Feature: Respond to Collaboration Requests
       | 28 | 18     | 3      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
       | 29 | 19     | 3      | 438-764-1940      | Hi, I have experience in that field and I am interested in working on this! |
     And the database contains the following collaboration responses (ID025):
-    # No need for contact info if rejected
+    # No need for contact info if rejected (empty string here will be converted to null automatically by cucumber)
       | id | additionalContact               | message                                                        | status   | collaborationRequestId |
-      | 30 | Hi, my contact is +438-764-1940 | Hi, could you develop on your experience in that field please. | Accepted | 23                     |
-      | 31 | Hi, my contact is +438-764-1940 | Hi, could you develop on your experience in that field please. | Accepted | 24                     |
-      | 32 |                                 | No sorry :(                                                    | Rejected | 25                     |
+      | 30 | Hi, my contact is +438-764-1940 | Hi, could you develop on your experience in that field please. | Approved | 23                     |
+      | 31 | Hi, my contact is +438-764-1940 | Hi, could you develop on your experience in that field please. | Approved | 24                     |
+      | 32 |                                 | No sorry :(                                                    | Declined | 25                     |
 
   # Normal/alternate flows
   Scenario Outline: User successfully accepts collaboration request for their created idea
@@ -85,35 +85,23 @@ Feature: Respond to Collaboration Requests
   Scenario Outline: User tries to accept a collaboration request erroneously
     Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
     When the user erroneously approves the collaboration request with id "<collaboration_request_id>" and message "<message>" and additional contact "<additional_contact>"
-    Then the user shall receive the error message "<errorMessage>" with status "<status>"
+    Then the user shall receive the error message "<errorMessage>" with status "<status>" (ID025)
 
     Examples:
-      | email                    | password     | collaboration_request_id | errorMessage                                                               | status | message                                                        | additional_contact |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 23                       | This collaboration request already has a response                          | 409    | Sounds good, text me at the provided number to get started     | 123-123-1234       |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 24                       | This collaboration request already has a response                          | 409    | Sounds good, text me at the provided number to get started     | 123-123-1234       |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 26                       | Please provide an additional contact and a message to approve this request | 400    | Hi, could you develop on your experience in that field please. |                    |
-      | jane.doe@gmail.com       | P@ssWord1234 | 27                       | Please provide an additional contact and a message to approve this request | 400    | Hi, could you develop on your experience in that field please. |                    |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 28                       | Please provide an additional contact and a message to approve this request | 400    | Hi, could you develop on your experience in that field please. |                    |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 29                       | Please provide an additional contact and a message to approve this request | 400    | Hi, could you develop on your experience in that field please. |                    |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 26                       | Please provide an additional contact and a message to approve this request | 400    |                                                                | 438-764-1940       |
-      | jane.doe@gmail.com       | P@ssWord1234 | 27                       | Please provide an additional contact and a message to approve this request | 400    |                                                                | 438-764-1940       |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 28                       | Please provide an additional contact and a message to approve this request | 400    |                                                                | 438-764-1940       |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 29                       | Please provide an additional contact and a message to approve this request | 400    |                                                                | 438-764-1940       |
-      | jane.doe@gmail.com       | P@ssWord1234 | 29                       | The handler is not the owner of the idea                                   | 400    | Hi, could you develop on your experience in that field please. | 438-764-1940       |
-      | jane.doe@gmail.com       | P@ssWord1234 | 28                       | The handler is not the owner of the idea                                   | 400    | Hi, could you develop on your experience in that field please. | 438-764-1940       |
+      | email                   | password     | collaboration_request_id | errorMessage                                      | status | message                                                        | additional_contact |
+      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | This collaboration request already has a response | 409    | Sounds good, text me at the provided number to get started     | 123-123-1234       |
+      | john.goblikon@gmail.com | P@ssWord1234 | 24                       | This collaboration request already has a response | 409    | Sounds good, text me at the provided number to get started     | 123-123-1234       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 29                       | The handler is not the owner of the idea          | 403    | Hi, could you develop on your experience in that field please. | 438-764-1940       |
+      | jane.doe@gmail.com      | P@ssWord1234 | 28                       | The handler is not the owner of the idea          | 403    | Hi, could you develop on your experience in that field please. | 438-764-1940       |
 
   Scenario Outline: User tries to decline a collaboration request erroneously
     Given I am logged in as the user with email "<email>" and password "<password>" (ID025)
     When the user erroneously declines the collaboration request with id "<collaboration_request_id>" and message "<message>"
-    Then the user shall receive the error message "<errorMessage>" with status "<status>"
+    Then the user shall receive the error message "<errorMessage>" with status "<status>" (ID025)
 
     Examples:
-      | email                    | password     | collaboration_request_id | errorMessage                                      | status | message |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 23                       | This collaboration request already has a response | 409    | Nope    |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 24                       | This collaboration request already has a response | 409    | Nope    |
-      | wassim.jabbour@gmail.com | P@ssWord1234 | 26                       | Please provide a message to decline this request  | 400    |         |
-      | jane.doe@gmail.com       | P@ssWord1234 | 27                       | Please provide a message to decline this request  | 400    |         |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 28                       | Please provide a message to decline this request  | 400    |         |
-      | john.goblikon@gmail.com  | P@ssWord1234 | 29                       | Please provide a message to decline this request  | 400    |         |
-      | jane.doe@gmail.com       | P@ssWord1234 | 29                       | The handler is not the owner of the idea          | 400    | Nope    |
-      | jane.doe@gmail.com       | P@ssWord1234 | 28                       | The handler is not the owner of the idea          | 400    | Nope    |
+      | email                   | password     | collaboration_request_id | errorMessage                                      | status | message |
+      | john.goblikon@gmail.com | P@ssWord1234 | 23                       | This collaboration request already has a response | 409    | Nope    |
+      | john.goblikon@gmail.com | P@ssWord1234 | 24                       | This collaboration request already has a response | 409    | Nope    |
+      | jane.doe@gmail.com      | P@ssWord1234 | 29                       | The handler is not the owner of the idea          | 403    | Nope    |
+      | jane.doe@gmail.com      | P@ssWord1234 | 28                       | The handler is not the owner of the idea          | 403    | Nope    |

@@ -1,8 +1,11 @@
 package ca.mcgill.purposeful.util;
 
+import static org.junit.Assert.fail;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
+import ca.mcgill.purposeful.dao.CollaborationResponseRepository;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.dao.ReactionRepository;
@@ -12,11 +15,13 @@ import ca.mcgill.purposeful.dao.TopicRepository;
 import ca.mcgill.purposeful.dao.URLRepository;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.CollaborationRequest;
+import ca.mcgill.purposeful.model.CollaborationResponse;
 import ca.mcgill.purposeful.model.Domain;
 import ca.mcgill.purposeful.model.Idea;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Status;
 import ca.mcgill.purposeful.model.Technology;
 import ca.mcgill.purposeful.model.Topic;
 import ca.mcgill.purposeful.model.URL;
@@ -58,6 +63,8 @@ public class CucumberUtil {
   @Autowired private CollaborationRequestRepository collaborationRequestRepository;
 
   @Autowired private PasswordEncoder passwordEncoder;
+
+  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -423,6 +430,54 @@ public class CucumberUtil {
 
       if (idMap != null) {
         idMap.put(row.get("id"), collaborationRequest.getId());
+      }
+    }
+  }
+
+  /**
+   * This method creates and saves collaboration responses from a data table
+   *
+   * @param dataTable The table
+   * @param idMap The id map
+   * @author Wassim Jabbour
+   */
+  public void createAndSaveCollaborationResponsesFromTable(
+      DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+
+      CollaborationResponse collaborationResponse = new CollaborationResponse();
+
+      // Set the status
+      if (row.get("status").equals("Approved")) {
+        collaborationResponse.setStatus(Status.Approved);
+      } else if (row.get("status").equals("Declined")) {
+        collaborationResponse.setStatus(Status.Declined);
+      } else {
+        fail(); // Test written wrong if get here
+      }
+
+      // Set the message
+      collaborationResponse.setMessage(row.get("message"));
+
+      // Set the additional contact
+      collaborationResponse.setAdditionalContact(row.get("additionalContact"));
+
+      // Make the collaboration request point to it
+      CollaborationRequest collaborationRequest =
+          collaborationRequestRepository.findCollaborationRequestById(
+              idMap.get(row.get("collaborationRequestId")));
+      collaborationRequest.setCollaborationResponse(collaborationResponse);
+
+      // Save both
+      collaborationResponseRepository.save(collaborationResponse);
+      collaborationRequestRepository.save(collaborationRequest);
+
+      // Add the request to the map
+      if (idMap != null) {
+        idMap.put(row.get("id"), collaborationResponse.getId());
       }
     }
   }
