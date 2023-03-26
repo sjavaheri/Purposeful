@@ -153,7 +153,7 @@ public class IdeaController {
   }
 
     /**
-   * Remove an idea by its id
+   * Retrieve all the ideas that a user created.
    *
    * @return a response entity with a list of ideas and the HttpStatus
    * @author Ramin Akhavan
@@ -172,5 +172,25 @@ public class IdeaController {
     List<IdeaDTO> ideaDTOs = IdeaDTO.convertToDto(createdIdeas);
 
     return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(createdIdeas));
+  }
+
+  /**
+   * Get all ideas that the user has requested to collaborate on
+   *
+   * @return a response entity with a list of ideas that the user has requested collaboration on and the HttpStatus
+   * @author Enzo Benoit-Jeannin
+   */
+  @GetMapping({"/user/requests", "/user/requests/"})
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<List<IdeaDTO>> getIdeasByCollaborationRequests() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
+    }
+    String requestEmail = authentication.getName();
+
+    List<Idea> requestedIdeas = ideaService.getIdeasByCollaborationRequest(requestEmail);
+
+    return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(requestedIdeas));
   }
 }
