@@ -2,7 +2,6 @@ package ca.mcgill.purposeful.dto;
 
 import ca.mcgill.purposeful.model.Idea;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +30,7 @@ public class IdeaDTO {
   public IdeaDTO() {}
 
   public IdeaDTO(Idea idea) {
+    this.id = idea.getId();
     this.isPaid = idea.isPaid();
     this.isPrivate = idea.isPrivate();
     this.inProgress = idea.isInProgress();
