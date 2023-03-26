@@ -30,6 +30,7 @@ public class IdeaDTO {
   public IdeaDTO() {}
 
   public IdeaDTO(Idea idea) {
+    this.id = idea.getId();
     this.isPaid = idea.isPaid();
     this.isPrivate = idea.isPrivate();
     this.inProgress = idea.isInProgress();

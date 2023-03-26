@@ -158,7 +158,7 @@ public class IdeaController {
    * @return a response entity with a list of ideas and the HttpStatus
    * @author Ramin Akhavan
    */
-  @PostMapping({"/user", "/user/"})
+    @GetMapping({"/user", "/user/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<IdeaDTO>> getUserCreatedIdeas() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -168,6 +168,8 @@ public class IdeaController {
     String requestEmail = authentication.getName();
 
     List<Idea> createdIdeas = ideaService.getCreatedIdeas(requestEmail);
+
+    List<IdeaDTO> ideaDTOs = IdeaDTO.convertToDto(createdIdeas);
 
     return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(createdIdeas));
   }
