@@ -6,14 +6,9 @@ import fetchWrapper from '@/utils/fetch_wrapper';
 import { useEffect, useState } from 'react';
 
 export default function CollaborationResponse({ ideaId }) {
-    // User and authentication info
-    // const [GrantedAuth, setGrantedAuth] = useState([]);
-    // useEffect(() => {
-    //     setGrantedAuth(getAuthorities());
-    // }, []);
-
     const [collaborationResponse, setCollaborationResponse] = useState({});
 
+    // fetch data
     useEffect(() => {
         const fetchCollaborationResponse = async () => {
             const response = await fetchWrapper('/api/collaborationResponse/' + ideaId)
@@ -31,10 +26,12 @@ export default function CollaborationResponse({ ideaId }) {
         fetchCollaborationResponse();
     }, [ideaId]);
 
+    // error has occurred, meaning that either there is no response yet or the user did not send a request
     if (collaborationResponse === null) {
         return null;
     }
 
+    // message
     var message = collaborationResponse.message;
     message = (
         <div>
@@ -42,6 +39,7 @@ export default function CollaborationResponse({ ideaId }) {
         </div>
     )
 
+    // contact
     var additionalContact = collaborationResponse.additionalContact;
     if (additionalContact === "") {
         additionalContact = null;
@@ -53,8 +51,8 @@ export default function CollaborationResponse({ ideaId }) {
         )
     }
 
+    // status
     var status = collaborationResponse.status;
-
     if (status === "Approved") {
         status = (
             <Badge colorScheme="green">Approved</Badge>
