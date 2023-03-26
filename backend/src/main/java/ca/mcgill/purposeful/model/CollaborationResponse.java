@@ -7,8 +7,8 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * The CollaborationResponse class, the model for regular user's collaboration response to a
- * request in the database
+ * The CollaborationResponse class, the model for regular user's collaboration response to a request
+ * in the database
  */
 @Entity
 public class CollaborationResponse {
@@ -26,6 +26,9 @@ public class CollaborationResponse {
 
   @Column(nullable = false)
   private String message;
+
+  @Column(nullable = false)
+  private Status status;
 
   // ------------------------
   // CollaborationResponse Constructor
@@ -59,5 +62,13 @@ public class CollaborationResponse {
 
   public void setMessage(String message) {
     this.message = message;
+  }
+
+  public Status getStatus() {
+    return status;
+  }
+
+  public void setStatus(Status status) {
+    this.status = status;
   }
 }

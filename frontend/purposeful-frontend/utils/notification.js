@@ -19,7 +19,6 @@ export default function notification(
     status: status,
     title: message,
     description: description,
-    variant: "subtle",
     position: "top",
     isClosable: true,
   });
