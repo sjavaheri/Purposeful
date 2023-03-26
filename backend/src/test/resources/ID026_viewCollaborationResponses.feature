@@ -64,14 +64,13 @@ As a user, I want to be able to view the response from the idea creator to the c
       | jane.doe@gmail.com | P@ssWord1234 | 17     | 31                       |
       | jane.doe@gmail.com | P@ssWord1234 | 18     | 32                       |
 
-  # alternate flow
+
+  # error flows
 
   Scenario: try to access collaboration response for an idea that does not have any responses yet
     When the user requests to access the collaboration response for the idea with id "21"
-    Then the user shall receive a null value for the collaboration response
-
-  # error flow
-
+    Then the user shall receive the error message "There is no response for this collaboration request" with status code 404
+    
   Scenario: try to access collaboration response for an idea on which the user has not made a collaboration request
     When the user requests to access the collaboration response for the idea with id "19"
     Then the user shall receive the error message "You did not send a collaboration request for this idea" with status code 400
