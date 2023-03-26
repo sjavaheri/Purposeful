@@ -1,17 +1,38 @@
 package ca.mcgill.purposeful.util;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.*;
-import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
+import ca.mcgill.purposeful.dao.DomainRepository;
+import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.ReactionRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.CollaborationRequest;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.service.AppUserService;
 import io.cucumber.datatable.DataTable;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.*;
 
 @Configuration
 public class CucumberUtil {
@@ -33,6 +54,8 @@ public class CucumberUtil {
   @Autowired private ReactionRepository reactionRepository;
 
   @Autowired private AppUserService appUserService;
+
+  @Autowired private CollaborationRequestRepository collaborationRequestRepository;
 
   @Autowired private PasswordEncoder passwordEncoder;
 
@@ -373,6 +396,34 @@ public class CucumberUtil {
 
       reactionRepository.save(reaction);
       idMap.put(row.get("id"), reaction.getId());
+    }
+  }
+
+  /**
+   * This method creates and saves collaboration requests from a data table
+   *
+   * @param dataTable The table
+   * @param idMap The id map
+   * @author Wassim Jabbour
+   */
+  public void createAndSaveCollaborationRequestsFromTable(
+      DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
+    List<Map<String, String>> rows = dataTable.asMaps();
+
+    for (var row : rows) {
+      CollaborationRequest collaborationRequest = new CollaborationRequest();
+      collaborationRequest.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("ideaId"))));
+      collaborationRequest.setRequester(
+          regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
+      collaborationRequest.setMessage(row.get("message"));
+      collaborationRequest.setAdditionalContact(row.get("additionalContact"));
+
+      collaborationRequestRepository.save(collaborationRequest);
+
+      if (idMap != null) {
+        idMap.put(row.get("id"), collaborationRequest.getId());
+      }
     }
   }
 }
