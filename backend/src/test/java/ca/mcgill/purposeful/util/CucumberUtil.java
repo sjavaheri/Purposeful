@@ -1,56 +1,68 @@
 package ca.mcgill.purposeful.util;
 
 import ca.mcgill.purposeful.configuration.Authority;
-import ca.mcgill.purposeful.dao.*;
-import ca.mcgill.purposeful.model.*;
+import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
+import ca.mcgill.purposeful.dao.CollaborationResponseRepository;
+import ca.mcgill.purposeful.dao.DomainRepository;
+import ca.mcgill.purposeful.dao.IdeaRepository;
+import ca.mcgill.purposeful.dao.ReactionRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.dao.URLRepository;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.CollaborationRequest;
+import ca.mcgill.purposeful.model.CollaborationResponse;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
+import ca.mcgill.purposeful.model.RegularUser;
+import ca.mcgill.purposeful.model.Status;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
+import ca.mcgill.purposeful.model.URL;
 import ca.mcgill.purposeful.service.AppUserService;
 import io.cucumber.datatable.DataTable;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
-
 @Configuration
 public class CucumberUtil {
 
-  @Autowired
-  private TopicRepository topicRepository;
+  @Autowired private TopicRepository topicRepository;
 
-  @Autowired
-  private TechnologyRepository technologyRepository;
+  @Autowired private TechnologyRepository technologyRepository;
 
-  @Autowired
-  private URLRepository urlRepository;
+  @Autowired private URLRepository urlRepository;
 
-  @Autowired
-  private IdeaRepository ideaRepository;
+  @Autowired private IdeaRepository ideaRepository;
 
-  @Autowired
-  private DomainRepository domainRepository;
+  @Autowired private DomainRepository domainRepository;
 
-  @Autowired
-  private AppUserRepository appUserRepository;
+  @Autowired private AppUserRepository appUserRepository;
 
-  @Autowired
-  private RegularUserRepository regularUserRepository;
+  @Autowired private RegularUserRepository regularUserRepository;
 
-  @Autowired
-  private ReactionRepository reactionRepository;
+  @Autowired private ReactionRepository reactionRepository;
 
-  @Autowired
-  private AppUserService appUserService;
+  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
 
-  @Autowired
-  private CollaborationResponseRepository collaborationResponseRepository;
+  @Autowired private AppUserService appUserService;
 
-  @Autowired
-  private CollaborationRequestRepository collaborationRequestRepository;
+  @Autowired private CollaborationRequestRepository collaborationRequestRepository;
 
-  @Autowired
-  private PasswordEncoder passwordEncoder;
+  @Autowired private PasswordEncoder passwordEncoder;
 
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
@@ -136,8 +148,9 @@ public class CucumberUtil {
     for (var row : rows) {
 
       // create an instance of App User from the table values
-      AppUser appUser = appUserService.registerRegularUser(
-          row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
+      AppUser appUser =
+          appUserService.registerRegularUser(
+              row.get("email"), row.get("password"), row.get("firstname"), row.get("lastname"));
 
       // Add the regular user to the map if it was passed
       // Note: no need to add the app user to the map since we only will be
@@ -153,7 +166,7 @@ public class CucumberUtil {
    * This method creates and saves domains from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveDomainsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -180,7 +193,7 @@ public class CucumberUtil {
    * This method creates and saves topics from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTopicsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -207,7 +220,7 @@ public class CucumberUtil {
    * This method creates and saves technologies from a data table
    *
    * @param dataTable The table
-   * @param idMap     The map of ids
+   * @param idMap The map of ids
    * @author Wassim Jabbour
    */
   public void createAndSaveTechsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -234,7 +247,7 @@ public class CucumberUtil {
    * This method creates and saves Ideas from a data table
    *
    * @param dataTable a data table containing the ideas to be created
-   * @param idMap     a map containing the ids of the users and domains
+   * @param idMap a map containing the ids of the users and domains
    * @implNote {@code idMap} CANNOT BE NULL
    * @author Thibaut Baguette
    */
@@ -318,7 +331,7 @@ public class CucumberUtil {
    * This method creates and saves URLs from a data table
    *
    * @param dataTable a data table containing the URLs to be created
-   * @param idMap     a map containing the ids of the users and domains
+   * @param idMap a map containing the ids of the users and domains
    * @author Thibaut Baguette
    */
   public void createAndSaveURLsFromTable(DataTable dataTable, Map<String, String> idMap) {
@@ -337,8 +350,7 @@ public class CucumberUtil {
   }
 
   /**
-   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first
-   * authenticate
+   * Method to generate the HttpHeaders for the basic auth, i.e. when a user first authenticate
    *
    * @param email
    * @param password
@@ -353,8 +365,7 @@ public class CucumberUtil {
   }
 
   /**
-   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is
-   * already
+   * Method to generate the HttpHeaders for the bearer auth, i.e. when a user is already
    * authenticated
    *
    * @param jwtToken
@@ -395,13 +406,13 @@ public class CucumberUtil {
 
   /**
    * This method creates and saves CollaborationResponses from a data table
-   * 
+   *
    * @param dataTable
    * @param idMap
-   * 
    * @author Thibaut Baguette
    */
-  public void createAndSaveCollaborationResponsesFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveCollaborationResponsesFromTable(
+      DataTable dataTable, Map<String, String> idMap) {
     List<Map<String, String>> rows = dataTable.asMaps();
 
     for (var row : rows) {
@@ -416,28 +427,30 @@ public class CucumberUtil {
   }
 
   /**
-   * This method creates and saves CollaborationRequests from a data table
-   * 
-   * @param dataTable
-   * @param idMap
-   * 
-   * @author Thibaut Baguette
+   * This method creates and saves collaboration requests from a data table
+   *
+   * @param dataTable The table
+   * @param idMap The id map
+   * @author Wassim Jabbour
    */
-  public void createAndSaveCollaborationRequestsFromTable(DataTable dataTable, Map<String, String> idMap) {
+  public void createAndSaveCollaborationRequestsFromTable(
+      DataTable dataTable, Map<String, String> idMap) {
+    // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();
 
     for (var row : rows) {
       CollaborationRequest collaborationRequest = new CollaborationRequest();
       collaborationRequest.setIdea(ideaRepository.findIdeaById(idMap.get(row.get("ideaId"))));
-      collaborationRequest.setCollaborationResponse(collaborationResponseRepository
-          .findCollaborationResponseById(idMap.get(row.get("collaborationResponseId"))));
-      collaborationRequest.setRequester(regularUserRepository
-          .findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
-      collaborationRequest.setAdditionalContact(row.get("additionalContact"));
+      collaborationRequest.setRequester(
+          regularUserRepository.findRegularUserByAppUser_Id(idMap.get(row.get("userId"))));
       collaborationRequest.setMessage(row.get("message"));
-      
+      collaborationRequest.setAdditionalContact(row.get("additionalContact"));
+
       collaborationRequestRepository.save(collaborationRequest);
-      idMap.put(row.get("id"), collaborationRequest.getId());
+
+      if (idMap != null) {
+        idMap.put(row.get("id"), collaborationRequest.getId());
+      }
     }
   }
 }

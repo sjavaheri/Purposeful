@@ -3,7 +3,7 @@
 import jwt_decode from "jwt-decode";
 
 // Backend URL
-const BACKEND = "http://127.0.0.1:8080";
+export const BACKEND = "http://127.0.0.1:8080";
 
 /**
  * Method to login a user given its username and password
@@ -48,7 +48,7 @@ export async function verifyToken() {
   const token = localStorage.getItem("token");
   // Check if there is a token
   if (!token) return false;
-  const res = await fetchWrapper(`${BACKEND}/api/login`);
+  const res = await fetchWrapper("/api/login");
   if (!res.ok) {
     logout();
     return false;
@@ -117,20 +117,28 @@ export default async function fetchWrapper(
     headers = {
       ...headers,
       Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    };
+  } else {
+    headers = {
+      ...headers,
+      "Content-Type": "application/json",
     };
   }
 
   let options = {
     method,
-    ...(payload && method !== "GET" && { body: payload }),
+    ...(payload && method !== "GET" && { body: JSON.stringify(payload) }),
     ...(headers && { headers: headers }),
   };
   try {
-    const res = await fetch(endpoint, options);
+    const res = await fetch(BACKEND + endpoint, options);
     const { status, ok } = res;
     if (!ok) {
+      const errorMessages = await res.text();
+      res.errorMessages = errorMessages;
       console.error(
-        `Bad request. Status Code: ${status} Message: ${res.statusText}`
+        `Bad request. Status Code: ${status} Message: ${errorMessages}`
       );
     }
     return res;
