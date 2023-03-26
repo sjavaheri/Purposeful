@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import {
   Box,
   FormControl,
@@ -10,27 +10,46 @@ import {
   Textarea,
   Button,
   useColorModeValue,
-  FormHelperText,
   FormErrorMessage,
-  InputGroup,
-  InputRightElement,
   Select,
-  Flex,
+  IconButton,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
+import { RxPlus } from "react-icons/rx";
+
+
 var fullfilled = 0;
 var field_name = "domains";
 var c_domains = [];
 var c_topics = [];
 var c_techs = [];
 
+var domains_sel = <Select id="domains"></Select>
+var topics_sel = <Select id="topics"></Select>
+var techs_sel = <Select id="techs"></Select>
+
+var rendered_domains = [];
+var rendered_topics = [];
+var rendered_techs = [];
+
 export default function CreateIdea() {
+  const [render_domains, set_rd] = useState(<Fragment></Fragment>);
+  const [render_topics, set_tp] = useState(<Fragment></Fragment>);
+  const [render_techs, set_tc] = useState(<Fragment></Fragment>);
+
+  var domainContainer = <Stack on direction={['column', 'row']} id={"domainContainer"} wrap={"wrap"} justifyContent={"center"}>{render_domains}</Stack>;
+  var topicContainer = <Stack on direction={['column', 'row']} id={"topicContainer"} wrap={"wrap"} justifyContent={"center"}>{render_topics}</Stack>;
+  var techContainer = <Stack on direction={['column', 'row']} id={"techContainer"} wrap={"wrap"} justifyContent={"center"}>{render_techs}</Stack>;
+  var domains = [];
+  var topics = [];
+  var techs = [];
+
   (async () => {
-    let domains = await getDomains();
-    let topics = await getTopics();
-    let techs = await getTechs();
+    domains = await getDomains();
+    topics = await getTopics();
+    techs = await getTechs();
     if(fullfilled == 0){
       fullfilled++;
       domains.map(MakeOption);
@@ -47,23 +66,28 @@ export default function CreateIdea() {
     }
   })()
 
-  var MakeOption = function(X) {
+  var refreshfn = function(){
+    set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
+    set_tp(<Fragment>{rendered_topics.concat([])}</Fragment>);
+    set_tc(<Fragment>{rendered_techs.concat([])}</Fragment>);
+  }
+  function MakeOption(X) {
     const el = document.createElement('option');
     el.setAttribute('value',X.id);
     el.textContent = X.name;
     document.getElementById(field_name).appendChild(el);
   };
-
-  var PushObj = function(name,arr,c_arr,elem) {
-    if(find_name_in_arr(name,c_arr) == -1){
-    const el = <ContainerLabel innerTxt={name} index={c_arr.length}/>;
-    c_arr.push(find_name_in_arr(name,arr));
-    elem.appendChild(el);
+  
+  function PushObj(selectedIndex,arr,c_arr, arr2) {
+    if(find_in_arr(selectedIndex,arr,c_arr) == -1){
+    const el = <ContainerLabel key={arr[selectedIndex].name} innerTxt={arr[selectedIndex].name} arr={c_arr} arr2={arr2} refresh={refreshfn}/>;
+    c_arr.push(arr[selectedIndex]);
+    arr2.push(el)
+    refreshfn();
     }
   };
-
   return (
-    <Stack width={"70%"}>
+    <Stack width={"75%"}>
       <Box
         //width={"1"}
         rounded={"lg"}
@@ -92,15 +116,9 @@ export default function CreateIdea() {
                 <Box>
                   <Field name="title">
                     {({ field, form }) => (
-                      <FormControl
-                        isInvalid={
-                          form.errors.title && form.touched.title
-                        }>
+                      <FormControl>
                         <FormLabel>Title</FormLabel>
                         <Input {...field} type="text" />
-                        <FormErrorMessage>
-                          {form.errors.title}
-                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -109,15 +127,9 @@ export default function CreateIdea() {
                   <Field name="purpose">
                     {({ field, form }) => (
                       <FormControl
-                        id="purpose"
-                        isInvalid={
-                          form.errors.purpose && form.touched.purpose
-                        }>
+                        id="purpose">
                         <FormLabel>Purpose</FormLabel>
                         <Input {...field} type="text" />
-                        <FormErrorMessage>
-                          {form.errors.purpose}
-                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -126,15 +138,9 @@ export default function CreateIdea() {
                   <Field name="description">
                     {({ field, form }) => (
                       <FormControl
-                        id="description"
-                        isInvalid={
-                          form.errors.description && form.touched.description
-                        }>
+                        id="description">
                         <FormLabel>Description</FormLabel>
                         <Textarea {...field} rows={"10"}/>
-                        <FormErrorMessage>
-                          {form.errors.description}
-                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -148,22 +154,21 @@ export default function CreateIdea() {
                   <Field name="Domain">
                     {({ field, form }) => (
                       <FormControl
-                        id="domain"
-                        isInvalid={
-                          form.errors.domain && form.touched.domain
-                        }>
+                        id="domain">
                         <FormLabel>Domains</FormLabel>
-                        <Select id="domains"></Select>
-                        <FormErrorMessage>
-                          {form.errors.domain}
-                        </FormErrorMessage>
+                        <HStack>
+                        {domains_sel}
+                        <IconButton
+                          icon={<RxPlus/>}
+                          borderRadius={"20px"}
+                          onClick={() => PushObj(document.getElementById('domains').selectedIndex, domains,c_domains, rendered_domains)}
+                        />
+                        </HStack>
                       </FormControl>
                     )}
                   </Field>
+                  {domainContainer}
                 </Box>
-                <Flex id="chosenDomains">
-                  <ContainerLabel innerTxt={"Software"}/>
-                </Flex>
                 <Box>
                   <Field name="Topic">
                     {({ field, form }) => (
@@ -173,13 +178,18 @@ export default function CreateIdea() {
                           form.errors.topic && form.touched.topic
                         }>
                         <FormLabel>Topics</FormLabel>
-                        <Select id="topics"></Select>
-                        <FormErrorMessage>
-                          {form.errors.topic}
-                        </FormErrorMessage>
+                        <HStack>
+                        {topics_sel}
+                        <IconButton
+                          icon={<RxPlus/>}
+                          borderRadius={"20px"}
+                          onClick={() => PushObj(document.getElementById('topics').selectedIndex, topics,c_topics,rendered_topics)}
+                        />
+                        </HStack>
                       </FormControl>
                     )}
                   </Field>
+                  {topicContainer}
                 </Box>
                 <Box>
                   <Field name="Tech">
@@ -190,16 +200,30 @@ export default function CreateIdea() {
                           form.errors.tech && form.touched.tech
                         }>
                         <FormLabel>Technologies</FormLabel>
-                        <Select id="techs"></Select>
-                        <FormErrorMessage>
-                          {form.errors.tech}
-                        </FormErrorMessage>
+                        <HStack>
+                          {techs_sel}
+                          <IconButton
+                            icon={<RxPlus/>}
+                            borderRadius={"20px"}
+                            onClick={() => PushObj(document.getElementById('techs').selectedIndex, techs,c_techs,rendered_techs)}
+                          />
+                        </HStack>
                       </FormControl>
                     )}
                   </Field>
+                  {techContainer}
                 </Box>
               </Stack>
               </HStack>
+              <Button
+                bg={"blue.400"}
+                color={"white"}
+                _hover={{
+                  bg: "blue.500",
+                }}
+                type="submit">
+                Create Idea
+              </Button>
             </Form>
           )}
         </Formik>
@@ -208,11 +232,11 @@ export default function CreateIdea() {
   );
 }
 
-export function find_name_in_arr(name,arr){
-  for(var i = 0; i < arr.length; i++){
-    if((arr[i].name).localCompare(name) == 0){
+export function find_in_arr(index,arr,c_arr){
+  for(var i = 0; i < c_arr.length; i++){
+    if((c_arr[i].id) === (arr[index]).id){
       return i;
     }
-    return -1;
   }
+  return -1;
 }
