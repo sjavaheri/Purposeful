@@ -82,6 +82,12 @@ public class CollaborationResponseService {
       throw new GlobalException(HttpStatus.NOT_FOUND, "This collaboration request does not exist");
     }
 
+    // Make sure it doesn't already have a response
+    if (request.getCollaborationResponse() != null) {
+      throw new GlobalException(
+          HttpStatus.CONFLICT, "This collaboration request already has a response");
+    }
+
     // Find the handler account
     RegularUser handler = regularUserRepository.findRegularUserByAppUserEmail(handlerEmail);
 
@@ -143,6 +149,12 @@ public class CollaborationResponseService {
     // Make sure it isn't null
     if (request == null) {
       throw new GlobalException(HttpStatus.NOT_FOUND, "This collaboration request does not exist");
+    }
+
+    // Make sure it doesn't already have a response
+    if (request.getCollaborationResponse() != null) {
+      throw new GlobalException(
+          HttpStatus.CONFLICT, "This collaboration request already has a response");
     }
 
     // Find the handler account
