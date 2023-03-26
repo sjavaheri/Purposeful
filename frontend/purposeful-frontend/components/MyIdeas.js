@@ -25,8 +25,6 @@ import {
     EditIcon,
     SearchIcon
   } from "@chakra-ui/icons";
-import { Field, Form, Formik } from "formik";
-import { RxPlus } from "react-icons/rx";
 
 
 export default function MyIdeas() {
@@ -81,8 +79,10 @@ export default function MyIdeas() {
                 <SimpleGrid columns={4} spacing={7}>
                 {list.map((item, index) => (
                     <Box
+                    key={index}
                     rounded={"lg"}
-                    bg={useColorModeValue("white", "gray.700")}
+                    bg={"gray.700"}
+                    color={"white"}
                     boxShadow={"lg"}
                     borderWidth="1px" 
                     borderRadius="lg" 
@@ -99,7 +99,7 @@ export default function MyIdeas() {
                     </Flex>
                     <Text mt={2}>{item.purpose}</Text>
                     <br></br>
-                    <Image src={item.imageUrl} height="100px"/>
+                    <Image src={item.imageUrl} height="100px" alt="Example Img"/>
                     <br></br>
                     <TagList tags={item.topics}></TagList>
                   </Box>
@@ -126,7 +126,8 @@ export default function MyIdeas() {
             <Input 
             placeholder="Search..."
             rounded={"lg"}
-            bg={useColorModeValue("white", "gray.700")}
+            bg={"gray.700"}
+            color={"white"}
             boxShadow={"lg"}
             borderWidth="1px" 
             borderRadius="lg" 
