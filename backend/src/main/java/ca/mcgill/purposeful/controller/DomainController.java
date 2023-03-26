@@ -28,7 +28,7 @@ public class DomainController {
    * @author Adam Kazma
    */
   @GetMapping()
-  @PreAuthorize("hasAuthority('User')")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<DomainDTO>> getAllDomains() {
     ArrayList<DomainDTO> domains = new ArrayList<>();
     for (Domain d : domainService.getAllDomains()) {

@@ -28,7 +28,7 @@ public class TopicController {
    * @author Adam Kazma
    */
   @GetMapping()
-  @PreAuthorize("hasAuthority('User')")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<TopicDTO>> getAllTopics() {
     ArrayList<TopicDTO> topics = new ArrayList<>();
     for (Topic t : topicService.getAllTopics()) {

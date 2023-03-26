@@ -28,7 +28,7 @@ public class TechnologyController {
    * @author Adam Kazma
    */
   @GetMapping()
-  @PreAuthorize("hasAuthority('User')")
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<TechDTO>> getAllTechs() {
     ArrayList<TechDTO> techs = new ArrayList<>();
     for (Technology t : technologyService.getAllTechs()) {
