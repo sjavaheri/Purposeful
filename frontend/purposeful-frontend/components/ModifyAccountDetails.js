@@ -64,8 +64,6 @@ export function ModifyDetails({ appUser, GrantedAuth }) {
     }
   }
 
-  // TODO: fix the loading
-  if (!appUser) return;
   return (
     <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
       <Box

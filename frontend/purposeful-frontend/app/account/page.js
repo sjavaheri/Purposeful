@@ -10,6 +10,7 @@ import {
   Stack,
   useColorMode,
   useColorModeValue,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   ModifyDetails,
@@ -31,6 +32,8 @@ export default function ModifyAccountDetailsPage() {
       setGrantedAuth(getAuthorities());
     });
   }, []);
+
+  if (!appUser) return <Spinner />;
 
   return (
     <Flex
