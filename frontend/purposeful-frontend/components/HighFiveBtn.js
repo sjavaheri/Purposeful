@@ -1,12 +1,13 @@
 import { IconButton } from '@chakra-ui/react';
 import { FaHandPaper } from 'react-icons/fa';
+import { react, verifyToken } from "../utils/fetch_wrapper";
 
-function HighFiveBtn({ onClick }) {
+export default function HighFiveBtn(idea_id) {
     return (
         <IconButton
             aria-label="High Five"
             icon={<FaHandPaper />}
-            onClick={onClick}
+            onClick={react(idea_id, "HighFive")}
         />
     );
 }
