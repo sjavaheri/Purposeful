@@ -19,7 +19,8 @@ import notification from "../utils/notification";
 
 export default function Login() {
 
-  if (localStorage.getItem("token")) {
+  // bring back to home page if user is already logged in (not working on runtime due to localStorage not existing at runtime)
+  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
     window.location.href = "/"; // Redirect to home page if user is already logged in
   }
 
