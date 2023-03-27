@@ -8,7 +8,7 @@ export const BACKEND = "http://127.0.0.1:8080";
 export async function react(idea_id, reactionType) {
   try {
     appUserId = JSON.parse(localStorage.getItem("appUser")).id;
-    const res = await fetchWrapper("/api/idea/react", {
+    const res = await fetchWrapper("/api/reaction", {
       method: "POST",
       body: JSON.stringify({ appUserId, idea_id, reactionType }),
     });
