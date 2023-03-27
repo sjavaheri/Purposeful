@@ -84,7 +84,7 @@ public class CollaborationResponseController {
    * @return the collaboration response with a status
    * @author Wassim Jabbour
    */
-  @PostMapping({"/decline/{requestId}/{message}/", "/decline/{requestId}/{message}//"})
+  @PostMapping({"/decline/{requestId}/{message}", "/decline/{requestId}/{message}/"})
   @PreAuthorize("hasAuthority('User')")
   public ResponseEntity<CollaborationResponseDTO> declineCollaborationRequest(
       @PathVariable(name = "requestId") String requestId,
