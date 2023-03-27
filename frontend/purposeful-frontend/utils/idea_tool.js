@@ -1,21 +1,17 @@
 import fetchWrapper from "./fetch_wrapper";
-// Backend URL
-const BACKEND = "http://127.0.0.1:8080";
-
-/**
- * 
- * @author Adam Kazma
- */
 
 export async function getDomains(){
-    let domains = await fetchWrapper(`${BACKEND}/api/domain`);
-    return domains;
+    let domains = await fetchWrapper(`/api/domain`);
+    let body = await domains.json();
+    return body;
   }
   export async function getTopics(){
-    let topics = await fetchWrapper(`${BACKEND}/api/topic`);
-    return topics;
+    let topics = await fetchWrapper(`/api/topic`);
+    let body = await topics.json();
+    return body;
   }
   export async function getTechs(){
-    let techs = await fetchWrapper(`${BACKEND}/api/tech`);
-    return techs;
+    let techs = await fetchWrapper(`/api/tech`);
+    let body = await techs.json();
+    return body;
   }
