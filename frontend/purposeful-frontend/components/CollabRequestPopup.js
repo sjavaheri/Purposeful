@@ -18,10 +18,10 @@ export default function CollabRequestPopup({RequesterMail,ideaID,ideaTitle,remov
                 />
                 </Flex>
             </Box>
-            <Hstack>
-                <Text>User Email: {RequesterMail}</Text>
-                <Text>Idea: {ideaTitle}</Text>
-            </Hstack>
+            <Flex width={"80%"} alignSelf={"center"}>
+                <Text marginLeft={"0"} marginRight={"auto"}>User Email: {RequesterMail}</Text>
+                <Text marginLeft={"auto"} marginRight={"0"}>Idea: {ideaTitle}</Text>
+            </Flex>
             <Textarea alignSelf={"center"} width={"90%"} placeholder={"Add a custom collaboration message..."}>{reqMessage}</Textarea>
             <Button
             bg={"blue.400"}
