@@ -19,7 +19,7 @@ import {
     ListItem,
 } from '@chakra-ui/react';
 
-export default function Simple() {
+export default function moreDetailsOfIdea(ideaId, idea) {
     return (
         <Container maxW={'7xl'}>
             <SimpleGrid
