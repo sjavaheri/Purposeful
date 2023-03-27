@@ -5,28 +5,6 @@ import jwt_decode from "jwt-decode";
 // Backend URL
 export const BACKEND = "http://127.0.0.1:8080";
 
-export async function react(idea_id, reactionType) {
-  try {
-    appUserId = JSON.parse(localStorage.getItem("appUser")).id;
-    const res = await fetchWrapper("/api/reaction", {
-      method: "POST",
-      body: JSON.stringify({ appUserId, idea_id, reactionType }),
-    });
-    const { status, ok } = await res;
-    if (!ok) {
-      console.error(
-        `Unable to react. Status Code: ${status} Message: ${res.statusText}`
-      );
-      return false;
-    }
-    return true;
-  }
-  catch (err) {
-    console.error("Something went wrong. Unable to react to idea. " + err);
-    return false;
-  }
-}
-
 /**
  * Method to login a user given its username and password
  * and store the token in local storage.
