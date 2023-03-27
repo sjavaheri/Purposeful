@@ -27,7 +27,7 @@ export default function HighFiveBtn(idea_id) {
         <IconButton
             aria-label="High Five"
             icon={<FaHandPaper />}
-            onClick={react(idea_id, "HighFive")}
+            onClick={() => react(idea_id, "HighFive")}
         />
     );
 }
