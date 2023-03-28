@@ -238,7 +238,6 @@ export default function ModifyIdea() {
                 style={{float : 'right'}}>
                 <DeleteIcon w={8} h={8} color="red.500" />
               </Button>
-                
             </Form>
           )}
         </Formik>
