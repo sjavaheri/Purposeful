@@ -228,7 +228,16 @@ export default function ModifyIdea() {
                 type="submit">
                 Save Changes
               </Button>
-                
+              <Button
+                bg={"red.200"}
+                color={"red"}
+                _hover={{
+                    bg: "red.400",
+                }}
+                type="submit"
+                style={{float : 'right'}}>
+                <DeleteIcon w={8} h={8} color="red.500" />
+              </Button>
             </Form>
           )}
         </Formik>
