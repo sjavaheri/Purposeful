@@ -1,5 +1,6 @@
 "use client";
 import Carousel from '@/components/Carousel';
+import HighFiveBtn from '@/components/HighFiveBtn';
 import {
     Box,
     chakra,
@@ -20,6 +21,47 @@ import {
 } from '@chakra-ui/react';
 
 export default function moreDetailsOfIdea(ideaId, idea) {
+
+    let domains1 = [];
+    const domains2 = [];
+
+    let i = 0;
+    for (const domain in idea.domains) {
+        if (i < idea.domains.length / 2) {
+            domains1.push(domain.name);
+        }
+        else {
+            domains2.push(domain.name);
+        }
+        i++;
+    }
+
+    const topics1 = [];
+    const topics2 = [];
+    i = 0;
+    for (const topic in idea.topics) {
+        if (i < idea.topics.length / 2) {
+            topics1.push(topic.name);
+        }
+        else {
+            topics2.push(topic.name);
+        }
+        i++;
+    }
+
+    const techs1 = [];
+    const techs2 = [];
+    i = 0;
+    for (const tech in idea.techs) {
+        if (i < idea.techs.length / 2) {
+            techs1.push(tech.name);
+        }
+        else {
+            techs2.push(tech.name);
+        }
+        i++;
+    }
+
     return (
         <Container maxW={'7xl'}>
             <SimpleGrid
@@ -32,48 +74,25 @@ export default function moreDetailsOfIdea(ideaId, idea) {
                             lineHeight={1.1}
                             fontWeight={600}
                             fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-                            Flying Cars
+                            {idea.title}
                         </Heading>
                         <Text
                             color={useColorModeValue('gray.900', 'gray.400')}
                             fontWeight={300}
                             fontSize={'2xl'}>
-                            Let people fly in cars
+                            {idea.purpose}
                         </Text>
                     </Box>
                     <Image
                         rounded={'md'}
                         alt={'product image'}
-                        src={
-                            'https://c.files.bbci.co.uk/9942/production/_119143293_flying-car.jpg'
-                        }
+                        src={idea.iconUrl}
                         fit={'cover'}
                         align={'center'}
                         w={'100%'}
                         h={{ base: '100%', sm: '400px', lg: '500px' }}
                     />
-                    {/* <Text
-                        color={useColorModeValue('gray.900', 'gray.400')}
-                        fontWeight={300}
-                        fontSize={'3xl'}>
-                        Author:
-                    </Text>
-                    <Text
-                        color={useColorModeValue('white.900', 'white.400')}
-                        fontWeight={500}
-                        fontSize={'3xl'}>
-                        Peter Parker
-                    </Text>
-                    <Image
-                        rounded={'md'}
-                        src={
-                            'https://i.stack.imgur.com/5Kgaq.jpg?s=256&g=1'
-                        }
-                        fit={'cover'}
-                        align={'center'}
-                        w={'100%'}
-                        h={{ base: '100%', sm: '400px', lg: '500px' }}
-                    /> */}
+                    <Carousel imgUrls={idea.imgUrls} />
                 </Stack>
                 <Stack spacing={{ base: 6, md: 10 }}>
 
@@ -93,7 +112,7 @@ export default function moreDetailsOfIdea(ideaId, idea) {
                                 Idea Description
                             </Text>
                             <Text fontSize={'lg'}>
-                                The purpose of this idea is to allow people to fly in cars. This will be done by using a turbo engine on the back of a Ferrari.
+                                {idea.description}
                             </Text>
                         </VStack>
                         <Box>
@@ -108,7 +127,7 @@ export default function moreDetailsOfIdea(ideaId, idea) {
 
                             <SimpleGrid columns={{ base: 1, md: 1 }} spacing={10}>
                                 <List spacing={2}>
-                                    <ListItem>No</ListItem>
+                                    <ListItem>{idea.isPaid}</ListItem>
                                 </List>
                             </SimpleGrid>
                         </Box>
@@ -124,7 +143,7 @@ export default function moreDetailsOfIdea(ideaId, idea) {
 
                             <SimpleGrid columns={{ base: 1, md: 1 }} spacing={10}>
                                 <List spacing={2}>
-                                    <ListItem>No</ListItem>
+                                    <ListItem>{idea.isInProgress}</ListItem>
                                 </List>
                             </SimpleGrid>
                         </Box>
@@ -140,10 +159,14 @@ export default function moreDetailsOfIdea(ideaId, idea) {
 
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                                 <List spacing={2}>
-                                    <ListItem>Software Engineering</ListItem>
+                                    {domains1.map((domain) => (
+                                        <ListItem>{domain}</ListItem>
+                                    ))}
                                 </List>
                                 <List spacing={2}>
-                                    <ListItem>Agile Development</ListItem>
+                                    {domains2.map((domain) => (
+                                        <ListItem>{domain}</ListItem>
+                                    ))}
                                 </List>
                             </SimpleGrid>
                         </Box>
@@ -159,14 +182,14 @@ export default function moreDetailsOfIdea(ideaId, idea) {
 
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                                 <List spacing={2}>
-                                    <ListItem>Money</ListItem>
-                                    <ListItem>Cars</ListItem>{' '}
-                                    <ListItem>Electricity</ListItem>
+                                    {topics1.map((topic) => (
+                                        <ListItem>{topic}</ListItem>
+                                    ))}
                                 </List>
                                 <List spacing={2}>
-                                    <ListItem>Speed</ListItem>
-                                    <ListItem>Live Programming</ListItem>
-                                    <ListItem>Embedded Systems</ListItem>
+                                    {topics2.map((topic) => (
+                                        <ListItem>{topic}</ListItem>
+                                    ))}
                                 </List>
                             </SimpleGrid>
                         </Box>
@@ -182,28 +205,18 @@ export default function moreDetailsOfIdea(ideaId, idea) {
 
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                                 <List spacing={2}>
-                                    <ListItem>Python</ListItem>
+                                    {techs1.map((tech) => (
+                                        <ListItem>{tech}</ListItem>
+                                    ))}
                                 </List>
                                 <List spacing={2}>
-                                    <ListItem>Gherkin</ListItem>
+                                    {techs2.map((tech) => (
+                                        <ListItem>{tech}</ListItem>
+                                    ))}
                                 </List>
                             </SimpleGrid>
                         </Box>
-                        <Button
-                            rounded={'none'}
-                            w={'full'}
-                            mt={8}
-                            size={'lg'}
-                            py={'7'}
-                            bg={useColorModeValue('gray.900', 'gray.50')}
-                            color={useColorModeValue('white', 'gray.900')}
-                            textTransform={'uppercase'}
-                            _hover={{
-                                transform: 'translateY(2px)',
-                                boxShadow: 'lg',
-                            }}>
-                            High Five
-                        </Button>
+                        <HighFiveBtn />
                     </Stack>
                     {/* <Carousel /> can't fix it for now*/}
                 </Stack>
