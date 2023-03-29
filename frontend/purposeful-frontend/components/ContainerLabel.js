@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {Box, HStack, IconButton} from '@chakra-ui/react';
 import { RxCross1} from "react-icons/rx";
 
-
 export default function ContainerLabel({innerTxt, arr, arr2, refresh}){
     function find_component_in_arr(c_arr){
         for(var i = 0; i < c_arr.length; i++){
