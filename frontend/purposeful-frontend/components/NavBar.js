@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { RiAccountCircleLine, RiLogoutBoxRLine } from "react-icons/ri";
-import { logout, verifyToken, getAuthorities } from "../utils/fetch_wrapper";
+import { logout, verifyToken, getAuthorities } from "@/utils/fetch_wrapper";
 
 export default function NavBar() {
   // Colors and theme
