@@ -5,12 +5,13 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { BsSend } from "react-icons/bs";
 
 export default function CollabRequestPopup({RequesterMail,ideaID,ideaTitle,removeFunc}){
-    const col = useColorModeValue("rgb(255,255,255)", "rgb(26,32,44)")
+    const col = useColorModeValue("rgb(255,255,255)", "rgb(26,32,44)");
+    const bannercol = useColorModeValue("rgb(237,242,247)","rgb(23,25,35)");
     return (
         <Box zIndex={"10"} backgroundColor={col} marginTop={"5%"} marginLeft={"20%"} borderColor={"rgba(0,0,0,0.1)"} border={"solid"} width={"40%"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"}>
         <Stack>
             <Box width={"100%"}>
-                <Flex width={"100%"} backgroundColor={"rgba(10,10,10,0.2)"} borderRadius={"10px"} borderBottom={"solid"}>
+                <Flex width={"100%"} backgroundColor={bannercol} borderRadius={"10px"} borderBottom={"solid"}>
                 <Text marginLeft={"10px"}>Collaboration Request</Text>
                 <IconButton
                 borderLeft={"solid"}
