@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { login, logout, verifyToken } from "../utils/fetch_wrapper";
+import { redirect } from "next/navigation";
 
 export default function Login() {
   const [username, setUsername] = useState("");
