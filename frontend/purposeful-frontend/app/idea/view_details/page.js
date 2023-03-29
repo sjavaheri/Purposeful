@@ -1,7 +1,5 @@
 "use client";
 import Carousel from '@/components/Carousel';
-import CollabRequestPopup from '@/components/CollabRequestPopup';
-import { useState } from "react";
 import {
     Box,
     chakra,
@@ -22,19 +20,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function Simple() {
-
-    const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
-
-    function collab_rm(){
-        set_req(<Flex display={"none"}></Flex>)
-    }
-    //TODO: Pass Idea ID and Requester mail and Idea Title
-    function collab_req(){
-        set_req(<CollabRequestPopup RequesterMail={""} ideaID={""} ideaTitle={""} removeFunc={collab_rm}/>);
-    }
     return (
-        <Box width={"100%"} height={"100%"} alignItems={"center"}>
-            {collabReq}
         <Container maxW={'7xl'}>
             <SimpleGrid
                 columns={{ base: 1, lg: 2 }}
@@ -66,25 +52,6 @@ export default function Simple() {
                         w={'100%'}
                         h={{ base: '100%', sm: '400px', lg: '500px' }}
                     />
-                    <Button
-                            rounded={'none'}
-                            w={'full'}
-                            mt={8}
-                            size={'lg'}
-                            py={'7'}
-                            bg={useColorModeValue('gray.900', 'gray.50')}
-                            color={useColorModeValue('white', 'gray.900')}
-                            textTransform={'uppercase'}
-                            _hover={{
-                                transform: 'translateY(2px)',
-                                boxShadow: 'lg',
-                            }}
-                            onClick={
-                                () => collab_req()
-                            }
-                            >
-                            Send A Collaboration Request
-                        </Button>
                     {/* <Text
                         color={useColorModeValue('gray.900', 'gray.400')}
                         fontWeight={300}
@@ -242,6 +209,5 @@ export default function Simple() {
                 </Stack>
             </SimpleGrid>
         </Container>
-        </Box>
     );
 }
