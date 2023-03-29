@@ -1,6 +1,8 @@
 "use client";
+import { useState } from 'react';
 import Carousel from '@/components/Carousel';
 import HighFiveBtn from '@/components/HighFiveBtn';
+import CollabRequestPopup from '@/components/CollabRequestPopup';
 import {
     Box,
     chakra,
@@ -19,8 +21,24 @@ import {
     List,
     ListItem,
 } from '@chakra-ui/react';
+import { BsSend } from "react-icons/bs";
 
 export default function moreDetailsOfIdea(ideaId, idea) {
+
+    const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
+
+    //TODO: Get requester mail
+    function getReqMail(){
+
+    }
+
+    function collab_rm(){
+        set_req(<Flex display={"none"}></Flex>)
+    }
+    
+    function collab_req(){
+        set_req(<CollabRequestPopup RequesterMail={getReqMail()} ideaID={ideaId} ideaTitle={idea.title} removeFunc={collab_rm}/>);
+    }
 
     let domains1 = [];
     const domains2 = [];
@@ -64,6 +82,7 @@ export default function moreDetailsOfIdea(ideaId, idea) {
 
     return (
         <Container maxW={'7xl'}>
+            {collabReq}
             <SimpleGrid
                 columns={{ base: 1, lg: 2 }}
                 spacing={{ base: 8, md: 10 }}
@@ -218,6 +237,14 @@ export default function moreDetailsOfIdea(ideaId, idea) {
                         </Box>
                         <HighFiveBtn />
                     </Stack>
+                        <Button
+                            rightIcon={<BsSend/>}
+                            onClick={
+                                () => collab_req()
+                            }
+                            >
+                            SEND COLLABORATION REQUEST
+                        </Button>
                     {/* <Carousel /> can't fix it for now*/}
                 </Stack>
             </SimpleGrid>
