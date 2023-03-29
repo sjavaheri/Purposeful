@@ -14,14 +14,14 @@ import {
   Select,
   IconButton,
 } from "@chakra-ui/react";
-
 import {
-    DeleteIcon
-  } from "@chakra-ui/icons";
+  DeleteIcon
+} from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
+import NavBar from "./NavBar";
 
 
 var fullfilled = 0;
@@ -43,9 +43,9 @@ export default function ModifyIdea() {
   const [render_topics, set_tp] = useState(<Fragment></Fragment>);
   const [render_techs, set_tc] = useState(<Fragment></Fragment>);
 
-  var domainContainer = <Stack on direction={['column', 'row']} id={"domainContainer"} wrap={"wrap"} justifyContent={"center"}>{render_domains}</Stack>;
-  var topicContainer = <Stack on direction={['column', 'row']} id={"topicContainer"} wrap={"wrap"} justifyContent={"center"}>{render_topics}</Stack>;
-  var techContainer = <Stack on direction={['column', 'row']} id={"techContainer"} wrap={"wrap"} justifyContent={"center"}>{render_techs}</Stack>;
+  var domainContainer = <Stack on direction={['column', 'row']} id={"domainContainer"} wrap={"wrap"}>{render_domains}</Stack>;
+  var topicContainer = <Stack on direction={['column', 'row']} id={"topicContainer"} wrap={"wrap"}>{render_topics}</Stack>;
+  var techContainer = <Stack on direction={['column', 'row']} id={"techContainer"} wrap={"wrap"}>{render_techs}</Stack>;
   var domains = [];
   var topics = [];
   var techs = [];
@@ -92,7 +92,7 @@ export default function ModifyIdea() {
   };
   return (
     <Stack width={"75%"}>
-      <Box
+      <Box 
         //width={"1"}
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
@@ -100,9 +100,9 @@ export default function ModifyIdea() {
         p={8}>
         <Formik
           initialValues={{
-            title: "Real Idea Title",
-            purpose: "Real Idea Purpose",
-            description: "Detailed Description",
+            title: "",
+            purpose: "",
+            description: "",
           }}
           onSubmit={(values, actions) => {
             setTimeout(async () => {
@@ -122,7 +122,7 @@ export default function ModifyIdea() {
                     {({ field, form }) => (
                       <FormControl>
                         <FormLabel>Title</FormLabel>
-                        <Input {...field} type="text" />
+                        <Input placeholder="Title" {...field} type="text" />
                       </FormControl>
                     )}
                   </Field>
@@ -133,7 +133,7 @@ export default function ModifyIdea() {
                       <FormControl
                         id="purpose">
                         <FormLabel>Purpose</FormLabel>
-                        <Input {...field} type="text" />
+                        <Input placeholder="Purpose" {...field} type="text" />
                       </FormControl>
                     )}
                   </Field>
@@ -144,10 +144,22 @@ export default function ModifyIdea() {
                       <FormControl
                         id="description">
                         <FormLabel>Description</FormLabel>
-                        <Textarea {...field} rows={"10"}/>
+                        <Textarea placeholder="Briefly describe your idea here..." {...field} rows={"10"}/>
                       </FormControl>
                     )}
                   </Field>
+                </Box>
+                  <Field name="iconurl">
+                      {({ field, form }) => (
+                        <FormControl
+                          id="iconurl">
+                          <FormLabel>Icon URL</FormLabel>
+                          <Input placeholder="https://picsum.photos/200" {...field} type="text" />
+                        </FormControl>
+                      )}
+                    </Field>
+                <Box>
+
                 </Box>
               </Stack>
               <Stack spacing={4} width={"50%"} padding={"50px"}>
@@ -217,27 +229,46 @@ export default function ModifyIdea() {
                   </Field>
                   {techContainer}
                 </Box>
+                <Box>
+                  <Field name="supportingimgurl">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="supportingimgurls">
+                        <FormLabel>Supporting Images (Optional)</FormLabel>
+                        <Input marginTop={"5px"} placeholder="URL 1 (Optional)" {...field} type="text" />
+                        <Input marginTop={"10px"} placeholder="URL 2 (Optional)" {...field} type="text" />
+                        <Input marginTop={"10px"} placeholder="URL 3 (Optional)" {...field} type="text" />
+                      </FormControl>
+                    )}
+                  </Field>
+                </Box>
               </Stack>
               </HStack>
+              <Box width={"100%"} display={"flex"} justifyContent={"center"}>
               <Button
+                width={"30%"}
                 bg={"blue.400"}
                 color={"white"}
                 _hover={{
                   bg: "blue.500",
                 }}
-                type="submit">
+                type="submit"
+                style={{ marginRight: "auto", marginLeft: "auto" }}
+              >
                 Save Changes
               </Button>
               <Button
                 bg={"red.200"}
                 color={"red"}
                 _hover={{
-                    bg: "red.400",
+                  bg: "red.400",
                 }}
                 type="submit"
-                style={{float : 'right'}}>
-                <DeleteIcon w={8} h={8} color="red.500" />
+                style={{ float: "right" }}
+              >
+                <DeleteIcon w={6} h={6} color="red.500" />
               </Button>
+              </Box>
             </Form>
           )}
         </Formik>
