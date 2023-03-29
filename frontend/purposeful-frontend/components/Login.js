@@ -14,18 +14,46 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { login, logout, verifyToken } from "../utils/fetch_wrapper";
+import { login, verifyToken } from "../utils/fetch_wrapper";
+import notification from "../utils/notification";
 
 export default function Login() {
+
+  // bring back to home page if user is already logged in (not working on runtime due to localStorage not existing at runtime)
+  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
+    window.location.href = "/"; // Redirect to home page if user is already logged in
+  }
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  // Function to validate the email field
+  const validateEmail = (value) => {
+    let error;
+    if (!value) {
+      error = "Please enter a valid email. Email cannot be left empty";
+    } else if (
+      !/^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value)
+    ) {
+      error =
+        "Please enter a valid email. The email address you entered is not valid";
+    }
+    return error;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     // alert(`Email: ${username} & Password: ${password}`);
     let success = await login(username, password);
     await verifyToken();
-    // alert(`AppUser: ${JSON.parse(localStorage.getItem("appUser")).firstname}`);
+    if (success) {
+      // User successfully logged in as a regular user
+      window.location.href = "/"; // Redirect to home page
+    }
+    else {
+      // User login failed display error mesages
+      notification("error", "Invalid email and/or password.", null);
+    }
     // logout();
     // console.log(verifyToken());
     // what to do if verify is false?
@@ -54,6 +82,8 @@ export default function Login() {
                   type="email"
                   // value={username}
                   onChange={(event) => setUsername(event.currentTarget.value)}
+                  name="email"
+                  validate={(value) => validateEmail(value)}
                 />
               </FormControl>
               <FormControl id="password">
@@ -69,8 +99,6 @@ export default function Login() {
                   direction={{ base: "column", sm: "row" }}
                   align={"start"}
                   justify={"space-between"}>
-                  <Checkbox>Remember me</Checkbox>
-                  <Link color={"blue.400"}>Forgot password?</Link>
                 </Stack>
                 <Button
                   bg={"blue.400"}
