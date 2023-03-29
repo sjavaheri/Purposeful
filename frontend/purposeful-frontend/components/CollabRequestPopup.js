@@ -1,13 +1,16 @@
 import React from 'react';
 import {Input, Box, Text, Button, Stack, Flex, IconButton, Textarea} from '@chakra-ui/react';
 import { RxCross1} from "react-icons/rx";
+import { useColorModeValue } from '@chakra-ui/react';
+import { BsSend } from "react-icons/bs";
 
-
-export default function CollabRequestPopup({RequesterMail,ideaID,ideaTitle,removeFunc,disp}){
+export default function CollabRequestPopup({RequesterMail,ideaID,ideaTitle,removeFunc}){
+    const col = useColorModeValue("rgb(255,255,255)", "rgb(26,32,44)")
     return (
-        <Stack zIndex={"1"} marginTop={"5%"} marginLeft={"30%"} borderColor={"rgba(0,0,0,0.1)"} border={"solid"} width={"40%"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"} backgroundColor={"rgba(255,255,255,1)"}>
+        <Box zIndex={"10"} backgroundColor={col} marginTop={"5%"} marginLeft={"20%"} borderColor={"rgba(0,0,0,0.1)"} border={"solid"} width={"40%"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"}>
+        <Stack>
             <Box width={"100%"}>
-                <Flex width={"100%"} backgroundColor={"rgba(10,10,10,0.1)"} borderRadius={"10px"} borderBottom={"solid"}>
+                <Flex width={"100%"} backgroundColor={"rgba(10,10,10,0.2)"} borderRadius={"10px"} borderBottom={"solid"}>
                 <Text marginLeft={"10px"}>Collaboration Request</Text>
                 <IconButton
                 borderLeft={"solid"}
@@ -30,22 +33,18 @@ export default function CollabRequestPopup({RequesterMail,ideaID,ideaTitle,remov
                 <Input id={"addContact"} placeholder="Additional Contact..." type="text"/>
             </Flex>
             <Button
-            bg={"blue.400"}
-            color={"white"}
-            _hover={{
-              bg: "blue.500",
-            }}
+            rightIcon={<BsSend/>}
             width={"fit-content"}
             fontSize={"auto"}
             alignSelf={"center"}
-            iconRight={<RxCross1/>}
             onClick = {function(){
                 //Connect to backend here
             }}
             >
-                Send Collab Request
+                Send Request
             </Button>
             <br></br>
         </Stack>
+        </Box>
     );
 }

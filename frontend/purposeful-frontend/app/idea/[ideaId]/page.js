@@ -81,9 +81,8 @@ export default function moreDetailsOfIdea(ideaId, idea) {
     }
 
     return (
-        <Box width={"100%"} height={"100%"} alignItems={"center"}>
-            {collabReq}
         <Container maxW={'7xl'}>
+            {collabReq}
             <SimpleGrid
                 columns={{ base: 1, lg: 2 }}
                 spacing={{ base: 8, md: 10 }}
@@ -250,6 +249,5 @@ export default function moreDetailsOfIdea(ideaId, idea) {
                 </Stack>
             </SimpleGrid>
         </Container>
-        </Box>
     );
 }
