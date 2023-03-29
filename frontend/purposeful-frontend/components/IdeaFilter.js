@@ -1,0 +1,247 @@
+import { Fragment, useState } from "react";
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  HStack,
+  Checkbox,
+  Textarea,
+  Button,
+  useColorModeValue,
+  FormErrorMessage,
+  Select,
+  IconButton,
+} from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
+import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
+import ContainerLabel from "./ContainerLabel";
+import { RxPlus } from "react-icons/rx";
+import NavBar from "./NavBar";
+
+var fullfilled = 0;
+var field_name = "domains";
+var c_domains = [];
+var c_topics = [];
+var c_techs = [];
+
+var domains_sel = <Select id="domains"></Select>;
+var topics_sel = <Select id="topics"></Select>;
+var techs_sel = <Select id="techs"></Select>;
+
+var rendered_domains = [];
+var rendered_topics = [];
+var rendered_techs = [];
+
+export default function IdeaFilter() {
+  const [render_domains, set_rd] = useState(<Fragment></Fragment>);
+  const [render_topics, set_tp] = useState(<Fragment></Fragment>);
+  const [render_techs, set_tc] = useState(<Fragment></Fragment>);
+
+  var domainContainer = (
+    <Stack
+      on
+      direction={["column", "row"]}
+      id={"domainContainer"}
+      wrap={"wrap"}>
+      {render_domains}
+    </Stack>
+  );
+  var topicContainer = (
+    <Stack on direction={["column", "row"]} id={"topicContainer"} wrap={"wrap"}>
+      {render_topics}
+    </Stack>
+  );
+  var techContainer = (
+    <Stack on direction={["column", "row"]} id={"techContainer"} wrap={"wrap"}>
+      {render_techs}
+    </Stack>
+  );
+  var domains = [];
+  var topics = [];
+  var techs = [];
+
+  (async () => {
+    domains = await getDomains();
+    topics = await getTopics();
+    techs = await getTechs();
+    if (fullfilled == 0) {
+      fullfilled++;
+      domains.map(MakeOption);
+    }
+    if (fullfilled == 1) {
+      fullfilled++;
+      field_name = "topics";
+      topics.map(MakeOption);
+    }
+    if (fullfilled == 2) {
+      fullfilled++;
+      field_name = "techs";
+      techs.map(MakeOption);
+    }
+  })();
+
+  var refreshfn = function () {
+    set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
+    set_tp(<Fragment>{rendered_topics.concat([])}</Fragment>);
+    set_tc(<Fragment>{rendered_techs.concat([])}</Fragment>);
+  };
+  function MakeOption(X) {
+    const el = document.createElement("option");
+    el.setAttribute("value", X.id);
+    el.textContent = X.name;
+    document.getElementById(field_name).appendChild(el);
+  }
+
+  function PushObj(selectedIndex, arr, c_arr, arr2) {
+    if (find_in_arr(selectedIndex, arr, c_arr) == -1) {
+      const el = (
+        <ContainerLabel
+          key={arr[selectedIndex].name}
+          innerTxt={arr[selectedIndex].name}
+          arr={c_arr}
+          arr2={arr2}
+          refresh={refreshfn}
+        />
+      );
+      c_arr.push(arr[selectedIndex]);
+      arr2.push(el);
+      refreshfn();
+    }
+  }
+  return (
+    <Stack width={"100%"}>
+      <Box
+        //width={"1"}
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={0}>
+        <Formik
+          initialValues={{
+            title: "",
+            purpose: "",
+            description: "",
+          }}
+          onSubmit={(values, actions) => {
+            setTimeout(async () => {
+              console.log(values); // TODO: To be removed once the API is connected
+              // TODO: Set the error messages for the fields according to the API response
+              // TODO: Differentiate API methods depending on authentication status
+              actions.setSubmitting(false);
+              // TODO: Redirect to the login page
+            }, 1000);
+          }}>
+          {(props) => (
+            <Form>
+              <Stack spacing={8} width={"100%"} padding={"10%"}>
+                <Box>
+                  <Field name="Domain">
+                    {({ field, form }) => (
+                      <FormControl id="domain">
+                        <FormLabel>Domains</FormLabel>
+                        <HStack>
+                          {domains_sel}
+                          <IconButton
+                            icon={<RxPlus />}
+                            borderRadius={"20px"}
+                            onClick={() =>
+                              PushObj(
+                                document.getElementById("domains")
+                                  .selectedIndex,
+                                domains,
+                                c_domains,
+                                rendered_domains
+                              )
+                            }
+                          />
+                        </HStack>
+                      </FormControl>
+                    )}
+                  </Field>
+                  {domainContainer}
+                </Box>
+                <Box>
+                  <Field name="Topic">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="topic"
+                        isInvalid={form.errors.topic && form.touched.topic}>
+                        <FormLabel>Topics</FormLabel>
+                        <HStack>
+                          {topics_sel}
+                          <IconButton
+                            icon={<RxPlus />}
+                            borderRadius={"20px"}
+                            onClick={() =>
+                              PushObj(
+                                document.getElementById("topics").selectedIndex,
+                                topics,
+                                c_topics,
+                                rendered_topics
+                              )
+                            }
+                          />
+                        </HStack>
+                      </FormControl>
+                    )}
+                  </Field>
+                  {topicContainer}
+                </Box>
+                <Box>
+                  <Field name="Tech">
+                    {({ field, form }) => (
+                      <FormControl
+                        id="tech"
+                        isInvalid={form.errors.tech && form.touched.tech}>
+                        <FormLabel>Technologies</FormLabel>
+                        <HStack>
+                          {techs_sel}
+                          <IconButton
+                            icon={<RxPlus />}
+                            borderRadius={"20px"}
+                            onClick={() =>
+                              PushObj(
+                                document.getElementById("techs").selectedIndex,
+                                techs,
+                                c_techs,
+                                rendered_techs
+                              )
+                            }
+                          />
+                        </HStack>
+                      </FormControl>
+                    )}
+                  </Field>
+                  {techContainer}
+                </Box>
+                <Box width={"100%"} display={"flex"}>
+                  <Button
+                    width={"100%"}
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                    type="submit">
+                    Search
+                  </Button>
+                </Box>
+              </Stack>
+            </Form>
+          )}
+        </Formik>
+      </Box>
+    </Stack>
+  );
+}
+
+export function find_in_arr(index, arr, c_arr) {
+  for (var i = 0; i < c_arr.length; i++) {
+    if (c_arr[i].id === arr[index].id) {
+      return i;
+    }
+  }
+  return -1;
+}

@@ -1,0 +1,37 @@
+.ideaFilter {
+    flex: 2;
+}
+
+.ideas {
+    flex: 8;
+}   
+
+.container {
+    width: 100%;
+    display: flex; 
+}
+
+.ideaCard {
+    width: 50%;
+}
+
+@media screen and (max-width: 767px) {
+    .container {
+        flex-direction: column;
+    }
+    .ideaCard {
+        width: 60%;
+    }
+}
+
+@media screen and (max-width: 1199px) {
+    .ideaCard {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .ideaCard {
+        width: 80%;
+    }
+}
