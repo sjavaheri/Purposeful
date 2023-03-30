@@ -4,8 +4,6 @@ import { FRONTEND } from "./utils/fetch_wrapper";
 
 export function middleware(request) {
   let tokenCookie = request.cookies.get("token")?.value;
-  console.log("token: " + tokenCookie);
-  console.log("URL path: " + request.nextUrl.pathname);
 
   // If the token is not present in the cookie and path is not /login or /register, redirect to login page
   if (

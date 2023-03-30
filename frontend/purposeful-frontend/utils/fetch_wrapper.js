@@ -142,13 +142,7 @@ export default async function fetchWrapper(
     );
     return;
   }
-  // if (
-  //   headers &&
-  //   Object.hasOwn(headers, "Content-Type") &&
-  //   headers["Content-Type"] == "application/json"
-  // ) {
-  //   json = true;
-  // }
+
   // Check if there is a token
   let token = getTokenCookie();
   if (token) {
