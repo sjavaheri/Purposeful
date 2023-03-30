@@ -28,6 +28,9 @@ var c_techs = [];
 var domains_sel = <Select id="domains"></Select>;
 var topics_sel = <Select id="topics"></Select>;
 var techs_sel = <Select id="techs"></Select>;
+var domains_sel = <Select id="domains"></Select>;
+var topics_sel = <Select id="topics"></Select>;
+var techs_sel = <Select id="techs"></Select>;
 
 var rendered_domains = [];
 var rendered_topics = [];
