@@ -9,7 +9,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-export default function IdeaCard() {
+export default function IdeaCard({ idea }) {
   return (
     <Box
       maxW={"100%"}

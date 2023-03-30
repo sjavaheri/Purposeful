@@ -1,6 +1,6 @@
 package ca.mcgill.purposeful;
 
-import ca.mcgill.purposeful.configuration.Authority;import ca.mcgill.purposeful.dao.AppUserRepository;import ca.mcgill.purposeful.model.AppUser;import org.springframework.boot.CommandLineRunner;import org.springframework.boot.SpringApplication;
+import ca.mcgill.purposeful.configuration.Authority;import ca.mcgill.purposeful.dao.AppUserRepository;import ca.mcgill.purposeful.dao.DomainRepository;import ca.mcgill.purposeful.dao.TechnologyRepository;import ca.mcgill.purposeful.dao.TopicRepository;import ca.mcgill.purposeful.model.AppUser;import ca.mcgill.purposeful.model.Domain;import ca.mcgill.purposeful.model.Technology;import ca.mcgill.purposeful.model.Topic;import org.springframework.boot.CommandLineRunner;import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;import org.springframework.context.annotation.Bean;import org.springframework.security.crypto.password.PasswordEncoder;
 
 /** Main Application */
@@ -20,7 +20,9 @@ public class PurposefulApplication {
    */
     @Bean
     public CommandLineRunner commandLineRunner(
-        AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+        AppUserRepository appUserRepository, PasswordEncoder passwordEncoder,
+        DomainRepository domainRepository, TopicRepository topicRepository,
+        TechnologyRepository technologyRepository) {
       return args -> {
 
         // create an owner at bootstrap
@@ -34,6 +36,27 @@ public class PurposefulApplication {
           appUser.setPassword(encoded);
           appUser.getAuthorities().add(Authority.Owner);
           appUserRepository.save(appUser);
+        }
+        // Create Domains
+        var domains = new String[]{"AI", "ML", "Finance", "WebDev", "Web3"};
+        for (String domain : domains) {
+          var d = new Domain();
+          d.setName(domain);
+          domainRepository.save(d);
+        }
+        // Create Topics
+        var topics = new String[]{"Environment", "Business", "Crypto", "Security", "Games"};
+        for (String topic : topics) {
+          var t = new Topic();
+          t.setName(topic);
+          topicRepository.save(t);
+        }
+        // Create Technologies
+        var technologies = new String[]{"Java", "Python", "C++", "C#", "JavaScript"};
+        for (String technology : technologies) {
+          var t = new Technology();
+          t.setName(technology);
+          technologyRepository.save(t);
         }
   //      if (appUserRepository.findAppUserByEmail("moderator@email.com") == null) {
   //        // create a moderator at bootstrap

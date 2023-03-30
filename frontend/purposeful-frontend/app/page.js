@@ -32,7 +32,7 @@ export default function page() {
   // const [topics, setTopics] = useState([]);
   // const [technologies, setTechnologies] = useState([]);
   // List of ideas
-  const [ideas, setIdeas] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const [ideas, setIdeas] = useState([]);
   // useEffect(() => {
   //   verifyToken().then((res) => {
   //     setVerified(res);
@@ -46,7 +46,7 @@ export default function page() {
   return (
     <Box className={styles.container}>
       <Box className={styles.ideaFilter}>
-        <IdeaFilter />
+        <IdeaFilter setIdeas={setIdeas} />
       </Box>
       <Stack className={styles.ideas}>
         <List>

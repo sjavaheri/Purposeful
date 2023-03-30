@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -19,96 +19,73 @@ import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
 import NavBar from "./NavBar";
+import { v4 as uuidv4 } from "uuid";
+import fetchWrapper from "@/utils/fetch_wrapper";
+import notification from "../utils/notification";
 
-var fullfilled = 0;
-var field_name = "domains";
-var c_domains = [];
-var c_topics = [];
-var c_techs = [];
+export default function IdeaFilter({ setIdeas }) {
+  const [domains, setDomains] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [techs, setTechs] = useState([]);
 
-var domains_sel = <Select id="domains"></Select>;
-var topics_sel = <Select id="topics"></Select>;
-var techs_sel = <Select id="techs"></Select>;
+  useEffect(() => {
+    getDomains().then((res) => {
+      setDomains(res);
+    });
+    getTopics().then((res) => {
+      setTopics(res);
+    });
+    getTechs().then((res) => {
+      setTechs(res);
+    });
+    const payload = {
+      domains: [null],
+      topics: [null],
+      technologies: [null],
+    };
+    fetchWrapper("/api/idea", null, "POST", payload).then(async (res) => {
+      if (res !== null) {
+        // User registration failed display error mesages
+        notification("error", "An error occurred.", res.errorMessages);
+      } else if (res.ok) {
+        const ideaList = await res.json();
+        setIdeas(ideaList);
+      }
+    });
+  }, []);
 
-var rendered_domains = [];
-var rendered_topics = [];
-var rendered_techs = [];
+  // backend call setIdeas(list)
 
-export default function IdeaFilter() {
-  const [render_domains, set_rd] = useState(<Fragment></Fragment>);
-  const [render_topics, set_tp] = useState(<Fragment></Fragment>);
-  const [render_techs, set_tc] = useState(<Fragment></Fragment>);
-
-  var domainContainer = (
-    <Stack
-      on
-      direction={["column", "row"]}
-      id={"domainContainer"}
-      wrap={"wrap"}>
-      {render_domains}
-    </Stack>
-  );
-  var topicContainer = (
-    <Stack on direction={["column", "row"]} id={"topicContainer"} wrap={"wrap"}>
-      {render_topics}
-    </Stack>
-  );
-  var techContainer = (
-    <Stack on direction={["column", "row"]} id={"techContainer"} wrap={"wrap"}>
-      {render_techs}
-    </Stack>
-  );
-  var domains = [];
-  var topics = [];
-  var techs = [];
-
-  (async () => {
-    domains = await getDomains();
-    topics = await getTopics();
-    techs = await getTechs();
-    if (fullfilled == 0) {
-      fullfilled++;
-      domains.map(MakeOption);
+  async function handleSearchForm(values, actions) {
+    if (values.domain === "") {
+      values.domain = null;
     }
-    if (fullfilled == 1) {
-      fullfilled++;
-      field_name = "topics";
-      topics.map(MakeOption);
+    if (values.topic === "") {
+      values.topic = null;
     }
-    if (fullfilled == 2) {
-      fullfilled++;
-      field_name = "techs";
-      techs.map(MakeOption);
+    if (values.tech === "") {
+      values.tech = null;
     }
-  })();
+    const payload = {
+      domains: [values.domain],
+      topics: [values.topic],
+      technologies: [values.tech],
+    };
 
-  var refreshfn = function () {
-    set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
-    set_tp(<Fragment>{rendered_topics.concat([])}</Fragment>);
-    set_tc(<Fragment>{rendered_techs.concat([])}</Fragment>);
-  };
-  function MakeOption(X) {
-    const el = document.createElement("option");
-    el.setAttribute("value", X.id);
-    el.textContent = X.name;
-    document.getElementById(field_name).appendChild(el);
-  }
-
-  function PushObj(selectedIndex, arr, c_arr, arr2) {
-    if (find_in_arr(selectedIndex, arr, c_arr) == -1) {
-      const el = (
-        <ContainerLabel
-          key={arr[selectedIndex].name}
-          innerTxt={arr[selectedIndex].name}
-          arr={c_arr}
-          arr2={arr2}
-          refresh={refreshfn}
-        />
-      );
-      c_arr.push(arr[selectedIndex]);
-      arr2.push(el);
-      refreshfn();
+    const response = await fetchWrapper("/api/idea", null, "POST", payload);
+    console.log("response", response);
+    if (response !== null) {
+      // User registration failed display error mesages
+      notification("error", "An error occurred.", response.errorMessages);
+    } else if (response.ok) {
+      const ideaList = await response.json();
+      setIdeas(ideaList);
     }
+    console.log("domains", values.domain);
+    console.log("topics", values.topic);
+    console.log("techs", values.tech);
+
+    actions.setSubmitting(false);
   }
   return (
     <Stack width={"100%"}>
@@ -119,102 +96,64 @@ export default function IdeaFilter() {
         boxShadow={"lg"}
         p={0}>
         <Formik
-          initialValues={{
-            title: "",
-            purpose: "",
-            description: "",
-          }}
-          onSubmit={(values, actions) => {
-            setTimeout(async () => {
-              console.log(values); // TODO: To be removed once the API is connected
-              // TODO: Set the error messages for the fields according to the API response
-              // TODO: Differentiate API methods depending on authentication status
-              actions.setSubmitting(false);
-              // TODO: Redirect to the login page
-            }, 1000);
+          initialValues={{ domain: "", topic: "", tech: "" }}
+          onSubmit={async (values, actions) => {
+            await handleSearchForm(values, actions);
           }}>
           {(props) => (
             <Form>
               <Stack spacing={8} width={"100%"} padding={"10%"}>
                 <Box>
-                  <Field name="Domain">
+                  <Field name="domain">
                     {({ field, form }) => (
-                      <FormControl id="domain">
+                      <FormControl>
                         <FormLabel>Domains</FormLabel>
-                        <HStack>
-                          {domains_sel}
-                          <IconButton
-                            icon={<RxPlus />}
-                            borderRadius={"20px"}
-                            onClick={() =>
-                              PushObj(
-                                document.getElementById("domains")
-                                  .selectedIndex,
-                                domains,
-                                c_domains,
-                                rendered_domains
-                              )
-                            }
-                          />
-                        </HStack>
+                        <Select {...field} placeholder="All">
+                          {domains.map((domain) => (
+                            <option key={domain.id} value={domain.name}>
+                              {domain.name}
+                            </option>
+                          ))}
+                        </Select>
                       </FormControl>
                     )}
                   </Field>
-                  {domainContainer}
                 </Box>
                 <Box>
-                  <Field name="Topic">
+                  <Field name="topic">
                     {({ field, form }) => (
                       <FormControl
                         id="topic"
                         isInvalid={form.errors.topic && form.touched.topic}>
                         <FormLabel>Topics</FormLabel>
-                        <HStack>
-                          {topics_sel}
-                          <IconButton
-                            icon={<RxPlus />}
-                            borderRadius={"20px"}
-                            onClick={() =>
-                              PushObj(
-                                document.getElementById("topics").selectedIndex,
-                                topics,
-                                c_topics,
-                                rendered_topics
-                              )
-                            }
-                          />
-                        </HStack>
+                        <Select {...field} placeholder="All">
+                          {topics.map((topic) => (
+                            <option key={topic.id} value={topic.name}>
+                              {topic.name}
+                            </option>
+                          ))}
+                        </Select>
                       </FormControl>
                     )}
                   </Field>
-                  {topicContainer}
                 </Box>
                 <Box>
-                  <Field name="Tech">
+                  <Field name="tech">
                     {({ field, form }) => (
                       <FormControl
                         id="tech"
                         isInvalid={form.errors.tech && form.touched.tech}>
                         <FormLabel>Technologies</FormLabel>
-                        <HStack>
-                          {techs_sel}
-                          <IconButton
-                            icon={<RxPlus />}
-                            borderRadius={"20px"}
-                            onClick={() =>
-                              PushObj(
-                                document.getElementById("techs").selectedIndex,
-                                techs,
-                                c_techs,
-                                rendered_techs
-                              )
-                            }
-                          />
-                        </HStack>
+                        <Select {...field} placeholder="All">
+                          {techs.map((tech) => (
+                            <option key={tech.id} value={tech.name}>
+                              {tech.name}
+                            </option>
+                          ))}
+                        </Select>
                       </FormControl>
                     )}
                   </Field>
-                  {techContainer}
                 </Box>
                 <Box width={"100%"} display={"flex"}>
                   <Button
@@ -224,7 +163,8 @@ export default function IdeaFilter() {
                     _hover={{
                       bg: "blue.500",
                     }}
-                    type="submit">
+                    type="submit"
+                    isLoading={props.isSubmitting}>
                     Search
                   </Button>
                 </Box>
@@ -235,13 +175,4 @@ export default function IdeaFilter() {
       </Box>
     </Stack>
   );
-}
-
-export function find_in_arr(index, arr, c_arr) {
-  for (var i = 0; i < c_arr.length; i++) {
-    if (c_arr[i].id === arr[index].id) {
-      return i;
-    }
-  }
-  return -1;
 }
