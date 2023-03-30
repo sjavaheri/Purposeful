@@ -23,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { BsSend } from "react-icons/bs";
 
-export default function moreDetailsOfIdea(ideaId, idea) {
+export default function MoreDetailsOfIdea(ideaId, idea) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
   //TODO: Get requester mail

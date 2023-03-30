@@ -32,7 +32,7 @@ export default function page() {
   // const [topics, setTopics] = useState([]);
   // const [technologies, setTechnologies] = useState([]);
   // List of ideas
-  const [ideas, setIdeas] = useState([]);
+  const [ideas, setIdeas] = useState([1]);
   // useEffect(() => {
   //   verifyToken().then((res) => {
   //     setVerified(res);
@@ -58,7 +58,26 @@ export default function page() {
               justifyContent={"center"}
               margin={"50px 0px"}>
               <Box className={styles.ideaCard}>
-                <IdeaCard />
+                <IdeaCard
+                  idea={{
+                    id: 1,
+                    domain: "AI",
+                    title: "Free Money",
+                    purpose: "Find Arbitrage Opportunities",
+                    domains: [{ name: "AI" }, { name: "Finance" }],
+                    topics: [
+                      { name: "Arbitrage" },
+                      { name: "Trading" },
+                      { name: "HFT" },
+                    ],
+                    techs: [
+                      { name: "Python" },
+                      { name: "React" },
+                      { name: "Django" },
+                    ],
+                    isPaid: false,
+                  }}
+                />
               </Box>
             </ListItem>
           ))}
