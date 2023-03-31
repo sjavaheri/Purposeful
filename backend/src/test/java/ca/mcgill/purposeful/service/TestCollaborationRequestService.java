@@ -58,6 +58,9 @@ public class TestCollaborationRequestService {
             collaborationRequestRepository.findCollaborationRequestsByRequesterAndIdea(
                 any(RegularUser.class), any(Idea.class)))
         .thenAnswer(MockRepository::findCollaborationRequestsByRequesterAndIdea);
+    lenient()
+        .when(collaborationRequestRepository.findCollaborationRequestsByIdea(any(Idea.class)))
+        .thenAnswer(MockRepository::findCollaborationRequestsByIdea);
   }
 
   // Test the success case
@@ -125,6 +128,43 @@ public class TestCollaborationRequestService {
       // Check the correct error message is returned
       assertEquals(
           "You can only send one collaboration request to this user for this idea", e.getMessage());
+    }
+  }
+
+  // Test the success case
+  @Test
+  public void testGetCollaborationRequestsByIdea_Success() {
+    try {
+
+      // Send a request
+      List<CollaborationRequest> collabReqs =
+          collaborationRequestService.getCollaborationRequestsByIdea(MockDatabase.idea2.getId());
+
+      // Ensure no requests are returned
+      assertNotNull(collabReqs);
+      assertEquals(1, collabReqs.size());
+      assertEquals(collabReqs.get(0).getId(), MockDatabase.collaborationRequest1.getId());
+
+    } catch (GlobalException e) {
+      fail(); // Shouldn't get here
+    }
+  }
+
+  // Test the success case
+  @Test
+  public void testGetCollaborationRequestsByIdea_NoRequests() {
+    try {
+
+      // Send a request
+      List<CollaborationRequest> collabReqs =
+          collaborationRequestService.getCollaborationRequestsByIdea(MockDatabase.idea1.getId());
+
+      // Ensure no requests are returned
+      assertNotNull(collabReqs);
+      assertEquals(0, collabReqs.size());
+
+    } catch (GlobalException e) {
+      fail(); // Shouldn't get here
     }
   }
 
@@ -278,6 +318,15 @@ public class TestCollaborationRequestService {
 
     static CollaborationRequest save(InvocationOnMock invocation) {
       return invocation.getArgument(0);
+    }
+
+    static List<CollaborationRequest> findCollaborationRequestsByIdea(InvocationOnMock invocation) {
+      Idea idea = invocation.getArgument(0);
+      if (idea.getId().equals(MockDatabase.idea2.getId())) {
+        return List.of(MockDatabase.collaborationRequest1);
+      } else {
+        return List.of();
+      }
     }
   }
 }
