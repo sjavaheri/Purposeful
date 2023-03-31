@@ -12,12 +12,6 @@ import {
   Image,
   Tag,
   TagLabel, 
-  IconButton,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from "@chakra-ui/react";
 
 import { useColorModeValue } from "@chakra-ui/color-mode";
@@ -44,11 +38,12 @@ export default function MyIdeas() {
 
     (async () => {
         orig_ideas = await getMyIdeas();
-        orig_ideas.map(MakeOption);
+        orig_ideas.map(MakeIdeaObj);
         
       })()
 
-    function MakeOption(idea) {
+    function MakeIdeaObj(idea) {
+        console.log("make option");
         var idea_topics = [];
         for (let i = 0; i < idea.topics.length; i++) {
             idea_topics.push(idea.topics[i].name)
@@ -83,8 +78,10 @@ export default function MyIdeas() {
     }
 
     function IdeaBoxes({ list }) {
-        
-        console.log(document.getElementById('my-list'));
+        console.log("ideaBoxes");
+        // if (list.length != 0){
+        //     console.log(list[0].title)
+        // }
         return (
             <SimpleGrid columns={4} spacing={7}>
             {list.map((item, index) => (
