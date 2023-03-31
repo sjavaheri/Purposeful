@@ -12,12 +12,16 @@ import {
   useColorModeValue,
   FormErrorMessage,
   Select,
+  Text,
   IconButton,
+  Tooltip,
+  Icon,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
+import { BsInfoCircle } from "react-icons/bs";
 
 var fullfilled = 0;
 var field_name = "domains";
@@ -128,6 +132,7 @@ export default function CreateIdea() {
         boxShadow={"lg"}
         p={8}
       >
+        <Text fontSize={"2em"} textShadow={"2px 2px "+useColorModeValue("rgba(0,0,0,0.1)","rgba(255,255,255,0.1)")}>Create An Idea. Pursue it with Purpose.</Text>
         <Formik
           initialValues={{
             title: "",
@@ -148,12 +153,18 @@ export default function CreateIdea() {
             <Form>
               <HStack spacing={2}>
                 <Stack spacing={4} width={"50%"}>
+                  <Text fontSize={"xl"} fontWeight={"bold"}>Idea Details</Text>
                   <Box>
                     <Field name="title">
                       {({ field, form }) => (
                         <FormControl>
                           <FormLabel>Title</FormLabel>
+                          <HStack>
                           <Input placeholder="Title" {...field} type="text" />
+                          <Tooltip label="Share the title of your idea here! Titles should aim to be short and catchy, giving your idea a bang!">
+                            <Box height={"fit-content"}><BsInfoCircle/></Box>
+                          </Tooltip>
+                          </HStack>
                         </FormControl>
                       )}
                     </Field>
@@ -163,7 +174,12 @@ export default function CreateIdea() {
                       {({ field, form }) => (
                         <FormControl id="purpose">
                           <FormLabel>Purpose</FormLabel>
+                          <HStack>
                           <Input placeholder="Purpose" {...field} type="text" />
+                          <Tooltip label="Share the purpose of your idea! What is driving you to pursue it? For example, what need in your reality does it attempt to address? What skills are you hoping to develop?">
+                          <Box height={"fit-content"}><BsInfoCircle/></Box>
+                          </Tooltip>
+                          </HStack>
                         </FormControl>
                       )}
                     </Field>
@@ -173,11 +189,16 @@ export default function CreateIdea() {
                       {({ field, form }) => (
                         <FormControl id="description">
                           <FormLabel>Description</FormLabel>
+                          <HStack alignItems={"top"}>
                           <Textarea
                             placeholder="Briefly describe your idea here..."
                             {...field}
                             rows={"10"}
                           />
+                          <Tooltip label="Describe your idea in more detail!">
+                            <Box height={"fit-content"}><BsInfoCircle/></Box>
+                          </Tooltip>
+                          </HStack>
                         </FormControl>
                       )}
                     </Field>
@@ -186,20 +207,37 @@ export default function CreateIdea() {
                     {({ field, form }) => (
                       <FormControl id="iconurl">
                         <FormLabel>Icon URL</FormLabel>
+                        <HStack>
                         <Input
                           placeholder="https://picsum.photos/200"
                           {...field}
                           type="text"
                         />
+                        <Tooltip label="What image would best capture what your idea is hoping to achieve?">
+                            <Box height={"fit-content"}><BsInfoCircle/></Box>
+                          </Tooltip>
+                          </HStack>
                       </FormControl>
                     )}
                   </Field>
                   <Box></Box>
                 </Stack>
                 <Stack spacing={4} width={"50%"} padding={"50px"}>
+                  <HStack>
+                    <Text fontSize={"xl"} fontWeight={"bold"}>Additional Details</Text>
+                    <Tooltip label="Does any of the following apply to your idea?">
+                        <Box height={"fit-content"}><BsInfoCircle/></Box>
+                      </Tooltip>
+                  </HStack>
                   <Checkbox name="ispaid">Paid</Checkbox>
                   <Checkbox name="inprogress">In Progress</Checkbox>
                   <Checkbox name="isprivate">Private</Checkbox>
+                  <HStack>
+                    <Text fontSize={"xl"} fontWeight={"bold"}>Domains, Topics and Technologies</Text>
+                    <Tooltip label="What areas would best be attributed to your idea? This will help people to find it!">
+                        <Box height={"fit-content"}><BsInfoCircle/></Box>
+                      </Tooltip>
+                  </HStack>
                   <Box>
                     <Field name="Domain">
                       {({ field, form }) => (
@@ -284,6 +322,12 @@ export default function CreateIdea() {
                     </Field>
                     {techContainer}
                   </Box>
+                  <HStack>
+                    <Text fontSize={"xl"} fontWeight={"bold"}>Supporting Images</Text>
+                    <Tooltip label="Add links to any images that add to your idea description!">
+                        <Box height={"fit-content"}><BsInfoCircle/></Box>
+                      </Tooltip>
+                  </HStack>
                   <Box>
                     <Field name="supportingimgurl">
                       {({ field, form }) => (
