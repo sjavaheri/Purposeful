@@ -80,7 +80,7 @@ export default function CollaborationRequestIncoming({ request }) {
   };
 
   return (
-    <Card direction="row">
+    <Card direction="row" mb="20px">
       <CardBody>
         {message} <br />
         <b>Contact</b> {additionalContact}
