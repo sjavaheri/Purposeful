@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import Carousel from "@/components/Carousel";
 import HighFiveBtn from "@/components/HighFiveBtn";
 import CollabRequestPopup from "@/components/CollabRequestPopup";
@@ -22,8 +21,9 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 import { BsSend } from "react-icons/bs";
+import { useState } from "react";
 
-export default function MoreDetailsOfIdea(ideaId, idea) {
+export default function MoreDetailsOfIdea({ idea }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
   //TODO: Get requester mail
@@ -37,7 +37,7 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
     set_req(
       <CollabRequestPopup
         RequesterMail={getReqMail()}
-        ideaID={ideaId}
+        ideaID={idea.id}
         ideaTitle={idea.title}
         removeFunc={collab_rm}
       />
@@ -45,10 +45,10 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
   }
 
   let domains1 = [];
-  const domains2 = [];
+  let domains2 = [];
 
   let i = 0;
-  for (const domain in idea.domains) {
+  for (const domain of idea.domains) {
     if (i < idea.domains.length / 2) {
       domains1.push(domain.name);
     } else {
@@ -57,10 +57,10 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
     i++;
   }
 
-  const topics1 = [];
-  const topics2 = [];
+  let topics1 = [];
+  let topics2 = [];
   i = 0;
-  for (const topic in idea.topics) {
+  for (const topic of idea.topics) {
     if (i < idea.topics.length / 2) {
       topics1.push(topic.name);
     } else {
@@ -69,10 +69,10 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
     i++;
   }
 
-  const techs1 = [];
-  const techs2 = [];
+  let techs1 = [];
+  let techs2 = [];
   i = 0;
-  for (const tech in idea.techs) {
+  for (const tech of idea.techs) {
     if (i < idea.techs.length / 2) {
       techs1.push(tech.name);
     } else {
@@ -106,7 +106,7 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
           <Image
             rounded={"md"}
             alt={"product image"}
-            src={idea.iconUrl}
+            src={idea.iconUrl.url}
             fit={"cover"}
             align={"center"}
             w={"100%"}
@@ -144,7 +144,7 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
 
               <SimpleGrid columns={{ base: 1, md: 1 }} spacing={10}>
                 <List spacing={2}>
-                  <ListItem>{idea.isPaid}</ListItem>
+                  <ListItem>{idea.isPaid ? "Yes" : "No"}</ListItem>
                 </List>
               </SimpleGrid>
             </Box>
@@ -160,7 +160,7 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
 
               <SimpleGrid columns={{ base: 1, md: 1 }} spacing={10}>
                 <List spacing={2}>
-                  <ListItem>{idea.isInProgress}</ListItem>
+                  <ListItem>{idea.inProgress ? "Yes" : "No"}</ListItem>
                 </List>
               </SimpleGrid>
             </Box>
@@ -176,13 +176,13 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
 
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                 <List spacing={2}>
-                  {domains1.map((domain) => (
-                    <ListItem>{domain}</ListItem>
+                  {domains1.map((domain, index) => (
+                    <ListItem key={index}>{domain}</ListItem>
                   ))}
                 </List>
                 <List spacing={2}>
-                  {domains2.map((domain) => (
-                    <ListItem>{domain}</ListItem>
+                  {domains2.map((domain, index) => (
+                    <ListItem key={index}>{domain}</ListItem>
                   ))}
                 </List>
               </SimpleGrid>
@@ -199,13 +199,13 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
 
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                 <List spacing={2}>
-                  {topics1.map((topic) => (
-                    <ListItem>{topic}</ListItem>
+                  {topics1.map((topic, value) => (
+                    <ListItem key={value}>{topic}</ListItem>
                   ))}
                 </List>
                 <List spacing={2}>
-                  {topics2.map((topic) => (
-                    <ListItem>{topic}</ListItem>
+                  {topics2.map((topic, value) => (
+                    <ListItem key={value}>{topic}</ListItem>
                   ))}
                 </List>
               </SimpleGrid>
@@ -222,13 +222,13 @@ export default function MoreDetailsOfIdea(ideaId, idea) {
 
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
                 <List spacing={2}>
-                  {techs1.map((tech) => (
-                    <ListItem>{tech}</ListItem>
+                  {techs1.map((tech, index) => (
+                    <ListItem key={index}>{tech}</ListItem>
                   ))}
                 </List>
                 <List spacing={2}>
-                  {techs2.map((tech) => (
-                    <ListItem>{tech}</ListItem>
+                  {techs2.map((tech, index) => (
+                    <ListItem key={index}>{tech}</ListItem>
                   ))}
                 </List>
               </SimpleGrid>

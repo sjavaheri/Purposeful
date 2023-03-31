@@ -3,16 +3,11 @@ import {
   Box,
   FormControl,
   FormLabel,
-  Input,
   Stack,
-  HStack,
-  Checkbox,
-  Textarea,
   Button,
   useColorModeValue,
-  FormErrorMessage,
   Select,
-  IconButton,
+  Spinner,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
@@ -23,11 +18,15 @@ import { v4 as uuidv4 } from "uuid";
 import fetchWrapper from "@/utils/fetch_wrapper";
 import notification from "../utils/notification";
 
+// TODO: Modify the idea filter to be able to select multiple domains, topics, and technologies
+// At the moment, it only allows for one selection
 export default function IdeaFilter({ setIdeas }) {
   const [domains, setDomains] = useState([]);
   const [topics, setTopics] = useState([]);
   const [techs, setTechs] = useState([]);
 
+  // Initially get all domains, topics, and technologies in the system
+  // Then get all ideas
   useEffect(() => {
     getDomains().then((res) => {
       setDomains(res);
@@ -45,48 +44,47 @@ export default function IdeaFilter({ setIdeas }) {
     };
     fetchWrapper("/api/idea", null, "POST", payload).then(async (res) => {
       if (res !== null) {
-        // User registration failed display error mesages
         notification("error", "An error occurred.", res.errorMessages);
       } else if (res.ok) {
         const ideaList = await res.json();
+        // SUPER IMPORTANT
+        // This is the function that updates the list of ideas in the parent component
         setIdeas(ideaList);
       }
     });
   }, []);
 
-  // backend call setIdeas(list)
-
+  // Handle the search form submission
   async function handleSearchForm(values, actions) {
-    if (values.domain === "") {
+    if (values.domain === "All") {
       values.domain = null;
     }
-    if (values.topic === "") {
+    if (values.topic === "All") {
       values.topic = null;
     }
-    if (values.tech === "") {
+    if (values.tech === "All") {
       values.tech = null;
     }
+    // Takes only one value unfortunately
     const payload = {
       domains: [values.domain],
       topics: [values.topic],
       technologies: [values.tech],
     };
+    console.log(payload);
 
     const response = await fetchWrapper("/api/idea", null, "POST", payload);
-    console.log("response", response);
     if (response !== null) {
-      // User registration failed display error mesages
       notification("error", "An error occurred.", response.errorMessages);
     } else if (response.ok) {
       const ideaList = await response.json();
       setIdeas(ideaList);
     }
-    console.log("domains", values.domain);
-    console.log("topics", values.topic);
-    console.log("techs", values.tech);
-
     actions.setSubmitting(false);
   }
+  // Same frontend code as the create idea form for domains, topics, and technologies
+  // Remove the old logic and replaced it with Select components
+  // Add better logic eventually
   return (
     <Stack width={"100%"}>
       <Box
@@ -96,7 +94,7 @@ export default function IdeaFilter({ setIdeas }) {
         boxShadow={"lg"}
         p={0}>
         <Formik
-          initialValues={{ domain: "", topic: "", tech: "" }}
+          initialValues={{ domain: "All", topic: "All", tech: "All" }}
           onSubmit={async (values, actions) => {
             await handleSearchForm(values, actions);
           }}>
@@ -108,7 +106,7 @@ export default function IdeaFilter({ setIdeas }) {
                     {({ field, form }) => (
                       <FormControl>
                         <FormLabel>Domains</FormLabel>
-                        <Select {...field} placeholder="All">
+                        <Select {...field}>
                           {domains.map((domain) => (
                             <option key={domain.id} value={domain.name}>
                               {domain.name}
@@ -126,7 +124,7 @@ export default function IdeaFilter({ setIdeas }) {
                         id="topic"
                         isInvalid={form.errors.topic && form.touched.topic}>
                         <FormLabel>Topics</FormLabel>
-                        <Select {...field} placeholder="All">
+                        <Select {...field}>
                           {topics.map((topic) => (
                             <option key={topic.id} value={topic.name}>
                               {topic.name}
@@ -144,7 +142,7 @@ export default function IdeaFilter({ setIdeas }) {
                         id="tech"
                         isInvalid={form.errors.tech && form.touched.tech}>
                         <FormLabel>Technologies</FormLabel>
-                        <Select {...field} placeholder="All">
+                        <Select {...field}>
                           {techs.map((tech) => (
                             <option key={tech.id} value={tech.name}>
                               {tech.name}
