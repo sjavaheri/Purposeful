@@ -234,7 +234,14 @@ public class ID016_modifyIdeaStepDefinitions {
       assertEquals(Boolean.valueOf(value), idea.isPrivate());
     }
     if (field.equalsIgnoreCase("icon URL")) {
-      assertEquals(idMap.get(value), idea.getIconUrl().getId());
+      assertEquals(value, idea.getIconUrl().getURL());
+    }
+
+    if (field.equalsIgnoreCase("image URLs")) {
+      for (URL url : idea.getSupportingImageUrls()) {
+        List<String> changedUrls = List.of(value.split(","));
+        assertTrue(changedUrls.contains(url.getURL()));
+      }
     }
 
     if (field.equalsIgnoreCase("domains")) {
@@ -253,14 +260,8 @@ public class ID016_modifyIdeaStepDefinitions {
         objIds.add(technology.getId());
       }
     }
-    if (field.equalsIgnoreCase("image URLs")) {
-      for (URL url : idea.getSupportingImageUrls()) {
-        objIds.add(url.getId());
-      }
-    }
 
-    if (field.equalsIgnoreCase("image URLs")
-        || field.equalsIgnoreCase("topics")
+    if ( field.equalsIgnoreCase("topics")
         || field.equalsIgnoreCase("techs")
         || field.equalsIgnoreCase("domains")) {
       List<String> newObjIds = List.of(value.split(","));
@@ -282,13 +283,13 @@ public class ID016_modifyIdeaStepDefinitions {
     List<String> domainIds = null;
     List<String> techIds = null;
     List<String> topicIds = null;
-    List<String> imgUrlIds = null;
+    List<String> imgUrls = null;
 
     // Required fields
     boolean isPaid = idea.isPaid();
     boolean inProgress = idea.isInProgress();
     boolean isPrivate = idea.isPrivate();
-    String iconUrlId = idea.getIconUrl().getId();
+    String iconUrl = idea.getIconUrl().getURL();
 
     // Parameters for String fields
     if (field.equalsIgnoreCase("title")) {
@@ -311,7 +312,7 @@ public class ID016_modifyIdeaStepDefinitions {
       techIds = new ArrayList<>();
     }
     if (field.equalsIgnoreCase("image URLs")) {
-      imgUrlIds = new ArrayList<>();
+      imgUrls = new ArrayList<>();
     }
 
     IdeaRequestDTO ideaDTO =
@@ -327,8 +328,8 @@ public class ID016_modifyIdeaStepDefinitions {
             domainIds,
             techIds,
             topicIds,
-            imgUrlIds,
-            iconUrlId);
+            imgUrls,
+            iconUrl);
 
     this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
     this.authHeader.setContentType(MediaType.APPLICATION_JSON);

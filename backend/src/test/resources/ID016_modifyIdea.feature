@@ -91,12 +91,10 @@ Feature: Modify Idea
     Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | field      | old_value | new_value | error                                                                 | Http_status |
-      | 18 | domains    | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 19 | topics     | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 18 | techs      | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 19 | image URLs | 12        | 1         | You are attempting to link your idea to an object that does not exist | 400         |
-      | 18 | icon URL   | 17        | 2         | You are attempting to link your idea to an object that does not exist | 400         |
+      | id | field   | old_value | new_value | error                                                                 | Http_status |
+      | 18 | domains | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 19 | topics  | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 18 | techs   | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
 
 
 

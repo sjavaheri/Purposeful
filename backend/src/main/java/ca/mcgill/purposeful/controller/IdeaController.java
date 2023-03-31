@@ -71,10 +71,16 @@ public class IdeaController {
     }
 
     // create the urls for the supporting images
-    List<String> supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    List<String> supportingImageUrlIds = null;
+    if (ideaDTO.getImgUrls() != null) {
+      supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    }
 
     // create the icon url if it doesn't already exist
-    String iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+    String iconUrlId = null;
+    if (ideaDTO.getIconUrl() != null) {
+      iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+    }
 
     Idea createdIdea =
         ideaService.createIdea(
@@ -104,9 +110,7 @@ public class IdeaController {
    * @author Ramin Akhavan
    */
   @PutMapping(
-      value = {"/edit", "/edit/"},
-      consumes = "application/json",
-      produces = "application/json")
+      value = {"/edit", "/edit/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
       throws GlobalException {
@@ -115,10 +119,16 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
     }
     // create the urls for the supporting images
-    List<String> supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    List<String> supportingImageUrlIds = null;
+    if (ideaDTO.getImgUrls() != null) {
+        supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    }
 
     // create the icon url if it doesn't already exist
-    String iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+    String iconUrlId = null;
+    if (ideaDTO.getIconUrl() != null) {
+        iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+    }
 
     Idea modifiedIdea =
         ideaService.modifyIdea(
