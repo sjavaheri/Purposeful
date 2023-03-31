@@ -51,7 +51,7 @@ export default function IdeaCard({ idea }) {
           </Heading>
           <Text color={"gray.500"}>{idea.purpose}</Text>
           <Text
-            color={"green.500"}
+            color={"blue.500"}
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
@@ -59,7 +59,7 @@ export default function IdeaCard({ idea }) {
             Domains: {idea.domains.map((domain) => domain.name).join(", ")}
           </Text>
           <Text
-            color={"green.500"}
+            color={"blue.500"}
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
@@ -67,7 +67,7 @@ export default function IdeaCard({ idea }) {
             Topics: {idea.topics.map((topic) => topic.name).join(", ")}
           </Text>
           <Text
-            color={"green.500"}
+            color={"blue.500"}
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
@@ -75,7 +75,7 @@ export default function IdeaCard({ idea }) {
             Technologies: {idea.techs.map((tech) => tech.name).join(", ")}
           </Text>
           <Text
-            color={"green.500"}
+            color={"blue.500"}
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}

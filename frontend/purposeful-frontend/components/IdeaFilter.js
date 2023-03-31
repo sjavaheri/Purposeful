@@ -88,6 +88,7 @@ export default function IdeaFilter({ setIdeas }) {
   return (
     <Stack width={"100%"}>
       <Box
+        id="idea-filter"
         //width={"1"}
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
