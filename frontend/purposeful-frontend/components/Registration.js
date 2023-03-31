@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
-import fetchWrapper, { getAuthorities } from "../utils/fetch_wrapper";
-import notification from "../utils/notification";
+import fetchWrapper, { getAuthorities } from "@/utils/fetch_wrapper";
+import notification from "@/utils/notification";
 
 export default function Registration() {
   const [showPassword, setShowPassword] = useState(false);
