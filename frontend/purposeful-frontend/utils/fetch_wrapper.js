@@ -4,6 +4,44 @@ import jwt_decode from "jwt-decode";
 
 // Backend URL
 export const BACKEND = "http://127.0.0.1:8080";
+export const FRONTEND = "http://localhost:3000";
+
+/**
+ * Function to set or delete the cookie for the token.
+ *
+ * @param {*} token
+ */
+export function setTokenCookie(token) {
+  if (!token) {
+    // If there is no token, delete the cookie
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  } else {
+    const decoded = jwt_decode(token);
+    let tokenExpiry = decoded.exp; // in seconds
+    let date = new Date(tokenExpiry * 1000); // *1000 to milliseconds
+    let cookieExpiry = date.toUTCString();
+    document.cookie = `token=${token}; expires=${cookieExpiry}; path=/; secure; samesite=lax`;
+  }
+}
+
+/**
+ * Function to get the token from the cookie.
+ */
+export function getTokenCookie() {
+  let token = "";
+  let cookie = document.cookie;
+  if (cookie) {
+    let cookieArr = cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+      let cookiePair = cookieArr[i].split("=");
+      if (cookiePair[0].trim() == "token") {
+        token = cookiePair[1];
+        break;
+      }
+    }
+  }
+  return token;
+}
 
 /**
  * Method to login a user given its username and password
@@ -31,7 +69,7 @@ export async function login(username, password) {
     }
     let token = await res.text();
     // Store token in local storage
-    localStorage.setItem("token", token);
+    setTokenCookie(token);
     return true;
   } catch (err) {
     console.error("Something went wrong. Unable to get token. " + err);
@@ -45,7 +83,7 @@ export async function login(username, password) {
  */
 export async function verifyToken() {
   localStorage.removeItem("appUser");
-  const token = localStorage.getItem("token");
+  const token = getTokenCookie();
   // Check if there is a token
   if (!token) return false;
   const res = await fetchWrapper("/api/login");
@@ -67,7 +105,7 @@ export async function verifyToken() {
  */
 export function logout() {
   localStorage.removeItem("appUser");
-  localStorage.removeItem("token");
+  setTokenCookie(null);
 }
 
 /**
@@ -76,7 +114,7 @@ export function logout() {
  * @author Siger Ma
  */
 export function getAuthorities() {
-  const token = localStorage.getItem("token");
+  const token = getTokenCookie();
   if (!token) return [];
   const decoded = jwt_decode(token);
   return decoded.grantedAuthorities;
@@ -104,15 +142,9 @@ export default async function fetchWrapper(
     );
     return;
   }
-  // if (
-  //   headers &&
-  //   Object.hasOwn(headers, "Content-Type") &&
-  //   headers["Content-Type"] == "application/json"
-  // ) {
-  //   json = true;
-  // }
+
   // Check if there is a token
-  let token = localStorage.getItem("token");
+  let token = getTokenCookie();
   if (token) {
     headers = {
       ...headers,

@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -18,7 +18,6 @@ import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
-import NavBar from "./NavBar";
 
 var fullfilled = 0;
 var field_name = "domains";
@@ -26,6 +25,9 @@ var c_domains = [];
 var c_topics = [];
 var c_techs = [];
 
+var domains_sel = <Select id="domains"></Select>;
+var topics_sel = <Select id="topics"></Select>;
+var techs_sel = <Select id="techs"></Select>;
 var domains_sel = <Select id="domains"></Select>;
 var topics_sel = <Select id="topics"></Select>;
 var techs_sel = <Select id="techs"></Select>;
@@ -44,7 +46,8 @@ export default function CreateIdea() {
       on
       direction={["column", "row"]}
       id={"domainContainer"}
-      wrap={"wrap"}>
+      wrap={"wrap"}
+    >
       {render_domains}
     </Stack>
   );
@@ -62,25 +65,31 @@ export default function CreateIdea() {
   var topics = [];
   var techs = [];
 
-  (async () => {
-    domains = await getDomains();
-    topics = await getTopics();
-    techs = await getTechs();
-    if (fullfilled == 0) {
-      fullfilled++;
-      domains.map(MakeOption);
-    }
-    if (fullfilled == 1) {
-      fullfilled++;
-      field_name = "topics";
-      topics.map(MakeOption);
-    }
-    if (fullfilled == 2) {
-      fullfilled++;
-      field_name = "techs";
-      techs.map(MakeOption);
-    }
-  })();
+  useEffect(() => {
+    getDomains().then((res) => {
+      if (fullfilled == 0) {
+        fullfilled++;
+        domains = res;
+        domains.map(MakeOption);
+      }
+    });
+    getTopics().then((res) => {
+      if (fullfilled == 1) {
+        fullfilled++;
+        topics = res;
+        field_name = "topics";
+        topics.map(MakeOption);
+      }
+    });
+    getTechs().then((res) => {
+      if (fullfilled == 2) {
+        fullfilled++;
+        techs = res;
+        field_name = "techs";
+        techs.map(MakeOption);
+      }
+    });
+  }, []);
 
   var refreshfn = function () {
     set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
@@ -117,7 +126,8 @@ export default function CreateIdea() {
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
         boxShadow={"lg"}
-        p={8}>
+        p={8}
+      >
         <Formik
           initialValues={{
             title: "",
@@ -132,7 +142,8 @@ export default function CreateIdea() {
               actions.setSubmitting(false);
               // TODO: Redirect to the login page
             }, 1000);
-          }}>
+          }}
+        >
           {(props) => (
             <Form>
               <HStack spacing={2}>
@@ -220,7 +231,8 @@ export default function CreateIdea() {
                       {({ field, form }) => (
                         <FormControl
                           id="topic"
-                          isInvalid={form.errors.topic && form.touched.topic}>
+                          isInvalid={form.errors.topic && form.touched.topic}
+                        >
                           <FormLabel>Topics</FormLabel>
                           <HStack>
                             {topics_sel}
@@ -248,7 +260,8 @@ export default function CreateIdea() {
                       {({ field, form }) => (
                         <FormControl
                           id="tech"
-                          isInvalid={form.errors.tech && form.touched.tech}>
+                          isInvalid={form.errors.tech && form.touched.tech}
+                        >
                           <FormLabel>Technologies</FormLabel>
                           <HStack>
                             {techs_sel}
@@ -308,7 +321,8 @@ export default function CreateIdea() {
                   _hover={{
                     bg: "blue.500",
                   }}
-                  type="submit">
+                  type="submit"
+                >
                   Create Idea
                 </Button>
               </Box>
