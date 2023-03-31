@@ -138,7 +138,8 @@ public class TestCollaborationRequestService {
 
       // Send a request
       List<CollaborationRequest> collabReqs =
-          collaborationRequestService.getCollaborationRequestsByIdea(MockDatabase.idea2.getId());
+          collaborationRequestService.getCollaborationRequestsByIdea(
+              MockDatabase.appUser2.getEmail(), MockDatabase.idea2.getId());
 
       // Ensure no requests are returned
       assertNotNull(collabReqs);
@@ -150,14 +151,15 @@ public class TestCollaborationRequestService {
     }
   }
 
-  // Test the success case
+  // Test the alternative case
   @Test
   public void testGetCollaborationRequestsByIdea_NoRequests() {
     try {
 
       // Send a request
       List<CollaborationRequest> collabReqs =
-          collaborationRequestService.getCollaborationRequestsByIdea(MockDatabase.idea1.getId());
+          collaborationRequestService.getCollaborationRequestsByIdea(
+              MockDatabase.appUser1.getEmail(), MockDatabase.idea1.getId());
 
       // Ensure no requests are returned
       assertNotNull(collabReqs);
@@ -165,6 +167,26 @@ public class TestCollaborationRequestService {
 
     } catch (GlobalException e) {
       fail(); // Shouldn't get here
+    }
+  }
+
+  // Test the failure case
+  @Test
+  public void testGetCollaborationRequestsByIdea_NotOwner() {
+    try {
+
+      // Send a request
+      List<CollaborationRequest> collabReqs =
+          collaborationRequestService.getCollaborationRequestsByIdea(
+              MockDatabase.appUser2.getEmail(), MockDatabase.idea1.getId());
+
+      // Shouldn't succeed
+      fail();
+
+    } catch (GlobalException e) {
+      // Check the correct error message is returned
+      assertEquals(
+          "Only the owner of the idea can view its collaboration requests", e.getMessage());
     }
   }
 

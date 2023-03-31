@@ -61,9 +61,14 @@ public class CollaborationRequestController {
   @PreAuthorize("hasAuthority('User')")
   public ResponseEntity<List<CollaborationRequestDTO>> getCollaborationRequestsByIdea(
       @PathVariable String ideaId) {
+
+    // Retrieve the sender's email given that he is logged in
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    String email = authentication.getName();
+
     return new ResponseEntity<List<CollaborationRequestDTO>>(
         CollaborationRequestDTO.convertToDTO(
-            collaborationRequestService.getCollaborationRequestsByIdea(ideaId)),
+            collaborationRequestService.getCollaborationRequestsByIdea(email, ideaId)),
         HttpStatus.OK);
   }
 }
