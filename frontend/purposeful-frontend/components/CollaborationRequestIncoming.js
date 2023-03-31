@@ -82,8 +82,8 @@ export default function CollaborationRequestIncoming({ request }) {
   return (
     <Card direction="row" mb="20px">
       <CardBody>
-        {message} <br />
-        <b>Contact</b> {additionalContact}
+        <b>Message</b> {message} <br />
+        <b>Contact Information</b> {additionalContact}
       </CardBody>
       <CardFooter>
         <Popover>
