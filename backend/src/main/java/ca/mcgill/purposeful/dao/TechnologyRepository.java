@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface TechnologyRepository extends CrudRepository<Technology, Integer> {
 
   Technology findTechnologyById(String id);
+    Technology findTechnologyByName(String name);
 }

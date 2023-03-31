@@ -114,13 +114,13 @@ public class ID016_modifyIdeaStepDefinitions {
     List<String> domainIds = null;
     List<String> techIds = null;
     List<String> topicIds = null;
-    List<String> imgUrlIds = null;
+    List<String> imgUrls = null;
 
     // Required fields
     boolean isPaid = idea.isPaid();
     boolean inProgress = idea.isInProgress();
     boolean isPrivate = idea.isPrivate();
-    String iconUrlId = idea.getIconUrl().getId();
+    String iconUrl = idea.getIconUrl().getURL();
 
     // Parameters for String fields
     if (field.equalsIgnoreCase("title")) {
@@ -144,7 +144,7 @@ public class ID016_modifyIdeaStepDefinitions {
       isPrivate = Boolean.valueOf(new_value);
     }
     if (field.equalsIgnoreCase("icon URL")) {
-      iconUrlId = idMap.get(new_value);
+      iconUrl = new_value;
     }
 
     if (field.equalsIgnoreCase("domains")) {
@@ -166,10 +166,10 @@ public class ID016_modifyIdeaStepDefinitions {
       }
     }
     if (field.equalsIgnoreCase("image URLs")) {
-      imgUrlIds = new ArrayList<>();
-      for (String single_id : List.of(new_value.split(","))) {
+      imgUrls = new ArrayList<>();
+      for (String url : List.of(new_value.split(","))) {
         // assertEquals(1, single_id);
-        imgUrlIds.add(idMap.get(single_id));
+        imgUrls.add(url);
       }
     }
 
@@ -186,8 +186,8 @@ public class ID016_modifyIdeaStepDefinitions {
             domainIds,
             techIds,
             topicIds,
-            imgUrlIds,
-            iconUrlId);
+            imgUrls,
+            iconUrl);
 
     this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
     this.authHeader.setContentType(MediaType.APPLICATION_JSON);

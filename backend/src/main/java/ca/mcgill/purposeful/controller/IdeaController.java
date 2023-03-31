@@ -70,6 +70,12 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
 
+    // create the urls for the supporting images
+    List<String> supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+
+    // create the icon url if it doesn't already exist
+    String iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+
     Idea createdIdea =
         ideaService.createIdea(
             ideaDTO.getTitle(),
@@ -81,8 +87,8 @@ public class IdeaController {
             ideaDTO.getDomainIds(),
             ideaDTO.getTechIds(),
             ideaDTO.getTopicIds(),
-            ideaDTO.getImgUrlIds(),
-            ideaDTO.getIconUrlId(),
+            supportingImageUrlIds,
+            iconUrlId,
             auth.getName());
 
     IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
@@ -108,6 +114,11 @@ public class IdeaController {
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
     }
+    // create the urls for the supporting images
+    List<String> supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+
+    // create the icon url if it doesn't already exist
+    String iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
 
     Idea modifiedIdea =
         ideaService.modifyIdea(
@@ -121,8 +132,8 @@ public class IdeaController {
             ideaDTO.getDomainIds(),
             ideaDTO.getTechIds(),
             ideaDTO.getTopicIds(),
-            ideaDTO.getImgUrlIds(),
-            ideaDTO.getIconUrlId());
+            supportingImageUrlIds,
+            iconUrlId);
     IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
 
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
