@@ -61,7 +61,7 @@ public class UrlRepositoryTests {
     assertEquals(str, url.getURL());
     assertEquals(id, url.getId());
 
-    // check a URL can be found but its URL
+    // check a URL can be found by its URL
     url = null;
     url = urlRepository.findURLByURL(str).get(0);
     assertNotNull(url);
