@@ -12,33 +12,41 @@ import java.util.List;
 public class CollaborationRequestDTO {
 
   private String id;
-  private IdeaDTO idea;
+  private String ideaId;
   private String message;
   private String additionalContact;
 
   public CollaborationRequestDTO() {}
 
   public CollaborationRequestDTO(
-      String id, IdeaDTO idea, String message, String additionalContact) {
+      String id, String ideaId, String message, String additionalContact) {
     this.id = id;
-    this.idea = idea;
+    this.ideaId = ideaId;
     this.message = message;
     this.additionalContact = additionalContact;
   }
 
   public CollaborationRequestDTO(CollaborationRequest collaborationRequest) {
     this.id = collaborationRequest.getId();
-    this.idea = new IdeaDTO(collaborationRequest.getIdea());
+    this.ideaId = collaborationRequest.getIdea().getId();
     this.message = collaborationRequest.getMessage();
     this.additionalContact = collaborationRequest.getAdditionalContact();
   }
 
-  public IdeaDTO getIdea() {
-    return idea;
+  public String getId() {
+    return id;
   }
 
-  public void setIdea(IdeaDTO idea) {
-    this.idea = idea;
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getIdeaId() {
+    return ideaId;
+  }
+
+  public void setIdeaId(String ideaId) {
+    this.ideaId = ideaId;
   }
 
   public String getMessage() {
