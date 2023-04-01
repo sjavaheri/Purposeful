@@ -37,6 +37,14 @@ public class CollaborationRequestDTO {
     return idea;
   }
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+
   public void setIdea(IdeaDTO idea) {
     this.idea = idea;
   }
