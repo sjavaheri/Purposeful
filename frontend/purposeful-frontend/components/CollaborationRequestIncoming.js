@@ -24,6 +24,11 @@ export default function CollaborationRequestIncoming({ request }) {
   const additionalContact = request.additionalContact;
   const message = request.message;
   const requestId = request.id;
+  const hasResponse = request.hasResponse;
+
+  if (hasResponse) {
+    return null;
+  }
 
   const acceptMessage = useRef();
   const acceptContact = useRef();
@@ -34,6 +39,7 @@ export default function CollaborationRequestIncoming({ request }) {
   const handleAccept = async () => {
     const message = acceptMessage.current.value;
     const additionalInfo = acceptContact.current.value;
+    console.log("Request id: " + requestId);
     console.log("accept: " + message + " " + additionalInfo);
 
     setButtonLoading.on();
@@ -50,9 +56,9 @@ export default function CollaborationRequestIncoming({ request }) {
     );
 
     if (!response.ok) {
-      notification('error', response.errorMessages);
+      notification("error", response.errorMessages);
     } else {
-      notification('success', 'Message sent!')
+      notification("success", "Message sent!");
     }
 
     setButtonLoading.off();
@@ -60,6 +66,7 @@ export default function CollaborationRequestIncoming({ request }) {
 
   const handleIgnore = async () => {
     const message = declineMessage.current.value;
+    console.log("Request id: " + requestId);
     console.log("ignore " + message);
 
     setButtonLoading.on();
@@ -71,9 +78,9 @@ export default function CollaborationRequestIncoming({ request }) {
     );
 
     if (!response.ok) {
-      notification('error', response.errorMessages);
+      notification("error", response.errorMessages);
     } else {
-      notification('success', 'Message sent!')
+      notification("success", "Message sent!");
     }
 
     setButtonLoading.off();

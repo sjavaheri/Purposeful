@@ -15,15 +15,17 @@ public class CollaborationRequestDTO {
   private IdeaDTO idea;
   private String message;
   private String additionalContact;
+  private boolean hasResponse;
 
   public CollaborationRequestDTO() {}
 
   public CollaborationRequestDTO(
-      String id, IdeaDTO idea, String message, String additionalContact) {
+      String id, IdeaDTO idea, String message, String additionalContact, boolean hasResponse) {
     this.id = id;
     this.idea = idea;
     this.message = message;
     this.additionalContact = additionalContact;
+    this.hasResponse = hasResponse;
   }
 
   public CollaborationRequestDTO(CollaborationRequest collaborationRequest) {
@@ -31,6 +33,7 @@ public class CollaborationRequestDTO {
     this.idea = new IdeaDTO(collaborationRequest.getIdea());
     this.message = collaborationRequest.getMessage();
     this.additionalContact = collaborationRequest.getAdditionalContact();
+    this.hasResponse = collaborationRequest.getCollaborationResponse() != null;
   }
 
   public IdeaDTO getIdea() {
@@ -63,6 +66,14 @@ public class CollaborationRequestDTO {
 
   public void setAdditionalContact(String additionalContact) {
     this.additionalContact = additionalContact;
+  }
+
+  public boolean isHasResponse() {
+    return hasResponse;
+  }
+
+  public void setHasResponse(boolean hasResponse) {
+    this.hasResponse = hasResponse;
   }
 
   /**
