@@ -55,7 +55,7 @@ public class CollaborationRequestController {
    *
    * @param ideaId - the id of the idea
    * @return a list of collaboration request DTOs linked to the idea
-   * @throws GlobalException if the idea does not exist
+   * @throws GlobalException if the idea does not exist, or the person accessing the requests is not the owner of the idea
    */
   @GetMapping("/{ideaId}")
   @PreAuthorize("hasAuthority('User')")
