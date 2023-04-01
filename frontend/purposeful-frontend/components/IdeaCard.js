@@ -56,7 +56,10 @@ export default function IdeaCard({ idea }) {
             fontWeight={800}
             fontSize={"sm"}
             letterSpacing={1.1}>
-            Domains: {idea.domains.map((domain) => domain.name).join(", ")}
+            Domains:{" "}
+            <Text display="inline-block" color={"gray.500"} fontWeight={400}>
+              {idea.domains.map((domain) => domain.name).join(", ")}
+            </Text>
           </Text>
           <Text
             color={"blue.500"}
@@ -64,7 +67,10 @@ export default function IdeaCard({ idea }) {
             fontWeight={800}
             fontSize={"sm"}
             letterSpacing={1.1}>
-            Topics: {idea.topics.map((topic) => topic.name).join(", ")}
+            Topics:{" "}
+            <Text display="inline-block" color={"gray.500"} fontWeight={400}>
+              {idea.topics.map((topic) => topic.name).join(", ")}
+            </Text>
           </Text>
           <Text
             color={"blue.500"}
@@ -72,7 +78,10 @@ export default function IdeaCard({ idea }) {
             fontWeight={800}
             fontSize={"sm"}
             letterSpacing={1.1}>
-            Technologies: {idea.techs.map((tech) => tech.name).join(", ")}
+            Technologies:{" "}
+            <Text display="inline-block" color={"gray.500"} fontWeight={400}>
+              {idea.techs.map((tech) => tech.name).join(", ")}
+            </Text>
           </Text>
           <Text
             color={"blue.500"}
