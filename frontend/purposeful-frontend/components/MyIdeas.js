@@ -12,7 +12,9 @@ import {
   Image,
   Tag,
   TagLabel, 
-  Spinner
+  Spinner,
+  Heading,
+  Link
 } from "@chakra-ui/react";
 
 import { useColorModeValue } from "@chakra-ui/color-mode";
@@ -50,6 +52,7 @@ export default function MyIdeas() {
     function MakeIdeaObj(idea) {
       const idea_topics = idea.topics.map((topic) => topic.name);
       const idea_obj = {
+        id: idea.id,
         purpose: idea.purpose,
         title: idea.title,
         imageUrl: idea.iconUrl.url,
@@ -78,22 +81,23 @@ export default function MyIdeas() {
     }
   
     function IdeaBoxes({ list }) {
+      console.log(list[0].id);
       return (
-        <SimpleGrid columns={4} spacing={7}>
+        <SimpleGrid columns={3} spacing={7}>
           {list.map((item, index) => (
-            <Box
-              key={index}
-              rounded={"lg"}
-              bg={boxColor}
-              boxShadow={"lg"}
-              borderWidth="1px"
-              borderRadius="lg"
-              overflow="hidden"
-              p={4}
-              m={4}
-            >
+            <Link 
+            key={index} 
+            as={Box} 
+            rounded={"lg"} 
+            bg={boxColor} 
+            boxShadow={"lg"} 
+            borderWidth="1px" 
+            borderRadius="lg" 
+            overflow="hidden" 
+            p={4} m={4} 
+            href="#">
               <Flex alignItems="center" justifyContent="space-between">
-                <Text mt={4} fontWeight="bold">
+                <Text mt={4} fontWeight="bold" fontSize="xl">
                   {item.title}
                 </Text>
                 <Button size="sm">
@@ -105,7 +109,7 @@ export default function MyIdeas() {
               <Image src={item.imageUrl} height="100px" alt="Example Img" />
               <br />
               <TagList tags={item.topics}></TagList>
-            </Box>
+            </Link>
           ))}
         </SimpleGrid>
       );
@@ -120,6 +124,9 @@ export default function MyIdeas() {
         py={12}
         px={6}
       >
+        <Heading textAlign="center" as="h1" size="2xl">
+        The hub of creativity. Your ideas!
+        </Heading>
         <Flex alignItems="center">
           <Input
             placeholder="Search..."
@@ -144,7 +151,9 @@ export default function MyIdeas() {
             ideas.length > 0 ? (
             <IdeaBoxes list={ideas} />
             ) : (
-            <p>No ideas found</p>
+                <Heading as="h3" size="xl">
+                No ideas yet!
+                </Heading>
             )
         )}
       </Stack>
