@@ -1,6 +1,7 @@
 package ca.mcgill.purposeful.controller;
 
 import ca.mcgill.purposeful.dto.CollaborationResponseDTO;
+import ca.mcgill.purposeful.dto.CollaborationResponseInformationDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.CollaborationResponse;
 import ca.mcgill.purposeful.service.CollaborationResponseService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,21 +50,15 @@ public class CollaborationResponseController {
   /**
    * This method is used to approve a collaboration request
    *
-   * @param requestId The id of the collaboration request to approve
-   * @param message The message to send to the requester
-   * @param additionalInfo The additional info to send to the requester
+   * @param collaborationResponseInformationDTO The collaboration response info WITH an additional
+   *     contact
    * @return the collaboration response with a status
    * @author Wassim Jabbour
    */
-  @PostMapping({
-    "/approve/{requestId}/{message}/{additionalInfo}",
-    "/approve/{requestId}/{message}/{additionalInfo}/"
-  })
+  @PostMapping({"/approve", "/approve/"})
   @PreAuthorize("hasAuthority('User')")
   public ResponseEntity<CollaborationResponseDTO> approveCollaborationRequest(
-      @PathVariable(name = "requestId") String requestId,
-      @PathVariable(name = "message") String message,
-      @PathVariable(name = "additionalInfo") String additionalInfo) {
+      @RequestBody CollaborationResponseInformationDTO collaborationResponseInformationDTO) {
 
     // Extract the email
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -72,23 +68,25 @@ public class CollaborationResponseController {
     return new ResponseEntity<CollaborationResponseDTO>(
         new CollaborationResponseDTO(
             collaborationResponseService.approveCollaborationRequest(
-                email, requestId, additionalInfo, message)),
+                email,
+                collaborationResponseInformationDTO.getCollaborationRequestId(),
+                collaborationResponseInformationDTO.getAdditionalContact(),
+                collaborationResponseInformationDTO.getMessage())),
         HttpStatus.OK);
   }
 
   /**
    * This method is used to decline a collaboration request
    *
-   * @param requestId The id of the collaboration request to reject
-   * @param message The message to send to the requester
+   * @param collaborationResponseInformationDTO The collaboration response info without an
+   *     additional contact (Leave field to be null)
    * @return the collaboration response with a status
    * @author Wassim Jabbour
    */
-  @PostMapping({"/decline/{requestId}/{message}", "/decline/{requestId}/{message}/"})
+  @PostMapping({"/decline", "/decline/"})
   @PreAuthorize("hasAuthority('User')")
   public ResponseEntity<CollaborationResponseDTO> declineCollaborationRequest(
-      @PathVariable(name = "requestId") String requestId,
-      @PathVariable(name = "message") String message) {
+      @RequestBody CollaborationResponseInformationDTO collaborationResponseInformationDTO) {
 
     // Extract the email
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -97,7 +95,10 @@ public class CollaborationResponseController {
     // Make the call
     return new ResponseEntity<CollaborationResponseDTO>(
         new CollaborationResponseDTO(
-            collaborationResponseService.declineCollaborationRequest(email, requestId, message)),
+            collaborationResponseService.declineCollaborationRequest(
+                email,
+                collaborationResponseInformationDTO.getCollaborationRequestId(),
+                collaborationResponseInformationDTO.getMessage())),
         HttpStatus.OK);
   }
 }

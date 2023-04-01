@@ -205,5 +205,11 @@ public class CollaborationRepositoryTests {
     assertNotNull(requests);
     assertEquals(1, requests.size());
     assertEquals(request.getId(), requests.get(0).getId());
+
+    // Assert that the collaboration request can be retrieved by idea
+    requests = collaborationRequestRepository.findCollaborationRequestsByIdea(idea);
+    assertNotNull(requests);
+    assertEquals(1, requests.size());
+    assertEquals(request.getId(), requests.get(0).getId());
   }
 }

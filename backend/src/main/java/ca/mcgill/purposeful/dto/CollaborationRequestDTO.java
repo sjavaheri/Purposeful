@@ -1,6 +1,8 @@
 package ca.mcgill.purposeful.dto;
 
 import ca.mcgill.purposeful.model.CollaborationRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data transfer object for the CollaborationRequest class
@@ -9,30 +11,42 @@ import ca.mcgill.purposeful.model.CollaborationRequest;
  */
 public class CollaborationRequestDTO {
 
-  private IdeaDTO idea;
+  private String id;
+  private String ideaId;
   private String message;
   private String additionalContact;
 
   public CollaborationRequestDTO() {}
 
-  public CollaborationRequestDTO(IdeaDTO idea, String message, String additionalContact) {
-    this.idea = idea;
+  public CollaborationRequestDTO(
+      String id, String ideaId, String message, String additionalContact) {
+    this.id = id;
+    this.ideaId = ideaId;
     this.message = message;
     this.additionalContact = additionalContact;
   }
 
   public CollaborationRequestDTO(CollaborationRequest collaborationRequest) {
-    this.idea = new IdeaDTO(collaborationRequest.getIdea());
+    this.id = collaborationRequest.getId();
+    this.ideaId = collaborationRequest.getIdea().getId();
     this.message = collaborationRequest.getMessage();
     this.additionalContact = collaborationRequest.getAdditionalContact();
   }
 
-  public IdeaDTO getIdea() {
-    return idea;
+  public String getId() {
+    return id;
   }
 
-  public void setIdea(IdeaDTO idea) {
-    this.idea = idea;
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getIdeaId() {
+    return ideaId;
+  }
+
+  public void setIdeaId(String ideaId) {
+    this.ideaId = ideaId;
   }
 
   public String getMessage() {
@@ -49,5 +63,23 @@ public class CollaborationRequestDTO {
 
   public void setAdditionalContact(String additionalContact) {
     this.additionalContact = additionalContact;
+  }
+
+  /**
+   * Converts a list of collaboration requests to DTOs
+   *
+   * @param collaborationRequests list of collaboration requests
+   * @return list of collaboration request DTOs
+   * @author Wassim Jabbour
+   */
+  public static List<CollaborationRequestDTO> convertToDTO(
+      List<CollaborationRequest> collaborationRequests) {
+    ArrayList<CollaborationRequestDTO> dtoList = new ArrayList<>();
+
+    for (CollaborationRequest req : collaborationRequests) {
+      dtoList.add(new CollaborationRequestDTO(req));
+    }
+
+    return dtoList;
   }
 }
