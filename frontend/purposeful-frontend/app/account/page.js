@@ -4,6 +4,7 @@
 // see https://beta.nextjs.org/docs/rendering/server-and-client-components#when-to-use-server-vs-client-components
 "use client";
 import {
+  Box,
   Button,
   Flex,
   Heading,
@@ -25,6 +26,7 @@ export default function ModifyAccountDetailsPage() {
   const [appUser, setAppUser] = useState(null);
   const [GrantedAuth, setGrantedAuth] = useState([]);
   const [verified, setVerified] = useState(false);
+
   useEffect(() => {
     verifyToken().then((res) => {
       setVerified(res);
@@ -33,7 +35,16 @@ export default function ModifyAccountDetailsPage() {
     });
   }, []);
 
-  if (!appUser) return <Spinner />;
+  if (!appUser)
+    return (
+      <Flex
+        minH={"100vh"}
+        align={"center"}
+        justify={"center"}
+        bg={useColorModeValue("gray.50", "gray.800")}>
+        <Spinner />
+      </Flex>
+    );
 
   return (
     <Flex
