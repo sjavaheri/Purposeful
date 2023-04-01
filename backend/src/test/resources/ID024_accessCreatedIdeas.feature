@@ -22,13 +22,13 @@ Feature: Access Created Ideas
       | 10 | React  |
       | 11 | C      |
     And the database contains the following URL object info:
-      | id | url           |
-      | 12 | something.com |
-      | 13 | another.com   |
-      | 14 | sayless.com   |
-      | 15 | keepitup.com  |
-      | 16 | interest.com  |
-      | 17 | bestteam.com  |
+      | id | url                                                                                                             |
+      | 12 | https://images.pexels.com/photos/8145352/pexels-photo-8145352.jpeg                                              |
+      | 13 | https://images.pexels.com/photos/7413915/pexels-photo-7413915.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2 |
+      | 14 | https://images.pexels.com/photos/6238186/pexels-photo-6238186.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2 |
+      | 15 | https://images.pexels.com/photos/6476783/pexels-photo-6476783.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2 |
+      | 16 | https://images.pexels.com/photos/4344860/pexels-photo-4344860.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2 |
+      | 17 | https://images.pexels.com/photos/3727463/pexels-photo-3727463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2 |
     And the database contains the following idea object info:
       | id | title            | purpose      | description | domains | topics | techs | supportingImageUrls | iconUrl | isPaid | isInProgress | isPrivate | user |
       | 18 | Music generation | Open source  | extra info1 | 2       | 6      | 8,9   | 14                  | 17      | false  | false        | false     | 0    |
