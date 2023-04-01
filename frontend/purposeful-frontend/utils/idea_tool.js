@@ -23,3 +23,9 @@ export async function removeIdea(id) {
   var body = removal.status;
   return body;
 }
+
+export async function getMyIdeas(){
+  let ideas = await fetchWrapper(`/api/idea/user`);
+  let body = await ideas.json();
+  return body;
+}
