@@ -33,9 +33,10 @@ export default function MyIdeas() {
 
     const tagColor = useColorModeValue("blue.400", "gray.900");
     const boxColor = useColorModeValue("gray.50", "gray.800");
-    const editColor = useColorModeValue("gray.50", "gray.800");
+    const editColor = useColorModeValue("yellow.300", "gray.700");
     const searchColor = useColorModeValue("gray.50", "gray.800");
     const searchIconColor = useColorModeValue("gray.20", "gray.750");
+    const collabRequestColor = useColorModeValue("cyan.100", "cyan.750");
 
 
     const [ideas, setIdeas] = useState([]);
@@ -83,23 +84,9 @@ export default function MyIdeas() {
       );
     }
 
-    function handleDetails(id) {
-        console.log("loaded third");
-        if (boxClicked == 1){
-            window.location.href = '/idea/{id}';
-        }
-      }
 
-
-    function handleModify(event) {
-        console.log("loaded second");
-        if (event.type === "click") {
-            window.location.href = '/idea/modify';
-        }
-    }
   
     function IdeaBoxes({ list }) {
-      console.log("loaded first");
       return (
         <SimpleGrid columns={3} spacing={7}>
           {list.map((item, index) => (
@@ -122,7 +109,7 @@ export default function MyIdeas() {
                 <Text mt={4} fontWeight="bold" fontSize="xl">
                   {item.title}
                 </Text>
-                <Button size="sm" onClick={(event) => {
+                <Button size="sm" bg={editColor} hoverBg={editColor} _hover={{ boxShadow: "none" }} onClick={(event) => {
                     event.stopPropagation();
                     localStorage.setItem("ideaId", item.id);
                     window.location.href = '/idea/modify';
@@ -135,7 +122,17 @@ export default function MyIdeas() {
               <Image src={item.imageUrl} height="170px" alt="Example Img" />
               <br />
               <TagList tags={item.topics}></TagList>
+              <Text><br></br></Text>
+              <Flex justifyContent="center">
+                <Button size="sm" bg={collabRequestColor} hoverBg={collabRequestColor} _hover={{ boxShadow: "none" }} onClick={(event) => {
+                    event.stopPropagation();
+                    window.location.href = '/collaborationRequests?ideaId=' + item.id;
+                }}>
+                    View Collaboration Requests
+                </Button>
+                </Flex>
               </Box>
+              
           ))}
         </SimpleGrid>
       );
