@@ -28,6 +28,8 @@ var field_name = "allIdeas";
 
 export default function MyIdeas() {
     
+    var boxClicked = 0;
+    var modifyClicked = 0;
 
     const tagColor = useColorModeValue("blue.400", "gray.900");
     const boxColor = useColorModeValue("gray.50", "gray.800");
@@ -38,6 +40,7 @@ export default function MyIdeas() {
 
     const [ideas, setIdeas] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    
 
     useEffect(() => {
       const fetchData = async () => {
@@ -79,28 +82,51 @@ export default function MyIdeas() {
         </>
       );
     }
+
+    function handleDetails(id) {
+        console.log("loaded third");
+        if (boxClicked == 1){
+            window.location.href = '/idea/{id}';
+        }
+      }
+
+
+    function handleModify(event) {
+        console.log("loaded second");
+        if (event.type === "click") {
+            window.location.href = '/idea/modify';
+        }
+    }
   
     function IdeaBoxes({ list }) {
-      console.log(list[0].id);
+      console.log("loaded first");
       return (
         <SimpleGrid columns={3} spacing={7}>
           {list.map((item, index) => (
-            <Link 
-            key={index} 
-            as={Box} 
-            rounded={"lg"} 
-            bg={boxColor} 
-            boxShadow={"lg"} 
-            borderWidth="1px" 
-            borderRadius="lg" 
-            overflow="hidden" 
-            p={4} m={4} 
-            href="#">
+            <Box
+            rounded={"lg"}
+            bg={boxColor}
+            boxShadow={"lg"}
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
+            p={4}
+            m={4}
+            cursor="pointer"
+            key={index}
+            onClick={() => {
+                window.location.href = '/idea/{item.id}';
+              }}
+            >
               <Flex alignItems="center" justifyContent="space-between">
                 <Text mt={4} fontWeight="bold" fontSize="xl">
                   {item.title}
                 </Text>
-                <Button size="sm">
+                <Button size="sm" onClick={(event) => {
+                    event.stopPropagation();
+                    localStorage.setItem("ideaId", item.id);
+                    window.location.href = '/idea/modify';
+                }}>
                   <EditIcon w={4} h={4} bg={editColor} />
                 </Button>
               </Flex>
@@ -109,7 +135,7 @@ export default function MyIdeas() {
               <Image src={item.imageUrl} height="170px" alt="Example Img" />
               <br />
               <TagList tags={item.topics}></TagList>
-            </Link>
+              </Box>
           ))}
         </SimpleGrid>
       );
