@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import {
   Box,
   Stack,
@@ -12,6 +12,7 @@ import {
   Image,
   Tag,
   TagLabel, 
+  Spinner
 } from "@chakra-ui/react";
 
 import { useColorModeValue } from "@chakra-ui/color-mode";
@@ -33,120 +34,119 @@ export default function MyIdeas() {
     const searchIconColor = useColorModeValue("gray.20", "gray.750");
 
 
-    var orig_ideas = [];
-    var ideas = [];
+    const [ideas, setIdeas] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    (async () => {
-        orig_ideas = await getMyIdeas();
-        orig_ideas.map(MakeIdeaObj);
-        
-      })()
-
+    useEffect(() => {
+      const fetchData = async () => {
+        const orig_ideas = await getMyIdeas();
+        const ideas = orig_ideas.map(MakeIdeaObj);
+        setIdeas(ideas);
+        setIsLoading(false);
+      };
+      fetchData();
+    }, []);
+  
     function MakeIdeaObj(idea) {
-        console.log("make option");
-        var idea_topics = [];
-        for (let i = 0; i < idea.topics.length; i++) {
-            idea_topics.push(idea.topics[i].name)
-        }
-        var idea = {
-            purpose: idea.purpose,
-            title: idea.title,
-            imageUrl: idea.iconUrl.url,
-            topics: idea_topics,
-        };
-        ideas.push(idea);
-    };
-
-
-    function TagList({ tags }) {
-        return (
-        <>
-            {tags.map((tag, index) => (
-            <Tag
-                key={index}
-                size="md"
-                borderRadius="full"
-                variant="solid"
-                bg={tagColor}
-                mr={2}
-            >
-                <TagLabel>{tag}</TagLabel>
-            </Tag>
-            ))}
-        </>
-        );
+      const idea_topics = idea.topics.map((topic) => topic.name);
+      const idea_obj = {
+        purpose: idea.purpose,
+        title: idea.title,
+        imageUrl: idea.iconUrl.url,
+        topics: idea_topics,
+      };
+      return idea_obj;
     }
-
+  
+    function TagList({ tags }) {
+      return (
+        <>
+          {tags.map((tag, index) => (
+            <Tag
+              key={index}
+              size="md"
+              borderRadius="full"
+              variant="solid"
+              bg={tagColor}
+              mr={2}
+            >
+              <TagLabel>{tag}</TagLabel>
+            </Tag>
+          ))}
+        </>
+      );
+    }
+  
     function IdeaBoxes({ list }) {
-        console.log("ideaBoxes");
-        // if (list.length != 0){
-        //     console.log(list[0].title)
-        // }
-        return (
-            <SimpleGrid columns={4} spacing={7}>
-            {list.map((item, index) => (
-                <Box
-                key={index}
-                rounded={"lg"}
-                bg={boxColor}
-                boxShadow={"lg"}
-                borderWidth="1px" 
-                borderRadius="lg" 
-                overflow="hidden" 
-                p={4}
-                m={4}>
-                <Flex alignItems="center" justifyContent="space-between">
+      return (
+        <SimpleGrid columns={4} spacing={7}>
+          {list.map((item, index) => (
+            <Box
+              key={index}
+              rounded={"lg"}
+              bg={boxColor}
+              boxShadow={"lg"}
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              p={4}
+              m={4}
+            >
+              <Flex alignItems="center" justifyContent="space-between">
                 <Text mt={4} fontWeight="bold">
-                    {item.title}
+                  {item.title}
                 </Text>
                 <Button size="sm">
-                    <EditIcon w={4} h={4} bg={editColor} />
+                  <EditIcon w={4} h={4} bg={editColor} />
                 </Button>
-                </Flex>
-                <Text mt={2}>{item.purpose}</Text>
-                <br></br>
-                <Image src={item.imageUrl} height="100px" alt="Example Img"/>
-                <br></br>
-                <TagList tags={item.topics}></TagList>
-                </Box>
-                
-            ))}
-            </SimpleGrid>
-        )
-        }
-    
-    //TODO: Connect this function to the backend and get list of ideas
-    // function IdeaList({ideaList}){
-    //     var ideas = []
-    //     for (let i = 0; i < ideaList; i++) {
-    //         const idea = ideaList[i];
-    //         const title = "Placeholder #" + String.valueOf(i);
-    //         ideas.push({title: title, purpose: "Description of idea and data"});
-    //     }
-    //     return (ideas);
-    // }
-
-  return (
-    <Stack minWidth="1100px" spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
+              </Flex>
+              <Text mt={2}>{item.purpose}</Text>
+              <br />
+              <Image src={item.imageUrl} height="100px" alt="Example Img" />
+              <br />
+              <TagList tags={item.topics}></TagList>
+            </Box>
+          ))}
+        </SimpleGrid>
+      );
+    }
+  
+    return (
+      <Stack
+        minWidth="1100px"
+        spacing={8}
+        mx={"auto"}
+        maxW={"2xl"}
+        py={12}
+        px={6}
+      >
         <Flex alignItems="center">
-            <Input 
+          <Input
             placeholder="Search..."
             rounded={"lg"}
             bg={searchColor}
             color={"white"}
             boxShadow={"lg"}
-            borderWidth="1px" 
-            borderRadius="lg" 
-            overflow="hidden" 
+            borderWidth="1px"
+            borderRadius="lg"
+            overflow="hidden"
             p={4}
-            m={4}>
-            </Input>
-            <Button size="md">
-                <SearchIcon w={4} h={4} bg={searchIconColor} />
-            </Button>
-            </Flex>
-        
-        <IdeaBoxes list={ideas}/>
-    </Stack>
-  );
-}
+            m={4}
+          ></Input>
+          <Button size="md">
+            <SearchIcon w={4} h={4} bg={searchIconColor} />
+          </Button>
+        </Flex>
+  
+        {isLoading ? (
+        <Spinner />
+        ) : (
+            ideas.length > 0 ? (
+            <IdeaBoxes list={ideas} />
+            ) : (
+            <p>No ideas found</p>
+            )
+        )}
+      </Stack>
+    );
+  }
