@@ -38,14 +38,19 @@ import styles from "./styles.module.css";
 // Clicking on an idea will show a modal with more details
 export default function page() {
   // Replace with [] when real ideas are available
-  const [ideas, setIdeas] = useState([1, 2, 3, 4, 5, 6, 7, 8]);
+  const [ideas, setIdeas] = useState([]);
 
   // We could have a loading component to be used throughout the app
   // if (ideas.length === 0) return <Spinner />;
 
   return (
     <Box className={styles.container}>
-      <Box position='fixed' width={"20%"} display={"flex"} className={styles.ideaFilter}>
+      <Box
+        position="fixed"
+        // width={"20%"}
+        width={"20%"}
+        display={"flex"}
+        className={styles.ideaFilter}>
         {/* This is the components to update eventually. */}
         {/* The components updates the list of ideas. */}
         <IdeaFilter setIdeas={setIdeas} />
@@ -62,47 +67,7 @@ export default function page() {
               <Box className={styles.ideaCard}>
                 {/* Map the ideas into individual cards */}
                 {/* Remove the hardcoded objects once real ideas are in the list */}
-                <IdeaCard
-                  idea={{
-                    id: 1,
-                    title: "Free Money",
-                    purpose: "Find Arbitrage Opportunities",
-                    domains: [
-                      { id: "1", name: "AI" },
-                      { id: "2", name: "Finance" },
-                    ],
-                    topics: [
-                      { id: "3", name: "Arbitrage" },
-                      { id: "4", name: "Trading" },
-                      { id: "5", name: "HFT" },
-                    ],
-                    techs: [
-                      { id: "6", name: "Python" },
-                      { id: "7", name: "React" },
-                      { id: "8", name: "Django" },
-                    ],
-                    isPaid: false,
-                    inProgress: false,
-                    iconUrl: {
-                      id: "9",
-                      url: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-                      presetIcon: false,
-                    },
-                    description: "This is a description of the idea",
-                    imgUrls: [
-                      {
-                        id: "10",
-                        url: "https://www.istockphoto.com/photo/young-family-posing-for-pictures-gm1394330164-449846563",
-                        presetIcon: false,
-                      },
-                      {
-                        id: "11",
-                        url: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-                        presetIcon: false,
-                      },
-                    ],
-                  }}
-                />
+                <IdeaCard idea={idea} />
               </Box>
             </ListItem>
           ))}

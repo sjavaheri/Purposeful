@@ -38,15 +38,15 @@ export default function IdeaFilter({ setIdeas }) {
       setTechs(res);
     });
     const payload = {
-      domains: [null],
-      topics: [null],
-      technologies: [null],
+      domains: null,
+      topics: null,
+      technologies: null,
     };
     fetchWrapper("/api/idea", null, "POST", payload).then(async (res) => {
-      if (res !== null) {
+      if (!res.ok) {
         notification("error", "An error occurred.", res.errorMessages);
-      } else if (res.ok) {
-        const ideaList = await res.json();
+      } else {
+        let ideaList = await res.json();
         // SUPER IMPORTANT
         // This is the function that updates the list of ideas in the parent component
         setIdeas(ideaList);
@@ -56,32 +56,25 @@ export default function IdeaFilter({ setIdeas }) {
 
   // Handle the search form submission
   async function handleSearchForm(values, actions) {
-    if (values.domain === "All") {
-      values.domain = null;
-    }
-    if (values.topic === "All") {
-      values.topic = null;
-    }
-    if (values.tech === "All") {
-      values.tech = null;
-    }
     // Takes only one value unfortunately
     const payload = {
-      domains: [values.domain],
-      topics: [values.topic],
-      technologies: [values.tech],
+      domains: values.domain === "All" ? null : [values.domain],
+      topics: values.topic === "All" ? null : [values.topic],
+      technologies: values.tech === "All" ? null : [values.tech],
     };
-    console.log(payload);
-
-    const response = await fetchWrapper("/api/idea", null, "POST", payload);
-    if (response !== null) {
-      notification("error", "An error occurred.", response.errorMessages);
-    } else if (response.ok) {
-      const ideaList = await response.json();
-      setIdeas(ideaList);
-    }
+    fetchWrapper("/api/idea", null, "POST", payload).then(async (res) => {
+      if (!res.ok) {
+        notification("error", "An error occurred.", res.errorMessages);
+      } else {
+        let ideaList = await res.json();
+        // SUPER IMPORTANT
+        // This is the function that updates the list of ideas in the parent component
+        setIdeas(ideaList);
+      }
+    });
     actions.setSubmitting(false);
   }
+
   // Same frontend code as the create idea form for domains, topics, and technologies
   // Remove the old logic and replaced it with Select components
   // Add better logic eventually
