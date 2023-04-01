@@ -1,6 +1,14 @@
 package ca.mcgill.purposeful;
 
-import ca.mcgill.purposeful.configuration.Authority;import ca.mcgill.purposeful.dao.AppUserRepository;import ca.mcgill.purposeful.model.AppUser;import org.springframework.boot.CommandLineRunner;import org.springframework.boot.SpringApplication;
+import ca.mcgill.purposeful.configuration.Authority;import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.DomainRepository;
+import ca.mcgill.purposeful.dao.TechnologyRepository;
+import ca.mcgill.purposeful.dao.TopicRepository;
+import ca.mcgill.purposeful.model.AppUser;
+import ca.mcgill.purposeful.model.Domain;
+import ca.mcgill.purposeful.model.Technology;
+import ca.mcgill.purposeful.model.Topic;
+import org.springframework.boot.CommandLineRunner;import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;import org.springframework.context.annotation.Bean;import org.springframework.security.crypto.password.PasswordEncoder;
 
 /** Main Application */
@@ -20,7 +28,7 @@ public class PurposefulApplication {
    */
     @Bean
     public CommandLineRunner commandLineRunner(
-        AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+        AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, DomainRepository domainRepository, TopicRepository topicRepository, TechnologyRepository technologyRepository) {
       return args -> {
 
       // create an owner at bootstrap
