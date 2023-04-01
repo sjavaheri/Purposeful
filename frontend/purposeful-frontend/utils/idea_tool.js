@@ -15,3 +15,11 @@ export async function getTechs() {
   let body = await techs.json();
   return body;
 }
+
+export async function removeIdea(id) {
+  console.log("Removal");
+  console.log(`/api/idea/` + id);
+  let removal = await fetchWrapper(`/api/idea/` + id, null, "DELETE", null);
+  var body = removal.status;
+  return body;
+}

@@ -9,7 +9,6 @@ import ca.mcgill.purposeful.dao.IdeaRepository;
 import ca.mcgill.purposeful.dao.ReactionRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dto.CollaborationRequestDTO;
-import ca.mcgill.purposeful.dto.IdeaDTO;
 import ca.mcgill.purposeful.model.CollaborationRequest;
 import ca.mcgill.purposeful.util.CucumberUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -103,7 +102,7 @@ public class ID022_collaborationRequestWithMessage {
     CollaborationRequestDTO collaborationRequestDTO = new CollaborationRequestDTO();
     collaborationRequestDTO.setMessage(message);
     collaborationRequestDTO.setAdditionalContact(additionalContact);
-    collaborationRequestDTO.setIdea(new IdeaDTO(ideaRepository.findIdeaById(idMap.get(ideaId))));
+    collaborationRequestDTO.setIdeaId(idMap.get(ideaId));
 
     // Create the request header
     HttpHeaders header = cucumberUtil.bearerAuthHeader(jwtToken);
@@ -174,7 +173,7 @@ public class ID022_collaborationRequestWithMessage {
     CollaborationRequestDTO collaborationRequestDTO = new CollaborationRequestDTO();
     collaborationRequestDTO.setMessage(message);
     collaborationRequestDTO.setAdditionalContact(additionalContact);
-    collaborationRequestDTO.setIdea(new IdeaDTO(ideaRepository.findIdeaById(idMap.get(ideaId))));
+    collaborationRequestDTO.setIdeaId(idMap.get(ideaId));
 
     // Create the request header
     HttpHeaders header = cucumberUtil.bearerAuthHeader(jwtToken);

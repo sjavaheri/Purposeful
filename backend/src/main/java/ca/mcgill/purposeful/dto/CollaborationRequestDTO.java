@@ -12,7 +12,7 @@ import java.util.List;
 public class CollaborationRequestDTO {
 
   private String id;
-  private IdeaDTO idea;
+  private String ideaId;
   private String message;
   private String additionalContact;
   private boolean hasResponse;
@@ -20,9 +20,9 @@ public class CollaborationRequestDTO {
   public CollaborationRequestDTO() {}
 
   public CollaborationRequestDTO(
-      String id, IdeaDTO idea, String message, String additionalContact, boolean hasResponse) {
+      String id, String ideaId, String message, String additionalContact, boolean hasResponse) {
     this.id = id;
-    this.idea = idea;
+    this.ideaId = ideaId;
     this.message = message;
     this.additionalContact = additionalContact;
     this.hasResponse = hasResponse;
@@ -30,15 +30,12 @@ public class CollaborationRequestDTO {
 
   public CollaborationRequestDTO(CollaborationRequest collaborationRequest) {
     this.id = collaborationRequest.getId();
-    this.idea = new IdeaDTO(collaborationRequest.getIdea());
+    this.ideaId = collaborationRequest.getIdea().getId();
     this.message = collaborationRequest.getMessage();
     this.additionalContact = collaborationRequest.getAdditionalContact();
     this.hasResponse = collaborationRequest.getCollaborationResponse() != null;
   }
 
-  public IdeaDTO getIdea() {
-    return idea;
-  }
 
   public String getId() {
     return id;
@@ -48,8 +45,12 @@ public class CollaborationRequestDTO {
     this.id = id;
   }
 
-  public void setIdea(IdeaDTO idea) {
-    this.idea = idea;
+  public String getIdeaId() {
+    return ideaId;
+  }
+
+  public void setIdeaId(String ideaId) {
+    this.ideaId = ideaId;
   }
 
   public String getMessage() {
@@ -76,6 +77,7 @@ public class CollaborationRequestDTO {
     this.hasResponse = hasResponse;
   }
 
+
   /**
    * Converts a list of collaboration requests to DTOs
    *
@@ -93,4 +95,6 @@ public class CollaborationRequestDTO {
 
     return dtoList;
   }
+
+
 }
