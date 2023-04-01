@@ -106,7 +106,7 @@ export default function MyIdeas() {
               </Flex>
               <Text mt={2}>{item.purpose}</Text>
               <br />
-              <Image src={item.imageUrl} height="100px" alt="Example Img" />
+              <Image src={item.imageUrl} height="170px" alt="Example Img" />
               <br />
               <TagList tags={item.topics}></TagList>
             </Link>
