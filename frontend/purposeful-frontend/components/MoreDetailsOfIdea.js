@@ -27,7 +27,7 @@ export default function MoreDetailsOfIdea({ idea }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
   //TODO: Get requester mail
-  function getReqMail() {}
+  function getReqMail() { }
 
   function collab_rm() {
     set_req(<Flex display={"none"}></Flex>);
@@ -135,7 +135,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
+                color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
                 mb={"4"}>
@@ -151,7 +151,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
+                color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
                 mb={"4"}>
@@ -167,7 +167,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
+                color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
                 mb={"4"}>
@@ -190,7 +190,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
+                color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
                 mb={"4"}>
@@ -213,7 +213,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             <Box>
               <Text
                 fontSize={{ base: "16px", lg: "18px" }}
-                color={useColorModeValue("yellow.500", "yellow.300")}
+                color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
                 mb={"4"}>
@@ -233,11 +233,13 @@ export default function MoreDetailsOfIdea({ idea }) {
                 </List>
               </SimpleGrid>
             </Box>
-            <HighFiveBtn />
           </Stack>
-          <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
-            SEND COLLABORATION REQUEST
-          </Button>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
+            <HighFiveBtn />
+            <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
+              Send Collaboration Request
+            </Button>
+          </SimpleGrid>
           {/* <Carousel /> can't fix it for now*/}
         </Stack>
       </SimpleGrid>

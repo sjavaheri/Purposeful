@@ -4,11 +4,11 @@
 
 .ideas {
     flex: 8;
-}   
+}
 
 .container {
     width: 100%;
-    display: flex; 
+    display: flex;
 }
 
 .ideaCard {
@@ -23,6 +23,7 @@
     .container {
         flex-direction: column;
     }
+
     .ideaCard {
         width: 60%;
     }

@@ -1,7 +1,7 @@
-import { IconButton } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { FaHandPaper } from 'react-icons/fa';
 
-export default function HighFiveBtn(idea_id) {
+export default function HighFiveBtn({ idea_id }) {
     async function react(idea_id, reactionType) {
         try {
             appUserId = JSON.parse(localStorage.getItem("appUser")).id;
@@ -24,10 +24,8 @@ export default function HighFiveBtn(idea_id) {
         }
     }
     return (
-        <IconButton
-            aria-label="High Five"
-            icon={<FaHandPaper />}
-            onClick={() => react(idea_id, "HighFive")}
-        />
+        <Button rightIcon={<FaHandPaper />} onClick={() => react(idea_id, "HighFive")}>
+            High Five
+        </Button>
     );
 }

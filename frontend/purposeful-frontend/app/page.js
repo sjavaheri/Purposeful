@@ -45,7 +45,7 @@ export default function page() {
 
   return (
     <Box className={styles.container}>
-      <Box className={styles.ideaFilter}>
+      <Box position='fixed' width={"20%"} display={"flex"} className={styles.ideaFilter}>
         {/* This is the components to update eventually. */}
         {/* The components updates the list of ideas. */}
         <IdeaFilter setIdeas={setIdeas} />
