@@ -94,8 +94,8 @@ public class IdeaService {
     allIdeas.forEach(allIdeasList::add);
 
     // Filter out private ideas from the list of all ideas
-    for(Idea idea : allIdeas) {
-      if(idea.isPrivate()) {
+    for (Idea idea : allIdeas) {
+      if (idea.isPrivate()) {
         allIdeasList.remove(idea);
       }
     }
@@ -475,43 +475,37 @@ public class IdeaService {
     ideaRepository.deleteById(uuid);
   }
 
-
-
   /**
    * Get's all of a user's created ideas
    *
-   * @param  email - the email of the user trying to access their created ideas
+   * @param email - the email of the user trying to access their created ideas
    * @throws GlobalException if an object does not exist
    * @return List of created Idea objects made by the user
    * @author Ramin Akhavan
    */
   public List<Idea> getCreatedIdeas(String email) {
 
-    if (email == null || email.isEmpty()){
+    if (email == null || email.isEmpty()) {
       throw new GlobalException(
-        HttpStatus.BAD_REQUEST,
-        "Please enter a valid email. Email cannot be left empty");
+          HttpStatus.BAD_REQUEST, "Please enter a valid email. Email cannot be left empty");
     }
 
     List<Idea> createdIdeas = new ArrayList<>();
-    for (Idea idea: ideaRepository.findAll()){
+    for (Idea idea : ideaRepository.findAll()) {
       String ideaEmail = idea.getUser().getAppUser().getEmail();
-      if (ideaEmail.equalsIgnoreCase(email)){
+      if (ideaEmail.equalsIgnoreCase(email)) {
         createdIdeas.add(idea);
-      } 
+      }
     }
-
 
     return createdIdeas;
   }
-
 
   /**
    * Retrieve all the ideas that a user expressed interest in.
    *
    * @param email Email of the user to retrieve the ideas for
    * @return List of ideas that the user expressed interest in
-   *
    * @author Enzo Benoit-Jeannin
    */
   @Transactional
@@ -539,13 +533,15 @@ public class IdeaService {
     allRequests.forEach(allRequestsList::add);
 
     // Remove collaboration requests that are not linked to given regularUser, compare emails
-    allRequestsList.removeIf(request -> !(request.getRequester().getAppUser().getEmail().equals(user.getAppUser().getEmail())));
+    allRequestsList.removeIf(
+        request ->
+            !(request.getRequester().getAppUser().getEmail().equals(user.getAppUser().getEmail())));
 
     // Get all ideas that were ever requested
     List<Idea> allRequestedIdeas = new ArrayList<>();
     for (CollaborationRequest request : allRequestsList) {
-        allRequestedIdeas.add(request.getIdea());
-      }
+      allRequestedIdeas.add(request.getIdea());
+    }
 
     // Filter out private ideas from the list of all ideas
     // In case the user expressed interest in an idea that was turned private later on
@@ -556,6 +552,57 @@ public class IdeaService {
     allRequestedIdeas.sort((idea1, idea2) -> idea2.getDate().compareTo(idea1.getDate()));
 
     return allRequestedIdeas;
-    }
+  }
 
+  /**
+   * @author Shidan Javaheri
+   * Method to the supporting URLs for an idea. It returns a list of their Ids. A Supporting URL can
+   * only belong to one idea, so they are all automatically created and saved.
+   *
+   * @param urls an ArrayList<String> of Urls
+   * @return urlIds an ArrayList<String> of Url Ids
+   */
+  @Transactional
+  public List<String> createSupportingURLS(List<String> urls) {
+    List<String> urlIds = new ArrayList<String>();
+    // make the Urls
+    for (String url : urls) {
+      URL newUrl = new URL();
+      newUrl.setURL(url);
+      newUrl.setPresetIcon(false);
+      urlRepository.save(newUrl);
+      urlIds.add(newUrl.getId());
+    }
+    return urlIds;
+  }
+
+  /**
+   * @author Shidan Javaheri
+   * Method to create a new URL object for an Icon. Since an icon can belong to many ideas, this method checks
+   * to make sure that no other URL object has the same URL.
+   * @param url the String URL to be used as an icon for the idea
+   * @return urlId, the id of the created object
+   */
+  @Transactional
+  public String createIconURL(String url) {
+    String urlId = "";
+    if (url == null || url.isEmpty()) {
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "An idea icon is required");
+    }
+    // check if it already exists
+    ArrayList<URL> urlCheck = urlRepository.findURLByURL(url);
+    if (urlCheck.size() !=0 ) {
+      urlId = urlCheck.get(0).getId();
+      return urlId;
+      }
+    // otherwise make a new object and save it
+    URL newUrl = new URL();
+    newUrl.setURL(url);
+    newUrl.setPresetIcon(false);
+    urlRepository.save(newUrl);
+    urlId = newUrl.getId();
+    return urlId;
+  }
 }
+

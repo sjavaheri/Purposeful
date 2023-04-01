@@ -70,6 +70,18 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
 
+    // create the urls for the supporting images
+    List<String> supportingImageUrlIds = null;
+    if (ideaDTO.getImgUrls() != null) {
+      supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    }
+
+    // create the icon url if it doesn't already exist
+    String iconUrlId = null;
+    if (ideaDTO.getIconUrl() != null) {
+      iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+    }
+
     Idea createdIdea =
         ideaService.createIdea(
             ideaDTO.getTitle(),
@@ -81,8 +93,8 @@ public class IdeaController {
             ideaDTO.getDomainIds(),
             ideaDTO.getTechIds(),
             ideaDTO.getTopicIds(),
-            ideaDTO.getImgUrlIds(),
-            ideaDTO.getIconUrlId(),
+            supportingImageUrlIds,
+            iconUrlId,
             auth.getName());
 
     IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
@@ -98,15 +110,24 @@ public class IdeaController {
    * @author Ramin Akhavan
    */
   @PutMapping(
-      value = {"/edit", "/edit/"},
-      consumes = "application/json",
-      produces = "application/json")
+      value = {"/edit", "/edit/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
       throws GlobalException {
     // Unpack the DTO
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
+    }
+    // create the urls for the supporting images
+    List<String> supportingImageUrlIds = null;
+    if (ideaDTO.getImgUrls() != null) {
+        supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    }
+
+    // create the icon url if it doesn't already exist
+    String iconUrlId = null;
+    if (ideaDTO.getIconUrl() != null) {
+        iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
     }
 
     Idea modifiedIdea =
@@ -121,8 +142,8 @@ public class IdeaController {
             ideaDTO.getDomainIds(),
             ideaDTO.getTechIds(),
             ideaDTO.getTopicIds(),
-            ideaDTO.getImgUrlIds(),
-            ideaDTO.getIconUrlId());
+            supportingImageUrlIds,
+            iconUrlId);
     IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
 
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);

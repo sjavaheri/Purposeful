@@ -45,18 +45,18 @@ Feature: Modify Idea
     Then the idea with id "<id>" will have value "<new_value>" for the field "<field>"
 
     Examples:
-      | id | field       | new_value      |
-      | 18 | title       | Health App     |
-      | 18 | purpose     | For customer   |
-      | 19 | description | new extra info |
-      | 18 | isPaid      | True           |
-      | 18 | inProgress  | True           |
-      | 19 | isPrivate   | True           |
-      | 18 | domains     | 3              |
-      | 19 | topics      | 7              |
-      | 18 | techs       | 8              |
-      | 19 | image URLs  | 13             |
-      | 18 | icon URL    | 13             |
+      | id | field       | new_value                  |
+      | 18 | title       | Health App                 |
+      | 18 | purpose     | For customer               |
+      | 19 | description | new extra info             |
+      | 18 | isPaid      | True                       |
+      | 18 | inProgress  | True                       |
+      | 19 | isPrivate   | True                       |
+      | 18 | domains     | 3                          |
+      | 19 | topics      | 7                          |
+      | 18 | techs       | 8                          |
+      | 19 | image URLs  | www.test.com,www.test2.com |
+      | 18 | icon URL    | www.icon.com               |
 
 	# Alternate Flow
 
@@ -91,12 +91,10 @@ Feature: Modify Idea
     Then the error message "<error>" will be thrown with status code "<Http_status>"
 
     Examples:
-      | id | field      | old_value | new_value | error                                                                 | Http_status |
-      | 18 | domains    | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 19 | topics     | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 18 | techs      | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
-      | 19 | image URLs | 12        | 1         | You are attempting to link your idea to an object that does not exist | 400         |
-      | 18 | icon URL   | 17        | 2         | You are attempting to link your idea to an object that does not exist | 400         |
+      | id | field   | old_value | new_value | error                                                                 | Http_status |
+      | 18 | domains | 2         | 15        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 19 | topics  | 6         | 20        | You are attempting to link your idea to an object that does not exist | 400         |
+      | 18 | techs   | 8,9       | 25        | You are attempting to link your idea to an object that does not exist | 400         |
 
 
 

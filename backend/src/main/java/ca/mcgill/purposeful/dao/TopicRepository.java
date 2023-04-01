@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface TopicRepository extends CrudRepository<Topic, Integer> {
 
   Topic findTopicById(String id);
+  Topic findTopicByName(String name);
 }
