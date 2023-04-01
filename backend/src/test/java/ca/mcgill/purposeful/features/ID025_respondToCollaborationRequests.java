@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import ca.mcgill.purposeful.dao.CollaborationRequestRepository;
 import ca.mcgill.purposeful.dao.CollaborationResponseRepository;
 import ca.mcgill.purposeful.dto.CollaborationResponseDTO;
+import ca.mcgill.purposeful.dto.CollaborationResponseInformationDTO;
 import ca.mcgill.purposeful.model.CollaborationRequest;
 import ca.mcgill.purposeful.model.CollaborationResponse;
 import ca.mcgill.purposeful.model.Status;
@@ -123,21 +124,23 @@ public class ID025_respondToCollaborationRequests {
     header.setContentType(MediaType.APPLICATION_JSON);
     header.setAccessControlAllowOrigin("*");
 
-    // Create the request entity
-    HttpEntity<?> requestEntity = new HttpEntity<>(header);
+    // Create the DTO
+    CollaborationResponseInformationDTO collaborationResponseInformationDTO =
+        new CollaborationResponseInformationDTO();
+    collaborationResponseInformationDTO.setCollaborationRequestId(idMap.get(requestId));
+    collaborationResponseInformationDTO.setMessage(message);
+    collaborationResponseInformationDTO.setAdditionalContact(additionalContact);
 
-    // Create the path variable
-    String url =
-        "/api/collaborationResponse/approve/"
-            + idMap.get(requestId)
-            + "/"
-            + message
-            + "/"
-            + additionalContact;
+    // Create the request entity
+    HttpEntity<?> requestEntity = new HttpEntity<>(collaborationResponseInformationDTO, header);
 
     // Save the response in the current class (This is the response we are trying to test here)
     var response =
-        client.exchange(url, HttpMethod.POST, requestEntity, CollaborationResponseDTO.class);
+        client.exchange(
+            "/api/collaborationResponse/approve/",
+            HttpMethod.POST,
+            requestEntity,
+            CollaborationResponseDTO.class);
 
     // Extract returned collaboration response
     ObjectMapper mapper = new ObjectMapper();
@@ -191,15 +194,23 @@ public class ID025_respondToCollaborationRequests {
     header.setContentType(MediaType.APPLICATION_JSON);
     header.setAccessControlAllowOrigin("*");
 
-    // Create the request entity
-    HttpEntity<?> requestEntity = new HttpEntity<>(header);
+    // Create the DTO
+    CollaborationResponseInformationDTO collaborationResponseInformationDTO =
+        new CollaborationResponseInformationDTO();
+    collaborationResponseInformationDTO.setCollaborationRequestId(idMap.get(requestId));
+    collaborationResponseInformationDTO.setMessage(message);
+    collaborationResponseInformationDTO.setAdditionalContact(null);
 
-    // Create the path variable
-    String url = "/api/collaborationResponse/decline/" + idMap.get(requestId) + "/" + message + "/";
+    // Create the request entity
+    HttpEntity<?> requestEntity = new HttpEntity<>(collaborationResponseInformationDTO, header);
 
     // Save the response in the current class (This is the response we are trying to test here)
     var response =
-        client.exchange(url, HttpMethod.POST, requestEntity, CollaborationResponseDTO.class);
+        client.exchange(
+            "/api/collaborationResponse/decline/",
+            HttpMethod.POST,
+            requestEntity,
+            CollaborationResponseDTO.class);
 
     // Extract returned collaboration response
     ObjectMapper mapper = new ObjectMapper();
@@ -256,20 +267,20 @@ public class ID025_respondToCollaborationRequests {
     header.setContentType(MediaType.APPLICATION_JSON);
     header.setAccessControlAllowOrigin("*");
 
-    // Create the request entity
-    HttpEntity<?> requestEntity = new HttpEntity<>(header);
+    // Create the DTO
+    CollaborationResponseInformationDTO collaborationResponseInformationDTO =
+        new CollaborationResponseInformationDTO();
+    collaborationResponseInformationDTO.setCollaborationRequestId(idMap.get(requestId));
+    collaborationResponseInformationDTO.setMessage(message);
+    collaborationResponseInformationDTO.setAdditionalContact(additionalContact);
 
-    // Create the path variable
-    String url =
-        "/api/collaborationResponse/approve/"
-            + idMap.get(requestId)
-            + "/"
-            + message
-            + "/"
-            + additionalContact;
+    // Create the request entity
+    HttpEntity<?> requestEntity = new HttpEntity<>(collaborationResponseInformationDTO, header);
 
     // Save the response in the current class (This is the response we are trying to test here)
-    erroneousResponse = client.exchange(url, HttpMethod.POST, requestEntity, String.class);
+    erroneousResponse =
+        client.exchange(
+            "/api/collaborationResponse/approve/", HttpMethod.POST, requestEntity, String.class);
   }
 
   @When(
@@ -287,14 +298,20 @@ public class ID025_respondToCollaborationRequests {
     header.setContentType(MediaType.APPLICATION_JSON);
     header.setAccessControlAllowOrigin("*");
 
-    // Create the request entity
-    HttpEntity<?> requestEntity = new HttpEntity<>(header);
+    // Create the DTO
+    CollaborationResponseInformationDTO collaborationResponseInformationDTO =
+        new CollaborationResponseInformationDTO();
+    collaborationResponseInformationDTO.setCollaborationRequestId(idMap.get(requestId));
+    collaborationResponseInformationDTO.setMessage(message);
+    collaborationResponseInformationDTO.setAdditionalContact(null);
 
-    // Create the path variable
-    String url = "/api/collaborationResponse/decline/" + idMap.get(requestId) + "/" + message;
+    // Create the request entity
+    HttpEntity<?> requestEntity = new HttpEntity<>(collaborationResponseInformationDTO, header);
 
     // Save the response in the current class (This is the response we are trying to test here)
-    erroneousResponse = client.exchange(url, HttpMethod.POST, requestEntity, String.class);
+    erroneousResponse =
+        client.exchange(
+            "/api/collaborationResponse/decline/", HttpMethod.POST, requestEntity, String.class);
   }
 
   @Then("the user shall receive the error message {string} with status {string} \\(ID025)")
