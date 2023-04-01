@@ -92,4 +92,34 @@ public class CollaborationRequestService {
     // Save the collaboration request and return it
     return collaborationRequestRepository.save(collabReq);
   }
+
+  /**
+   * Function that gets a all collaboration requests related to an idea
+   *
+   * @param ideaId the id of the idea
+   * @return a list of collaboration requests related to the idea
+   * @author Wassim Jabbour
+   */
+  public List<CollaborationRequest> getCollaborationRequestsByIdea(
+      String requesterEmail, String ideaId) {
+
+    // Find the requester account
+    RegularUser requester = regularUserRepository.findRegularUserByAppUserEmail(requesterEmail);
+
+    // Find the target idea (Throws an error itself if the idea does not exist)
+    Idea targetIdea = ideaService.getIdeaById(ideaId);
+
+    // Check that the requester is the owner of the idea
+    if (!requesterEmail.equals(targetIdea.getUser().getAppUser().getEmail())) {
+      throw new GlobalException(
+          HttpStatus.BAD_REQUEST, "Only the owner of the idea can view its collaboration requests");
+    }
+
+    // Get the list of collaboration requests related to the idea
+    List<CollaborationRequest> requests =
+        collaborationRequestRepository.findCollaborationRequestsByIdea(targetIdea);
+
+    // Return the list of collaboration requests
+    return requests;
+  }
 }
