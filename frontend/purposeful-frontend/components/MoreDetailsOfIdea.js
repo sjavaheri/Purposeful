@@ -27,7 +27,7 @@ export default function MoreDetailsOfIdea({ idea }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
   //TODO: Get requester mail
-  function getReqMail() { }
+  function getReqMail() {}
 
   function collab_rm() {
     set_req(<Flex display={"none"}></Flex>);
@@ -82,12 +82,12 @@ export default function MoreDetailsOfIdea({ idea }) {
   }
 
   return (
-    <Container maxW={"7xl"}>
+    <Container maxW={"6xl"}>
       {collabReq}
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 18, md: 24 }}>
+        py={{ base: 18, md: 18 }}>
         <Stack>
           <Box as={"header"}>
             <Heading
