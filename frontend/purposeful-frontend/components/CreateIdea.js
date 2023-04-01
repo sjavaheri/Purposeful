@@ -23,6 +23,11 @@ import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
 import { BsInfoCircle } from "react-icons/bs";
 
+var domains = [];
+var topics = [];
+var techs = [];
+
+
 var fullfilled = 0;
 var field_name = "domains";
 var c_domains = [];
@@ -45,6 +50,10 @@ export default function CreateIdea() {
   const [render_topics, set_tp] = useState(<Fragment></Fragment>);
   const [render_techs, set_tc] = useState(<Fragment></Fragment>);
 
+  function validateRequired(req, entered){
+    return (req === '' && entered == true);
+  }
+
   var domainContainer = (
     <Stack
       on
@@ -65,9 +74,38 @@ export default function CreateIdea() {
       {render_techs}
     </Stack>
   );
-  var domains = [];
-  var topics = [];
-  var techs = [];
+
+  //Form Data
+  const [title,setTitle] = useState('');
+  const [purpose,setPurpose] = useState('');
+  const [description,setDescription] = useState('');
+  const [iconURL,setIconURL] = useState('');
+  const [domns,setDomns] = useState([]);
+  const [topcs,setTopcs] = useState([]);
+  const [tchs,setTchs] = useState([]);
+
+  //Used to restrict isInvalid to until after a value is entered
+  const [enteredTitle,setEnteredTitle] = useState(false);
+  const [enteredPurpose,setEnteredPurpose] = useState(false);
+  const [enteredDescription, setEnteredDescription] = useState(false);
+  const [enteredIconURL,setEnteredIconURL] = useState(false);
+  const [enteredDomains, setEnteredDomains] = useState(false);
+  const [enteredTopics, setEnteredTopics] = useState(false);
+  const [enteredTechs, setEnteredTechs] = useState(false);
+
+  function handleRequired(fn,value,enteredFn){
+    enteredFn(true);
+    fn(value);
+  }
+
+  function handleArrays(arg1,arg2,arg3,arg4,enteredFn){
+    enteredFn(true);
+    PushObj(arg1,arg2,arg3,arg4);
+  }
+
+  function validateArrays(obj_arr, entered){
+    return (obj_arr.length == 0 && entered);
+  }
 
   useEffect(() => {
     getDomains().then((res) => {
@@ -99,6 +137,9 @@ export default function CreateIdea() {
     set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
     set_tp(<Fragment>{rendered_topics.concat([])}</Fragment>);
     set_tc(<Fragment>{rendered_techs.concat([])}</Fragment>);
+    setDomns(c_domains.concat([]));
+    setTopcs(c_topics.concat([]));
+    setTchs(c_techs.concat([]));
   };
   function MakeOption(X) {
     const el = document.createElement("option");
@@ -134,11 +175,7 @@ export default function CreateIdea() {
       >
         <Text fontSize={"2em"} textShadow={"2px 2px "+useColorModeValue("rgba(0,0,0,0.1)","rgba(255,255,255,0.1)")}>Create An Idea. Pursue it with Purpose.</Text>
         <Formik
-          initialValues={{
-            title: "",
-            purpose: "",
-            description: "",
-          }}
+          initialValues={{}}
           onSubmit={(values, actions) => {
             setTimeout(async () => {
               console.log(values); // TODO: To be removed once the API is connected
@@ -157,14 +194,15 @@ export default function CreateIdea() {
                   <Box>
                     <Field name="title">
                       {({ field, form }) => (
-                        <FormControl>
+                        <FormControl isRequired={"true"} isInvalid={validateRequired(title,enteredTitle)}>
                           <FormLabel>Title</FormLabel>
-                          <HStack>
-                          <Input placeholder="Title" {...field} type="text" />
+                          <HStack> 
+                          <Input placeholder="Title" {...field} value={title} type="text" onChange={(e) => handleRequired(setTitle,e.target.value,setEnteredTitle)}/>
                           <Tooltip label="Share the title of your idea here! Titles should aim to be short and catchy, giving your idea a bang!">
                             <Box height={"fit-content"}><BsInfoCircle/></Box>
                           </Tooltip>
                           </HStack>
+                          <FormErrorMessage>Title is Required.</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -172,14 +210,15 @@ export default function CreateIdea() {
                   <Box>
                     <Field name="purpose">
                       {({ field, form }) => (
-                        <FormControl id="purpose">
+                        <FormControl id="purpose" isRequired={"true"} isInvalid={validateRequired(purpose,enteredPurpose)}>
                           <FormLabel>Purpose</FormLabel>
                           <HStack>
-                          <Input placeholder="Purpose" {...field} type="text" />
+                          <Input placeholder="Purpose" {...field} value={purpose} type="text" onChange={(e) => handleRequired(setPurpose,e.target.value,setEnteredPurpose)}/>
                           <Tooltip label="Share the purpose of your idea! What is driving you to pursue it? For example, what need in your reality does it attempt to address? What skills are you hoping to develop?">
                           <Box height={"fit-content"}><BsInfoCircle/></Box>
                           </Tooltip>
                           </HStack>
+                          <FormErrorMessage>Purpose is Required.</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -187,36 +226,42 @@ export default function CreateIdea() {
                   <Box>
                     <Field name="description">
                       {({ field, form }) => (
-                        <FormControl id="description">
+                        <FormControl id="description" isRequired={"true"} isInvalid={validateRequired(description,enteredDescription)}>
                           <FormLabel>Description</FormLabel>
                           <HStack alignItems={"top"}>
                           <Textarea
                             placeholder="Briefly describe your idea here..."
                             {...field}
                             rows={"10"}
+                            value={description}
+                            onChange={(e) => handleRequired(setDescription,e.target.value,setEnteredDescription)}
                           />
                           <Tooltip label="Describe your idea in more detail!">
                             <Box height={"fit-content"}><BsInfoCircle/></Box>
                           </Tooltip>
                           </HStack>
+                          <FormErrorMessage>Description is Required.</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
                   </Box>
                   <Field name="iconurl">
                     {({ field, form }) => (
-                      <FormControl id="iconurl">
+                      <FormControl id="iconurl" isRequired={"true"} isInvalid={validateRequired(iconURL,enteredIconURL)}>
                         <FormLabel>Icon URL</FormLabel>
                         <HStack>
                         <Input
                           placeholder="https://picsum.photos/200"
                           {...field}
+                          value={iconURL}
+                          onChange={(e) => handleRequired(setIconURL,e.target.value,setEnteredIconURL)}
                           type="text"
                         />
                         <Tooltip label="What image would best capture what your idea is hoping to achieve?">
                             <Box height={"fit-content"}><BsInfoCircle/></Box>
                           </Tooltip>
                           </HStack>
+                          <FormErrorMessage>Icon URL is Required.</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -241,7 +286,7 @@ export default function CreateIdea() {
                   <Box>
                     <Field name="Domain">
                       {({ field, form }) => (
-                        <FormControl id="domain">
+                        <FormControl id="domain" isRequired={"true"} isInvalid={validateArrays(domns,enteredDomains)}>
                           <FormLabel>Domains</FormLabel>
                           <HStack>
                             {domains_sel}
@@ -249,16 +294,28 @@ export default function CreateIdea() {
                               icon={<RxPlus />}
                               borderRadius={"20px"}
                               onClick={() =>
+                                handleArrays(document.getElementById("domains")
+                                .selectedIndex,
+                              domains,
+                              c_domains,
+                              rendered_domains,setEnteredDomains)
+                              /*
+                                function(){
+                                setEnteredDomains(true);
+                                
                                 PushObj(
                                   document.getElementById("domains")
                                     .selectedIndex,
                                   domains,
                                   c_domains,
                                   rendered_domains
-                                )
+                                );
+                                }
+                                */
                               }
                             />
                           </HStack>
+                          <FormErrorMessage>At least 1 domain is required.</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -269,7 +326,8 @@ export default function CreateIdea() {
                       {({ field, form }) => (
                         <FormControl
                           id="topic"
-                          isInvalid={form.errors.topic && form.touched.topic}
+                          isRequired={"true"}
+                          isInvalid={validateArrays(topcs,enteredTopics)}
                         >
                           <FormLabel>Topics</FormLabel>
                           <HStack>
@@ -277,17 +335,29 @@ export default function CreateIdea() {
                             <IconButton
                               icon={<RxPlus />}
                               borderRadius={"20px"}
-                              onClick={() =>
+                              onClick={() => handleArrays(
+                                document.getElementById("topics")
+                                    .selectedIndex,
+                                  topics,
+                                  c_topics,
+                                  rendered_topics,
+                                  setEnteredTopics
+                              )
+                              /*
+                                function(){
+                                setEnteredTopics(true);
                                 PushObj(
                                   document.getElementById("topics")
                                     .selectedIndex,
                                   topics,
                                   c_topics,
                                   rendered_topics
-                                )
+                                );
+                                }*/
                               }
                             />
                           </HStack>
+                          <FormErrorMessage>At least 1 topic is required.</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -298,7 +368,8 @@ export default function CreateIdea() {
                       {({ field, form }) => (
                         <FormControl
                           id="tech"
-                          isInvalid={form.errors.tech && form.touched.tech}
+                          isRequired={"true"}
+                          isInvalid={validateArrays(tchs,enteredTechs)}
                         >
                           <FormLabel>Technologies</FormLabel>
                           <HStack>
@@ -306,17 +377,28 @@ export default function CreateIdea() {
                             <IconButton
                               icon={<RxPlus />}
                               borderRadius={"20px"}
-                              onClick={() =>
+                              onClick={() => handleArrays(
+                                document.getElementById("techs")
+                                    .selectedIndex,
+                                  techs,
+                                  c_techs,
+                                  rendered_techs,
+                                  setEnteredTechs
+                              )
+                               /* function(){
+                                setEnteredTechs(true);
                                 PushObj(
                                   document.getElementById("techs")
                                     .selectedIndex,
                                   techs,
                                   c_techs,
                                   rendered_techs
-                                )
+                                );
+                                }*/
                               }
                             />
                           </HStack>
+                          <FormErrorMessage>At least 1 technology is required.</FormErrorMessage>
                         </FormControl>
                       )}
                     </Field>
@@ -365,6 +447,20 @@ export default function CreateIdea() {
                   _hover={{
                     bg: "blue.500",
                   }}
+                  loadingText="Submitting"
+                  isLoading={props.isSubmitting}
+                  isDisabled={
+                    ((!(enteredTitle && enteredPurpose && enteredDescription && enteredIconURL && enteredDomains && enteredTopics && enteredTechs)) 
+                    ||
+                    (validateRequired(title,enteredTitle) || 
+                    validateRequired(purpose,enteredPurpose) || 
+                    validateRequired(description,enteredDescription) || 
+                    validateRequired(iconURL,enteredIconURL) ||
+                    validateArrays(domns,enteredDomains) ||
+                    validateArrays(topcs,enteredTopics) ||
+                    validateArrays(tchs,enteredTechs)
+                    ))
+                  }
                   type="submit"
                 >
                   Create Idea
