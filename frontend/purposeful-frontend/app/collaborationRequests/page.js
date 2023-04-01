@@ -27,7 +27,15 @@ export default function CollaborationRequestsPage() {
         if (!response.ok) {
           return null;
         } else {
-          return await response.json();
+          var json = await response.json();
+
+          for (var collab_request of json) {
+            if (!collab_request.hasResponse) {
+              return json;
+            }
+          }
+
+          return null;
         }
       };
 
@@ -58,9 +66,11 @@ export default function CollaborationRequestsPage() {
         </Heading>
       </Center>
       <Box w="90vw" display="block" m="auto" pt="20px">
-        {requests.map((request) => (
-          <CollaborationRequestIncoming request={request} />
-        ))}
+        {requests !== null
+          ? requests.map((request) => (
+              <CollaborationRequestIncoming request={request} />
+            ))
+          : <Center color="grey">There are currently no collaboration requests for this idea.</Center>}
       </Box>
     </>
   );
