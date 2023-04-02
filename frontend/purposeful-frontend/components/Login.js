@@ -1,18 +1,14 @@
 // Copied from: https://chakra-templates.dev/forms/authentication
 import {
-  Flex,
   Box,
   FormControl,
   FormLabel,
   Input,
   InputGroup,
   Stack,
-  Link,
   Button,
-  Heading,
   InputRightElement,
   useColorModeValue,
-  FormHelperText,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -23,9 +19,6 @@ import { Field, Form, Formik } from "formik";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [disableForm, setDisableForm] = useState(false);
 
   // Function to validate the email field
   const validateEmail = (value) => {
@@ -43,10 +36,7 @@ export default function Login() {
 
   const handleSubmit = async (values, actions) => {
     event.preventDefault();
-    // alert(`Email: ${username} & Password: ${password}`);
     let success = await login(values.email, values.password);
-    console.log(success);
-    console.log(await verifyToken());
     if (success && (await verifyToken())) {
       // User successfully logged in as a regular user
       actions.setSubmitting(false);
@@ -58,9 +48,6 @@ export default function Login() {
       actions.setSubmitting(false);
       return;
     }
-    // logout();
-    // console.log(verifyToken());
-    // what to do if verify is false?
   };
 
   return (
@@ -173,10 +160,7 @@ export default function Login() {
                     loadingText="Submitting"
                     isLoading={props.isSubmitting}
                     isDisabled={
-                      !props.isValid ||
-                      props.isSubmitting ||
-                      disableForm ||
-                      !props.dirty
+                      !props.isValid || props.isSubmitting || !props.dirty
                     }
                     type="submit"
                   >
