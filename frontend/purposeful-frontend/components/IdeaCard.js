@@ -1,72 +1,121 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import {
   Box,
-  Center,
   Heading,
   Text,
   Stack,
   Avatar,
   useColorModeValue,
+  useDisclosure,
+  Icon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
 } from "@chakra-ui/react";
+import { GiReceiveMoney } from "react-icons/gi";
+import MoreDetailsOfIdea from "./MoreDetailsOfIdea";
+import styles from "../app/styles.module.css";
+import { react } from "./HighFiveBtn";
 
-export default function IdeaCard() {
+export default function IdeaCard({ idea }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [hasReacted, setHasReacted] = useState(null);
+
   return (
-    <Center py={6}>
+    <>
       <Box
-        maxW={"445px"}
+        maxW={"100%"}
         w={"full"}
         bg={useColorModeValue("white", "gray.900")}
         boxShadow={"2xl"}
         rounded={"md"}
         p={6}
-        overflow={"hidden"}>
+        overflow={"hidden"}
+        onClick={() => {
+          onOpen();
+        }}
+      >
         <Box
-          h={"210px"}
+          h={"400px"}
           bg={"gray.100"}
           mt={-6}
           mx={-6}
           mb={6}
-          pos={"relative"}>
-          <Image
-            src={
-              "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            }
-            layout={"fill"}
-          />
+          pos={"relative"}
+        >
+          <Image src={idea.iconUrl.url} fill style={{ objectFit: "cover" }} />
         </Box>
-        <Stack>
-          <Text
-            color={"green.500"}
-            textTransform={"uppercase"}
-            fontWeight={800}
-            fontSize={"sm"}
-            letterSpacing={1.1}>
-            Blog
-          </Text>
+        <Stack paddingTop={"5%"}>
           <Heading
             color={useColorModeValue("gray.700", "white")}
             fontSize={"2xl"}
-            fontFamily={"body"}>
-            Boost your conversion rate
+            fontFamily={"body"}
+          >
+            {idea.title}
           </Heading>
-          <Text color={"gray.500"}>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum.
+          <Text color={"gray.500"}>{idea.purpose}</Text>
+          <Text
+            color={"blue.500"}
+            textTransform={"uppercase"}
+            fontWeight={800}
+            fontSize={"sm"}
+            letterSpacing={1.1}
+          >
+            Domains:{" "}
+            <Text display="inline-block" color={"gray.500"} fontWeight={400}>
+              {idea.domains.map((domain) => domain.name).join(", ")}
+            </Text>
+          </Text>
+          <Text
+            color={"blue.500"}
+            textTransform={"uppercase"}
+            fontWeight={800}
+            fontSize={"sm"}
+            letterSpacing={1.1}
+          >
+            Topics:{" "}
+            <Text display="inline-block" color={"gray.500"} fontWeight={400}>
+              {idea.topics.map((topic) => topic.name).join(", ")}
+            </Text>
+          </Text>
+          <Text
+            color={"blue.500"}
+            textTransform={"uppercase"}
+            fontWeight={800}
+            fontSize={"sm"}
+            letterSpacing={1.1}
+          >
+            Technologies:{" "}
+            <Text display="inline-block" color={"gray.500"} fontWeight={400}>
+              {idea.techs.map((tech) => tech.name).join(", ")}
+            </Text>
+          </Text>
+          <Text
+            color={"blue.500"}
+            textTransform={"uppercase"}
+            fontWeight={800}
+            fontSize={"sm"}
+            letterSpacing={1.1}
+          >
+            <Icon as={GiReceiveMoney} boxSize={6} />{" "}
+            {idea.isPaid ? "Paid" : "Unpaid"}
           </Text>
         </Stack>
-        <Stack mt={6} direction={"row"} spacing={4} align={"center"}>
-          <Avatar
-            src={"https://avatars0.githubusercontent.com/u/1164541?v=4"}
-            alt={"Author"}
-          />
-          <Stack direction={"column"} spacing={0} fontSize={"sm"}>
-            <Text fontWeight={600}>Achim Rolle</Text>
-            <Text color={"gray.500"}>Feb 08, 2021 · 6min read</Text>
-          </Stack>
-        </Stack>
       </Box>
-    </Center>
+      <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} autoFocus={false}>
+        <ModalOverlay />
+        <ModalContent>
+          <MoreDetailsOfIdea
+            idea={idea}
+            hasReacted={hasReacted}
+            setHasReacted={setHasReacted}
+          />
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

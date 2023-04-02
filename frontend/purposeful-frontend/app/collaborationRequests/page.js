@@ -68,8 +68,8 @@ export default function CollaborationRequestsPage() {
       <Box w="90vw" display="block" m="auto" pt="20px">
         {requests !== null
           ? requests.map((request) => (
-              <CollaborationRequestIncoming request={request} />
-            ))
+            <CollaborationRequestIncoming request={request} />
+          ))
           : <Center color="grey">There are currently no collaboration requests for this idea.</Center>}
       </Box>
     </>
