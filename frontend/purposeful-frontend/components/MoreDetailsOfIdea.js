@@ -27,7 +27,7 @@ export default function MoreDetailsOfIdea({ idea }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
   //TODO: Get requester mail
-  function getReqMail() {}
+  function getReqMail() { }
 
   function collab_rm() {
     set_req(<Flex display={"none"}></Flex>);
@@ -81,6 +81,7 @@ export default function MoreDetailsOfIdea({ idea }) {
     i++;
   }
 
+  console.log(idea.id)
   return (
     <Container maxW={"6xl"}>
       {collabReq}
@@ -240,7 +241,6 @@ export default function MoreDetailsOfIdea({ idea }) {
               Send Collaboration Request
             </Button>
           </SimpleGrid>
-          {/* <Carousel /> can't fix it for now*/}
         </Stack>
       </SimpleGrid>
     </Container>
