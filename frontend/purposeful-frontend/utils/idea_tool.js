@@ -30,7 +30,7 @@ export async function getIdeaFromID(id) {
   return body;
 }
 
-export async function getMyIdeas(){
+export async function getMyIdeas() {
   let ideas = await fetchWrapper(`/api/idea/user`);
   let body = await ideas.json();
   return body;

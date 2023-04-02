@@ -59,8 +59,7 @@ export default function NavBar() {
               alignItems={"left"}
               onClick={() => {
                 window.location.href = "/";
-              }}
-            >
+              }}>
               <Text as="em" color={"gray.500"}>
                 Share.
               </Text>
@@ -75,8 +74,7 @@ export default function NavBar() {
             <HStack
               as={"nav"}
               spacing={4}
-              display={{ base: "none", md: "flex" }}
-            >
+              display={{ base: "none", md: "flex" }}>
               {/* Home nav */}
               <Link
                 p={2}
@@ -89,8 +87,7 @@ export default function NavBar() {
                 }}
                 onClick={() => {
                   window.location.href = "/";
-                }}
-              >
+                }}>
                 Home
               </Link>
               {/* Ideas nav */}
@@ -105,8 +102,7 @@ export default function NavBar() {
                       _hover={{
                         textDecoration: "underline",
                         color: textColorBaseHover,
-                      }}
-                    >
+                      }}>
                       Ideas
                     </Text>
                   </PopoverTrigger>
@@ -116,8 +112,7 @@ export default function NavBar() {
                     bg={bgColorBase}
                     p={4}
                     rounded={"xl"}
-                    minW={"sm"}
-                  >
+                    minW={"sm"}>
                     <Stack>
                       {/* Create Idea nav option */}
                       <Link
@@ -128,15 +123,13 @@ export default function NavBar() {
                         rounded={"md"}
                         _hover={{
                           bg: bgColorBaseHover,
-                        }}
-                      >
+                        }}>
                         <Stack direction={"row"} align={"center"}>
                           <Box>
                             <Text
                               transition={"all .3s ease"}
                               _groupHover={{ color: "blue.500" }}
-                              fontWeight={500}
-                            >
+                              fontWeight={500}>
                               Create Idea
                             </Text>
                             <Text fontSize={"sm"}>Have an idea? Share it!</Text>
@@ -151,8 +144,7 @@ export default function NavBar() {
                             }}
                             justify={"flex-end"}
                             align={"center"}
-                            flex={1}
-                          >
+                            flex={1}>
                             <Icon
                               color={"blue.500"}
                               w={5}
@@ -171,15 +163,13 @@ export default function NavBar() {
                         rounded={"md"}
                         _hover={{
                           bg: bgColorBaseHover,
-                        }}
-                      >
+                        }}>
                         <Stack direction={"row"} align={"center"}>
                           <Box>
                             <Text
                               transition={"all .3s ease"}
                               _groupHover={{ color: "blue.500" }}
-                              fontWeight={500}
-                            >
+                              fontWeight={500}>
                               My Ideas
                             </Text>
                             <Text fontSize={"sm"}>
@@ -196,8 +186,7 @@ export default function NavBar() {
                             }}
                             justify={"flex-end"}
                             align={"center"}
-                            flex={1}
-                          >
+                            flex={1}>
                             <Icon
                               color={"blue.500"}
                               w={5}
@@ -216,15 +205,13 @@ export default function NavBar() {
                         rounded={"md"}
                         _hover={{
                           bg: bgColorBaseHover,
-                        }}
-                      >
+                        }}>
                         <Stack direction={"row"} align={"center"}>
                           <Box>
                             <Text
                               transition={"all .3s ease"}
                               _groupHover={{ color: "blue.500" }}
-                              fontWeight={500}
-                            >
+                              fontWeight={500}>
                               My Interests
                             </Text>
                             <Text fontSize={"sm"}>
@@ -241,8 +228,7 @@ export default function NavBar() {
                             }}
                             justify={"flex-end"}
                             align={"center"}
-                            flex={1}
-                          >
+                            flex={1}>
                             <Icon
                               color={"blue.500"}
                               w={5}
@@ -268,8 +254,7 @@ export default function NavBar() {
                       _hover={{
                         textDecoration: "underline",
                         color: textColorBaseHover,
-                      }}
-                    >
+                      }}>
                       Domain
                     </Text>
                   </PopoverTrigger>
@@ -279,8 +264,7 @@ export default function NavBar() {
                     bg={bgColorBase}
                     p={4}
                     rounded={"xl"}
-                    minW={"sm"}
-                  >
+                    minW={"sm"}>
                     <Stack>
                       {/* Software nav option */}
                       <Link
@@ -292,15 +276,13 @@ export default function NavBar() {
                         rounded={"md"}
                         _hover={{
                           bg: bgColorBaseHover,
-                        }}
-                      >
+                        }}>
                         <Stack direction={"row"} align={"center"}>
                           <Box>
                             <Text
                               transition={"all .3s ease"}
                               _groupHover={{ color: "blue.500" }}
-                              fontWeight={500}
-                            >
+                              fontWeight={500}>
                               Software
                             </Text>
                           </Box>
@@ -314,8 +296,7 @@ export default function NavBar() {
                             }}
                             justify={"flex-end"}
                             align={"center"}
-                            flex={1}
-                          >
+                            flex={1}>
                             <Icon
                               color={"blue.500"}
                               w={5}
@@ -342,8 +323,7 @@ export default function NavBar() {
                   }}
                   onClick={() => {
                     window.location.href = "/register/moderator";
-                  }}
-                >
+                  }}>
                   Admin
                 </Link>
               )}
@@ -365,13 +345,13 @@ export default function NavBar() {
                       rounded={"full"}
                       variant={"link"}
                       cursor={"pointer"}
-                      minW={0}
-                    >
+                      minW={0}>
                       {/* Avatar button */}
                       <Avatar
                         size={"md"}
-                        src={`https://avatars.dicebear.com/api/big-smile/${JSON.parse(appUser).email
-                          }.svg`}
+                        src={`https://avatars.dicebear.com/api/big-smile/${
+                          JSON.parse(appUser).email
+                        }.svg`}
                       />
                     </MenuButton>
                     <MenuList bg={bgColorBase} border={0} boxShadow={"xl"}>
@@ -380,8 +360,9 @@ export default function NavBar() {
                         {/* Avatar in big inside account menu */}
                         <Avatar
                           size={"2xl"}
-                          src={`https://avatars.dicebear.com/api/big-smile/${JSON.parse(appUser).email
-                            }.svg`}
+                          src={`https://avatars.dicebear.com/api/big-smile/${
+                            JSON.parse(appUser).email
+                          }.svg`}
                         />
                       </Center>
                       <br />
@@ -404,8 +385,7 @@ export default function NavBar() {
                         icon={<RiAccountCircleLine />}
                         onClick={() => {
                           window.location.href = "/account";
-                        }}
-                      >
+                        }}>
                         Account
                       </MenuItem>
                       {/* Logout */}
@@ -419,8 +399,7 @@ export default function NavBar() {
                         onClick={() => {
                           logout();
                           window.location.href = "/login";
-                        }}
-                      >
+                        }}>
                         Logout
                       </MenuItem>
                     </MenuList>
