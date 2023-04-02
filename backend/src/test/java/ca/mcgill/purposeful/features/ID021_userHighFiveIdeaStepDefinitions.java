@@ -8,6 +8,7 @@ import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.dao.ReactionRepository;
 import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dto.ReactionDTO;
+import ca.mcgill.purposeful.dto.ReactionRequestDTO;
 import ca.mcgill.purposeful.model.Reaction;
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 import ca.mcgill.purposeful.model.RegularUser;
@@ -114,12 +115,12 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     RegularUser regularUser = regularUserRepository.findRegularUserByAppUser_Id(correctedUser);
     String email = regularUser.getAppUser().getEmail();
 
-    ReactionDTO reactionDTO =
-        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), correctedIdea, email);
+    ReactionRequestDTO reactionDTO =
+        new ReactionRequestDTO( correctedIdea, email,ReactionType.valueOf(reactionType));
     // make a post request to create the user and store the response
-    HttpEntity<ReactionDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
+    HttpEntity<ReactionRequestDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
     this.response =
-        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionDTO.class);
+        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionRequestDTO.class);
   }
 
   @Then("a new reaction of idea {string} and user {string} shall be added to the reaction database")
@@ -142,12 +143,12 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     RegularUser regularUser = regularUserRepository.findRegularUserByAppUser_Id(correctedUser);
     String email = regularUser.getAppUser().getEmail();
 
-    ReactionDTO reactionDTO =
-        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), correctedIdea, email);
+    ReactionRequestDTO reactionDTO =
+            new ReactionRequestDTO( correctedIdea, email,ReactionType.valueOf(reactionType));
     // make a post request to create the user and store the response
-    HttpEntity<ReactionDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
+    HttpEntity<ReactionRequestDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
     this.response =
-        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionDTO.class);
+        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionRequestDTO.class);
   }
 
   @And(
@@ -159,12 +160,12 @@ public class ID021_userHighFiveIdeaStepDefinitions {
     RegularUser regularUser = regularUserRepository.findRegularUserByAppUser_Id(correctedUser);
     String email = regularUser.getAppUser().getEmail();
 
-    ReactionDTO reactionDTO =
-        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), correctedIdea, email);
+    ReactionRequestDTO reactionDTO =
+            new ReactionRequestDTO( correctedIdea, email,ReactionType.valueOf(reactionType));
     // make a post request to create the user and store the response
-    HttpEntity<ReactionDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
+    HttpEntity<ReactionRequestDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
     this.response =
-        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionDTO.class);
+        client.exchange("/api/reaction", HttpMethod.POST, requestEntity, ReactionRequestDTO.class);
   }
 
   @Then(
@@ -191,10 +192,10 @@ public class ID021_userHighFiveIdeaStepDefinitions {
         correctedTargetUser);
     String email = regularUser.getAppUser().getEmail();
 
-    ReactionDTO reactionDTO =
-        new ReactionDTO(new Date(), ReactionType.valueOf(reactionType), correctedIdea, email);
+    ReactionRequestDTO reactionDTO =
+            new ReactionRequestDTO( correctedIdea, email,ReactionType.valueOf(reactionType));
     // make a post request to create the user and store the response
-    HttpEntity<ReactionDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
+    HttpEntity<ReactionRequestDTO> requestEntity = new HttpEntity<>(reactionDTO, authHeader);
     this.response = client.exchange("/api/reaction", HttpMethod.POST, requestEntity, String.class);
   }
 

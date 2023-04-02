@@ -1,6 +1,7 @@
 package ca.mcgill.purposeful.controller;
 
 import ca.mcgill.purposeful.dao.AppUserRepository;
+import ca.mcgill.purposeful.dao.RegularUserRepository;
 import ca.mcgill.purposeful.dto.ReactionDTO;
 import ca.mcgill.purposeful.dto.ReactionRequestDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
@@ -31,6 +32,8 @@ public class ReactionController {
   private ReactionService reactionService;
   @Autowired
   private AppUserRepository appUserRepository;
+  @Autowired
+  private RegularUserRepository regularUserRepository;
 
   /**
    * POST method to react
@@ -65,7 +68,8 @@ public class ReactionController {
     if (appUser == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not found");
     }
-    String user_id = appUser.getId();
+    String app_user_id = appUser.getId();
+    String user_id = regularUserRepository.findRegularUserByAppUser_Id(app_user_id).getId();
     // react
     Reaction reaction = reactionService.react(date, reactionType, idea_id, user_id);
 
