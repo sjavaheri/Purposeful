@@ -17,7 +17,7 @@ public class ReactionDTO {
   private Date date;
 
   private String idea_id;
-  private String user_id;
+  private String email;
 
   /**
    * Default constructor.
@@ -32,7 +32,7 @@ public class ReactionDTO {
     this.reactionType = reaction.getReactionType();
     this.date = reaction.getDate();
     this.idea_id = reaction.getIdea().getId();
-    this.user_id = reaction.getRegularUser().getId();
+    this.email = reaction.getRegularUser().getAppUser().getEmail();
   }
 
     /**
@@ -40,13 +40,14 @@ public class ReactionDTO {
      * @param date the date of the reaction
      * @param reactionType the type of the reaction
      * @param idea_id the id of the idea
-     * @param user_id the id of the user
+     * @param email the email of the user
      */
-  public ReactionDTO(Date date, ReactionType reactionType, String idea_id, String user_id) {
+  public ReactionDTO(Date date, ReactionType reactionType, String idea_id, String email) {
+
     this.reactionType = reactionType;
     this.date = date;
     this.idea_id = idea_id;
-    this.user_id = user_id;
+    this.email = email;
   }
 
   /**
@@ -54,7 +55,7 @@ public class ReactionDTO {
    * @return the id of the reaction
    */
   public String getId() {
-    return id;
+    return this.id;
   }
 
     /**
@@ -70,7 +71,7 @@ public class ReactionDTO {
      * @return the type of the reaction
      */
   public ReactionType getReactionType() {
-    return reactionType;
+    return this.reactionType;
   }
 
     /**
@@ -86,7 +87,7 @@ public class ReactionDTO {
      * @return the date of the reaction
      */
   public Date getDate() {
-    return date;
+    return this.date;
   }
 
     /**
@@ -113,19 +114,19 @@ public class ReactionDTO {
     this.idea_id = idea_id;
   }
 
-    /**
-     * Returns the id of the user.
-     * @return the id of the user
-     */
-  public String getUser_id() {
-    return user_id;
+/**
+ * Returns the email of the user.
+ * @return the email of the user
+ */
+  public String getEmail() {
+    return this.email;
   }
 
     /**
-     * Sets the id of the user.
-     * @param user_id the id of the user
+     * Sets the email of the user.
+     * @param email the email of the user
      */
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
+  public void setEmail(String email) {
+    this.email= email;
   }
 }

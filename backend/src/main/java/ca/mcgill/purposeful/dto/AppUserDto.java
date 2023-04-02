@@ -26,7 +26,7 @@ public class AppUserDto {
    * @param lastname - the lastname of the user
    * @author Shidan Javaheri
    */
-  public AppUserDto(String email, String password, String firstname, String lastname) {
+  public AppUserDto(String email, String password, String firstname, String lastname){
     this.email = email;
     this.password = password;
     this.firstname = firstname;

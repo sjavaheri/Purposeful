@@ -1,7 +1,7 @@
 "use client";
 
 import { CacheProvider } from "@chakra-ui/next-js";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Box } from "@chakra-ui/react";
 import theme from "./theme";
 import NavBar from "@/components/NavBar";
 
@@ -12,7 +12,9 @@ export default function RootLayout({ children }) {
       <body>
         <CacheProvider>
           <ChakraProvider theme={theme}>
-            <NavBar />
+            <Box position={"sticky"} top={"0px"} width={"100%"} zIndex={"3"}>
+              <NavBar />
+            </Box>
             {children}
           </ChakraProvider>
         </CacheProvider>
