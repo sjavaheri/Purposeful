@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import {
   Box,
   Heading,
@@ -22,12 +23,7 @@ import { react } from "./HighFiveBtn";
 
 export default function IdeaCard({ idea }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  let hasReacted = null;
-
-  async function checkIfReacted(idea_id, reactionType) {
-    await react(idea_id, reactionType);
-    hasReacted = await react(idea_id, reactionType);
-  }
+  const [hasReacted, setHasReacted] = useState(null);
 
   return (
     <>
@@ -39,21 +35,26 @@ export default function IdeaCard({ idea }) {
         rounded={"md"}
         p={6}
         overflow={"hidden"}
-        onClick={() => { checkIfReacted(idea.id, "HighFive"); onOpen() }}>
+        onClick={() => {
+          onOpen();
+        }}
+      >
         <Box
           h={"400px"}
           bg={"gray.100"}
           mt={-6}
           mx={-6}
           mb={6}
-          pos={"relative"}>
+          pos={"relative"}
+        >
           <Image src={idea.iconUrl.url} fill style={{ objectFit: "cover" }} />
         </Box>
         <Stack paddingTop={"5%"}>
           <Heading
             color={useColorModeValue("gray.700", "white")}
             fontSize={"2xl"}
-            fontFamily={"body"}>
+            fontFamily={"body"}
+          >
             {idea.title}
           </Heading>
           <Text color={"gray.500"}>{idea.purpose}</Text>
@@ -62,7 +63,8 @@ export default function IdeaCard({ idea }) {
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
-            letterSpacing={1.1}>
+            letterSpacing={1.1}
+          >
             Domains:{" "}
             <Text display="inline-block" color={"gray.500"} fontWeight={400}>
               {idea.domains.map((domain) => domain.name).join(", ")}
@@ -73,7 +75,8 @@ export default function IdeaCard({ idea }) {
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
-            letterSpacing={1.1}>
+            letterSpacing={1.1}
+          >
             Topics:{" "}
             <Text display="inline-block" color={"gray.500"} fontWeight={400}>
               {idea.topics.map((topic) => topic.name).join(", ")}
@@ -84,7 +87,8 @@ export default function IdeaCard({ idea }) {
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
-            letterSpacing={1.1}>
+            letterSpacing={1.1}
+          >
             Technologies:{" "}
             <Text display="inline-block" color={"gray.500"} fontWeight={400}>
               {idea.techs.map((tech) => tech.name).join(", ")}
@@ -95,7 +99,8 @@ export default function IdeaCard({ idea }) {
             textTransform={"uppercase"}
             fontWeight={800}
             fontSize={"sm"}
-            letterSpacing={1.1}>
+            letterSpacing={1.1}
+          >
             <Icon as={GiReceiveMoney} boxSize={6} />{" "}
             {idea.isPaid ? "Paid" : "Unpaid"}
           </Text>
@@ -104,7 +109,11 @@ export default function IdeaCard({ idea }) {
       <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} autoFocus={false}>
         <ModalOverlay />
         <ModalContent>
-          <MoreDetailsOfIdea idea={idea} hasReacted={hasReacted} />
+          <MoreDetailsOfIdea
+            idea={idea}
+            hasReacted={hasReacted}
+            setHasReacted={setHasReacted}
+          />
         </ModalContent>
       </Modal>
     </>

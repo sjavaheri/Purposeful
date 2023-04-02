@@ -23,9 +23,8 @@ import {
 import { BsSend } from "react-icons/bs";
 import { useState } from "react";
 
-export default function MoreDetailsOfIdea({ idea, hasReacted }) {
+export default function MoreDetailsOfIdea({ idea, hasReacted, setHasReacted }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
-
 
   //TODO: Get requester mail
   function getReqMail() {
@@ -90,19 +89,22 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
       <SimpleGrid
         columns={{ base: 1, lg: 2 }}
         spacing={{ base: 8, md: 10 }}
-        py={{ base: 18, md: 18 }}>
+        py={{ base: 18, md: 18 }}
+      >
         <Stack>
           <Box as={"header"}>
             <Heading
               lineHeight={1.1}
               fontWeight={600}
-              fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}>
+              fontSize={{ base: "2xl", sm: "4xl", lg: "5xl" }}
+            >
               {idea.title}
             </Heading>
             <Text
               color={useColorModeValue("gray.900", "gray.400")}
               fontWeight={300}
-              fontSize={"2xl"}>
+              fontSize={"2xl"}
+            >
               {idea.purpose}
             </Text>
           </Box>
@@ -125,12 +127,14 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
               <StackDivider
                 borderColor={useColorModeValue("gray.200", "gray.600")}
               />
-            }>
+            }
+          >
             <VStack spacing={{ base: 4, sm: 6 }}>
               <Text
                 color={useColorModeValue("gray.500", "gray.400")}
                 fontSize={"2xl"}
-                fontWeight={"300"}>
+                fontWeight={"300"}
+              >
                 Idea Description
               </Text>
               <Text fontSize={"lg"}>{idea.description}</Text>
@@ -141,7 +145,8 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
                 color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
-                mb={"4"}>
+                mb={"4"}
+              >
                 Is Paid?
               </Text>
 
@@ -157,7 +162,8 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
                 color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
-                mb={"4"}>
+                mb={"4"}
+              >
                 Is In Progress?
               </Text>
 
@@ -173,7 +179,8 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
                 color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
-                mb={"4"}>
+                mb={"4"}
+              >
                 Domains
               </Text>
 
@@ -196,7 +203,8 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
                 color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
-                mb={"4"}>
+                mb={"4"}
+              >
                 Topics
               </Text>
 
@@ -219,7 +227,8 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
                 color={useColorModeValue("blue.500", "blue.300")}
                 fontWeight={"500"}
                 textTransform={"uppercase"}
-                mb={"4"}>
+                mb={"4"}
+              >
                 Technologies
               </Text>
 
@@ -238,7 +247,11 @@ export default function MoreDetailsOfIdea({ idea, hasReacted }) {
             </Box>
           </Stack>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-            <HighFiveBtn idea_id={idea.id} hasReacted={hasReacted} />
+            <HighFiveBtn
+              idea_id={idea.id}
+              hasReacted={hasReacted}
+              setHasReacted={setHasReacted}
+            />
             <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
               Send Collaboration Request
             </Button>
