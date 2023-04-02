@@ -42,11 +42,11 @@ export default function CollabRequestPopup({ RequesterMail, ideaID, ideaTitle, r
     };
 
     return (
-        <Box zIndex={"10"} backgroundColor={col} marginTop={"15%"} marginLeft={"3%"} borderColor={"rgba(0,0,0,0.1)"} width={"40%"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"}>
+        <Box zIndex={"10"} backgroundColor={col} left={"50%"} transform={"translate(-50%, 80%)"} borderColor={"rgba(0,0,0,0.1)"} width={"4xl"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"} >
             <Stack>
                 <Box width={"100%"}>
                     <Flex width={"100%"} backgroundColor={bannercol} borderRadius={"10px"}>
-                        <Text margin={"10px"}>Collaboration Request</Text>
+                        <Text margin={"10px"} fontWeight={"500"} >Collaboration Request</Text>
                         <IconButton
                             margin={"10px"}
                             marginLeft={"auto"}
@@ -56,13 +56,20 @@ export default function CollabRequestPopup({ RequesterMail, ideaID, ideaTitle, r
                         />
                     </Flex>
                 </Box>
-                <Flex width={"80%"} alignSelf={"center"}>
-                    <Text marginLeft={"0"} marginRight={"auto"}>User Email: {RequesterMail}</Text>
-                    <Text marginLeft={"auto"} marginRight={"0"}>Idea: {ideaTitle}</Text>
+                <Flex width={"60%"} alignSelf={"center"}>
+                    <Text marginLeft={"0"} marginRight={"auto"} fontWeight={"500"}>User Email
+                        <Text marginLeft={"0"} marginRight={"0"} fontWeight={"100"}>{RequesterMail}</Text>
+                    </Text>
+                    <Text marginLeft={"auto"} marginRight={"0"} fontWeight={"500"}>Idea
+                        <Text marginLeft={"0"} marginRight={"0"} fontWeight={"100"}>{ideaTitle}</Text>
+                    </Text>
                 </Flex>
-                <Textarea id={"reqMessage"} alignSelf={"center"} width={"90%"} placeholder={"Add a collaboration invitation message..."}></Textarea>
-                <Flex padding={1} width={"80%"} alignSelf={"center"}>
-                    <Text>Additional Contact :</Text>
+                <Flex padding={1} width={"90%"} alignSelf={"center"}>
+                    <Text fontWeight={"500"}>Invitation Message</Text>
+                    <Textarea id={"reqMessage"} alignSelf={"center"} width={"100%"} placeholder={"Add a collaboration invitation message..."}></Textarea>
+                </Flex>
+                <Flex padding={1} width={"90%"} alignSelf={"center"}>
+                    <Text fontWeight={"500"}>Additional Contact</Text>
                     <Input id={"addContact"} placeholder="Additional Contact..." type="text" />
                 </Flex>
                 <Button
@@ -78,6 +85,6 @@ export default function CollabRequestPopup({ RequesterMail, ideaID, ideaTitle, r
                 </Button>
                 <br></br>
             </Stack>
-        </Box>
+        </Box >
     );
 }
