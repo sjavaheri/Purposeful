@@ -1,5 +1,6 @@
 Feature: Access Created Ideas
   As a user who has created an idea, I want to be able to access all the ideas I have created so that I can keep track of them and their associated collaboration requests
+
   Background:
     Given the database contains the following user account info:
       | id | firstname | lastname | email                | password         |
@@ -12,9 +13,9 @@ Feature: Access Created Ideas
       | 4  | Computer   |
       | 5  | Electrical |
     And the database contains the following topic object info:
-      | id | name              |
-      | 6  | Frontend Dev      |
-      | 7  | Backend Dev       |
+      | id | name         |
+      | 6  | Frontend Dev |
+      | 7  | Backend Dev  |
     And the database contains the following tech object info:
       | id | name   |
       | 8  | Python |
@@ -38,19 +39,19 @@ Feature: Access Created Ideas
 
     # Normal Flow
 
-    Scenario Outline: Successfully access all created ideas
-        Given user with email "<email>" and password "<password>" is successfully logged in
-        When the user requests to access all ideas associated to them
-        Then then all ideas with ids "<idea_ids>" will be provided
+  Scenario Outline: Successfully access all created ideas
+    Given user with email "<email>" and password "<password>" is successfully logged in
+    When the user requests to access all ideas associated to them
+    Then then all ideas with ids "<idea_ids>" will be provided
 
-        Examples:
-        | email                | password            | idea_ids |
-        | user.steve@gmail.com | SteveIsAwesome01    | 18,19    |
-        | user.bob@gmail.com   | BobIsAwesome01      | 20,21    |
-        | user.joe@gmail.com   | JoeIsAwesome01      |          |
+    Examples:
+      | email                | password         | idea_ids |
+      | user.steve@gmail.com | SteveIsAwesome01 | 18,19    |
+      | user.bob@gmail.com   | BobIsAwesome01   | 20,21    |
+      | user.joe@gmail.com   | JoeIsAwesome01   |          |
 
     # Error Flow
 
-    Scenario: Unsuccessfully access created ideas if logged out
-        When the user requests to access all ideas associated to them
-        Then the status code "401" unauthorized error will be received
+  Scenario: Unsuccessfully access created ideas if logged out
+    When the user requests to access all ideas associated to them
+    Then the status code "401" unauthorized error will be received

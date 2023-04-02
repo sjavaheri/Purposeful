@@ -36,7 +36,6 @@ public class CollaborationRequestDTO {
     this.hasResponse = collaborationRequest.getCollaborationResponse() != null;
   }
 
-
   public String getId() {
     return id;
   }
@@ -77,7 +76,6 @@ public class CollaborationRequestDTO {
     this.hasResponse = hasResponse;
   }
 
-
   /**
    * Converts a list of collaboration requests to DTOs
    *
@@ -95,6 +93,4 @@ public class CollaborationRequestDTO {
 
     return dtoList;
   }
-
-
 }

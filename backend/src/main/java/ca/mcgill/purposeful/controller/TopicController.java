@@ -18,8 +18,7 @@ import java.util.List;
 @RequestMapping({"/api/topic", "/api/topic/"})
 public class TopicController {
 
-  @Autowired
-  private TopicService topicService;
+  @Autowired private TopicService topicService;
 
   /**
    * GET method to retrieve all topics in the database.

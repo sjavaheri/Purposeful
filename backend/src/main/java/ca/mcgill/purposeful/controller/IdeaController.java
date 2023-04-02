@@ -109,8 +109,7 @@ public class IdeaController {
    * @throws GlobalException if the ideaDTO is null
    * @author Ramin Akhavan
    */
-  @PutMapping(
-      value = {"/edit", "/edit/"})
+  @PutMapping(value = {"/edit", "/edit/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
       throws GlobalException {
@@ -121,13 +120,13 @@ public class IdeaController {
     // create the urls for the supporting images
     List<String> supportingImageUrlIds = null;
     if (ideaDTO.getImgUrls() != null) {
-        supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+      supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
     }
 
     // create the icon url if it doesn't already exist
     String iconUrlId = null;
     if (ideaDTO.getIconUrl() != null) {
-        iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+      iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
     }
 
     Idea modifiedIdea =
@@ -149,7 +148,6 @@ public class IdeaController {
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
   }
 
-
   /**
    * Remove an idea by its id
    *
@@ -164,7 +162,9 @@ public class IdeaController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String requestEmail = authentication.getName();
     String ownerEmail = ideaService.getIdeaById(id).getUser().getAppUser().getEmail();
-    if (!requestEmail.equals(ownerEmail) && !authentication.getAuthorities().contains("Owner") && !authentication.getAuthorities().contains("Moderator")) {
+    if (!requestEmail.equals(ownerEmail)
+        && !authentication.getAuthorities().contains("Owner")
+        && !authentication.getAuthorities().contains("Moderator")) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized");
     }
     // call service layer
@@ -173,13 +173,13 @@ public class IdeaController {
     return new ResponseEntity<String>("Idea successfully deleted", HttpStatus.OK);
   }
 
-    /**
+  /**
    * Retrieve all the ideas that a user created.
    *
    * @return a response entity with a list of ideas and the HttpStatus
    * @author Ramin Akhavan
    */
-    @GetMapping({"/user", "/user/"})
+  @GetMapping({"/user", "/user/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<List<IdeaDTO>> getUserCreatedIdeas() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -198,7 +198,8 @@ public class IdeaController {
   /**
    * Get all ideas that the user has requested to collaborate on
    *
-   * @return a response entity with a list of ideas that the user has requested collaboration on and the HttpStatus
+   * @return a response entity with a list of ideas that the user has requested collaboration on and
+   *     the HttpStatus
    * @author Enzo Benoit-Jeannin
    */
   @GetMapping({"/user/requests", "/user/requests/"})

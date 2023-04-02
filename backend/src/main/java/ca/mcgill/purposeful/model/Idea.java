@@ -51,15 +51,24 @@ public class Idea {
   // ------------------------
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "idea_domain", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "url_id"))
+  @JoinTable(
+      name = "idea_domain",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "url_id"))
   private Set<Domain> domains;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "idea_topic", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "topic_id"))
+  @JoinTable(
+      name = "idea_topic",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "topic_id"))
   private Set<Topic> topics;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "idea_technology", joinColumns = @JoinColumn(name = "idea_id"), inverseJoinColumns = @JoinColumn(name = "technology_id"))
+  @JoinTable(
+      name = "idea_technology",
+      joinColumns = @JoinColumn(name = "idea_id"),
+      inverseJoinColumns = @JoinColumn(name = "technology_id"))
   private Set<Technology> techs;
 
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -79,8 +88,7 @@ public class Idea {
   // Idea Constructor
   // ------------------------
 
-  public Idea() {
-  }
+  public Idea() {}
 
   // ------------------------
   // Getter/Setter Methods

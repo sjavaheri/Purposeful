@@ -18,8 +18,7 @@ import java.util.List;
 @RequestMapping({"/api/tech", "/api/tech/"})
 public class TechnologyController {
 
-  @Autowired
-  private TechnologyService technologyService;
+  @Autowired private TechnologyService technologyService;
 
   /**
    * GET method to retrieve all technologies in the database.

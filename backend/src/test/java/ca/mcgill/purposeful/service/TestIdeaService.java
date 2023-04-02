@@ -1,8 +1,15 @@
 package ca.mcgill.purposeful.service;
 
+import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.model.*;
-import org.junit.jupiter.api.Assertions;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,15 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.*;
-
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 /**
  * To test the idea service methods
@@ -36,7 +34,6 @@ public class TestIdeaService {
   private static boolean NEW_PAY = true;
   private static boolean NEW_PRIVACY = true;
   private static boolean NEW_PROGRESS = true;
-
 
   // Mocks
   @Mock private IdeaRepository ideaRepository;
@@ -78,11 +75,14 @@ public class TestIdeaService {
         .when(regularUserRepository.findRegularUserByAppUserEmail(anyString()))
         .thenAnswer(MockRepository::findRegularUserByAppUserEmail);
     lenient()
-        .when(collaborationRequestRepository.findAll()).thenAnswer(MockRepository::findAllRequests);
+        .when(collaborationRequestRepository.findAll())
+        .thenAnswer(MockRepository::findAllRequests);
   }
 
   /**
-   * @author Ramin Akhavan Test access all user's created ideas
+   * Test access all user's created ideas
+   *
+   * @author Ramin Akhavan
    */
   @Test
   public void testGetCreatedIdeas_Success() {
@@ -93,12 +93,12 @@ public class TestIdeaService {
     assertTrue(!createdIdeas.isEmpty());
     assertTrue(createdIdeas.contains(MockDatabase.idea1));
     assertTrue(createdIdeas.contains(MockDatabase.idea2));
-
   }
 
   /**
-   * @author Ramin Akhavan Test access all user's created ideas
-   * Fail case where email is empty or null
+   * Test access all user's created ideas Fail case where email is empty or null
+   *
+   * @author Ramin Akhavan
    */
   @Test
   public void testGetCreatedIdeas_NullEmail() {
@@ -106,16 +106,16 @@ public class TestIdeaService {
 
     try {
       List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
-    }
-    catch(Exception e){
+    } catch (Exception e) {
       assertEquals("Please enter a valid email. Email cannot be left empty", e.getMessage());
     }
-
   }
 
   /**
-   * @author Ramin Akhavan Test access all user's created ideas
-   * Empty list is returned if email is not associated to an idea
+   * Test access all user's created ideas Empty list is returned if email is not associated to an
+   * idea
+   *
+   * @author Ramin Akhavan
    */
   @Test
   public void testGetCreatedIdeas_EmptyList() {
@@ -124,10 +124,8 @@ public class TestIdeaService {
     List<Idea> createdIdeas = ideaService.getCreatedIdeas(testUserEmail);
 
     assertTrue(createdIdeas.isEmpty());
-
   }
 
-  
   /**
    * Test the getIdeaById method (Success case)
    *
@@ -295,7 +293,9 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Adam Kazma Test creation of idea
+   * Test creation of idea
+   *
+   * @author Adam Kazma
    */
   @Test
   public void testCreationOfIdea() {
@@ -364,7 +364,9 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Adam Kazma Creating an idea with empty attribute
+   * Creating an idea with empty attribute
+   *
+   * @author Adam Kazma
    */
   @Test
   public void testCreateIdeaWithInvalidEmptyFieldFailure() {
@@ -414,7 +416,9 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Adam Kazma Test non-exsting object violation
+   * Test non-exsting object violation
+   *
+   * @author Adam Kazma
    */
   @Test
   public void testCreateIdeaWithNonExistingObjectFailure() {
@@ -465,7 +469,9 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Ramin Akhavan Test all attributes changing
+   * Test all attributes changing
+   *
+   * @author Ramin Akhavan
    */
   @Test
   public void testModifyAllAttributesOfIdea() {
@@ -541,7 +547,9 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Ramin Akhavan Test empty attribute violation
+   * Test empty attribute violation
+   *
+   * @author Ramin Akhavan
    */
   @Test
   public void testModifyIdeaWithInvalidEmptyFieldFailure() {
@@ -577,7 +585,9 @@ public class TestIdeaService {
   }
 
   /**
-   * @author Ramin Akhavan Test non-exsting object violation
+   * Test non-exsting object violation
+   *
+   * @author Ramin Akhavan
    */
   @Test
   public void testModifyIdeaWithNonExistingObjectFailure() {
@@ -615,7 +625,8 @@ public class TestIdeaService {
   }
 
   /**
-   * Test getting ideas by Collaboration Request (Success case 1). The user made collaboration requests before
+   * Test getting ideas by Collaboration Request (Success case 1). The user made collaboration
+   * requests before
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -623,7 +634,8 @@ public class TestIdeaService {
   public void testGetIdeasByCollaborationRequest_Success1() {
 
     // Try to get the ideas by all criteria
-    List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest(MockDatabase.appUser2.getEmail());
+    List<Idea> fetchedIdeas =
+        ideaService.getIdeasByCollaborationRequest(MockDatabase.appUser2.getEmail());
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -637,7 +649,8 @@ public class TestIdeaService {
   }
 
   /**
-   * Test getting ideas by Collaboration Request (Success case 2). The user did not make collaboration requests before
+   * Test getting ideas by Collaboration Request (Success case 2). The user did not make
+   * collaboration requests before
    *
    * @author Enzo Benoit-Jeannin
    */
@@ -645,7 +658,8 @@ public class TestIdeaService {
   public void testGetIdeasByCollaborationRequest_Success2() {
 
     // Try to get the ideas by all criteria
-    List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest(MockDatabase.appUser1.getEmail());
+    List<Idea> fetchedIdeas =
+        ideaService.getIdeasByCollaborationRequest(MockDatabase.appUser1.getEmail());
 
     // Check that the ideas list fetched isn't null
     assertNotNull(fetchedIdeas);
@@ -663,7 +677,7 @@ public class TestIdeaService {
   @Test
   public void testGetIdeasByCollaborationRequest_EmptyEmail() {
 
-    try{
+    try {
       // Try to get the ideas by all criteria using an empty email
       List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest("");
     } catch (Exception e) {
@@ -678,7 +692,7 @@ public class TestIdeaService {
    */
   @Test
   public void testGetIdeasByCollaborationRequest_NullEmail() {
-    try{
+    try {
       // Try to get the ideas by all criteria using a null email
       List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest(null);
     } catch (Exception e) {
@@ -690,17 +704,17 @@ public class TestIdeaService {
    * Test getting ideas by Collaboration Request non-existing email (Failure case)
    *
    * @author Enzo Benoit-Jeannin
-  */
-    @Test
-    public void testGetIdeasByCollaborationRequest_NonExistingEmail() {
-      try{
-        // Try to get the ideas by all criteria using a non-existing email
-        List<Idea> fetchedIdeas = ideaService.getIdeasByCollaborationRequest("nonexistingemail@email.com");
-      } catch (Exception e) {
-        assertEquals("This account does not exist.", e.getMessage());
-      }
+   */
+  @Test
+  public void testGetIdeasByCollaborationRequest_NonExistingEmail() {
+    try {
+      // Try to get the ideas by all criteria using a non-existing email
+      List<Idea> fetchedIdeas =
+          ideaService.getIdeasByCollaborationRequest("nonexistingemail@email.com");
+    } catch (Exception e) {
+      assertEquals("This account does not exist.", e.getMessage());
     }
-
+  }
 
   /**
    * This class holds all of the mock methods of the CRUD repositories
@@ -805,14 +819,14 @@ public class TestIdeaService {
       return ideas;
     }
 
-    static Iterable<CollaborationRequest> findAllRequests (InvocationOnMock invocation) {
+    static Iterable<CollaborationRequest> findAllRequests(InvocationOnMock invocation) {
       HashSet<CollaborationRequest> requests = new HashSet<>();
       requests.add(MockDatabase.collaborationRequest1);
       requests.add(MockDatabase.collaborationRequest2);
       return requests;
     }
 
-    static RegularUser findRegularUserByAppUserEmail (InvocationOnMock invocation){
+    static RegularUser findRegularUserByAppUserEmail(InvocationOnMock invocation) {
       String email = invocation.getArgument(0);
       if (email.equals(MockDatabase.appUser1.getEmail())) {
         return MockDatabase.user1;

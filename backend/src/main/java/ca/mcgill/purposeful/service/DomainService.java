@@ -17,12 +17,11 @@ public class DomainService {
    * CRUD repos
    */
 
-  @Autowired
-  DomainRepository domainRepository;
+  @Autowired DomainRepository domainRepository;
 
   /**
    * Method to retrieve all existing domains from the database.
-   * 
+   *
    * @return the domains in the database.
    * @author Adam Kazma
    */
@@ -37,5 +36,4 @@ public class DomainService {
 
     return domains;
   }
-
 }

@@ -7,5 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface DomainRepository extends CrudRepository<Domain, Integer> {
 
   Domain findDomainById(String id);
-    Domain findDomainByName(String name);
+
+  Domain findDomainByName(String name);
 }

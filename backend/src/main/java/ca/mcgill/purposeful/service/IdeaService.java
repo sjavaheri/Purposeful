@@ -555,10 +555,9 @@ public class IdeaService {
   }
 
   /**
-   * @author Shidan Javaheri
-   * Method to the supporting URLs for an idea. It returns a list of their Ids. A Supporting URL can
-   * only belong to one idea, so they are all automatically created and saved.
-   *
+   * @author Shidan Javaheri Method to the supporting URLs for an idea. It returns a list of their
+   *     Ids. A Supporting URL can only belong to one idea, so they are all automatically created
+   *     and saved.
    * @param urls an ArrayList<String> of Urls
    * @return urlIds an ArrayList<String> of Url Ids
    */
@@ -577,9 +576,8 @@ public class IdeaService {
   }
 
   /**
-   * @author Shidan Javaheri
-   * Method to create a new URL object for an Icon. Since an icon can belong to many ideas, this method checks
-   * to make sure that no other URL object has the same URL.
+   * @author Shidan Javaheri Method to create a new URL object for an Icon. Since an icon can belong
+   *     to many ideas, this method checks to make sure that no other URL object has the same URL.
    * @param url the String URL to be used as an icon for the idea
    * @return urlId, the id of the created object
    */
@@ -587,15 +585,14 @@ public class IdeaService {
   public String createIconURL(String url) {
     String urlId = "";
     if (url == null || url.isEmpty()) {
-      throw new GlobalException(
-          HttpStatus.BAD_REQUEST, "An idea icon is required");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "An idea icon is required");
     }
     // check if it already exists
     ArrayList<URL> urlCheck = urlRepository.findURLByURL(url);
-    if (urlCheck.size() !=0 ) {
+    if (urlCheck.size() != 0) {
       urlId = urlCheck.get(0).getId();
       return urlId;
-      }
+    }
     // otherwise make a new object and save it
     URL newUrl = new URL();
     newUrl.setURL(url);
@@ -605,4 +602,3 @@ public class IdeaService {
     return urlId;
   }
 }
-

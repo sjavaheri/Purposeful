@@ -17,12 +17,11 @@ public class TopicService {
    * CRUD repos
    */
 
-  @Autowired
-  TopicRepository topicRepository;
+  @Autowired TopicRepository topicRepository;
 
   /**
    * Method to retrieve all existing domains from the database.
-   * 
+   *
    * @return the domains in the database.
    * @author Adam Kazma
    */
@@ -37,5 +36,4 @@ public class TopicService {
 
     return topics;
   }
-
 }

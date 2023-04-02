@@ -17,12 +17,11 @@ public class TechnologyService {
    * CRUD repos
    */
 
-  @Autowired
-  TechnologyRepository technologyRepository;
+  @Autowired TechnologyRepository technologyRepository;
 
   /**
    * Method to retrieve all existing technologies from the database.
-   * 
+   *
    * @return the techs in the database.
    * @author Adam Kazma
    */
@@ -32,11 +31,10 @@ public class TechnologyService {
     List<Technology> techs = (List<Technology>) technologyRepository.findAll();
 
     if (techs == null) {
-      throw new GlobalException(HttpStatus.NOT_FOUND,
-          "Could not fetch technologies from database.");
+      throw new GlobalException(
+          HttpStatus.NOT_FOUND, "Could not fetch technologies from database.");
     }
 
     return techs;
   }
-
 }

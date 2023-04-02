@@ -1,5 +1,5 @@
 Feature: view collaboration responses
-As a user, I want to be able to view the response from the idea creator to the collobation request that I sent so that I can begin to work on the idea
+  As a user, I want to be able to view the response from the idea creator to the collobation request that I sent so that I can begin to work on the idea
 
   Background:
     Given the database contains the following RegularUser accounts:
@@ -70,7 +70,7 @@ As a user, I want to be able to view the response from the idea creator to the c
   Scenario: try to access collaboration response for an idea that does not have any responses yet
     When the user requests to access the collaboration response for the idea with id "21"
     Then the user shall receive the error message "There is no response for this collaboration request" with status code 404
-    
+
   Scenario: try to access collaboration response for an idea on which the user has not made a collaboration request
     When the user requests to access the collaboration response for the idea with id "19"
     Then the user shall receive the error message "You did not send a collaboration request for this idea" with status code 400

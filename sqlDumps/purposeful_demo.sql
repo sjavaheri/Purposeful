@@ -40,20 +40,6 @@ CREATE TABLE public.app_user (
 ALTER TABLE public.app_user OWNER TO postgres;
 
 --
--- TOC entry 232 (class 1259 OID 98867)
--- Name: collaboration_confirmation; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.collaboration_confirmation (
-    id character varying(255) NOT NULL,
-    additional_contact character varying(255),
-    message character varying(255)
-);
-
-
-ALTER TABLE public.collaboration_confirmation OWNER TO postgres;
-
---
 -- TOC entry 215 (class 1259 OID 98627)
 -- Name: collaboration_request; Type: TABLE; Schema: public; Owner: postgres
 --
@@ -319,17 +305,6 @@ d6c1aa33-5abd-40e1-b46b-e5a1c542cd82	{2}	enzo.benoit-jeannin@mail.mcgill.ca	Enzo
 a054f5d6-dd43-4c4c-bf25-cc65baeb8294	{2}	abdullah.arafat@mail.mcgill.ca	Abe	Arafat	$2a$10$runSAXI0T6hMmAOm1O/qTOBy78NZ.zQ1iiR1WkM7b67c9TYyAVjsy
 \.
 
-
---
--- TOC entry 3474 (class 0 OID 98867)
--- Dependencies: 232
--- Data for Name: collaboration_confirmation; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.collaboration_confirmation (id, additional_contact, message) FROM stdin;
-\.
-
-
 --
 -- TOC entry 3457 (class 0 OID 98627)
 -- Dependencies: 215
@@ -375,7 +350,7 @@ e7a8498b-d0c3-42d5-b363-84c48add43e2	Slack invite link: https://join.slack.com/t
 --
 
 COPY public.domain (id, name) FROM stdin;
-bc3d6f05-c52c-4b5a-a4a7-7f0f0451766a	Software
+bc3d6f05-c52c-4b5a-a4a7-7f0f0451766a	Software Engineering
 \.
 
 
@@ -659,15 +634,6 @@ COPY public.verification_request (company_oui_number, company_name, explanation,
 
 ALTER TABLE ONLY public.app_user
     ADD CONSTRAINT app_user_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 3291 (class 2606 OID 98873)
--- Name: collaboration_confirmation collaboration_confirmation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.collaboration_confirmation
-    ADD CONSTRAINT collaboration_confirmation_pkey PRIMARY KEY (id);
 
 
 --

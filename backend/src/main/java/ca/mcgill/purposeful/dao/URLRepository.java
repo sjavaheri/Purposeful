@@ -9,5 +9,6 @@ import java.util.ArrayList;
 public interface URLRepository extends CrudRepository<URL, Integer> {
 
   URL findURLById(String id);
+
   ArrayList<URL> findURLByURL(String URL);
 }

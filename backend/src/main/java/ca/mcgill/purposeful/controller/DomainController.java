@@ -18,8 +18,7 @@ import java.util.List;
 @RequestMapping({"/api/domain", "/api/domain/"})
 public class DomainController {
 
-  @Autowired
-  private DomainService domainService;
+  @Autowired private DomainService domainService;
 
   /**
    * GET method to retrieve all domains in the database.

@@ -261,7 +261,7 @@ public class ID016_modifyIdeaStepDefinitions {
       }
     }
 
-    if ( field.equalsIgnoreCase("topics")
+    if (field.equalsIgnoreCase("topics")
         || field.equalsIgnoreCase("techs")
         || field.equalsIgnoreCase("domains")) {
       List<String> newObjIds = List.of(value.split(","));
