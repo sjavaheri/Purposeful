@@ -38,6 +38,7 @@ export default function IdeaCard({ idea }) {
         onClick={() => {
           onOpen();
         }}
+        cursor={"pointer"}
       >
         <Box
           h={"400px"}
