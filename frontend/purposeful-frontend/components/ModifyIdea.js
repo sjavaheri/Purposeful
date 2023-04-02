@@ -42,7 +42,8 @@ var rendered_domains = [];
 var rendered_topics = [];
 var rendered_techs = [];
 
-export default function ModifyIdea() {
+export default function ModifyIdea(props) {
+  const idea = props;
   const [render_domains, set_rd] = useState(<Fragment></Fragment>);
   const [render_topics, set_tp] = useState(<Fragment></Fragment>);
   const [render_techs, set_tc] = useState(<Fragment></Fragment>);
@@ -243,9 +244,7 @@ export default function ModifyIdea() {
                 style={{float : 'right'}}
                 onClick={(event) => {
                   event.stopPropagation();
-                  const ideaID = localStorage.getItem("ideaId");
-                  deleteStatus = removeIdea(ideaID);
-                  localStorage.removeItem("ideaId");
+                  deleteStatus = removeIdea(idea.ideaId);
                   window.location.href = '/myideas';
                 }}>
                 <DeleteIcon w={6} h={6} color="red.500" />
