@@ -25,6 +25,7 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit:6.10.4'
     testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
     testImplementation 'io.cucumber:cucumber-spring:6.10.4'
+
 }
 
 
@@ -33,6 +34,7 @@ tasks.named('test') {
     testLogging {
         exceptionFormat "full"
     }
+
 }
 
 jacoco {
@@ -50,6 +52,18 @@ jacocoTestReport {
 
 test {
     finalizedBy jacocoTestReport
+    useJUnitPlatform()
+    systemProperties([
+            //Random in method level
+            'junit.jupiter.testmethod.order.default': 'org.junit.jupiter.api.MethodOrderer$Random',
+            // Random in class level
+            'junit.jupiter.testclass.order.default' : 'org.junit.jupiter.api.ClassOrderer$Random',
+    ])
+
+    //To print the JUnit logs in console
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 jacocoTestReport {
@@ -74,7 +88,13 @@ task cucumberCli() {
                     '--plugin', 'pretty',
                     '--plugin', 'html:target/cucumber-report.html',
                     '--glue', 'com.baeldung.cucumber',
+                    '--order', 'random',
                     'src/test/resources']
         }
     }
 }
+
+
+
+
+

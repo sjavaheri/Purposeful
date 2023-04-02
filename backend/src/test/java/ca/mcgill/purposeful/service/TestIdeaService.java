@@ -199,12 +199,14 @@ public class TestIdeaService {
 
     // Check that the ideas are from most recent to oldest
     Iterator<Idea> iterator = fetchedIdeas.iterator();
+    assertEquals(MockDatabase.idea4, iterator.next());
+    assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea3, iterator.next());
     assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea2, iterator.next());
     assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea1, iterator.next());
-    assertFalse(iterator.hasNext()); // Check only the 2 ideas are in the list
+    assertFalse(iterator.hasNext()); // Check only the 4 ideas are in the list
   }
 
   /**
@@ -255,6 +257,8 @@ public class TestIdeaService {
 
     // Check that the ideas list fetched has all 3 ideas
     assertNotNull(fetchedIdeas);
+    assertEquals(MockDatabase.idea4, iterator.next());
+    assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea3, iterator.next());
     assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea2, iterator.next());
@@ -626,7 +630,7 @@ public class TestIdeaService {
 
     // Check that the ideas are from most recent to oldest
     Iterator<Idea> iterator = fetchedIdeas.iterator();
-    assertEquals(MockDatabase.modifiableIdea, iterator.next());
+    assertEquals(MockDatabase.idea4, iterator.next());
     assertTrue(iterator.hasNext());
     assertEquals(MockDatabase.idea3, iterator.next());
     assertFalse(iterator.hasNext()); // Check only the 2 ideas are in the list
@@ -715,6 +719,8 @@ public class TestIdeaService {
         return MockDatabase.modifiableIdea;
       } else if (id.equals(MockDatabase.idea3.getId())) {
         return MockDatabase.idea3;
+      } else if (id.equals(MockDatabase.idea4.getId())) {
+        return MockDatabase.idea4;
       } else {
         return null;
       }
@@ -795,6 +801,7 @@ public class TestIdeaService {
       ideas.add(MockDatabase.idea1);
       ideas.add(MockDatabase.idea2);
       ideas.add(MockDatabase.idea3);
+      ideas.add(MockDatabase.idea4);
       return ideas;
     }
 
@@ -845,6 +852,8 @@ public class TestIdeaService {
     static Idea idea2 = new Idea();
 
     static Idea idea3 = new Idea();
+
+    static Idea idea4 = new Idea();
 
     static Idea modifiableIdea = new Idea();
 
@@ -916,7 +925,7 @@ public class TestIdeaService {
     /**
      * Initialize fields here
      *
-     * @author Wassim Jabbour
+     * @author Wassim Jabbour and Enzo Benoit-Jeannin
      */
     static {
 
@@ -1052,6 +1061,18 @@ public class TestIdeaService {
       idea3.setTechs(techGroup2);
       idea3.setUser(user1);
 
+      idea4.setId(UUID.randomUUID().toString());
+      idea4.setDate(new Date(15000)); // 15000 seconds since 1970 (Other constructors are
+      // deprecated)
+      idea4.setPaid(false);
+      idea4.setPrivate(false);
+      idea4.setInProgress(false);
+      idea4.setDescription("Cool web application for playing guitar");
+      idea4.setDomains(domainGroup2);
+      idea4.setTopics(topicGroup2);
+      idea4.setTechs(techGroup2);
+      idea4.setUser(user1);
+
       modifiableIdea.setId(UUID.randomUUID().toString());
       modifiableIdea.setDate(new Date(14000)); // 14000 seconds since 1970 (Other constructors are
       // deprecated)
@@ -1068,7 +1089,7 @@ public class TestIdeaService {
       collaborationRequest1.setRequester(user2);
       collaborationRequest1.setIdea(idea3);
       collaborationRequest2.setRequester(user2);
-      collaborationRequest2.setIdea(modifiableIdea);
+      collaborationRequest2.setIdea(idea4);
     }
   }
 }
