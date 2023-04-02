@@ -18,9 +18,11 @@ import {
 import { GiReceiveMoney } from "react-icons/gi";
 import MoreDetailsOfIdea from "./MoreDetailsOfIdea";
 import styles from "../app/styles.module.css";
+import { react } from "./HighFiveBtn";
 
 export default function IdeaCard({ idea }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  let isReacted = null;
 
   return (
     <>
@@ -32,7 +34,7 @@ export default function IdeaCard({ idea }) {
         rounded={"md"}
         p={6}
         overflow={"hidden"}
-        onClick={onOpen}>
+        onClick={() => { react(idea.id, "HighFive"); isReacted == react(idea.id, "HighFive"); onOpen() }}>
         <Box
           h={"400px"}
           bg={"gray.100"}

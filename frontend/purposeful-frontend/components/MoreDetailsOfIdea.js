@@ -26,6 +26,7 @@ import { useState } from "react";
 export default function MoreDetailsOfIdea({ idea }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
+
   //TODO: Get requester mail
   function getReqMail() {
     return JSON.parse(localStorage.getItem("appUser")).email;
