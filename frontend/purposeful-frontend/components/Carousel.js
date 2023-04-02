@@ -85,7 +85,7 @@ export default function Carousel({ imgUrls }) {
         {imgList.map((url, index) => (
           <Box
             key={index}
-            height={"6xl"}
+            height={"xl"}
             position="relative"
             backgroundPosition="center"
             backgroundRepeat="no-repeat"

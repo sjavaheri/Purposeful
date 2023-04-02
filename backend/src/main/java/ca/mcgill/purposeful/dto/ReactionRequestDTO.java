@@ -5,19 +5,19 @@ import ca.mcgill.purposeful.model.Reaction.ReactionType;
 public class ReactionRequestDTO {
 
   private String idea_id;
-  private String user_id;
+  private String email;
   private ReactionType reactionType;
 
   public ReactionRequestDTO() {}
 
-  public ReactionRequestDTO(String idea_id, String user_id, ReactionType reactionType) {
+  public ReactionRequestDTO(String idea_id, String email, ReactionType reactionType) {
     this.idea_id = idea_id;
-    this.user_id = user_id;
+    this.email = email;
     this.reactionType = reactionType;
   }
 
   public ReactionType getReactionType() {
-    return reactionType;
+    return this.reactionType;
   }
 
   public void setReactionType(ReactionType reactionType) {
@@ -25,18 +25,18 @@ public class ReactionRequestDTO {
   }
 
   public String getIdea_id() {
-    return idea_id;
+    return this.idea_id;
   }
 
   public void setIdea_id(String idea_id) {
     this.idea_id = idea_id;
   }
 
-  public String getUser_id() {
-    return user_id;
+  public String getEmail() {
+    return this.email;
   }
 
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
+  public void setEmail(String email) {
+    this.email = email;
   }
 }
