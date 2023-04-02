@@ -25,6 +25,7 @@ import IdeaCard from "@/components/IdeaCard";
 import IdeaFilter from "@/components/IdeaFilter";
 import { useState, useEffect, Fragment } from "react";
 import styles from "./styles.module.css";
+import IdeaFilter2 from "@/components/IdeaFilter2";
 
 // TODO: Style the page for consistency between cards and more details modal
 // TODO: Maybe problems with images coming from other sources, allow domain in
@@ -53,7 +54,8 @@ export default function page() {
         className={styles.ideaFilter}>
         {/* This is the components to update eventually. */}
         {/* The components updates the list of ideas. */}
-        <IdeaFilter setIdeas={setIdeas} />
+        {/* <IdeaFilter setIdeas={setIdeas} /> */}
+        <IdeaFilter2 setIdeas={setIdeas} />
       </Box>
       <Stack className={styles.ideas}>
         <List>
