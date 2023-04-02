@@ -22,6 +22,8 @@ import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
 import { BsInfoCircle } from "react-icons/bs";
+import fetchWrapper from "@/utils/fetch_wrapper";
+import notification from "@/utils/notification";
 
 var domains = [];
 var topics = [];
@@ -80,6 +82,8 @@ export default function CreateIdea() {
   const [purpose,setPurpose] = useState('');
   const [description,setDescription] = useState('');
   const [iconURL,setIconURL] = useState('');
+  const [checkedItems, setCheckedItems] = useState([false, false, false]);
+  const [imgeUrls, setImgeUrls] = useState(["","",""]);
   const [domns,setDomns] = useState([]);
   const [topcs,setTopcs] = useState([]);
   const [tchs,setTchs] = useState([]);
@@ -105,6 +109,40 @@ export default function CreateIdea() {
 
   function validateArrays(obj_arr, entered){
     return (obj_arr.length == 0 && entered);
+  }
+
+  async function handleCreateForm(actions,imageUrls) {
+    const payload = {
+      id: null,
+      isPaid: checkedItems[0],
+      isPrivate: checkedItems[2],
+      inProgress: checkedItems[1],
+      title: title,
+      purpose: purpose,
+      description: description,
+      date: null,
+      domainIds: getIds(c_domains),
+      techIds: getIds(c_techs),
+      topicIds: getIds(c_topics),
+      imgUrls: imageUrls,
+      iconUrl: iconURL
+    };
+    let response = null;
+
+    response = await fetchWrapper(
+      "/api/idea/create",
+      null,
+      "POST",
+      payload
+    );
+    if (response.ok) {
+      notification("success", "Idea created successfully!", null);
+    }
+    else{
+      notification("error", "An error occurred.", response.errorMessages);
+    }
+
+    actions.setSubmitting(false);
   }
 
   useEffect(() => {
@@ -176,13 +214,16 @@ export default function CreateIdea() {
         <Text fontSize={"2em"} textShadow={"2px 2px "+useColorModeValue("rgba(0,0,0,0.1)","rgba(255,255,255,0.1)")}>Create An Idea. Pursue it with Purpose.</Text>
         <Formik
           initialValues={{}}
-          onSubmit={(values, actions) => {
+          onSubmit={(values,actions) => {
             setTimeout(async () => {
-              console.log(values); // TODO: To be removed once the API is connected
-              // TODO: Set the error messages for the fields according to the API response
-              // TODO: Differentiate API methods depending on authentication status
-              actions.setSubmitting(false);
-              // TODO: Redirect to the login page
+              var imgs = [];
+              for(var i = 0; i < 3; i++){
+                if(imgeUrls[i].trim().length > 0){
+                  imgs.push(imgeUrls[i]);
+                }
+              }
+              handleCreateForm(actions,imgs);
+              // TODO: Redirect to idea details
             }, 1000);
           }}
         >
@@ -274,9 +315,9 @@ export default function CreateIdea() {
                         <Box height={"fit-content"}><BsInfoCircle/></Box>
                       </Tooltip>
                   </HStack>
-                  <Checkbox name="ispaid">Paid</Checkbox>
-                  <Checkbox name="inprogress">In Progress</Checkbox>
-                  <Checkbox name="isprivate">Private</Checkbox>
+                  <Checkbox isChecked={checkedItems[0]} onChange={(e) => setCheckedItems([e.target.checked, checkedItems[1], checkedItems[2]])}>Paid</Checkbox>
+                  <Checkbox isChecked={checkedItems[1]} onChange={(e) => setCheckedItems([checkedItems[0], e.target.checked, checkedItems[2]])}>In Progress</Checkbox>
+                  <Checkbox isChecked={checkedItems[2]} onChange={(e) => setCheckedItems([checkedItems[0], checkedItems[1], e.target.checked])}>Private</Checkbox>
                   <HStack>
                     <Text fontSize={"xl"} fontWeight={"bold"}>Domains, Topics and Technologies</Text>
                     <Tooltip label="What areas would best be attributed to your idea? This will help people to find it!">
@@ -411,26 +452,44 @@ export default function CreateIdea() {
                       </Tooltip>
                   </HStack>
                   <Box>
-                    <Field name="supportingimgurl">
+                    <Field name="supportingimgurl1">
                       {({ field, form }) => (
-                        <FormControl id="supportingimgurls">
+                        <FormControl id="supportingimgurls1">
                           <FormLabel>Supporting Images (Optional)</FormLabel>
                           <Input
                             marginTop={"5px"}
                             placeholder="URL 1 (Optional)"
                             {...field}
+                            value={imgeUrls[0]}
+                            onChange={(e) => setImgeUrls([e.target.value,imgeUrls[1],imgeUrls[2]])}
                             type="text"
                           />
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="supportingimgurl2">
+                      {({ field, form }) => (
+                        <FormControl id="supportingimgurls2">
                           <Input
                             marginTop={"10px"}
                             placeholder="URL 2 (Optional)"
                             {...field}
+                            value={imgeUrls[1]}
+                            onChange={(e) => setImgeUrls([imgeUrls[0],e.target.value,imgeUrls[2]])}
                             type="text"
                           />
+                        </FormControl>
+                      )}
+                    </Field>
+                    <Field name="supportingimgurl3">
+                      {({ field, form }) => (
+                        <FormControl id="supportingimgurls3">
                           <Input
                             marginTop={"10px"}
                             placeholder="URL 3 (Optional)"
                             {...field}
+                            value={imgeUrls[2]}
+                            onChange={(e) => setImgeUrls([imgeUrls[0],imgeUrls[1],e.target.value])}
                             type="text"
                           />
                         </FormControl>
@@ -481,4 +540,12 @@ export function find_in_arr(index, arr, c_arr) {
     }
   }
   return -1;
+}
+
+function getIds(array){
+  var ids = []
+  for(var i = 0; i < array.length; i++){
+    ids.push(array[i].id);
+  }
+  return ids;
 }
