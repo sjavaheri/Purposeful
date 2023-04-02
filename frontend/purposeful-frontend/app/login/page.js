@@ -26,8 +26,8 @@ export default function LoginPage() {
           <Heading as="h1" size="2xl">
             Welcome to Purposeful!
           </Heading>
-          <Text as="em" fontSize={"3xl"} color={"gray.500"}>
-            You are one click away from sharing your idea!
+          <Text as="em" fontSize={"2xl"} color={"gray.500"}>
+            You are one click away from sharing your purpose!
           </Text>
         </Stack>
         <Login />
