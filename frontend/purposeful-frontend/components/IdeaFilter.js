@@ -14,7 +14,7 @@ import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
 import NavBar from "./NavBar";
-import { v4 as uuidv4 } from "uuid";
+//import { v4 as uuidv4 } from "uuid";
 import fetchWrapper from "@/utils/fetch_wrapper";
 import notification from "../utils/notification";
 
