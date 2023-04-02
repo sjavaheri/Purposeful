@@ -34,6 +34,16 @@ export default function Login() {
     return error;
   };
 
+  // Function to validate the password field
+  const validatePassword = (value) => {
+    let error;
+    // Check if the password field is empty
+    if (!value || value.trim() === "") {
+      error = "Please enter a valid password. Password cannot be left empty";
+    }
+    return error;
+  };
+
   const handleSubmit = async (values, actions) => {
     event.preventDefault();
     let success = await login(values.email, values.password);
@@ -79,47 +89,31 @@ export default function Login() {
                       <FormControl
                         id="email"
                         isInvalid={form.errors.email && form.touched.email}
-                        borderColor={
-                          form.errors.email ==
-                          "This email is now registered as a moderator account"
-                            ? "green.500"
-                            : "inherit"
-                        }
                       >
                         <FormLabel>Username</FormLabel>
                         <Input
                           {...field}
                           type="email"
                           placeholder="email@example.com"
-                          style={
-                            form.errors.email ==
-                            "This email is now registered as a moderator account"
-                              ? {
-                                  borderColor: "green",
-                                  boxShadow: "none",
-                                }
-                              : null
-                          }
                         />
-                        <FormErrorMessage
-                          color={
-                            form.errors.email ==
-                            "This email is now registered as a moderator account"
-                              ? "green.500"
-                              : "red.500"
-                          }
-                        >
-                          {form.errors.email}
-                        </FormErrorMessage>
+                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
                 </Box>
                 <Stack>
                   <Box>
-                    <Field name="password">
+                    <Field
+                      name="password"
+                      validate={(value) => validatePassword(value)}
+                    >
                       {({ field, form }) => (
-                        <FormControl id="password">
+                        <FormControl
+                          id="password"
+                          isInvalid={
+                            form.errors.password && form.touched.password
+                          }
+                        >
                           <FormLabel>Password</FormLabel>
                           <InputGroup>
                             <Input
