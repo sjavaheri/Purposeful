@@ -165,10 +165,6 @@ export default function Login() {
                       )}
                     </Field>
                   </Box>
-                  <div></div>
-                  <FormLabel> Don't have an account?
-                    <Link color={'blue.400'} href="/register"> Register here</Link>
-                  </FormLabel>
                 </Stack>
                 <Stack align={"center"}>
                   <Button
