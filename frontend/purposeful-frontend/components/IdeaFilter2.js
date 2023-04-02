@@ -3,25 +3,17 @@ import {
   Box,
   FormControl,
   FormLabel,
-  Input,
   Stack,
   HStack,
-  Checkbox,
-  Textarea,
   Button,
   useColorModeValue,
-  FormErrorMessage,
   Select,
-  Text,
   IconButton,
-  Tooltip,
-  Icon,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
-import { BsInfoCircle } from "react-icons/bs";
 import fetchWrapper from "@/utils/fetch_wrapper";
 import notification from "@/utils/notification";
 
@@ -35,14 +27,27 @@ var c_domains = [];
 var c_topics = [];
 var c_techs = [];
 
-var domains_sel = <Select id="domains"><option></option></Select>;
-var topics_sel = <Select id="topics"><option></option></Select>;
-var techs_sel = <Select id="techs"><option></option></Select>;
+var domains_sel = (
+  <Select id="domains">
+    <option></option>
+  </Select>
+);
+var topics_sel = (
+  <Select id="topics">
+    <option></option>
+  </Select>
+);
+var techs_sel = (
+  <Select id="techs">
+    <option></option>
+  </Select>
+);
 
 var rendered_domains = [];
 var rendered_topics = [];
 var rendered_techs = [];
 
+// Second version of the idea filter that allows for multiple selections
 export default function IdeaFilter2({ setIdeas }) {
   const [render_domains, set_rd] = useState(<Fragment></Fragment>);
   const [render_topics, set_tp] = useState(<Fragment></Fragment>);
@@ -93,8 +98,7 @@ export default function IdeaFilter2({ setIdeas }) {
         notification("error", "An error occurred.", res.errorMessages);
       } else {
         let ideaList = await res.json();
-        // SUPER IMPORTANT
-        // This is the function that updates the list of ideas in the parent component
+        // Updates the list of ideas in the parent component
         setIdeas(ideaList);
       }
     });
@@ -135,21 +139,20 @@ export default function IdeaFilter2({ setIdeas }) {
         notification("error", "An error occurred.", res.errorMessages);
       } else {
         let ideaList = await res.json();
-        // SUPER IMPORTANT
-        // This is the function that updates the list of ideas in the parent component
+        // Updates the list of ideas in the parent component
         setIdeas(ideaList);
       }
     });
   }, []);
 
   var refreshfn = function () {
-    if(c_domains.length == 0){
+    if (c_domains.length == 0) {
       document.getElementById("domains").selectedIndex = 0;
     }
-    if(c_topics.length == 0){
-      document.getElementById("topics").selectedIndex  = 0;
+    if (c_topics.length == 0) {
+      document.getElementById("topics").selectedIndex = 0;
     }
-    if(c_techs.length == 0){
+    if (c_techs.length == 0) {
       document.getElementById("techs").selectedIndex = 0;
     }
     set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
@@ -167,17 +170,17 @@ export default function IdeaFilter2({ setIdeas }) {
   }
 
   function PushObj(selectedIndex, arr, c_arr, arr2) {
-    if (selectedIndex > 0 && find_in_arr(selectedIndex-1, arr, c_arr) == -1) {
+    if (selectedIndex > 0 && find_in_arr(selectedIndex - 1, arr, c_arr) == -1) {
       const el = (
         <ContainerLabel
-          key={arr[selectedIndex-1].name}
-          innerTxt={arr[selectedIndex-1].name}
+          key={arr[selectedIndex - 1].name}
+          innerTxt={arr[selectedIndex - 1].name}
           arr={c_arr}
           arr2={arr2}
           refresh={refreshfn}
         />
       );
-      c_arr.push(arr[selectedIndex-1]);
+      c_arr.push(arr[selectedIndex - 1]);
       arr2.push(el);
       refreshfn();
     }
@@ -186,7 +189,6 @@ export default function IdeaFilter2({ setIdeas }) {
     <Stack width={"100%"}>
       <Box
         id="idea-filter"
-        //width={"1"}
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
         boxShadow={"lg"}
@@ -202,11 +204,7 @@ export default function IdeaFilter2({ setIdeas }) {
                 <Box>
                   <Field name="Domain">
                     {({ field, form }) => (
-                      <FormControl
-                      //   id="domain"
-                      //   isRequired={"true"}
-                      //   isInvalid={validateArrays(domns, enteredDomains)}
-                      >
+                      <FormControl>
                         <FormLabel>Domains</FormLabel>
                         <HStack>
                           {domains_sel}
@@ -233,11 +231,7 @@ export default function IdeaFilter2({ setIdeas }) {
                 <Box>
                   <Field name="Topic">
                     {({ field, form }) => (
-                      <FormControl
-                        id="topic"
-                        //   isRequired={"true"}
-                        //   isInvalid={validateArrays(topcs, enteredTopics)}
-                      >
+                      <FormControl id="topic">
                         <FormLabel>Topics</FormLabel>
                         <HStack>
                           {topics_sel}
@@ -263,11 +257,7 @@ export default function IdeaFilter2({ setIdeas }) {
                 <Box>
                   <Field name="Tech">
                     {({ field, form }) => (
-                      <FormControl
-                      //   id="tech"
-                      //   isRequired={"true"}
-                      //   isInvalid={validateArrays(tchs, enteredTechs)}
-                      >
+                      <FormControl>
                         <FormLabel>Technologies</FormLabel>
                         <HStack>
                           {techs_sel}

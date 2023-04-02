@@ -1,23 +1,19 @@
 "use client";
-
 import Image from "next/image";
 import {
   Box,
   Heading,
   Text,
   Stack,
-  Avatar,
   useColorModeValue,
   useDisclosure,
   Icon,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalBody,
 } from "@chakra-ui/react";
 import { GiReceiveMoney } from "react-icons/gi";
 import MoreDetailsOfIdea from "./MoreDetailsOfIdea";
-import styles from "../app/styles.module.css";
 
 export default function IdeaCard({ idea }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
