@@ -35,9 +35,9 @@ var c_domains = [];
 var c_topics = [];
 var c_techs = [];
 
-var domains_sel = <Select id="domains"></Select>;
-var topics_sel = <Select id="topics"></Select>;
-var techs_sel = <Select id="techs"></Select>;
+var domains_sel = <Select id="domains"><option></option></Select>;
+var topics_sel = <Select id="topics"><option></option></Select>;
+var techs_sel = <Select id="techs"><option></option></Select>;
 
 var rendered_domains = [];
 var rendered_topics = [];
@@ -143,6 +143,15 @@ export default function IdeaFilter2({ setIdeas }) {
   }, []);
 
   var refreshfn = function () {
+    if(c_domains.length == 0){
+      document.getElementById("domains").selectedIndex = 0;
+    }
+    if(c_topics.length == 0){
+      document.getElementById("topics").selectedIndex  = 0;
+    }
+    if(c_techs.length == 0){
+      document.getElementById("techs").selectedIndex = 0;
+    }
     set_rd(<Fragment>{rendered_domains.concat([])}</Fragment>);
     set_tp(<Fragment>{rendered_topics.concat([])}</Fragment>);
     set_tc(<Fragment>{rendered_techs.concat([])}</Fragment>);
@@ -158,17 +167,17 @@ export default function IdeaFilter2({ setIdeas }) {
   }
 
   function PushObj(selectedIndex, arr, c_arr, arr2) {
-    if (find_in_arr(selectedIndex, arr, c_arr) == -1) {
+    if (selectedIndex > 0 && find_in_arr(selectedIndex-1, arr, c_arr) == -1) {
       const el = (
         <ContainerLabel
-          key={arr[selectedIndex].name}
-          innerTxt={arr[selectedIndex].name}
+          key={arr[selectedIndex-1].name}
+          innerTxt={arr[selectedIndex-1].name}
           arr={c_arr}
           arr2={arr2}
           refresh={refreshfn}
         />
       );
-      c_arr.push(arr[selectedIndex]);
+      c_arr.push(arr[selectedIndex-1]);
       arr2.push(el);
       refreshfn();
     }
