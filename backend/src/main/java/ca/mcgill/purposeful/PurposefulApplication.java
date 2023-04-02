@@ -27,7 +27,7 @@ public class PurposefulApplication {
    * Command Line Runner to initialize database if needed
    *
    * @param appUserRepository to create the user
-   * @param passwordEncoder to encode the user's password
+   * @param passwordEncoder   to encode the user's password
    * @return
    */
   @Bean
@@ -41,13 +41,13 @@ public class PurposefulApplication {
 
       /** OWNER CREATION AT BOOTSTRAP */
       // create an owner at bootstrap
-      if (appUserRepository.findAppUserByEmail("robert.sabourin@gmail.com") == null) {
+      if (appUserRepository.findAppUserByEmail("robsab@gmail.com") == null) {
         AppUser appUser = new AppUser();
         appUser.setFirstname("Robert");
         appUser.setLastname("Sabourin");
         appUser.setEmail("robsab@gmail.com");
         // encode the password
-        String encoded = passwordEncoder.encode("Bestprof1");
+        String encoded = passwordEncoder.encode("Password01");
         appUser.setPassword(encoded);
         appUser.getAuthorities().add(Authority.Owner);
         appUserRepository.save(appUser);
