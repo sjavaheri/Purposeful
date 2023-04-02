@@ -22,7 +22,6 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
 
 export default function Login() {
-
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -46,9 +45,9 @@ export default function Login() {
     event.preventDefault();
     // alert(`Email: ${username} & Password: ${password}`);
     let success = await login(values.email, values.password);
-    console.log(success)
-    console.log(await verifyToken())
-    if (success && await verifyToken()) {
+    console.log(success);
+    console.log(await verifyToken());
+    if (success && (await verifyToken())) {
       // User successfully logged in as a regular user
       actions.setSubmitting(false);
       window.location.href = "/"; // Redirect to home page
@@ -95,7 +94,7 @@ export default function Login() {
                         isInvalid={form.errors.email && form.touched.email}
                         borderColor={
                           form.errors.email ==
-                            "This email is now registered as a moderator account"
+                          "This email is now registered as a moderator account"
                             ? "green.500"
                             : "inherit"
                         }
@@ -107,18 +106,18 @@ export default function Login() {
                           placeholder="email@example.com"
                           style={
                             form.errors.email ==
-                              "This email is now registered as a moderator account"
+                            "This email is now registered as a moderator account"
                               ? {
-                                borderColor: "green",
-                                boxShadow: "none",
-                              }
+                                  borderColor: "green",
+                                  boxShadow: "none",
+                                }
                               : null
                           }
                         />
                         <FormErrorMessage
                           color={
                             form.errors.email ==
-                              "This email is now registered as a moderator account"
+                            "This email is now registered as a moderator account"
                               ? "green.500"
                               : "red.500"
                           }
@@ -131,13 +130,9 @@ export default function Login() {
                 </Box>
                 <Stack>
                   <Box>
-                    <Field
-                      name="password"
-                    >
+                    <Field name="password">
                       {({ field, form }) => (
-                        <FormControl
-                          id="password"
-                        >
+                        <FormControl id="password">
                           <FormLabel>Password</FormLabel>
                           <InputGroup>
                             <Input

@@ -111,8 +111,7 @@ export default function MyIdeas() {
                 </Text>
                 <Button size="sm" bg={editColor} hoverBg={editColor} _hover={{ boxShadow: "none" }} onClick={(event) => {
                     event.stopPropagation();
-                    localStorage.setItem("ideaId", item.id);
-                    window.location.href = '/idea/modify';
+                    window.location.href = '/idea/modify?ideaId=' + item.id;
                 }}>
                   <EditIcon w={4} h={4} bg={editColor} />
                 </Button>

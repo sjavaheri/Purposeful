@@ -13,6 +13,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Textarea,
 } from "@chakra-ui/react";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { useRef } from "react";
@@ -45,14 +46,14 @@ export default function CollaborationRequestIncoming({ request }) {
     setButtonLoading.on();
 
     const response = await fetchWrapper(
-      "/api/collaborationResponse/approve/" +
-        requestId +
-        "/" +
-        message +
-        "/" +
-        additionalInfo,
+      "/api/collaborationResponse/approve/",
       null,
-      "POST"
+      "POST",
+      {
+        collaborationRequestId: requestId,
+        message: message,
+        additionalContact: additionalInfo,
+      }
     );
 
     if (!response.ok) {
@@ -72,9 +73,13 @@ export default function CollaborationRequestIncoming({ request }) {
     setButtonLoading.on();
 
     const response = await fetchWrapper(
-      "/api/collaborationResponse/decline/" + requestId + "/" + message + "/",
+      "/api/collaborationResponse/decline/",
       null,
-      "POST"
+      "POST",
+      {
+        collaborationRequestId: requestId,
+        message: message,
+      }
     );
 
     if (!response.ok) {
@@ -106,12 +111,12 @@ export default function CollaborationRequestIncoming({ request }) {
             <PopoverBody>
               <FormControl mb="20px">
                 <FormLabel>Message</FormLabel>
-                <Input
+                <Textarea
                   placeholder="Type your message here..."
                   type="text"
-                  autoComplete="off"
+                  rows="5"
                   ref={declineMessage}
-                ></Input>
+                />
               </FormControl>
               <Button
                 rightIcon={<CloseIcon />}
@@ -141,12 +146,12 @@ export default function CollaborationRequestIncoming({ request }) {
             <PopoverBody>
               <FormControl mb="20px">
                 <FormLabel>Message</FormLabel>
-                <Input
+                <Textarea
                   placeholder="Type your message here..."
                   type="text"
-                  autoComplete="off"
+                  rows="5"
                   ref={acceptMessage}
-                ></Input>
+                />
               </FormControl>
               <FormControl mb="20px">
                 <FormLabel>Additional Contact</FormLabel>

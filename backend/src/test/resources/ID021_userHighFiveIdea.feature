@@ -43,7 +43,7 @@ Feature: User high five an Idea
 
     # Alternate Flow
 
-  Scenario Outline: Successfully high five an idea which I already high fived to remove the high five
+  Scenario Outline: Successfully high five an idea which I already high five to remove the high five
     When the user with id "<user>" reacts a first time with a reaction "<reactionType>" to an idea with id "<idea_id>"
     And the user with id "<user>" reacts again with a reaction "<reactionType>" to an idea with id "<idea_id>"
     Then the reaction entry of idea "<idea_id>" and user "<user>" shall be removed from the reaction database
