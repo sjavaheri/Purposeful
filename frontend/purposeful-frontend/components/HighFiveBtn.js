@@ -11,7 +11,7 @@ export default function HighFiveBtn({ idea_id }) {
                 date: null,
                 reactionType: reactionType,
                 idea_id: idea_id,
-                user_id: JSON.parse(localStorage.getItem("appUser")).id
+                user_email: JSON.parse(localStorage.getItem("appUser")).email
             };
             console.log(payload)
 
