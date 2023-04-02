@@ -22,7 +22,12 @@ import { react } from "./HighFiveBtn";
 
 export default function IdeaCard({ idea }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  let isReacted = null;
+  let hasReacted = null;
+
+  async function checkIfReacted(idea_id, reactionType) {
+    await react(idea_id, reactionType);
+    hasReacted = await react(idea_id, reactionType);
+  }
 
   return (
     <>
@@ -34,7 +39,7 @@ export default function IdeaCard({ idea }) {
         rounded={"md"}
         p={6}
         overflow={"hidden"}
-        onClick={() => { react(idea.id, "HighFive"); isReacted == react(idea.id, "HighFive"); onOpen() }}>
+        onClick={() => { checkIfReacted(idea.id, "HighFive"); onOpen() }}>
         <Box
           h={"400px"}
           bg={"gray.100"}
@@ -99,7 +104,7 @@ export default function IdeaCard({ idea }) {
       <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} autoFocus={false}>
         <ModalOverlay />
         <ModalContent>
-          <MoreDetailsOfIdea idea={idea} />
+          <MoreDetailsOfIdea idea={idea} hasReacted={hasReacted} />
         </ModalContent>
       </Modal>
     </>

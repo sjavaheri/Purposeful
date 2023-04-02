@@ -68,6 +68,7 @@ public class ReactionController {
     if (appUser == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not found");
     }
+    
     String app_user_id = appUser.getId();
     String user_id = regularUserRepository.findRegularUserByAppUser_Id(app_user_id).getId();
     // react

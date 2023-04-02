@@ -23,7 +23,7 @@ import {
 import { BsSend } from "react-icons/bs";
 import { useState } from "react";
 
-export default function MoreDetailsOfIdea({ idea }) {
+export default function MoreDetailsOfIdea({ idea, hasReacted }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
 
@@ -238,7 +238,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             </Box>
           </Stack>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-            <HighFiveBtn idea_id={idea.id} />
+            <HighFiveBtn idea_id={idea.id} hasReacted={hasReacted} />
             <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
               Send Collaboration Request
             </Button>

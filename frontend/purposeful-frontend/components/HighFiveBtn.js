@@ -2,6 +2,7 @@ import { Button } from '@chakra-ui/react';
 import { FaHandPaper } from 'react-icons/fa';
 import fetchWrapper from "@/utils/fetch_wrapper";
 import notification from "@/utils/notification";
+import React from 'react';
 
 export async function react(idea_id, reactionType) {
     try {
@@ -10,7 +11,6 @@ export async function react(idea_id, reactionType) {
             idea_id: idea_id,
             email: JSON.parse(localStorage.getItem("appUser")).email
         };
-        console.log(payload)
 
         let response = null;
 
@@ -21,11 +21,13 @@ export async function react(idea_id, reactionType) {
             payload
         );
 
+        let body = await response.json();
+
         if (!response.ok) {
             notification("error", response.errorMessages);
-        } else {
-            notification("success", "High Five sent!");
         }
+
+        return body.date != null;
     }
     catch (err) {
         console.error("Something went wrong. Unable to react to idea. " + err);
@@ -33,9 +35,16 @@ export async function react(idea_id, reactionType) {
     }
 }
 
-export default function HighFiveBtn({ idea_id }) {
+export default function HighFiveBtn({ idea_id, hasReacted }) {
+    const [color, setColor] = React.useState((hasReacted) ? "blue" : 'gray');
+    const changeColor = async (hasReacted) => {
+        hasReacted = await react(idea_id, "HighFive");
+        if (hasReacted) setColor('blue');
+        else setColor('gray');
+        console.log(hasReacted)
+    };
     return (
-        <Button rightIcon={<FaHandPaper />} onClick={() => react(idea_id, "HighFive")}>
+        <Button rightIcon={<FaHandPaper />} onClick={() => { changeColor(hasReacted) }} colorScheme={color} >
             High Five
         </Button>
     );
