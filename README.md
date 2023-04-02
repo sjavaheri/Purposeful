@@ -4,7 +4,7 @@ Purposeful is a 2-sided marketplace platform that connects creative minds with c
 ## Features
 Post project ideas or problems with optional payment
 Browse and filter project ideas
-Communicate with project owners via a chat system
+Communicate with project owners and and request to collaborate on ideas 
 
 ## Team Members
 Wassim Jabbour
