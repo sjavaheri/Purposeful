@@ -24,6 +24,12 @@ export async function removeIdea(id) {
   return body;
 }
 
+export async function getIdeaFromID(id) {
+  let response = await fetchWrapper(`/api/idea/` + id);
+  let body = await response.json();
+  return body;
+}
+
 export async function getMyIdeas(){
   let ideas = await fetchWrapper(`/api/idea/user`);
   let body = await ideas.json();
