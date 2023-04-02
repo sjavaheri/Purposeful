@@ -5,27 +5,28 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
+  InputGroup,
   Stack,
   Link,
   Button,
   Heading,
-  Text,
+  InputRightElement,
   useColorModeValue,
+  FormHelperText,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { login, verifyToken } from "../utils/fetch_wrapper";
 import notification from "../utils/notification";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Field, Form, Formik } from "formik";
 
 export default function Login() {
 
-  // bring back to home page if user is already logged in (not working on runtime due to localStorage not existing at runtime)
-  if (typeof window !== 'undefined' && localStorage.getItem("token")) {
-    window.location.href = "/"; // Redirect to home page if user is already logged in
-  }
-
+  const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [disableForm, setDisableForm] = useState(false);
 
   // Function to validate the email field
   const validateEmail = (value) => {
@@ -41,18 +42,22 @@ export default function Login() {
     return error;
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (values, actions) => {
     event.preventDefault();
     // alert(`Email: ${username} & Password: ${password}`);
-    let success = await login(username, password);
-    await verifyToken();
-    if (success) {
+    let success = await login(values.email, values.password);
+    console.log(success)
+    console.log(await verifyToken())
+    if (success && await verifyToken()) {
       // User successfully logged in as a regular user
+      actions.setSubmitting(false);
       window.location.href = "/"; // Redirect to home page
     }
-    else {
+    if (!success) {
       // User login failed display error mesages
       notification("error", "Invalid email and/or password.", null);
+      actions.setSubmitting(false);
+      return;
     }
     // logout();
     // console.log(verifyToken());
@@ -60,60 +65,138 @@ export default function Login() {
   };
 
   return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}>
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
-          p={8}>
-          <Stack spacing={4}>
-            <form onSubmit={handleSubmit}>
-              <FormControl id="email">
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type="email"
-                  // value={username}
-                  onChange={(event) => setUsername(event.currentTarget.value)}
-                  name="email"
-                  validate={(value) => validateEmail(value)}
-                />
-              </FormControl>
-              <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type="password"
-                  // value={password}
-                  onChange={(event) => setPassword(event.currentTarget.value)}
-                />
-              </FormControl>
-              <Stack spacing={10}>
-                <Stack
-                  direction={{ base: "column", sm: "row" }}
-                  align={"start"}
-                  justify={"space-between"}>
+    <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
+      <Box
+        rounded={"lg"}
+        bg={useColorModeValue("white", "gray.700")}
+        boxShadow={"lg"}
+        p={8}
+      >
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          onSubmit={async (values, actions) => {
+            await handleSubmit(values, actions);
+          }}
+        >
+          {(props) => (
+            <Form>
+              <Stack spacing={4}>
+                <Box>
+                  <Field
+                    name="email"
+                    validate={(value) => validateEmail(value)}
+                  >
+                    {({ field, form }) => (
+                      <FormControl
+                        id="email"
+                        isInvalid={form.errors.email && form.touched.email}
+                        borderColor={
+                          form.errors.email ==
+                            "This email is now registered as a moderator account"
+                            ? "green.500"
+                            : "inherit"
+                        }
+                      >
+                        <FormLabel>Username</FormLabel>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="email@example.com"
+                          style={
+                            form.errors.email ==
+                              "This email is now registered as a moderator account"
+                              ? {
+                                borderColor: "green",
+                                boxShadow: "none",
+                              }
+                              : null
+                          }
+                        />
+                        <FormErrorMessage
+                          color={
+                            form.errors.email ==
+                              "This email is now registered as a moderator account"
+                              ? "green.500"
+                              : "red.500"
+                          }
+                        >
+                          {form.errors.email}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+                </Box>
+                <Stack>
+                  <Box>
+                    <Field
+                      name="password"
+                    >
+                      {({ field, form }) => (
+                        <FormControl
+                          id="password"
+                        >
+                          <FormLabel>Password</FormLabel>
+                          <InputGroup>
+                            <Input
+                              {...field}
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Password"
+                            />
+                            <InputRightElement h={"full"}>
+                              <Button
+                                variant={"ghost"}
+                                onClick={() =>
+                                  setShowPassword(
+                                    (showPassword) => !showPassword
+                                  )
+                                }
+                              >
+                                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                              </Button>
+                            </InputRightElement>
+                          </InputGroup>
+                          <FormErrorMessage>
+                            {form.errors.password}
+                          </FormErrorMessage>
+                        </FormControl>
+                      )}
+                    </Field>
+                  </Box>
+                  <div></div>
+                  <FormLabel> Don't have an account?
+                    <Link color={'blue.400'} href="/register"> Register here</Link>
+                  </FormLabel>
                 </Stack>
-                <Button
-                  bg={"blue.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "blue.500",
-                  }}
-                  type="submit">
-                  Sign in
-                </Button>
+                <Stack align={"center"}>
+                  <Button
+                    size="lg"
+                    bg={"blue.400"}
+                    color={"white"}
+                    _hover={{
+                      bg: "blue.500",
+                    }}
+                    w={"50%"}
+                    loadingText="Submitting"
+                    isLoading={props.isSubmitting}
+                    isDisabled={
+                      !props.isValid ||
+                      props.isSubmitting ||
+                      disableForm ||
+                      !props.dirty
+                    }
+                    type="submit"
+                  >
+                    Login
+                  </Button>
+                </Stack>
               </Stack>
-            </form>
-          </Stack>
-        </Box>
-      </Stack>
-    </Flex>
+            </Form>
+          )}
+        </Formik>
+      </Box>
+    </Stack>
   );
 }
