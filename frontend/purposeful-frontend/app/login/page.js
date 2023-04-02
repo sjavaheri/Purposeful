@@ -27,7 +27,7 @@ export default function LoginPage() {
             Welcome to Purposeful!
           </Heading>
           <Text as="em" fontSize={"2xl"} color={"gray.500"}>
-            You are one click away from sharing your purpose!
+            Ideas are one click away.
           </Text>
         </Stack>
         <Login />
