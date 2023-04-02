@@ -14,12 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
-import fetchWrapper, { getAuthorities } from "../utils/fetch_wrapper";
-import notification from "../utils/notification";
+import fetchWrapper, { getAuthorities } from "@/utils/fetch_wrapper";
+import notification from "@/utils/notification";
 
 export default function Registration() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [disableForm, setDisableForm] = useState(false);
 
   // User and authentication info
   const [GrantedAuth, setGrantedAuth] = useState([]);
@@ -125,6 +126,7 @@ export default function Registration() {
         "You do not have the required permissions to perform this action.",
         null
       );
+      setDisableForm(true);
       actions.setSubmitting(false);
       return;
     }
@@ -136,6 +138,9 @@ export default function Registration() {
     ) {
       // User is an admin and successfully registered a moderator
       notification("success", "Moderator account created successfully.", null);
+      actions.setErrors({
+        email: "This email is now registered as a moderator account",
+      });
       actions.setSubmitting(false);
     } else if (response.ok) {
       // User successfully registered as a regular user
@@ -235,14 +240,38 @@ export default function Registration() {
                       <FormControl
                         id="email"
                         isInvalid={form.errors.email && form.touched.email}
+                        borderColor={
+                          form.errors.email ==
+                          "This email is now registered as a moderator account"
+                            ? "green.500"
+                            : "inherit"
+                        }
                       >
                         <FormLabel>Username</FormLabel>
                         <Input
                           {...field}
                           type="email"
                           placeholder="email@example.com"
+                          style={
+                            form.errors.email ==
+                            "This email is now registered as a moderator account"
+                              ? {
+                                  borderColor: "green",
+                                  boxShadow: "none",
+                                }
+                              : null
+                          }
                         />
-                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                        <FormErrorMessage
+                          color={
+                            form.errors.email ==
+                            "This email is now registered as a moderator account"
+                              ? "green.500"
+                              : "red.500"
+                          }
+                        >
+                          {form.errors.email}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -350,6 +379,12 @@ export default function Registration() {
                     w={"50%"}
                     loadingText="Submitting"
                     isLoading={props.isSubmitting}
+                    isDisabled={
+                      !props.isValid ||
+                      props.isSubmitting ||
+                      disableForm ||
+                      !props.dirty
+                    }
                     type="submit"
                   >
                     Register

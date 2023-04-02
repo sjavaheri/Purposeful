@@ -13,12 +13,16 @@ import {
   FormErrorMessage,
   Select,
   IconButton,
+  Alert,
+  AlertIcon,
+  AlertTitle
+
 } from "@chakra-ui/react";
 import {
   DeleteIcon
 } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
-import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
+import { getDomains, getTechs, getTopics, removeIdea} from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
 import { RxPlus } from "react-icons/rx";
 import NavBar from "./NavBar";
@@ -38,10 +42,12 @@ var rendered_domains = [];
 var rendered_topics = [];
 var rendered_techs = [];
 
-export default function ModifyIdea() {
+export default function ModifyIdea(props) {
+  const idea = props;
   const [render_domains, set_rd] = useState(<Fragment></Fragment>);
   const [render_topics, set_tp] = useState(<Fragment></Fragment>);
   const [render_techs, set_tc] = useState(<Fragment></Fragment>);
+  var deleteStatus = null;
 
   var domainContainer = <Stack on direction={['column', 'row']} id={"domainContainer"} wrap={"wrap"}>{render_domains}</Stack>;
   var topicContainer = <Stack on direction={['column', 'row']} id={"topicContainer"} wrap={"wrap"}>{render_topics}</Stack>;
@@ -264,8 +270,12 @@ export default function ModifyIdea() {
                   bg: "red.400",
                 }}
                 type="submit"
-                style={{ float: "right" }}
-              >
+                style={{float : 'right'}}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  deleteStatus = removeIdea(idea.ideaId);
+                  window.location.href = '/myideas';
+                }}>
                 <DeleteIcon w={6} h={6} color="red.500" />
               </Button>
               </Box>

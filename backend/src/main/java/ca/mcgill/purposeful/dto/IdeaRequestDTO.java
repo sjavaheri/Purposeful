@@ -23,8 +23,8 @@ public class IdeaRequestDTO {
   private List<String> domainIds;
   private List<String> techIds;
   private List<String> topicIds;
-  private List<String> imgUrlIds;
-  private String iconUrlId;
+  private List<String> imgUrls;
+  private String iconUrl;
 
   public IdeaRequestDTO() {}
 
@@ -40,7 +40,7 @@ public class IdeaRequestDTO {
     this.domainIds = new ArrayList<>();
     this.techIds = new ArrayList<>();
     this.topicIds = new ArrayList<>();
-    this.imgUrlIds = new ArrayList<>();
+    this.imgUrls = new ArrayList<>();
 
     for (Domain domain : idea.getDomains()) {
       this.domainIds.add(domain.getId());
@@ -52,10 +52,10 @@ public class IdeaRequestDTO {
       this.techIds.add(tech.getId());
     }
     for (URL url : idea.getSupportingImageUrls()) {
-      this.imgUrlIds.add(url.getId());
+      this.imgUrls.add(url.getURL());
     }
 
-    this.iconUrlId = idea.getIconUrl().getId();
+    this.iconUrl = idea.getIconUrl().getURL();
   }
 
   public IdeaRequestDTO(
@@ -83,8 +83,8 @@ public class IdeaRequestDTO {
     this.domainIds = domains;
     this.techIds = techs;
     this.topicIds = topics;
-    this.imgUrlIds = imgUrls;
-    this.iconUrlId = iconUrl;
+    this.imgUrls = imgUrls;
+    this.iconUrl = iconUrl;
   }
 
   public String getId() {
@@ -131,11 +131,11 @@ public class IdeaRequestDTO {
     return topicIds;
   }
 
-  public List<String> getImgUrlIds() {
-    return imgUrlIds;
+  public List<String> getImgUrls() {
+    return imgUrls;
   }
 
-  public String getIconUrlId() {
-    return iconUrlId;
+  public String getIconUrl() {
+    return iconUrl;
   }
 }

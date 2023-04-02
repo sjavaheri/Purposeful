@@ -25,7 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { RiAccountCircleLine, RiLogoutBoxRLine } from "react-icons/ri";
-import { logout, verifyToken, getAuthorities } from "../utils/fetch_wrapper";
+import { logout, verifyToken, getAuthorities } from "@/utils/fetch_wrapper";
 
 export default function NavBar() {
   // Colors and theme
@@ -370,9 +370,8 @@ export default function NavBar() {
                       {/* Avatar button */}
                       <Avatar
                         size={"md"}
-                        src={`https://avatars.dicebear.com/api/big-smile/${
-                          JSON.parse(appUser).email
-                        }.svg`}
+                        src={`https://avatars.dicebear.com/api/big-smile/${JSON.parse(appUser).email
+                          }.svg`}
                       />
                     </MenuButton>
                     <MenuList bg={bgColorBase} border={0} boxShadow={"xl"}>
@@ -381,9 +380,8 @@ export default function NavBar() {
                         {/* Avatar in big inside account menu */}
                         <Avatar
                           size={"2xl"}
-                          src={`https://avatars.dicebear.com/api/big-smile/${
-                            JSON.parse(appUser).email
-                          }.svg`}
+                          src={`https://avatars.dicebear.com/api/big-smile/${JSON.parse(appUser).email
+                            }.svg`}
                         />
                       </Center>
                       <br />

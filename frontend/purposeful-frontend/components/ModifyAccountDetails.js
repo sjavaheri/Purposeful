@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   FormControl,
@@ -14,19 +14,91 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Field, Form, Formik } from "formik";
+import notification from "../utils/notification";
+import fetchWrapper from "../utils/fetch_wrapper";
 
-export function ModifyDetails() {
-  //   const [showPassword, setShowPassword] = useState(false);
-  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+export function ModifyDetails({ appUser, GrantedAuth }) {
+  const [disableForm, setDisableForm] = useState(false);
 
-  //   // Function to validate the confirm password field
-  //   const validateConfirmPassword = (value, password) => {
-  //     let error;
-  //     if (value !== password) {
-  //       error = "Passwords do not match.";
-  //     }
-  //     return error;
-  //   };
+  // Function to validate the firstname field
+  const validateFirstname = (value) => {
+    let error;
+    if (!value) {
+      error =
+        "Please enter a valid first name. First name cannot be left empty";
+    }
+    return error;
+  };
+
+  // Function to validate the lastname field
+  const validateLastname = (value) => {
+    let error;
+    if (!value) {
+      error = "Please enter a valid last name. Last name cannot be left empty";
+    }
+    return error;
+  };
+
+  // Function to handle the modification of account details
+  async function handleModifyAccountInfo(values, actions) {
+    const payload = {
+      email: values.email,
+      firstname: values.firstname,
+      lastname: values.lastname,
+    };
+    let response = null;
+
+    // Regular User
+    if (GrantedAuth.includes("User")) {
+      response = await fetchWrapper(
+        "/api/appuser/regular",
+        null,
+        "PUT",
+        payload
+      );
+    } else if (GrantedAuth.includes("Moderator")) {
+      // User is an admin and is registering a moderator
+      response = await fetchWrapper(
+        "/api/appuser/moderator",
+        null,
+        "PUT",
+        payload
+      );
+    } else {
+      // User does not have the required permissions
+      notification(
+        "error",
+        "You do not have the required permissions to perform this action.",
+        null
+      );
+      setDisableForm(true);
+      actions.setSubmitting(false);
+      return;
+    }
+    if (response.ok) {
+      notification("success", "Successfully modified account details.", null);
+      actions.setSubmitting(false);
+      window.location.href = "/account";
+    } else if (response !== null) {
+      //Failed display error mesages
+      notification("error", "An error occurred.", response.errorMessages);
+      actions.setErrors({
+        firstname: response.errorMessages.toLowerCase().includes("first name")
+          ? response.errorMessages
+          : null,
+        lastname: response.errorMessages.toLowerCase().includes("last name")
+          ? response.errorMessages
+          : null,
+        email: response.errorMessages.toLowerCase().includes("email")
+          ? response.errorMessages
+          : null,
+        password: response.errorMessages.toLowerCase().includes("password")
+          ? response.errorMessages
+          : null,
+      });
+      actions.setSubmitting(false);
+    }
+  }
 
   return (
     <Stack spacing={8} mx={"auto"} maxW={"2xl"} py={12} px={6}>
@@ -37,26 +109,20 @@ export function ModifyDetails() {
         p={8}>
         <Formik
           initialValues={{
-            firstname: "",
-            lastname: "",
-            email: "",
-            // password: "",
-            // confirmPassword: "",
+            firstname: appUser.firstname,
+            lastname: appUser.lastname,
+            email: appUser.email,
           }}
-          onSubmit={(values, actions) => {
-            setTimeout(async () => {
-              console.log(values); // TODO: To be removed once the API is connected
-              // TODO: Set the error messages for the fields according to the API response
-              // TODO: Differentiate API methods depending on authentication status
-              actions.setSubmitting(false);
-              // TODO: Redirect to the login page
-            }, 1000);
+          onSubmit={async (values, actions) => {
+            await handleModifyAccountInfo(values, actions);
           }}>
           {(props) => (
             <Form>
               <Stack spacing={4}>
                 <Box>
-                  <Field name="firstname">
+                  <Field
+                    name="firstname"
+                    validate={(value) => validateFirstname(value)}>
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={
@@ -72,7 +138,9 @@ export function ModifyDetails() {
                   </Field>
                 </Box>
                 <Box>
-                  <Field name="lastname">
+                  <Field
+                    name="lastname"
+                    validate={(value) => validateLastname(value)}>
                     {({ field, form }) => (
                       <FormControl
                         id="lastName"
@@ -93,14 +161,38 @@ export function ModifyDetails() {
                     {({ field, form }) => (
                       <FormControl
                         id="email"
-                        isInvalid={form.errors.email && form.touched.email}>
+                        isInvalid={form.errors.email && form.touched.email}
+                        borderColor={
+                          form.errors.email ==
+                          "This email is now registered as a moderator account"
+                            ? "green.500"
+                            : "inherit"
+                        }>
                         <FormLabel>Username</FormLabel>
                         <Input
                           {...field}
                           type="email"
+                          disabled={true}
                           placeholder="email@example.com"
+                          style={
+                            form.errors.email ==
+                            "This email is now registered as a moderator account"
+                              ? {
+                                  borderColor: "green",
+                                  boxShadow: "none",
+                                }
+                              : null
+                          }
                         />
-                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                        <FormErrorMessage
+                          color={
+                            form.errors.email ==
+                            "This email is now registered as a moderator account"
+                              ? "green.500"
+                              : "red.500"
+                          }>
+                          {form.errors.email}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -116,8 +208,14 @@ export function ModifyDetails() {
                     w={"50%"}
                     loadingText="Submitting"
                     isLoading={props.isSubmitting}
+                    isDisabled={
+                      !props.isValid ||
+                      props.isSubmitting ||
+                      disableForm ||
+                      !props.dirty
+                    }
                     type="submit">
-                    Update
+                    Update Info
                   </Button>
                 </Stack>
               </Stack>
@@ -129,9 +227,87 @@ export function ModifyDetails() {
   );
 }
 
-export function ModifyPassword() {
+export function ModifyPassword({ appUser, GrantedAuth }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [disableForm, setDisableForm] = useState(false);
+
+  // Function to handle modification of password
+  async function handleModifyPassword(values, actions) {
+    const payload = {
+      email: appUser.email,
+      password: values.password,
+    };
+    let response = null;
+
+    // Regular User
+    if (GrantedAuth.includes("User")) {
+      response = await fetchWrapper(
+        "/api/appuser/regular/password",
+        null,
+        "PUT",
+        payload
+      );
+    } else if (GrantedAuth.includes("Moderator")) {
+      // User is an admin and is registering a moderator
+      response = await fetchWrapper(
+        "/api/appuser/moderator/password",
+        null,
+        "PUT",
+        payload
+      );
+    } else {
+      // User does not have the required permissions
+      notification(
+        "error",
+        "You do not have the required permissions to perform this action.",
+        null
+      );
+      setDisableForm(true);
+      actions.setSubmitting(false);
+      return;
+    }
+    if (response.ok) {
+      notification("success", "Successfully modified account password.", null);
+      actions.setSubmitting(false);
+      window.location.href = "/account";
+    } else if (response !== null) {
+      // Failed display error mesages
+      notification("error", "An error occurred.", response.errorMessages);
+      actions.setErrors({
+        firstname: response.errorMessages.toLowerCase().includes("first name")
+          ? response.errorMessages
+          : null,
+        lastname: response.errorMessages.toLowerCase().includes("last name")
+          ? response.errorMessages
+          : null,
+        email: response.errorMessages.toLowerCase().includes("email")
+          ? response.errorMessages
+          : null,
+        password: response.errorMessages.toLowerCase().includes("password")
+          ? response.errorMessages
+          : null,
+      });
+      actions.setSubmitting(false);
+    }
+  }
+
+  // Function to validate the password field
+  const validatePassword = (value) => {
+    let error;
+    if (!value) {
+      error = "Please enter a valid password. Password cannot be left empty";
+    } else if (
+      value.length < 8 ||
+      !/.*[0-9].*/.test(value) ||
+      !/.*[a-z].*/.test(value) ||
+      !/.*[A-Z].*/.test(value)
+    ) {
+      error =
+        "Please enter a valid password. Passwords must be at least 8 characters long and contain at least one number, one lowercase character and one uppercase character";
+    }
+    return error;
+  };
 
   // Function to validate the confirm password field
   const validateConfirmPassword = (value, password) => {
@@ -151,27 +327,20 @@ export function ModifyPassword() {
         p={8}>
         <Formik
           initialValues={{
-            firstname: "",
-            lastname: "",
-            email: "",
             password: "",
             confirmPassword: "",
           }}
-          onSubmit={(values, actions) => {
-            setTimeout(async () => {
-              console.log(values); // TODO: To be removed once the API is connected
-              // TODO: Set the error messages for the fields according to the API response
-              // TODO: Differentiate API methods depending on authentication status
-              actions.setSubmitting(false);
-              // TODO: Redirect to the login page
-            }, 1000);
+          onSubmit={async (values, actions) => {
+            await handleModifyPassword(values, actions);
           }}>
           {(props) => (
             <Form>
               <Stack spacing={4}>
                 <Stack>
                   <Box>
-                    <Field name="password">
+                    <Field
+                      name="password"
+                      validate={(value) => validatePassword(value)}>
                       {({ field, form }) => (
                         <FormControl
                           id="password"
@@ -264,8 +433,14 @@ export function ModifyPassword() {
                     w={"50%"}
                     loadingText="Submitting"
                     isLoading={props.isSubmitting}
+                    isDisabled={
+                      !props.isValid ||
+                      props.isSubmitting ||
+                      disableForm ||
+                      !props.dirty
+                    }
                     type="submit">
-                    Update
+                    Update Password
                   </Button>
                 </Stack>
               </Stack>
