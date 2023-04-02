@@ -4,12 +4,11 @@ import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.*;
 import jakarta.transaction.Transactional;
+import java.time.Instant;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.*;
 
 /** Service functions of the Idea class */
 @Service

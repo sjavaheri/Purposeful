@@ -2,7 +2,6 @@ package ca.mcgill.purposeful.dto;
 
 import ca.mcgill.purposeful.model.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

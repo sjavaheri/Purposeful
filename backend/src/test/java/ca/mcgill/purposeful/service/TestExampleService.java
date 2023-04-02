@@ -1,5 +1,7 @@
 package ca.mcgill.purposeful.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
 import org.junit.Test;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** This is an example class to provide a template for all service tests @Author Shidan Javaheri */
 @ExtendWith(MockitoExtension.class)

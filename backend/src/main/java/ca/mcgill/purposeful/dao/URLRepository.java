@@ -1,9 +1,8 @@
 package ca.mcgill.purposeful.dao;
 
 import ca.mcgill.purposeful.model.URL;
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.ArrayList;
+import org.springframework.data.repository.CrudRepository;
 
 /** Repository for URL */
 public interface URLRepository extends CrudRepository<URL, Integer> {
