@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * API for accessing the endpoints of collaboration request entity
+ */
 @RestController
 @RequestMapping({"/api/collaborationRequest", "/api/collaborationRequest/"})
 public class CollaborationRequestController {

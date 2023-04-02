@@ -34,40 +34,75 @@ public class CollaborationResponse {
   // CollaborationResponse Constructor
   // ------------------------
 
+  /**
+   * Default constructor
+   */
   public CollaborationResponse() {}
 
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
 
+  /**
+   * Get the id of the collaboration response
+   * @return the id of the collaboration response
+   */
   public String getId() {
     return id;
   }
 
+  /**
+   * Set the id of the collaboration response
+   * @param id the id of the collaboration response
+   */
   public void setId(String id) {
     this.id = id;
   }
 
+  /**
+   * Get the additional contact of the collaboration response
+   * @return the additional contact of the collaboration response
+   */
   public String getAdditionalContact() {
     return additionalContact;
   }
 
+  /**
+   * Set the additional contact of the collaboration response
+   * @param additionalContact the additional contact of the collaboration response
+   */
   public void setAdditionalContact(String additionalContact) {
     this.additionalContact = additionalContact;
   }
 
+  /**
+   * Get the message of the collaboration response
+   * @return the message of the collaboration response
+   */
   public String getMessage() {
     return message;
   }
 
+  /**
+   * Set the message of the collaboration response
+   * @param message the message of the collaboration response
+   */
   public void setMessage(String message) {
     this.message = message;
   }
 
+  /**
+   * Get the status of the collaboration response
+   * @return the status of the collaboration response
+   */
   public Status getStatus() {
     return status;
   }
 
+  /**
+   * Set the status of the collaboration response
+   * @param status the status of the collaboration response
+   */
   public void setStatus(Status status) {
     this.status = status;
   }

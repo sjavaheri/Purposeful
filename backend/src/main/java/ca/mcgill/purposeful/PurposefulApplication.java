@@ -14,7 +14,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;import org.s
 /** Main Application */
 @SpringBootApplication
 public class PurposefulApplication {
-
+    /**
+     * Main method
+     *
+     * @param args the arguments
+     */
   public static void main(String[] args) {
     SpringApplication.run(PurposefulApplication.class, args);
   }
@@ -24,7 +28,11 @@ public class PurposefulApplication {
    *
    * @param appUserRepository to create the user
    * @param passwordEncoder to encode the user's password
-   * @return
+   * @param technologyRepository to create the technologies
+   * @param domainRepository to create the domains
+   * @param topicRepository to create the topics
+   *
+   * @return the command line runner
    */
     @Bean
     public CommandLineRunner commandLineRunner(

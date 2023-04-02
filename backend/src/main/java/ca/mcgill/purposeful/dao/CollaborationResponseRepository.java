@@ -11,5 +11,10 @@ import org.springframework.data.repository.CrudRepository;
 public interface CollaborationResponseRepository
     extends CrudRepository<CollaborationResponse, Integer> {
 
+  /**
+   * Find a CollaborationResponse by id
+   * @param id - the id of the CollaborationResponse
+   * @return the CollaborationResponse with the given id
+   */
   CollaborationResponse findCollaborationResponseById(String id);
 }

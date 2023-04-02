@@ -40,7 +40,7 @@ public class AppUserService implements UserDetailsService {
    * @param password - password of the user
    * @param firstname - first name of the user
    * @param lastname - last name of the user
-   * @return {@link AppUser} - the newly created user
+   * @return - the newly created user
    * @author Siger Ma
    */
   @Transactional
@@ -281,7 +281,7 @@ public class AppUserService implements UserDetailsService {
   /**
    * This service method returns all the users in the database
    *
-   * @return List <{@link AppUser}> - the list of all the users in the database
+   * @return List AppUser - the list of all the users in the database
    * @author Enzo Benoit-Jeannin
    */
   @Transactional

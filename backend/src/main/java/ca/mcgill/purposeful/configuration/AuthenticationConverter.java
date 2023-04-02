@@ -8,6 +8,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 import java.util.ArrayList;
 
+/**
+ * Class that converts a JWT token to an authentication object
+ */
 public class AuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
   /**
