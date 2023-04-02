@@ -15,7 +15,7 @@ public class ReactionDTO {
   private Date date;
 
   private String idea_id;
-  private String user_id;
+  private String email;
 
   public ReactionDTO() {}
 
@@ -23,18 +23,18 @@ public class ReactionDTO {
     this.reactionType = reaction.getReactionType();
     this.date = reaction.getDate();
     this.idea_id = reaction.getIdea().getId();
-    this.user_id = reaction.getRegularUser().getId();
+    this.email = reaction.getRegularUser().getAppUser().getEmail();
   }
 
-  public ReactionDTO(Date date, ReactionType reactionType, String idea_id, String user_id) {
+  public ReactionDTO(Date date, ReactionType reactionType, String idea_id, String email) {
     this.reactionType = reactionType;
     this.date = date;
     this.idea_id = idea_id;
-    this.user_id = user_id;
+    this.email = email;
   }
 
   public String getId() {
-    return id;
+    return this.id;
   }
 
   public void setId(String id) {
@@ -42,7 +42,7 @@ public class ReactionDTO {
   }
 
   public ReactionType getReactionType() {
-    return reactionType;
+    return this.reactionType;
   }
 
   public void setReactionType(ReactionType reactionType) {
@@ -50,7 +50,7 @@ public class ReactionDTO {
   }
 
   public Date getDate() {
-    return date;
+    return this.date;
   }
 
   public void setDate(Date date) {
@@ -65,11 +65,11 @@ public class ReactionDTO {
     this.idea_id = idea_id;
   }
 
-  public String getUser_id() {
-    return user_id;
+  public String getEmail() {
+    return this.email;
   }
 
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
+  public void setEmail(String email) {
+    this.email= email;
   }
 }
