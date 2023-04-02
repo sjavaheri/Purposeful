@@ -3,26 +3,33 @@ import { Input, Box, Text, Button, Stack, Flex, IconButton, Textarea } from '@ch
 import { RxCross1 } from "react-icons/rx";
 import { useColorModeValue } from '@chakra-ui/react';
 import { BsSend } from "react-icons/bs";
+import { useBoolean } from "@chakra-ui/react";
+import fetchWrapper from "@/utils/fetch_wrapper";
+import notification from "@/utils/notification";
 
 export default function CollabRequestPopup({ RequesterMail, ideaID, ideaTitle, removeFunc }) {
     const col = useColorModeValue("rgb(255,255,255)", "rgb(26,32,44)");
     const bannercol = useColorModeValue("rgb(237,242,247)", "rgb(23,25,35)");
 
+    const [buttonLoading, setButtonLoading] = useBoolean(false);
+
     const handleSend = async () => {
-        const message = acceptMessage.current.value;
-        const additionalInfo = acceptContact.current.value;
 
         setButtonLoading.on();
 
-        const response = await fetchWrapper(
-            "/api/collaborationRequest/" +
-            requestId +
-            "/" +
-            message +
-            "/" +
-            additionalInfo,
+        const payload = {
+            ideaId: ideaID,
+            message: document.getElementById("reqMessage").value,
+            additionalContact: document.getElementById("addContact").value
+        };
+
+        let response = null;
+
+        response = await fetchWrapper(
+            "/api/collaborationRequest",
             null,
-            "POST"
+            "POST",
+            payload
         );
 
         if (!response.ok) {
@@ -35,7 +42,7 @@ export default function CollabRequestPopup({ RequesterMail, ideaID, ideaTitle, r
     };
 
     return (
-        <Box zIndex={"10"} backgroundColor={col} marginTop={"5%"} marginLeft={"20%"} borderColor={"rgba(0,0,0,0.1)"} width={"40%"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"}>
+        <Box zIndex={"10"} backgroundColor={col} marginTop={"15%"} marginLeft={"3%"} borderColor={"rgba(0,0,0,0.1)"} width={"40%"} alignSelf={"center"} position={"fixed"} borderRadius={"10px"}>
             <Stack>
                 <Box width={"100%"}>
                     <Flex width={"100%"} backgroundColor={bannercol} borderRadius={"10px"}>

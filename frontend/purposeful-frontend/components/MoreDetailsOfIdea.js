@@ -27,7 +27,9 @@ export default function MoreDetailsOfIdea({ idea }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
   //TODO: Get requester mail
-  function getReqMail() { }
+  function getReqMail() {
+    return JSON.parse(localStorage.getItem("appUser")).email;
+  }
 
   function collab_rm() {
     set_req(<Flex display={"none"}></Flex>);
@@ -81,7 +83,6 @@ export default function MoreDetailsOfIdea({ idea }) {
     i++;
   }
 
-  console.log(idea.id)
   return (
     <Container maxW={"6xl"}>
       {collabReq}
@@ -236,7 +237,7 @@ export default function MoreDetailsOfIdea({ idea }) {
             </Box>
           </Stack>
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-            <HighFiveBtn />
+            <HighFiveBtn idea_id={idea.id} />
             <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
               Send Collaboration Request
             </Button>
