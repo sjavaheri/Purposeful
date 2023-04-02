@@ -15,7 +15,6 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@next/font": "13.1.6",
-    "chakra-multiselect": "^0.4.1",
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
     "formik": "^2.2.9",
@@ -27,8 +26,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
     "react-slick": "^0.29.0",
-    "reactjs-popup": "^2.0.5",
-    "uuid": "^9.0.0"
+    "reactjs-popup": "^2.0.5"
   },
   "devDependencies": {
     "@types/node": "18.14.0",

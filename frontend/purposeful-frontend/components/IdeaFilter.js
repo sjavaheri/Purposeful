@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -7,26 +7,18 @@ import {
   Button,
   useColorModeValue,
   Select,
-  Spinner,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
-import ContainerLabel from "./ContainerLabel";
-import { RxPlus } from "react-icons/rx";
-import NavBar from "./NavBar";
-//import { v4 as uuidv4 } from "uuid";
 import fetchWrapper from "@/utils/fetch_wrapper";
 import notification from "../utils/notification";
 
-// TODO: Modify the idea filter to be able to select multiple domains, topics, and technologies
-// At the moment, it only allows for one selection
+// First version of the idea filter that only allows for one selection
 export default function IdeaFilter({ setIdeas }) {
   const [domains, setDomains] = useState([]);
   const [topics, setTopics] = useState([]);
   const [techs, setTechs] = useState([]);
 
-  // Initially get all domains, topics, and technologies in the system
-  // Then get all ideas
   useEffect(() => {
     getDomains().then((res) => {
       setDomains(res);
@@ -47,8 +39,7 @@ export default function IdeaFilter({ setIdeas }) {
         notification("error", "An error occurred.", res.errorMessages);
       } else {
         let ideaList = await res.json();
-        // SUPER IMPORTANT
-        // This is the function that updates the list of ideas in the parent component
+        // Updates the list of ideas in the parent component
         setIdeas(ideaList);
       }
     });
@@ -56,7 +47,6 @@ export default function IdeaFilter({ setIdeas }) {
 
   // Handle the search form submission
   async function handleSearchForm(values, actions) {
-    // Takes only one value unfortunately
     const payload = {
       domains: values.domain === "All" ? null : [values.domain],
       topics: values.topic === "All" ? null : [values.topic],
@@ -67,22 +57,17 @@ export default function IdeaFilter({ setIdeas }) {
         notification("error", "An error occurred.", res.errorMessages);
       } else {
         let ideaList = await res.json();
-        // SUPER IMPORTANT
-        // This is the function that updates the list of ideas in the parent component
+        // Updates the list of ideas in the parent component
         setIdeas(ideaList);
       }
     });
     actions.setSubmitting(false);
   }
 
-  // Same frontend code as the create idea form for domains, topics, and technologies
-  // Remove the old logic and replaced it with Select components
-  // Add better logic eventually
   return (
     <Stack width={"100%"}>
       <Box
         id="idea-filter"
-        //width={"1"}
         rounded={"lg"}
         bg={useColorModeValue("white", "gray.700")}
         boxShadow={"lg"}

@@ -4,7 +4,6 @@ import HighFiveBtn from "@/components/HighFiveBtn";
 import CollabRequestPopup from "@/components/CollabRequestPopup";
 import {
   Box,
-  chakra,
   Container,
   Stack,
   Text,
@@ -16,7 +15,6 @@ import {
   SimpleGrid,
   StackDivider,
   useColorModeValue,
-  VisuallyHidden,
   List,
   ListItem,
 } from "@chakra-ui/react";
