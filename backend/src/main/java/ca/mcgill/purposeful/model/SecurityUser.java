@@ -13,9 +13,13 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class SecurityUser implements UserDetails {
 
-  // contains the AppUser object
+  /** contains the AppUser object*/
   private final AppUser appUser;
 
+  /**
+   * Constructor for SecurityUser
+   * @param appUser the AppUser object
+   */
   public SecurityUser(AppUser appUser) {
     this.appUser = appUser;
   }

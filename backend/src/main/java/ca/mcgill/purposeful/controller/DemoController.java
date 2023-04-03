@@ -15,6 +15,7 @@ public class DemoController {
   /**
    * Method to demonstrate how to restrict access to an endpoint
    *
+   * @return a string
    * @throws GlobalException with http status 418 and message "You are a teapot", for demo purposes
    */
   @GetMapping

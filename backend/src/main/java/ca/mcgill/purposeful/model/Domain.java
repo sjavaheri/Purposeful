@@ -26,24 +26,37 @@ public class Domain {
   // Domain Constructor
   // ------------------------
 
+  /** Default constructor */
   public Domain() {}
 
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
 
+  /** Get the id of the domain
+   * @return the id of the domain
+   * */
   public String getId() {
     return id;
   }
 
+  /** Set the id of the domain
+   * @param id the id of the domain
+   * */
   public void setId(String id) {
     this.id = id;
   }
 
+  /** Get the name of the domain
+   * @return the name of the domain
+   * */
   public String getName() {
     return name;
   }
 
+  /** Set the name of the domain
+   * @param name the name of the domain
+   * */
   public void setName(String name) {
     this.name = name;
   }

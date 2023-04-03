@@ -26,6 +26,11 @@ public class IdeaController {
 
   @Autowired AppUserService appUserService;
 
+  /**
+   * This method gets the idea from the database with the given id
+   * @param id the id of the idea
+   * @return the idea with the given id
+   */
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaDTO> getIdeaById(@PathVariable String id) {
@@ -36,6 +41,7 @@ public class IdeaController {
   /**
    * Filter ideas by topics, domains, and techs. Results are ordered by date.
    *
+   * @param searchFilterDTO The filters to apply
    * @return A list of idea DTOs that matches the filters
    * @author Wassim Jabbour
    */
@@ -54,6 +60,7 @@ public class IdeaController {
   /**
    * This method creates an idea
    *
+   * @param ideaDTO the idea to be created
    * @return created idea
    * @throws GlobalException if user is not authenticated or ideaDTO is null
    * @author Adam Kazma
@@ -105,6 +112,7 @@ public class IdeaController {
   /**
    * This method modifies an idea
    *
+   * @param ideaDTO the idea to be modified
    * @return update idea
    * @throws GlobalException if the ideaDTO is null
    * @author Ramin Akhavan

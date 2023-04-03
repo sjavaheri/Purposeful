@@ -40,9 +40,12 @@ public class CollaborationRequestService {
 
   /**
    * Sends a collaboration request to the owner of the idea
-   *
+   * @param requesterEmail the email of the requester
    * @param ideaId the id of the idea
    * @param message the message to send to the owner of the idea
+   * @param additionalContact additional contact information
+   *                          (e.g. phone number, email, etc.)
+   * @return the collaboration request
    * @author Wassim Jabbour
    */
   @Transactional
@@ -96,6 +99,7 @@ public class CollaborationRequestService {
   /**
    * Function that gets a all collaboration requests related to an idea
    *
+   * @param requesterEmail the email of the requester
    * @param ideaId the id of the idea
    * @return a list of collaboration requests related to the idea
    * @author Wassim Jabbour

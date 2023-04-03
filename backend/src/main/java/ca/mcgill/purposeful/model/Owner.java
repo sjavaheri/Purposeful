@@ -24,6 +24,9 @@ public class Owner extends Role {
   // Owner Constructor
   // ------------------------
 
+  /**
+   * Default constructor for Owner
+   */
   public Owner() {}
 
   // ------------------------
