@@ -8,11 +8,14 @@ import {
   PopoverBody,
   Button,
   Badge,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import fetchWrapper from "@/utils/fetch_wrapper";
 import { useEffect, useState } from "react";
 
 export default function CollaborationResponse({ ideaId }) {
+  const collabResponseColor = useColorModeValue("cyan.100", "cyan.700");
+
   const [collaborationResponse, setCollaborationResponse] = useState({});
 
   // fetch data
@@ -72,7 +75,9 @@ export default function CollaborationResponse({ ideaId }) {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button>View Response</Button>
+        <Button bg={collabResponseColor} hoverBg={collabResponseColor}>
+          View Response
+        </Button>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
