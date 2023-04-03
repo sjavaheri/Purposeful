@@ -33,9 +33,6 @@ export default function MyIdeas() {
   const [ideas, setIdeas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [hasReacted, setHasReacted] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       const orig_ideas = await getMyIdeas();
@@ -52,6 +49,7 @@ export default function MyIdeas() {
       id: idea.id,
       purpose: idea.purpose,
       title: idea.title,
+      description: idea.description,
       imageUrl: idea.iconUrl.url,
       topics: idea.topics,
       topic_names: idea_topics,
@@ -59,6 +57,9 @@ export default function MyIdeas() {
       techs: idea.techs,
       iconUrl: idea.iconUrl,
       imgUrls: idea.imgUrls,
+      inProgress: idea.inProgress,
+      isPaid: idea.isPaid,
+      isPrivate: idea.isPrivate,
     };
     return idea_obj;
   }
@@ -82,86 +83,80 @@ export default function MyIdeas() {
     );
   }
 
-  function IdeaBoxes({ list }) {
+  function IdeaBoxes({ item, index }) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [hasReacted, setHasReacted] = useState(null);
+
     return (
-      <SimpleGrid columns={3} spacing={7}>
-        {list.map((item, index) => (
-          <>
-            <Box
-              rounded={"lg"}
-              bg={boxColor}
-              boxShadow={"lg"}
-              borderWidth="1px"
-              borderRadius="lg"
-              overflow="hidden"
-              p={4}
-              m={4}
-              cursor="pointer"
-              key={index}
-              onClick={() => {
-                onOpen();
+      <>
+        <Box
+          rounded={"lg"}
+          bg={boxColor}
+          boxShadow={"lg"}
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          p={4}
+          m={4}
+          cursor="pointer"
+          key={index}
+          onClick={() => {
+            onOpen();
+          }}
+        >
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text mt={4} fontWeight="bold" fontSize="xl">
+              {item.title}
+            </Text>
+            <Button
+              size="sm"
+              bg={editColor}
+              hoverBg={editColor}
+              _hover={{ boxShadow: "none" }}
+              onClick={(event) => {
+                event.stopPropagation();
+                window.location.href = "/idea/modify?ideaId=" + item.id;
               }}
             >
-              <Flex alignItems="center" justifyContent="space-between">
-                <Text mt={4} fontWeight="bold" fontSize="xl">
-                  {item.title}
-                </Text>
-                <Button
-                  size="sm"
-                  bg={editColor}
-                  hoverBg={editColor}
-                  _hover={{ boxShadow: "none" }}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    window.location.href = "/idea/modify?ideaId=" + item.id;
-                  }}
-                >
-                  <EditIcon w={4} h={4} bg={editColor} />
-                </Button>
-              </Flex>
-              <Text mt={2}>{item.purpose}</Text>
-              <br />
-              <Image src={item.imageUrl} height="170px" alt="Example Img" />
-              <br />
-              <TagList tags={item.topic_names}></TagList>
-              <Text>
-                <br></br>
-              </Text>
-              <Flex justifyContent="center">
-                <Button
-                  size="sm"
-                  bg={collabRequestColor}
-                  hoverBg={collabRequestColor}
-                  _hover={{ boxShadow: "none" }}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    window.location.href =
-                      "/collaborationRequests?ideaId=" + item.id;
-                  }}
-                >
-                  View Collaboration Requests
-                </Button>
-              </Flex>
-            </Box>
-
-            <Modal
-              isOpen={isOpen}
-              onClose={onClose}
-              size={"6xl"}
-              autoFocus={false}
+              <EditIcon w={4} h={4} bg={editColor} />
+            </Button>
+          </Flex>
+          <Text mt={2}>{item.purpose}</Text>
+          <br />
+          <Image src={item.imageUrl} height="170px" alt="Example Img" />
+          <br />
+          <TagList tags={item.topic_names}></TagList>
+          <Text>
+            <br></br>
+          </Text>
+          <Flex justifyContent="center">
+            <Button
+              size="sm"
+              bg={collabRequestColor}
+              hoverBg={collabRequestColor}
+              _hover={{ boxShadow: "none" }}
+              onClick={(event) => {
+                event.stopPropagation();
+                window.location.href =
+                  "/collaborationRequests?ideaId=" + item.id;
+              }}
             >
-              <ModalOverlay />
-              <ModalContent>
-                <MoreDetailsOfIdea
-                  idea={item}
-                  hasReacted={hasReacted}
-                  setHasReacted={setHasReacted}
-                />
-              </ModalContent>
-            </Modal>
-          </>
-        ))}
-      </SimpleGrid>
+              View Collaboration Requests
+            </Button>
+          </Flex>
+        </Box>
+
+        <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} autoFocus={false}>
+          <ModalOverlay />
+          <ModalContent>
+            <MoreDetailsOfIdea
+              idea={item}
+              hasReacted={hasReacted}
+              setHasReacted={setHasReacted}
+            />
+          </ModalContent>
+        </Modal>
+      </>
     );
   }
 
@@ -198,7 +193,11 @@ export default function MyIdeas() {
       {isLoading ? (
         <Spinner />
       ) : ideas.length > 0 ? (
-        <IdeaBoxes list={ideas} />
+        <SimpleGrid columns={3} spacing={7}>
+          {ideas.map((item, index) => (
+            <IdeaBoxes item={item} index={index} />
+          ))}
+        </SimpleGrid>
       ) : (
         <Heading as="h3" size="xl">
           No ideas yet!
