@@ -576,7 +576,7 @@ export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,ol
                   <DeleteIcon w={6} h={6} color="red.500" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent padding={1} color='white' bg='blue.800' borderColor='blue.800'>
+              <PopoverContent padding={1}>
                 <PopoverHeader pt={4} fontWeight='bold' border='0'>
                   Confirmation
                 </PopoverHeader>
