@@ -24,7 +24,6 @@ import { useState } from "react";
 export default function MoreDetailsOfIdea({ idea, hasReacted, setHasReacted }) {
   const [collabReq, set_req] = useState(<Flex display={"none"}></Flex>);
 
-  //TODO: Get requester mail
   function getReqMail() {
     return JSON.parse(localStorage.getItem("appUser")).email;
   }
@@ -244,16 +243,21 @@ export default function MoreDetailsOfIdea({ idea, hasReacted, setHasReacted }) {
               </SimpleGrid>
             </Box>
           </Stack>
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-            <HighFiveBtn
-              idea_id={idea.id}
-              hasReacted={hasReacted}
-              setHasReacted={setHasReacted}
-            />
-            <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
-              Send Collaboration Request
-            </Button>
-          </SimpleGrid>
+          {
+            // if location is contains "myideas" show nothing
+            location.pathname.includes("myideas") ? null : (
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
+                <HighFiveBtn
+                  idea_id={idea.id}
+                  hasReacted={hasReacted}
+                  setHasReacted={setHasReacted}
+                />
+                <Button rightIcon={<BsSend />} onClick={() => collab_req()}>
+                  Send Collaboration Request
+                </Button>
+              </SimpleGrid>
+            )
+          }
         </Stack>
       </SimpleGrid>
     </Container>

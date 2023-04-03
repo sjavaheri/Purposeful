@@ -3,14 +3,12 @@
 // we need to use client components
 // see https://beta.nextjs.org/docs/rendering/server-and-client-components#when-to-use-server-vs-client-components
 "use client";
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Stack,
   SimpleGrid,
   Button,
-  FormErrorMessage,
-  Select,
   Input,
   Text,
   Flex,
@@ -19,13 +17,10 @@ import {
   TagLabel,
   Spinner,
   Heading,
-  Link,
-  useColorMode,
   useColorModeValue,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalBody,
   useDisclosure,
 } from "@chakra-ui/react";
 
@@ -35,19 +30,10 @@ import fetchWrapper from "@/utils/fetch_wrapper";
 import MoreDetailsOfIdea from "@/components/MoreDetailsOfIdea";
 
 export default function MyIdeasPage() {
-  const { colorMode, toggleColorMode } = useColorMode(); // TODO: Move the light/dark mode toggle button to the navigation header
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [hasReacted, setHasReacted] = useState(null);
-
-  var boxClicked = 0;
-  var modifyClicked = 0;
-
-  const tagColor = useColorModeValue("blue.400", "gray.900");
+  const tagColor = useColorModeValue("blue.400", "blue.700");
   const boxColor = useColorModeValue("gray.50", "gray.800");
-  const editColor = useColorModeValue("yellow.300", "gray.700");
   const searchColor = useColorModeValue("gray.50", "gray.800");
   const searchIconColor = useColorModeValue("gray.20", "gray.750");
-  const collabRequestColor = useColorModeValue("cyan.100", "cyan.750");
 
   const [ideas, setIdeas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,6 +41,7 @@ export default function MyIdeasPage() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchWrapper(`/api/idea/user/requests`);
+      console.log(response);
 
       const handleData = async (response) => {
         if (!response.ok) {
@@ -63,8 +50,8 @@ export default function MyIdeasPage() {
           return await response.json();
         }
       };
-      const ideas = await handleData(response);
-      const ideas_with_topics = ideas.map(MakeIdeaObj);
+      const ideasResponse = await handleData(response);
+      const ideas_with_topics = ideasResponse.map(MakeIdeaObj);
 
       setIdeas(ideas_with_topics);
       setIsLoading(false);
@@ -74,11 +61,11 @@ export default function MyIdeasPage() {
 
   function MakeIdeaObj(idea) {
     const idea_topics = idea.topics.map((topic) => topic.name);
-    console.log(idea)
     const idea_obj = {
       id: idea.id,
       purpose: idea.purpose,
       title: idea.title,
+      description: idea.description,
       imageUrl: idea.iconUrl.url,
       topics: idea.topics,
       topic_names: idea_topics,
@@ -86,6 +73,9 @@ export default function MyIdeasPage() {
       techs: idea.techs,
       iconUrl: idea.iconUrl,
       imgUrls: idea.imgUrls,
+      inProgress: idea.inProgress,
+      isPaid: idea.isPaid,
+      isPrivate: idea.isPrivate,
     };
     return idea_obj;
   }
@@ -109,64 +99,58 @@ export default function MyIdeasPage() {
     );
   }
 
-  function IdeaBoxes({ list }) {
+  function IdeaBoxes({ item, index }) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [hasReacted, setHasReacted] = useState(null);
+
     return (
-      <SimpleGrid columns={3} spacing={7}>
-        {list.map((item, index) => (
-          <>
-            <Box
-              rounded={"lg"}
-              bg={boxColor}
-              boxShadow={"lg"}
-              borderWidth="1px"
-              borderRadius="lg"
-              overflow="hidden"
-              p={4}
-              m={4}
-              cursor="pointer"
-              key={index}
-              onClick={(event) => {
-                // we need to check the tag name so that clicking the view response button doesn't redirect the user
-                if (event.target.tagName !== "BUTTON") {
-                  onOpen();
-                }
-              }}
-            >
-              <Flex alignItems="center" justifyContent="space-between">
-                <Text mt={4} fontWeight="bold" fontSize="xl">
-                  {item.title}
-                </Text>
-              </Flex>
-              <Text mt={2}>{item.purpose}</Text>
-              <br />
-              <Image src={item.imageUrl} height="170px" alt="Example Img" />
-              <br />
-              <TagList tags={item.topic_names}></TagList>
-              <Text>
-                <br></br>
-              </Text>
-              <Flex justifyContent="center">
-                <CollaborationResponse ideaId={item.id} />
-              </Flex>
-            </Box>
-            <Modal
-              isOpen={isOpen}
-              onClose={onClose}
-              size={"6xl"}
-              autoFocus={false}
-            >
-              <ModalOverlay />
-              <ModalContent>
-                <MoreDetailsOfIdea
-                  idea={item}
-                  hasReacted={hasReacted}
-                  setHasReacted={setHasReacted}
-                />
-              </ModalContent>
-            </Modal>
-          </>
-        ))}
-      </SimpleGrid>
+      <>
+        <Box
+          rounded={"lg"}
+          bg={boxColor}
+          boxShadow={"lg"}
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          p={4}
+          m={4}
+          cursor="pointer"
+          key={index}
+          onClick={(event) => {
+            // we need to check the tag name so that clicking the view response button doesn't redirect the user
+            if (event.target.tagName !== "BUTTON") {
+              onOpen();
+            }
+          }}
+        >
+          <Flex alignItems="center" justifyContent="space-between">
+            <Text mt={4} fontWeight="bold" fontSize="xl">
+              {item.title}
+            </Text>
+          </Flex>
+          <Text mt={2}>{item.purpose}</Text>
+          <br />
+          <Image src={item.imageUrl} height="170px" alt="Example Img" />
+          <br />
+          <TagList tags={item.topic_names}></TagList>
+          <Text>
+            <br></br>
+          </Text>
+          <Flex justifyContent="center">
+            <CollaborationResponse ideaId={item.id} />
+          </Flex>
+        </Box>
+        <Modal isOpen={isOpen} onClose={onClose} size={"6xl"} autoFocus={false}>
+          <ModalOverlay />
+          <ModalContent>
+            <MoreDetailsOfIdea
+              idea={item}
+              hasReacted={hasReacted}
+              setHasReacted={setHasReacted}
+            />
+          </ModalContent>
+        </Modal>
+      </>
     );
   }
 
@@ -209,7 +193,11 @@ export default function MyIdeasPage() {
         {isLoading ? (
           <Spinner />
         ) : ideas.length > 0 ? (
-          <IdeaBoxes list={ideas} />
+          <SimpleGrid columns={3} spacing={7}>
+            {ideas.map((item, index) => (
+              <IdeaBoxes item={item} index={index} />
+            ))}
+          </SimpleGrid>
         ) : (
           <Heading as="h3" size="xl">
             No ideas of interest yet!
