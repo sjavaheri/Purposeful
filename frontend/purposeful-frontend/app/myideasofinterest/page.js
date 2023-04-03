@@ -22,14 +22,22 @@ import {
   Link,
   useColorMode,
   useColorModeValue,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import { SearchIcon } from "@chakra-ui/icons";
 import CollaborationResponse from "@/components/CollaborationResponse";
 import fetchWrapper from "@/utils/fetch_wrapper";
+import MoreDetailsOfIdea from "@/components/MoreDetailsOfIdea";
 
 export default function MyIdeasPage() {
   const { colorMode, toggleColorMode } = useColorMode(); // TODO: Move the light/dark mode toggle button to the navigation header
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [hasReacted, setHasReacted] = useState(null);
 
   var boxClicked = 0;
   var modifyClicked = 0;
@@ -66,12 +74,18 @@ export default function MyIdeasPage() {
 
   function MakeIdeaObj(idea) {
     const idea_topics = idea.topics.map((topic) => topic.name);
+    console.log(idea)
     const idea_obj = {
       id: idea.id,
       purpose: idea.purpose,
       title: idea.title,
       imageUrl: idea.iconUrl.url,
-      topics: idea_topics,
+      topics: idea.topics,
+      topic_names: idea_topics,
+      domains: idea.domains,
+      techs: idea.techs,
+      iconUrl: idea.iconUrl,
+      imgUrls: idea.imgUrls,
     };
     return idea_obj;
   }
@@ -99,54 +113,58 @@ export default function MyIdeasPage() {
     return (
       <SimpleGrid columns={3} spacing={7}>
         {list.map((item, index) => (
-          <Box
-            rounded={"lg"}
-            bg={boxColor}
-            boxShadow={"lg"}
-            borderWidth="1px"
-            borderRadius="lg"
-            overflow="hidden"
-            p={4}
-            m={4}
-            cursor="pointer"
-            key={index}
-            onClick={(event) => {
-              // we need to check the tag name so that clicking the view response button doesn't redirect the user
-              if (event.target.tagName !== "BUTTON") {
-                window.location.href = "/idea/" + item.id;
-              }
-            }}
-          >
-            <Flex alignItems="center" justifyContent="space-between">
-              <Text mt={4} fontWeight="bold" fontSize="xl">
-                {item.title}
+          <>
+            <Box
+              rounded={"lg"}
+              bg={boxColor}
+              boxShadow={"lg"}
+              borderWidth="1px"
+              borderRadius="lg"
+              overflow="hidden"
+              p={4}
+              m={4}
+              cursor="pointer"
+              key={index}
+              onClick={(event) => {
+                // we need to check the tag name so that clicking the view response button doesn't redirect the user
+                if (event.target.tagName !== "BUTTON") {
+                  onOpen();
+                }
+              }}
+            >
+              <Flex alignItems="center" justifyContent="space-between">
+                <Text mt={4} fontWeight="bold" fontSize="xl">
+                  {item.title}
+                </Text>
+              </Flex>
+              <Text mt={2}>{item.purpose}</Text>
+              <br />
+              <Image src={item.imageUrl} height="170px" alt="Example Img" />
+              <br />
+              <TagList tags={item.topic_names}></TagList>
+              <Text>
+                <br></br>
               </Text>
-            </Flex>
-            <Text mt={2}>{item.purpose}</Text>
-            <br />
-            <Image src={item.imageUrl} height="170px" alt="Example Img" />
-            <br />
-            <TagList tags={item.topics}></TagList>
-            <Text>
-              <br></br>
-            </Text>
-            <Flex justifyContent="center">
-              <CollaborationResponse ideaId={item.id} />
-              {/* <Button
-                size="sm"
-                bg={collabRequestColor}
-                hoverBg={collabRequestColor}
-                _hover={{ boxShadow: "none" }}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  window.location.href =
-                    "/collaborationRequests?ideaId=" + item.id;
-                }}
-              >
-                View Collaboration Requests
-              </Button> */}
-            </Flex>
-          </Box>
+              <Flex justifyContent="center">
+                <CollaborationResponse ideaId={item.id} />
+              </Flex>
+            </Box>
+            <Modal
+              isOpen={isOpen}
+              onClose={onClose}
+              size={"6xl"}
+              autoFocus={false}
+            >
+              <ModalOverlay />
+              <ModalContent>
+                <MoreDetailsOfIdea
+                  idea={item}
+                  hasReacted={hasReacted}
+                  setHasReacted={setHasReacted}
+                />
+              </ModalContent>
+            </Modal>
+          </>
         ))}
       </SimpleGrid>
     );
