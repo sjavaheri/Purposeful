@@ -36,7 +36,6 @@ export default function HighFiveBtn({ idea_id, hasReacted, setHasReacted }) {
     setHasReacted(reactResponse);
     if (reactResponse) setColor("blue");
     else setColor("gray");
-    console.log(reactResponse);
   };
   return (
     <Button
