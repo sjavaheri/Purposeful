@@ -41,6 +41,7 @@ public class LoginController {
   /**
    * This method validates a JWT token by returning information on the user.
    *
+   * @return a JWT token if the user is properly authenticated
    * @author Sasha Denouvilliez-Pech
    */
   @GetMapping()

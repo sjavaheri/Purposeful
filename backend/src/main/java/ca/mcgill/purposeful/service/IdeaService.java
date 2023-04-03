@@ -182,7 +182,19 @@ public class IdeaService {
   /**
    * Method to create an idea
    *
-   * @return The newly created {@link Idea}
+   * @param title Title of the idea
+   * @param purpose Purpose of the idea
+   * @param description Description of the idea
+   * @param isPaid Whether the idea is paid or not
+   * @param inProgress Whether the idea is in progress or not
+   * @param isPrivate Whether the idea is private or not
+   * @param domainIds List of domain ids
+   * @param techIds List of technology ids
+   * @param topicIds List of topic ids
+   * @param imgUrlIds List of image url ids
+   * @param iconUrlId Icon url id
+   * @param regularUsername Username of the user creating the idea
+   * @return The newly created Idea
    * @author Adam Kazma
    */
   @Transactional
@@ -264,6 +276,7 @@ public class IdeaService {
    * @param imgUrlIds image url Ids of idea
    * @param iconUrlId icon url Ids of idea
    * @author Ramin Akhavan
+   * @return the modified idea
    * @throws GlobalException if necessary field are left empty or if an object does not exist
    */
   @Transactional
@@ -341,6 +354,7 @@ public class IdeaService {
   /**
    * Check to make sure a necessary field is not empty
    *
+   * @param newValue new value
    * @throws GlobalException if necessary field is left empty
    * @author Ramin Akhavan
    */
@@ -355,6 +369,8 @@ public class IdeaService {
   /**
    * Check to make sure all domains of an idea exist
    *
+   * @param domainIds domain Ids
+   * @return set of domains
    * @throws GlobalException if an object does not exist
    * @author Ramin Akhavan
    */
@@ -378,7 +394,9 @@ public class IdeaService {
   /**
    * Check to make sure all technologies of an idea exist
    *
+   * @param techIds tech Ids
    * @throws GlobalException if an object does not exist
+   * @return set of technologies
    * @author Ramin Akhavan
    */
   public Set<Technology> checkTechs(List<String> techIds) {
@@ -401,7 +419,9 @@ public class IdeaService {
   /**
    * Check to make sure all topics of an idea exist
    *
+   * @param topicIds topic Ids
    * @throws GlobalException if an object does not exist
+   * @return set of topics
    * @author Ramin Akhavan
    */
   public Set<Topic> checkTopics(List<String> topicIds) {
@@ -424,7 +444,9 @@ public class IdeaService {
   /**
    * Check to make sure all image urls exist
    *
+   * @param imgUrlIds image url Ids
    * @throws GlobalException if an object does not exist
+   * @return list of image urls
    * @author Ramin Akhavan
    */
   public List<URL> checkImgURLS(List<String> imgUrlIds) {
@@ -443,7 +465,9 @@ public class IdeaService {
   /**
    * Check to make sure a url exists
    *
+   * @param urlId url Id
    * @throws GlobalException if an object does not exist
+   * @return url object
    * @author Ramin Akhavan
    */
   public URL checkURL(String urlId) {

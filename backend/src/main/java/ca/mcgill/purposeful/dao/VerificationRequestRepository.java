@@ -7,5 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 public interface VerificationRequestRepository
     extends CrudRepository<VerificationRequest, Integer> {
 
+  /**
+   * Find a verification request by its id
+   *
+   * @param companyOuiNumber the id of the verification request
+   * @return the verification request
+   */
   VerificationRequest findVerificationByCompanyOuiNumber(String companyOuiNumber);
 }

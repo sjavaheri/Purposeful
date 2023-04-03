@@ -12,15 +12,28 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
 import ModifyIdea from "@/components/ModifyIdea";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { getIdeaFromID } from "@/utils/idea_tool";
+import { Spinner } from '@chakra-ui/react'
+
 
 export default function ModifyIdeaPage() {
   const { colorMode, toggleColorMode } = useColorMode(); // TODO: Move the light/dark mode toggle button to the navigation header
   const searchParams = useSearchParams();
-  const ideaId = searchParams.get("ideaId");
-  console.log("idea id " + ideaId);
+  const id = searchParams.get('ideaId');
+
+  const [comp,setComp] = useState(<Box><Spinner/></Box>);
+  useEffect(() => {
+    getIdeaFromID(id).then((res) => {
+      console.log(res);
+      console.log(res.title);
+      setComp(<ModifyIdea ideaId={id} oldTitle={res.title} oldPurpose={res.purpose} oldDescription={res.description} oldIconUrl={res.iconUrl.url} oldisPaid={res.isPaid} oldinProgress={res.inProgress} oldisPrivate={res.isPrivate}/>);
+    });
+  }, []);
 
   return (
     <Flex
@@ -29,7 +42,7 @@ export default function ModifyIdeaPage() {
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-    <ModifyIdea ideaId={ideaId}/>
+    {comp}
     </Flex>
   );
 }

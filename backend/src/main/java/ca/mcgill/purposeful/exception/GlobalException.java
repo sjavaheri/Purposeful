@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @SuppressWarnings("serial")
 public class GlobalException extends RuntimeException {
 
-  // this exception has an HTTP status in addition to a method
+  /** this exception has an HTTP status in addition to a method */
   private HttpStatus status;
 
   /**
@@ -22,6 +22,11 @@ public class GlobalException extends RuntimeException {
     this.status = status;
   }
 
+  /**
+   * Get the http status of the failure
+   *
+   * @return the http status of the failure
+   */
   public HttpStatus getStatus() {
     return status;
   }

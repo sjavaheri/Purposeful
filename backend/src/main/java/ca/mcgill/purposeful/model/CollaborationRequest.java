@@ -56,56 +56,107 @@ public class CollaborationRequest {
   // CollaborationRequest Constructor
   // ------------------------
 
+  /**
+   * CollaborationRequest constructor
+   */
   public CollaborationRequest() {}
 
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
 
+  /**
+   * Returns the id of the CollaborationRequest
+   * @return the id of the CollaborationRequest
+   */
   public String getId() {
     return id;
   }
 
+    /**
+     * Sets the id of the CollaborationRequest
+     * @param id the id of the CollaborationRequest
+     */
   public void setId(String id) {
     this.id = id;
   }
 
+  /**
+   * Returns the additional contact of the CollaborationRequest
+   * @return the additional contact of the CollaborationRequest
+   */
   public String getAdditionalContact() {
     return additionalContact;
   }
 
+  /**
+   * Sets the additional contact of the CollaborationRequest
+   * @param additionalContact the additional contact of the CollaborationRequest
+   */
   public void setAdditionalContact(String additionalContact) {
     this.additionalContact = additionalContact;
   }
 
+  /**
+   * Returns the message of the CollaborationRequest
+   * @return the message of the CollaborationRequest
+   */
   public String getMessage() {
     return message;
   }
 
+  /**
+   * Sets the message of the CollaborationRequest
+   * @param message the message of the CollaborationRequest
+   */
   public void setMessage(String message) {
     this.message = message;
   }
 
+  /**
+   * Returns the requester of the CollaborationRequest
+   * @return the requester of the CollaborationRequest
+   */
   public RegularUser getRequester() {
     return requester;
   }
 
+  /**
+   * Sets the requester of the CollaborationRequest
+   * @param requester the requester of the CollaborationRequest
+   */
   public void setRequester(RegularUser requester) {
     this.requester = requester;
   }
 
+  /**
+   * Returns the idea of the CollaborationRequest
+   * @return the idea of the CollaborationRequest
+   */
   public Idea getIdea() {
     return idea;
   }
 
+  /**
+   * Sets the idea of the CollaborationRequest
+   * @param idea the idea of the CollaborationRequest
+   */
   public void setIdea(Idea idea) {
     this.idea = idea;
   }
 
+  /**
+   * Returns the collaboration response of the CollaborationRequest
+   * @return the collaboration response of the CollaborationRequest
+   */
   public CollaborationResponse getCollaborationResponse() {
     return collaborationResponse;
   }
 
+  /**
+   * Sets the collaboration response of the CollaborationRequest
+   * @param collaborationResponse the collaboration response of the CollaborationRequest
+   */
   public void setCollaborationResponse(CollaborationResponse collaborationResponse) {
     this.collaborationResponse = collaborationResponse;
   }
