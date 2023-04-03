@@ -147,7 +147,7 @@ export default function CreateIdea() {
 
     await delay(2000);
     actions.setSubmitting(false);
-    window.location.href = "/myideas";
+    window.location.href = "/";
   }
 
   useEffect(() => {
