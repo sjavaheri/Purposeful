@@ -561,19 +561,37 @@ export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,ol
                   Save Changes
                 </Button>
               </Box>
-              <Button
-                bg={"red.200"}
-                color={"red"}
-                _hover={{
-                  bg: "red.400",
-                }}
-                type="submit"
-                style={{float : 'right'}}
-                onClick={() => {
-                  deleteStatus = 1;
-                }}>
-                <DeleteIcon w={6} h={6} color="red.500" />
-              </Button>
+              <Popover>
+              <PopoverTrigger>
+                <Button
+                float={"right"}
+                  bg={"red.200"}
+                  color={"red"}
+                  _hover={{
+                    bg: "red.400",
+                  }}
+                  onClick={() => {
+                    deleteStatus = 1;
+                  }}>
+                  <DeleteIcon w={6} h={6} color="red.500" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent padding={1} color='white' bg='blue.800' borderColor='blue.800'>
+                <PopoverHeader pt={4} fontWeight='bold' border='0'>
+                  Confirmation
+                </PopoverHeader>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverBody>
+                  Are you sure that you want to delete your idea? This action cannot be undone.
+                </PopoverBody>
+                <PopoverFooter
+                  pb={4}
+                >
+                <Button colorScheme='green' marginLeft={"30%"} type="submit" onClick={() => function(){ deleteStatus=1; }}>Yes, Delete.</Button>
+                </PopoverFooter>
+              </PopoverContent>
+            </Popover>
             </Form>
           )}
         </Formik>
