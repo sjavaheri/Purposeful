@@ -5,7 +5,9 @@ import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.dto.SearchFilterDTO;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Idea;
+import ca.mcgill.purposeful.service.AppUserService;
 import ca.mcgill.purposeful.service.IdeaService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /** API for demonstrating how permissions work for access to endpoints */
 @RestController
 @RequestMapping({"api/idea", "api/idea/"})
@@ -23,6 +23,14 @@ public class IdeaController {
 
   @Autowired IdeaService ideaService;
 
+  @Autowired AppUserService appUserService;
+
+  /**
+   * This method gets the idea from the database with the given id
+   *
+   * @param id the id of the idea
+   * @return the idea with the given id
+   */
   @GetMapping("{id}")
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaDTO> getIdeaById(@PathVariable String id) {
@@ -33,6 +41,7 @@ public class IdeaController {
   /**
    * Filter ideas by topics, domains, and techs. Results are ordered by date.
    *
+   * @param searchFilterDTO The filters to apply
    * @return A list of idea DTOs that matches the filters
    * @author Wassim Jabbour
    */
@@ -51,6 +60,7 @@ public class IdeaController {
   /**
    * This method creates an idea
    *
+   * @param ideaDTO the idea to be created
    * @return created idea
    * @throws GlobalException if user is not authenticated or ideaDTO is null
    * @author Adam Kazma
@@ -67,6 +77,18 @@ public class IdeaController {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null.");
     }
 
+    // create the urls for the supporting images
+    List<String> supportingImageUrlIds = null;
+    if (ideaDTO.getImgUrls() != null) {
+      supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    }
+
+    // create the icon url if it doesn't already exist
+    String iconUrlId = null;
+    if (ideaDTO.getIconUrl() != null) {
+      iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
+    }
+
     Idea createdIdea =
         ideaService.createIdea(
             ideaDTO.getTitle(),
@@ -78,8 +100,8 @@ public class IdeaController {
             ideaDTO.getDomainIds(),
             ideaDTO.getTechIds(),
             ideaDTO.getTopicIds(),
-            ideaDTO.getImgUrlIds(),
-            ideaDTO.getIconUrlId(),
+            supportingImageUrlIds,
+            iconUrlId,
             auth.getName());
 
     IdeaRequestDTO createdIdeaDTO = new IdeaRequestDTO(createdIdea);
@@ -90,20 +112,29 @@ public class IdeaController {
   /**
    * This method modifies an idea
    *
+   * @param ideaDTO the idea to be modified
    * @return update idea
    * @throws GlobalException if the ideaDTO is null
    * @author Ramin Akhavan
    */
-  @PutMapping(
-      value = {"/edit", "/edit/"},
-      consumes = "application/json",
-      produces = "application/json")
+  @PutMapping(value = {"/edit", "/edit/"})
   @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
   public ResponseEntity<IdeaRequestDTO> modifyIdea(@RequestBody IdeaRequestDTO ideaDTO)
       throws GlobalException {
     // Unpack the DTO
     if (ideaDTO == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "ideaDTO is null");
+    }
+    // create the urls for the supporting images
+    List<String> supportingImageUrlIds = null;
+    if (ideaDTO.getImgUrls() != null) {
+      supportingImageUrlIds = ideaService.createSupportingURLS(ideaDTO.getImgUrls());
+    }
+
+    // create the icon url if it doesn't already exist
+    String iconUrlId = null;
+    if (ideaDTO.getIconUrl() != null) {
+      iconUrlId = ideaService.createIconURL(ideaDTO.getIconUrl());
     }
 
     Idea modifiedIdea =
@@ -118,13 +149,12 @@ public class IdeaController {
             ideaDTO.getDomainIds(),
             ideaDTO.getTechIds(),
             ideaDTO.getTopicIds(),
-            ideaDTO.getImgUrlIds(),
-            ideaDTO.getIconUrlId());
+            supportingImageUrlIds,
+            iconUrlId);
     IdeaRequestDTO modifiedIdeaDTO = new IdeaRequestDTO(modifiedIdea);
 
     return ResponseEntity.status(HttpStatus.OK).body(modifiedIdeaDTO);
   }
-
 
   /**
    * Remove an idea by its id
@@ -140,12 +170,57 @@ public class IdeaController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String requestEmail = authentication.getName();
     String ownerEmail = ideaService.getIdeaById(id).getUser().getAppUser().getEmail();
-    if (!requestEmail.equals(ownerEmail) && !authentication.getAuthorities().contains("Owner") && !authentication.getAuthorities().contains("Moderator")) {
+    if (!requestEmail.equals(ownerEmail)
+        && !authentication.getAuthorities().contains("Owner")
+        && !authentication.getAuthorities().contains("Moderator")) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not authorized");
     }
     // call service layer
     ideaService.removeIdeaById(id);
     // return response status with confirmation message
     return new ResponseEntity<String>("Idea successfully deleted", HttpStatus.OK);
+  }
+
+  /**
+   * Retrieve all the ideas that a user created.
+   *
+   * @return a response entity with a list of ideas and the HttpStatus
+   * @author Ramin Akhavan
+   */
+  @GetMapping({"/user", "/user/"})
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<List<IdeaDTO>> getUserCreatedIdeas() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
+    }
+    String requestEmail = authentication.getName();
+
+    List<Idea> createdIdeas = ideaService.getCreatedIdeas(requestEmail);
+
+    List<IdeaDTO> ideaDTOs = IdeaDTO.convertToDto(createdIdeas);
+
+    return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(createdIdeas));
+  }
+
+  /**
+   * Get all ideas that the user has requested to collaborate on
+   *
+   * @return a response entity with a list of ideas that the user has requested collaboration on and
+   *     the HttpStatus
+   * @author Enzo Benoit-Jeannin
+   */
+  @GetMapping({"/user/requests", "/user/requests/"})
+  @PreAuthorize("hasAnyAuthority('User', 'Moderator', 'Owner')")
+  public ResponseEntity<List<IdeaDTO>> getIdeasByCollaborationRequests() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null) {
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "User is not authenticated.");
+    }
+    String requestEmail = authentication.getName();
+
+    List<Idea> requestedIdeas = ideaService.getIdeasByCollaborationRequest(requestEmail);
+
+    return ResponseEntity.status(HttpStatus.OK).body(IdeaDTO.convertToDto(requestedIdeas));
   }
 }

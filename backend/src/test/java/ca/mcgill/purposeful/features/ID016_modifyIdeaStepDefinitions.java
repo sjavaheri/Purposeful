@@ -1,5 +1,9 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.model.*;
@@ -10,19 +14,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.ParseException;
+import java.time.Instant;
+import java.util.*;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.text.ParseException;
-import java.time.Instant;
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Step Definitions for Modifying an Idea
@@ -114,13 +113,13 @@ public class ID016_modifyIdeaStepDefinitions {
     List<String> domainIds = null;
     List<String> techIds = null;
     List<String> topicIds = null;
-    List<String> imgUrlIds = null;
+    List<String> imgUrls = null;
 
     // Required fields
     boolean isPaid = idea.isPaid();
     boolean inProgress = idea.isInProgress();
     boolean isPrivate = idea.isPrivate();
-    String iconUrlId = idea.getIconUrl().getId();
+    String iconUrl = idea.getIconUrl().getURL();
 
     // Parameters for String fields
     if (field.equalsIgnoreCase("title")) {
@@ -144,7 +143,7 @@ public class ID016_modifyIdeaStepDefinitions {
       isPrivate = Boolean.valueOf(new_value);
     }
     if (field.equalsIgnoreCase("icon URL")) {
-      iconUrlId = idMap.get(new_value);
+      iconUrl = new_value;
     }
 
     if (field.equalsIgnoreCase("domains")) {
@@ -166,10 +165,10 @@ public class ID016_modifyIdeaStepDefinitions {
       }
     }
     if (field.equalsIgnoreCase("image URLs")) {
-      imgUrlIds = new ArrayList<>();
-      for (String single_id : List.of(new_value.split(","))) {
+      imgUrls = new ArrayList<>();
+      for (String url : List.of(new_value.split(","))) {
         // assertEquals(1, single_id);
-        imgUrlIds.add(idMap.get(single_id));
+        imgUrls.add(url);
       }
     }
 
@@ -186,8 +185,8 @@ public class ID016_modifyIdeaStepDefinitions {
             domainIds,
             techIds,
             topicIds,
-            imgUrlIds,
-            iconUrlId);
+            imgUrls,
+            iconUrl);
 
     this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
     this.authHeader.setContentType(MediaType.APPLICATION_JSON);
@@ -234,7 +233,14 @@ public class ID016_modifyIdeaStepDefinitions {
       assertEquals(Boolean.valueOf(value), idea.isPrivate());
     }
     if (field.equalsIgnoreCase("icon URL")) {
-      assertEquals(idMap.get(value), idea.getIconUrl().getId());
+      assertEquals(value, idea.getIconUrl().getURL());
+    }
+
+    if (field.equalsIgnoreCase("image URLs")) {
+      for (URL url : idea.getSupportingImageUrls()) {
+        List<String> changedUrls = List.of(value.split(","));
+        assertTrue(changedUrls.contains(url.getURL()));
+      }
     }
 
     if (field.equalsIgnoreCase("domains")) {
@@ -253,14 +259,8 @@ public class ID016_modifyIdeaStepDefinitions {
         objIds.add(technology.getId());
       }
     }
-    if (field.equalsIgnoreCase("image URLs")) {
-      for (URL url : idea.getSupportingImageUrls()) {
-        objIds.add(url.getId());
-      }
-    }
 
-    if (field.equalsIgnoreCase("image URLs")
-        || field.equalsIgnoreCase("topics")
+    if (field.equalsIgnoreCase("topics")
         || field.equalsIgnoreCase("techs")
         || field.equalsIgnoreCase("domains")) {
       List<String> newObjIds = List.of(value.split(","));
@@ -282,13 +282,13 @@ public class ID016_modifyIdeaStepDefinitions {
     List<String> domainIds = null;
     List<String> techIds = null;
     List<String> topicIds = null;
-    List<String> imgUrlIds = null;
+    List<String> imgUrls = null;
 
     // Required fields
     boolean isPaid = idea.isPaid();
     boolean inProgress = idea.isInProgress();
     boolean isPrivate = idea.isPrivate();
-    String iconUrlId = idea.getIconUrl().getId();
+    String iconUrl = idea.getIconUrl().getURL();
 
     // Parameters for String fields
     if (field.equalsIgnoreCase("title")) {
@@ -311,7 +311,7 @@ public class ID016_modifyIdeaStepDefinitions {
       techIds = new ArrayList<>();
     }
     if (field.equalsIgnoreCase("image URLs")) {
-      imgUrlIds = new ArrayList<>();
+      imgUrls = new ArrayList<>();
     }
 
     IdeaRequestDTO ideaDTO =
@@ -327,8 +327,8 @@ public class ID016_modifyIdeaStepDefinitions {
             domainIds,
             techIds,
             topicIds,
-            imgUrlIds,
-            iconUrlId);
+            imgUrls,
+            iconUrl);
 
     this.authHeader = cucumberUtil.bearerAuthHeader(jwtToken);
     this.authHeader.setContentType(MediaType.APPLICATION_JSON);

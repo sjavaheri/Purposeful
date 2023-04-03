@@ -7,6 +7,7 @@ import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Idea;
 import org.springframework.http.HttpStatus;
 
+/** Utility class for converting entities to DTOs */
 public class DtoUtility {
 
   /**
@@ -31,6 +32,12 @@ public class DtoUtility {
     return appUserDto;
   }
 
+  /**
+   * Converts a Idea to a IdeaDTO
+   *
+   * @param idea - the Idea to be converted
+   * @return the converted IdeaDTO
+   */
   public static IdeaDTO convertToDto(Idea idea) {
     if (idea == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "Idea is null");

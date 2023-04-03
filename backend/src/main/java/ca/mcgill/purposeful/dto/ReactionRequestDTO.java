@@ -2,41 +2,80 @@ package ca.mcgill.purposeful.dto;
 
 import ca.mcgill.purposeful.model.Reaction.ReactionType;
 
+/** Data transfer object for the Reaction class */
 public class ReactionRequestDTO {
 
   private String idea_id;
-  private String user_id;
+  private String email;
   private ReactionType reactionType;
 
+  /** Default constructor. */
   public ReactionRequestDTO() {}
 
-  public ReactionRequestDTO(String idea_id, String user_id, ReactionType reactionType) {
+  /**
+   * Constructor.
+   *
+   * @param idea_id The id of the idea
+   * @param email The email of the user
+   * @param reactionType The type of the reaction
+   */
+  public ReactionRequestDTO(String idea_id, String email, ReactionType reactionType) {
     this.idea_id = idea_id;
-    this.user_id = user_id;
+    this.email = email;
     this.reactionType = reactionType;
   }
 
+  /**
+   * Get reaction type.
+   *
+   * @return Reaction type
+   */
   public ReactionType getReactionType() {
-    return reactionType;
+    return this.reactionType;
   }
 
+  /**
+   * Set reaction type.
+   *
+   * @param reactionType Reaction type
+   */
   public void setReactionType(ReactionType reactionType) {
     this.reactionType = reactionType;
   }
 
+  /**
+   * Get idea id.
+   *
+   * @return Idea id
+   */
   public String getIdea_id() {
-    return idea_id;
+    return this.idea_id;
   }
 
+  /**
+   * Set idea id.
+   *
+   * @param idea_id Idea id
+   */
   public void setIdea_id(String idea_id) {
     this.idea_id = idea_id;
   }
 
-  public String getUser_id() {
-    return user_id;
+  /**
+   * Get email.
+   *
+   * @return Email
+   */
+  public String getEmail() {
+    return this.email;
   }
 
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
+  /**
+   * Set email.
+   *
+   * @param email Email
+   */
+  public void setEmail(String email) {
+    this.email = email;
   }
 }

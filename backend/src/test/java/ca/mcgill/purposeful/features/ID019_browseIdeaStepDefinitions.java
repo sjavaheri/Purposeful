@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.controller.IdeaController;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
@@ -17,15 +20,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.*;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID019_BrowseIdea.feature file
@@ -66,27 +65,27 @@ public class ID019_browseIdeaStepDefinitions {
     idMap = new HashMap<>();
   }
 
-  @And("the database contains the following RegularUser accounts \\(Strategy1):")
+  @And("the database contains the following RegularUser accounts \\(ID019):")
   public void theDatabaseContainsTheFollowingRegularUserAccounts(DataTable dataTable) {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following domains \\(Strategy1):")
+  @And("the database contains the following domains \\(ID019):")
   public void theDatabaseContainsTheFollowingDomains(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following topics \\(Strategy1):")
+  @And("the database contains the following topics \\(ID019):")
   public void theDatabaseContainsTheFollowingTopics(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following techs \\(Strategy1):")
+  @And("the database contains the following techs \\(ID019):")
   public void theDatabaseContainsTheFollowingTechs(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @And("the database contains the following ideas \\(Strategy1):")
+  @And("the database contains the following ideas \\(ID019):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
     cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }
@@ -97,7 +96,8 @@ public class ID019_browseIdeaStepDefinitions {
         new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
 
     // We don't save this response in the field because we don't need it later
-    // In this case we are testing whether the browse ideas response is correct so we only
+    // In this case we are testing whether the browse ideas response is correct so
+    // we only
     // need the token
     ResponseEntity<?> response =
         client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
@@ -166,7 +166,8 @@ public class ID019_browseIdeaStepDefinitions {
     // Create the request entity
     HttpEntity<?> requestEntity = new HttpEntity<>(searchFilterDTO, header);
 
-    // Save the response in the current class (This is the response we are trying to test here)
+    // Save the response in the current class (This is the response we are trying to
+    // test here)
     var response = client.exchange("/api/idea", HttpMethod.POST, requestEntity, ArrayList.class);
 
     // Extract returned lists
@@ -184,7 +185,8 @@ public class ID019_browseIdeaStepDefinitions {
     assertEquals(orderedIdsList.size(), returnedIdeas.size());
 
     // Check that the returned ideas are the same as the ones we requested
-    // We check the title because it is unique for this set of tests since DTOs don't have ids
+    // We check the title because it is unique for this set of tests since DTOs
+    // don't have ids
     for (int i = 0; i < orderedIdsList.size(); i++) {
       assertEquals(
           ideaService.getIdeaById(idMap.get(orderedIdsList.get(i))).getTitle(),
@@ -216,7 +218,8 @@ public class ID019_browseIdeaStepDefinitions {
     // Create the request entity
     HttpEntity<?> requestEntity = new HttpEntity<>(searchFilterDTO, header);
 
-    // Save the response in the current class (This is the response we are trying to test here)
+    // Save the response in the current class (This is the response we are trying to
+    // test here)
     // Note the string return type
     erroneousResponse = client.exchange("/api/idea", HttpMethod.POST, requestEntity, String.class);
   }
@@ -227,7 +230,7 @@ public class ID019_browseIdeaStepDefinitions {
     assertEquals(error, erroneousResponse.getBody());
   }
 
-  @And("the database contains the following urls \\(Strategy1):")
+  @And("the database contains the following urls \\(ID019):")
   public void theDatabaseContainsTheFollowingUrlsStrategy(DataTable dataTable) {
     cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }

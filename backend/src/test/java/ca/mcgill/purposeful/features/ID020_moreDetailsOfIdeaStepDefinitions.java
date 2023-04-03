@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
@@ -11,15 +14,11 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Step definitions for the ID020_moreDetailsOfIdea.feature file
@@ -40,32 +39,32 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
   private ResponseEntity<?> response;
   private Map<String, String> idMap = new HashMap<String, String>();
 
-  @Given("the database contains the following users:")
+  @Given("the database contains the following users \\(ID020):")
   public void theDatabaseContainsTheFollowingUsers(DataTable dataTable) {
     cucumberUtil.createAndSaveRegularUsersFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following domains \\(Strategy2):")
+  @Given("the database contains the following domains \\(ID020):")
   public void theDatabaseContainsTheFollowingDomains(DataTable dataTable) {
     cucumberUtil.createAndSaveDomainsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following topics \\(Strategy2):")
+  @Given("the database contains the following topics \\(ID020):")
   public void theDatabaseContainsTheFollowingTopics(DataTable dataTable) {
     cucumberUtil.createAndSaveTopicsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following techs \\(Strategy2):")
+  @Given("the database contains the following techs \\(ID020):")
   public void theDatabaseContainsTheFollowingTechs(DataTable dataTable) {
     cucumberUtil.createAndSaveTechsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following URLs \\(Strategy2):")
+  @Given("the database contains the following URLs \\(ID020):")
   public void theDatabaseContainsTheFollowingURLs(DataTable dataTable) {
     cucumberUtil.createAndSaveURLsFromTable(dataTable, idMap);
   }
 
-  @Given("the database contains the following ideas \\(Strategy2):")
+  @Given("the database contains the following ideas \\(ID020):")
   public void theDatabaseContainsTheFollowingIdeas(DataTable dataTable) {
     cucumberUtil.createAndSaveIdeasFromTable(dataTable, idMap);
   }

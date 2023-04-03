@@ -1,20 +1,19 @@
 package ca.mcgill.purposeful.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.Owner;
 import ca.mcgill.purposeful.util.DatabaseUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Owner Repository testing class which initiates an owner and an AppUser repository, executes the

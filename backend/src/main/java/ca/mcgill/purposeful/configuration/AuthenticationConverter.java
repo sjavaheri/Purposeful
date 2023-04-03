@@ -1,13 +1,13 @@
 package ca.mcgill.purposeful.configuration;
 
+import java.util.ArrayList;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import java.util.ArrayList;
-
+/** Class that converts a JWT token to an authentication object */
 public class AuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
   /**
@@ -26,7 +26,8 @@ public class AuthenticationConverter implements Converter<Jwt, AbstractAuthentic
     for (String authority : authorities) {
       simpleAuthorities.add(new SimpleGrantedAuthority(authority.toString()));
     }
-    // create a new Tken with the new authorities as well as the username of the user
+    // create a new Tken with the new authorities as well as the username of the
+    // user
     return new JwtAuthenticationToken(source, simpleAuthorities, source.getClaimAsString("sub"));
   }
 }

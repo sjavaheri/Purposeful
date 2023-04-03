@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.model.*;
@@ -9,17 +12,14 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ID015_createIdeaStepDefinitions {
 
@@ -112,56 +112,53 @@ public class ID015_createIdeaStepDefinitions {
     ArrayList<String> domainIds = new ArrayList<String>();
     ArrayList<String> techIds = new ArrayList<String>();
     ArrayList<String> topicIds = new ArrayList<String>();
-    ArrayList<String> supportingImgIds = new ArrayList<String>();
-    String iconUrlId = "";
 
     String[] domainStr = domains.split(",");
     String[] techStr = techs.split(",");
     String[] topicStr = topics.split(",");
-    String[] urlStr = supportingimageurls.split(",");
+    List<String> supportingImageUrls = List.of(supportingimageurls.split(","));
 
     for (String domain_name : domainStr) {
-      String domainId = "";
-      for (Domain domain : domainRepository.findAll()) {
-        if (domain.getName().equals(domain_name)) {
-          domainId = domain.getId();
-          break;
-        }
+      if (domain_name.equals("")) {
+        continue;
       }
-      domainIds.add(domainId);
+      Domain domain = domainRepository.findDomainByName(domain_name);
+      if (domain != null) {
+        String domainId = domain.getId();
+        domainIds.add(domainId);
+        continue;
+      }
+      // add a dummy Id if the domain does not exist
+      domainIds.add(domain_name);
     }
     for (String tech_name : techStr) {
-      for (Technology tech : technologyRepository.findAll()) {
-        if (tech.getName().equals(tech_name)) {
-          techIds.add(tech.getId());
-          break;
-        }
+      if (tech_name.equals("")) {
+        continue;
       }
+      Technology tech = technologyRepository.findTechnologyByName(tech_name);
+      if (tech != null) {
+        String techId = tech.getId();
+        techIds.add(techId);
+        continue;
+      }
+      // add a dummy Id if the tech does not exist
+      techIds.add(tech_name);
     }
+
     for (String topic_name : topicStr) {
-      String topicId = "";
-      for (Topic topic : topicRepository.findAll()) {
-        if (topic.getName().equals(topic_name)) {
-          topicId = topic.getId();
-          break;
-        }
+      if (topic_name.equals("")) {
+        continue;
       }
-      topicIds.add(topicId);
-    }
-    for (String url_str : urlStr) {
-      for (URL url : urlRepository.findAll()) {
-        if (url.getURL().equals(url_str)) {
-          supportingImgIds.add(url.getId());
-          break;
-        }
+      Topic topic = topicRepository.findTopicByName(topic_name);
+      if (topic != null) {
+        String topicId = topic.getId();
+        topicIds.add(topicId);
+        continue;
       }
+      // add a dummy Id if the topic does not exist
+      topicIds.add(topic_name);
     }
-    for (URL url : urlRepository.findAll()) {
-      if (url.getURL().equals(iconurl)) {
-        iconUrlId = url.getId();
-        break;
-      }
-    }
+
     IdeaRequestDTO ideaDto =
         new IdeaRequestDTO(
             null,
@@ -175,8 +172,8 @@ public class ID015_createIdeaStepDefinitions {
             domainIds,
             techIds,
             topicIds,
-            supportingImgIds,
-            iconUrlId);
+            supportingImageUrls,
+            iconurl);
 
     // make a post request to create the idea and store the response
     HttpEntity<IdeaRequestDTO> requestEntity =

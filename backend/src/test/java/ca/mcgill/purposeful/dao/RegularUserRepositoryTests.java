@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.model.AppUser;
 import ca.mcgill.purposeful.model.RegularUser;
@@ -9,9 +12,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Test the persistence layer for the RegularUserRepository. Testing reading and writing of objects,

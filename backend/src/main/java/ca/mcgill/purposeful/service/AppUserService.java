@@ -10,6 +10,8 @@ import ca.mcgill.purposeful.model.Moderator;
 import ca.mcgill.purposeful.model.RegularUser;
 import ca.mcgill.purposeful.model.SecurityUser;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +19,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /** The AppUserService class, the business logic for managing AppUsers */
 @Service
@@ -40,7 +39,7 @@ public class AppUserService implements UserDetailsService {
    * @param password - password of the user
    * @param firstname - first name of the user
    * @param lastname - last name of the user
-   * @return {@link AppUser} - the newly created user
+   * @return - the newly created user
    * @author Siger Ma
    */
   @Transactional
@@ -281,7 +280,7 @@ public class AppUserService implements UserDetailsService {
   /**
    * This service method returns all the users in the database
    *
-   * @return List <{@link AppUser}> - the list of all the users in the database
+   * @return List AppUser - the list of all the users in the database
    * @author Enzo Benoit-Jeannin
    */
   @Transactional

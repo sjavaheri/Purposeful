@@ -4,11 +4,15 @@ import ca.mcgill.purposeful.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-/** Class for resuable methods needed across other classes */
+/** Class for reusable methods needed across other classes */
 @Configuration
 public class DatabaseUtil {
 
   @Autowired private AppUserRepository appUserRepository;
+
+  @Autowired private CollaborationResponseRepository collaborationResponseRepository;
+
+  @Autowired private CollaborationRequestRepository collaborationRequestRepository;
 
   @Autowired private DomainRepository domainRepository;
 
@@ -32,6 +36,8 @@ public class DatabaseUtil {
 
   /** Method to clear the database completely @Author Shidan Javaheri */
   public void clearDatabase() {
+    collaborationRequestRepository.deleteAll();
+    collaborationResponseRepository.deleteAll();
     reactionRepository.deleteAll();
     ideaRepository.deleteAll();
     moderatorRepository.deleteAll();
