@@ -24,9 +24,7 @@ public class Moderator extends Role {
   // Moderator Constructor
   // ------------------------
 
-  /**
-   * Default constructor for the Moderator class
-   */
+  /** Default constructor for the Moderator class */
   public Moderator() {}
 
   // ------------------------

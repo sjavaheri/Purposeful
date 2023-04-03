@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ca.mcgill.purposeful.controller.IdeaController;
 import ca.mcgill.purposeful.dao.DomainRepository;
 import ca.mcgill.purposeful.dao.TechnologyRepository;
@@ -17,15 +20,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.*;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Step definitions for the ID019_BrowseIdea.feature file
@@ -34,29 +33,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class ID019_browseIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  private IdeaController ideaController;
+  @Autowired private IdeaController ideaController;
 
-  @Autowired
-  private DatabaseUtil databaseUtil;
+  @Autowired private DatabaseUtil databaseUtil;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  private DomainRepository domainRepository;
+  @Autowired private DomainRepository domainRepository;
 
-  @Autowired
-  private TopicRepository topicRepository;
+  @Autowired private TopicRepository topicRepository;
 
-  @Autowired
-  private TechnologyRepository technologyRepository;
+  @Autowired private TechnologyRepository technologyRepository;
 
-  @Autowired
-  private IdeaService ideaService;
+  @Autowired private IdeaService ideaService;
 
   // token to store once user is logged in
   private String jwtToken;
@@ -101,19 +92,22 @@ public class ID019_browseIdeaStepDefinitions {
 
   @And("I am logged in as the user with email {string} and password {string}")
   public void iAmLoggedInAsTheUserWithEmailAndPassword(String email, String password) {
-    HttpEntity<String> requestEntity = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
+    HttpEntity<String> requestEntity =
+        new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
 
     // We don't save this response in the field because we don't need it later
     // In this case we are testing whether the browse ideas response is correct so
     // we only
     // need the token
-    ResponseEntity<?> response = client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
+    ResponseEntity<?> response =
+        client.exchange("/api/login", HttpMethod.POST, requestEntity, String.class);
     assertEquals(HttpStatus.OK, response.getStatusCode()); // Making sure the login was successful
     jwtToken = response.getBody().toString(); // Extract the token for future requests
     assertNotNull(jwtToken); // Ensure the token is not null
   }
 
-  @When("the user requests to browse ideas by domains {string}, topics {string}, and techs {string}")
+  @When(
+      "the user requests to browse ideas by domains {string}, topics {string}, and techs {string}")
   public void theUserRequestsToBrowseIdeasByDomainsTopicsAndTechs(
       String domainIds, String TopicIds, String techIds)
       throws JsonProcessingException, JSONException {
@@ -178,8 +172,8 @@ public class ID019_browseIdeaStepDefinitions {
 
     // Extract returned lists
     ObjectMapper mapper = new ObjectMapper();
-    returnedIdeas = mapper.convertValue(response.getBody(), new TypeReference<ArrayList<IdeaDTO>>() {
-    });
+    returnedIdeas =
+        mapper.convertValue(response.getBody(), new TypeReference<ArrayList<IdeaDTO>>() {});
   }
 
   @Then("the user shall have access to the ideas with ids {string}")
@@ -200,7 +194,8 @@ public class ID019_browseIdeaStepDefinitions {
     }
   }
 
-  @When("the user erroneously requests to browse ideas by domains with id {string}, topic with id {string}, and tech with id {string}")
+  @When(
+      "the user erroneously requests to browse ideas by domains with id {string}, topic with id {string}, and tech with id {string}")
   public void theUserErroneouslyRequestsToBrowseIdeasByDomainsWithIdTopicWithIdAndTechWithId(
       String domainId, String topicId, String techId) {
 

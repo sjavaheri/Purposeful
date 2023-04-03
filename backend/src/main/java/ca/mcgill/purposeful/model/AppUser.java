@@ -37,13 +37,12 @@ public class AppUser {
   // Every AppUser has a set of Authorities that they can be granted
   private Set<Authority> authorities = new HashSet<Authority>();
 
-  /**
-   * AppUser constructor
-   */
+  /** AppUser constructor */
   public AppUser() {}
 
   /**
    * Returns the id of the AppUser
+   *
    * @return the id of the AppUser
    */
   public String getId() {
@@ -52,6 +51,7 @@ public class AppUser {
 
   /**
    * Sets the id of the AppUser
+   *
    * @param id the id of the AppUser
    */
   public void setId(String id) {
@@ -60,6 +60,7 @@ public class AppUser {
 
   /**
    * Returns the email of the AppUser
+   *
    * @return the email of the AppUser
    */
   public String getEmail() {
@@ -68,6 +69,7 @@ public class AppUser {
 
   /**
    * Sets the email of the AppUser
+   *
    * @param email the email of the AppUser
    */
   public void setEmail(String email) {
@@ -76,6 +78,7 @@ public class AppUser {
 
   /**
    * Returns the first name of the AppUser
+   *
    * @return the first name of the AppUser
    */
   public String getFirstname() {
@@ -84,6 +87,7 @@ public class AppUser {
 
   /**
    * Sets the first name of the AppUser
+   *
    * @param firstname the first name of the AppUser
    */
   public void setFirstname(String firstname) {
@@ -92,14 +96,16 @@ public class AppUser {
 
   /**
    * Returns the last name of the AppUser
+   *
    * @return the last name of the AppUser
-  */
+   */
   public String getLastname() {
     return lastname;
   }
 
   /**
    * Sets the last name of the AppUser
+   *
    * @param lastname the last name of the AppUser
    */
   public void setLastname(String lastname) {
@@ -108,6 +114,7 @@ public class AppUser {
 
   /**
    * Returns the password of the AppUser
+   *
    * @return the password of the AppUser
    */
   public String getPassword() {
@@ -116,6 +123,7 @@ public class AppUser {
 
   /**
    * Sets the password of the AppUser
+   *
    * @param password the password of the AppUser
    */
   public void setPassword(String password) {
@@ -124,6 +132,7 @@ public class AppUser {
 
   /**
    * Returns the set of authorities of the AppUser
+   *
    * @return the set of authorities of the AppUser
    */
   public Set<Authority> getAuthorities() {
@@ -132,6 +141,7 @@ public class AppUser {
 
   /**
    * Sets the set of authorities of the AppUser
+   *
    * @param authorities the set of authorities of the AppUser
    */
   public void setAuthorities(Set<Authority> authorities) {

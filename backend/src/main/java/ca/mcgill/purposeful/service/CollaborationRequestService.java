@@ -40,11 +40,11 @@ public class CollaborationRequestService {
 
   /**
    * Sends a collaboration request to the owner of the idea
+   *
    * @param requesterEmail the email of the requester
    * @param ideaId the id of the idea
    * @param message the message to send to the owner of the idea
-   * @param additionalContact additional contact information
-   *                          (e.g. phone number, email, etc.)
+   * @param additionalContact additional contact information (e.g. phone number, email, etc.)
    * @return the collaboration request
    * @author Wassim Jabbour
    */

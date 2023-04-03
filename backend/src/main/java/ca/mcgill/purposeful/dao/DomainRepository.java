@@ -8,6 +8,7 @@ public interface DomainRepository extends CrudRepository<Domain, Integer> {
 
   /**
    * Find a Domain by id
+   * 
    * @param id - the id of the Domain
    * @return the Domain with the given id
    */
@@ -15,6 +16,7 @@ public interface DomainRepository extends CrudRepository<Domain, Integer> {
 
   /**
    * Find a Domain by name
+   * 
    * @param name - the name of the Domain
    * @return the Domain with the given name
    */

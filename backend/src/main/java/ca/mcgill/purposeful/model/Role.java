@@ -34,33 +34,38 @@ public abstract class Role {
   // ------------------------
   // Getter/Setter Methods
   // ------------------------
-  /** Get the id of the role
+  /**
+   * Get the id of the role
+   *
    * @return the id of the role
-   * */
+   */
   public String getId() {
     return id;
   }
 
   /**
    * Set the id of the role
+   *
    * @param id the id of the role
    */
   public void setId(String id) {
     this.id = id;
   }
 
-    /**
-     * Get the appUser of the role
-     * @return the appUser of the role
-     */
+  /**
+   * Get the appUser of the role
+   *
+   * @return the appUser of the role
+   */
   public AppUser getAppUser() {
     return appUser;
   }
 
-    /**
-     * Set the appUser of the role
-     * @param appUser the appUser of the role
-     */
+  /**
+   * Set the appUser of the role
+   *
+   * @param appUser the appUser of the role
+   */
   public void setAppUser(AppUser appUser) {
     this.appUser = appUser;
   }

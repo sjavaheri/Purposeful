@@ -9,6 +9,7 @@ public interface VerificationRequestRepository
 
   /**
    * Find a verification request by its id
+   *
    * @param companyOuiNumber the id of the verification request
    * @return the verification request
    */

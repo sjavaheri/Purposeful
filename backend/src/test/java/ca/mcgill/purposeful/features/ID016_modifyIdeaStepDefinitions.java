@@ -1,5 +1,9 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.dto.IdeaRequestDTO;
 import ca.mcgill.purposeful.model.*;
@@ -10,19 +14,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.ParseException;
+import java.time.Instant;
+import java.util.*;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.text.ParseException;
-import java.time.Instant;
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Step Definitions for Modifying an Idea
@@ -261,7 +260,7 @@ public class ID016_modifyIdeaStepDefinitions {
       }
     }
 
-    if ( field.equalsIgnoreCase("topics")
+    if (field.equalsIgnoreCase("topics")
         || field.equalsIgnoreCase("techs")
         || field.equalsIgnoreCase("domains")) {
       List<String> newObjIds = List.of(value.split(","));

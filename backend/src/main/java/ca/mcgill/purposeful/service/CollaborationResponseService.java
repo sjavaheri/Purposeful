@@ -73,7 +73,6 @@ public class CollaborationResponseService {
    * @param requestId the id of the collaboration request
    * @param additionalContact the additional contact information to send to the requester
    * @param message the message to send to the requester
-   *
    * @return the collaboration response
    * @author Wassim Jabbour
    */
@@ -145,7 +144,6 @@ public class CollaborationResponseService {
    * @param handlerEmail the email of the user accepting / declining the request
    * @param requestId the id of the collaboration request
    * @param message the message to send to the requester
-   *
    * @return the collaboration response
    * @author Wassim Jabbour
    */

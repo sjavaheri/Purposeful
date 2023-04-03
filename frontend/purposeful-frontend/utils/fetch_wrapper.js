@@ -89,6 +89,9 @@ export async function verifyToken() {
   const res = await fetchWrapper("/api/login");
   if (!res.ok) {
     logout();
+    if (window.location.pathname !== "/login") {
+      window.location.href = "/login";
+    }
     return false;
   }
   const appUserDTO = await res.json();

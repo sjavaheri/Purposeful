@@ -41,8 +41,6 @@ export default function MyIdeasPage() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchWrapper(`/api/idea/user/requests`);
-      console.log(response);
-
       const handleData = async (response) => {
         if (!response.ok) {
           return null;

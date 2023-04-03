@@ -23,8 +23,8 @@ public class GlobalException extends RuntimeException {
   }
 
   /**
-   *
    * Get the http status of the failure
+   *
    * @return the http status of the failure
    */
   public HttpStatus getStatus() {

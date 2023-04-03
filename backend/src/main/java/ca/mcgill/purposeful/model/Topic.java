@@ -26,9 +26,7 @@ public class Topic {
   // Topic Constructor
   // ------------------------
 
-  /**
-   * Default constructor of the Topic class
-   */
+  /** Default constructor of the Topic class */
   public Topic() {}
 
   // ------------------------
@@ -43,29 +41,29 @@ public class Topic {
     return id;
   }
 
-    /**
-     * Setter method for the id attribute
-     *
-     * @param id the id of the topic
-     */
+  /**
+   * Setter method for the id attribute
+   *
+   * @param id the id of the topic
+   */
   public void setId(String id) {
     this.id = id;
   }
 
-    /**
-     * Getter method for the name attribute
-     *
-     * @return the name of the topic
-     */
+  /**
+   * Getter method for the name attribute
+   *
+   * @return the name of the topic
+   */
   public String getName() {
     return name;
   }
 
-    /**
-     * Setter method for the name attribute
-     *
-     * @param name the name of the topic
-     */
+  /**
+   * Setter method for the name attribute
+   *
+   * @param name the name of the topic
+   */
   public void setName(String name) {
     this.name = name;
   }

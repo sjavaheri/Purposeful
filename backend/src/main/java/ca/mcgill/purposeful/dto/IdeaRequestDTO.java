@@ -2,14 +2,11 @@ package ca.mcgill.purposeful.dto;
 
 import ca.mcgill.purposeful.model.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Data transfer object for the Idea class
- */
+/** Data transfer object for the Idea class */
 public class IdeaRequestDTO {
 
   private String id;
@@ -29,13 +26,12 @@ public class IdeaRequestDTO {
   private List<String> imgUrls;
   private String iconUrl;
 
-  /**
-   * Default constructor for IdeaRequestDTO.
-   */
+  /** Default constructor for IdeaRequestDTO. */
   public IdeaRequestDTO() {}
 
   /**
    * Constructor for IdeaRequestDTO.
+   *
    * @param idea the idea to be converted to IdeaRequestDTO
    */
   public IdeaRequestDTO(Idea idea) {
@@ -70,6 +66,7 @@ public class IdeaRequestDTO {
 
   /**
    * Constructor for IdeaRequestDTO.
+   *
    * @param id the id of the idea
    * @param title the title of the idea
    * @param purpose the purpose of the idea
@@ -115,104 +112,117 @@ public class IdeaRequestDTO {
 
   /**
    * Getter for id.
+   *
    * @return the id of the idea
    */
   public String getId() {
     return id;
   }
 
-    /**
-     * Getter for title.
-     * @return the title of the idea
-     */
+  /**
+   * Getter for title.
+   *
+   * @return the title of the idea
+   */
   public String getTitle() {
     return title;
   }
 
   /**
    * Getter for purpose.
+   *
    * @return the purpose of the idea
    */
   public String getPurpose() {
     return purpose;
   }
 
-    /**
-     * Getter for description.
-     * @return the description of the idea
-     */
+  /**
+   * Getter for description.
+   *
+   * @return the description of the idea
+   */
   public String getDescription() {
     return this.description;
   }
 
   /**
    * Getter for isPaid.
+   *
    * @return whether the idea is paid
    */
   public boolean getIsPaid() {
     return isPaid;
   }
 
-    /**
-     * Getter for isPrivate.
-     * @return whether the idea is private
-     */
+  /**
+   * Getter for isPrivate.
+   *
+   * @return whether the idea is private
+   */
   public boolean getIsPrivate() {
     return isPrivate;
   }
 
-    /**
-     * Getter for inProgress.
-     * @return whether the idea is in progress
-     */
+  /**
+   * Getter for inProgress.
+   *
+   * @return whether the idea is in progress
+   */
   public boolean getInProgress() {
     return inProgress;
   }
 
-    /**
-     * Getter for date.
-     * @return the date of the idea
-     */
+  /**
+   * Getter for date.
+   *
+   * @return the date of the idea
+   */
   public Date getDate() {
     return date;
   }
 
-    /**
-     * Getter for domainIds.
-     * @return the domain ids of the idea
-     */
+  /**
+   * Getter for domainIds.
+   *
+   * @return the domain ids of the idea
+   */
   public List<String> getDomainIds() {
     return domainIds;
   }
 
-    /**
-     * Getter for techIds.
-     * @return the technology ids of the idea
-     */
+  /**
+   * Getter for techIds.
+   *
+   * @return the technology ids of the idea
+   */
   public List<String> getTechIds() {
     return techIds;
   }
 
-    /**
-     * Getter for topicIds.
-     * @return the topic ids of the idea
-     */
+  /**
+   * Getter for topicIds.
+   *
+   * @return the topic ids of the idea
+   */
   public List<String> getTopicIds() {
     return topicIds;
   }
 
-    /**
-     * Getter for imgUrls.
-     * @return the image urls of the idea
-     */
+  /**
+   * Getter for imgUrls.
+   *
+   * @return the image urls of the idea
+   */
   public List<String> getImgUrls() {
     return imgUrls;
   }
 
-    /**
-     * Getter for iconUrl.
-     * @return the icon url of the idea
-     */
+  /**
+   * Getter for iconUrl.
+   *
+   * @return the icon url of the idea
+   */
   public String getIconUrl() {
     return iconUrl;
   }

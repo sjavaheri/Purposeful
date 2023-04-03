@@ -4,12 +4,11 @@ import ca.mcgill.purposeful.dao.*;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.*;
 import jakarta.transaction.Transactional;
+import java.time.Instant;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.*;
 
 /** Service functions of the Idea class */
 @Service
@@ -182,6 +181,7 @@ public class IdeaService {
 
   /**
    * Method to create an idea
+   *
    * @param title Title of the idea
    * @param purpose Purpose of the idea
    * @param description Description of the idea
@@ -195,7 +195,6 @@ public class IdeaService {
    * @param iconUrlId Icon url id
    * @param regularUsername Username of the user creating the idea
    * @return The newly created Idea
-   *
    * @author Adam Kazma
    */
   @Transactional
@@ -277,7 +276,6 @@ public class IdeaService {
    * @param imgUrlIds image url Ids of idea
    * @param iconUrlId icon url Ids of idea
    * @author Ramin Akhavan
-   *
    * @return the modified idea
    * @throws GlobalException if necessary field are left empty or if an object does not exist
    */
@@ -372,7 +370,6 @@ public class IdeaService {
    * Check to make sure all domains of an idea exist
    *
    * @param domainIds domain Ids
-   *
    * @return set of domains
    * @throws GlobalException if an object does not exist
    * @author Ramin Akhavan
@@ -396,6 +393,7 @@ public class IdeaService {
 
   /**
    * Check to make sure all technologies of an idea exist
+   *
    * @param techIds tech Ids
    * @throws GlobalException if an object does not exist
    * @return set of technologies
@@ -420,7 +418,8 @@ public class IdeaService {
 
   /**
    * Check to make sure all topics of an idea exist
-   *  @param topicIds topic Ids
+   *
+   * @param topicIds topic Ids
    * @throws GlobalException if an object does not exist
    * @return set of topics
    * @author Ramin Akhavan
@@ -444,7 +443,8 @@ public class IdeaService {
 
   /**
    * Check to make sure all image urls exist
-   *  @param imgUrlIds image url Ids
+   *
+   * @param imgUrlIds image url Ids
    * @throws GlobalException if an object does not exist
    * @return list of image urls
    * @author Ramin Akhavan
@@ -464,6 +464,7 @@ public class IdeaService {
 
   /**
    * Check to make sure a url exists
+   *
    * @param urlId url Id
    * @throws GlobalException if an object does not exist
    * @return url object
@@ -577,10 +578,9 @@ public class IdeaService {
   }
 
   /**
-   * @author Shidan Javaheri
-   * Method to the supporting URLs for an idea. It returns a list of their Ids. A Supporting URL can
-   * only belong to one idea, so they are all automatically created and saved.
-   *
+   * @author Shidan Javaheri Method to the supporting URLs for an idea. It returns a list of their
+   *     Ids. A Supporting URL can only belong to one idea, so they are all automatically created
+   *     and saved.
    * @param urls an ArrayList<String> of Urls
    * @return urlIds an ArrayList<String> of Url Ids
    */
@@ -599,9 +599,8 @@ public class IdeaService {
   }
 
   /**
-   * @author Shidan Javaheri
-   * Method to create a new URL object for an Icon. Since an icon can belong to many ideas, this method checks
-   * to make sure that no other URL object has the same URL.
+   * @author Shidan Javaheri Method to create a new URL object for an Icon. Since an icon can belong
+   *     to many ideas, this method checks to make sure that no other URL object has the same URL.
    * @param url the String URL to be used as an icon for the idea
    * @return urlId, the id of the created object
    */
@@ -609,15 +608,14 @@ public class IdeaService {
   public String createIconURL(String url) {
     String urlId = "";
     if (url == null || url.isEmpty()) {
-      throw new GlobalException(
-          HttpStatus.BAD_REQUEST, "An idea icon is required");
+      throw new GlobalException(HttpStatus.BAD_REQUEST, "An idea icon is required");
     }
     // check if it already exists
     ArrayList<URL> urlCheck = urlRepository.findURLByURL(url);
-    if (urlCheck.size() !=0 ) {
+    if (urlCheck.size() != 0) {
       urlId = urlCheck.get(0).getId();
       return urlId;
-      }
+    }
     // otherwise make a new object and save it
     URL newUrl = new URL();
     newUrl.setURL(url);
@@ -627,4 +625,3 @@ public class IdeaService {
     return urlId;
   }
 }
-

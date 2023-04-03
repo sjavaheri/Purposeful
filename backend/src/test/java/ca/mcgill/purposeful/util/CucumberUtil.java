@@ -66,7 +66,6 @@ public class CucumberUtil {
 
   @Autowired private PasswordEncoder passwordEncoder;
 
-
   public static ArrayList<AppUser> unpackTableIntoUsers(DataTable dataTable) {
     // get access to the data table
     List<Map<String, String>> rows = dataTable.asMaps();

@@ -67,7 +67,5 @@ public class UrlRepositoryTests {
     assertNotNull(url);
     assertEquals(str, url.getURL());
     assertEquals(id, url.getId());
-
-
   }
 }

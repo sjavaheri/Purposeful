@@ -14,9 +14,7 @@ public class Reaction {
   // Enumerations
   // ------------------------
 
-  /**
-   * The ReactionType enum, the model for all reaction types in the database
-   */
+  /** The ReactionType enum, the model for all reaction types in the database */
   public enum ReactionType {
     /** High Five reaction */
     HighFive
@@ -57,9 +55,7 @@ public class Reaction {
   // Reaction Constructor
   // ------------------------
 
-  /**
-   * The Reaction constructor, the constructor for all reactions in the database
-   */
+  /** The Reaction constructor, the constructor for all reactions in the database */
   public Reaction() {}
 
   // ------------------------
@@ -68,79 +64,89 @@ public class Reaction {
 
   /**
    * Gets the id of the reaction
+   *
    * @return id of the reaction
    */
   public String getId() {
     return id;
   }
 
-    /**
-     * Sets the id of the reaction
-     * @param id of the reaction
-     */
+  /**
+   * Sets the id of the reaction
+   *
+   * @param id of the reaction
+   */
   public void setId(String id) {
     this.id = id;
   }
   /**
    * Gets the reaction type of the reaction
+   *
    * @return reactionType of the reaction
    */
   public ReactionType getReactionType() {
     return reactionType;
   }
 
-    /**
-     * Sets the reaction type of the reaction
-     * @param reactionType of the reaction
-     */
+  /**
+   * Sets the reaction type of the reaction
+   *
+   * @param reactionType of the reaction
+   */
   public void setReactionType(ReactionType reactionType) {
     this.reactionType = reactionType;
   }
 
   /**
    * Gets the date of the reaction
+   *
    * @return date of the reaction
    */
   public Date getDate() {
     return date;
   }
 
-    /**
-     * Sets the date of the reaction
-     * @param date of the reaction
-     */
+  /**
+   * Sets the date of the reaction
+   *
+   * @param date of the reaction
+   */
   public void setDate(Date date) {
     this.date = date;
   }
 
-    /**
-     * Gets the idea of the reaction
-     * @return idea of the reaction
-     */
+  /**
+   * Gets the idea of the reaction
+   *
+   * @return idea of the reaction
+   */
   public Idea getIdea() {
     return idea;
   }
 
-    /**
-     * Sets the idea of the reaction
-     * @param idea of the reaction
-     */
+  /**
+   * Sets the idea of the reaction
+   *
+   * @param idea of the reaction
+   */
   public void setIdea(Idea idea) {
     this.idea = idea;
   }
 
-    /**
-     * Gets the regular user of the reaction
-     * @return regularUser of the reaction
-     */
+  /**
+   * Gets the regular user of the reaction
+   *
+   * @return regularUser of the reaction
+   */
   public RegularUser getRegularUser() {
     return regularUser;
   }
 
-    /**
-     * Sets the regular user of the reaction
-     * @param regularUser of the reaction
-     */
+  /**
+   * Sets the regular user of the reaction
+   *
+   * @param regularUser of the reaction
+   */
   public void setRegularUser(RegularUser regularUser) {
     this.regularUser = regularUser;
   }

@@ -4,10 +4,10 @@ import ca.mcgill.purposeful.dao.TopicRepository;
 import ca.mcgill.purposeful.exception.GlobalException;
 import ca.mcgill.purposeful.model.Topic;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 /** Service functions of the Reaction class */
 @Service
@@ -17,12 +17,11 @@ public class TopicService {
    * CRUD repos
    */
 
-  @Autowired
-  TopicRepository topicRepository;
+  @Autowired TopicRepository topicRepository;
 
   /**
    * Method to retrieve all existing domains from the database.
-   * 
+   *
    * @return the domains in the database.
    * @author Adam Kazma
    */
@@ -37,5 +36,4 @@ public class TopicService {
 
     return topics;
   }
-
 }

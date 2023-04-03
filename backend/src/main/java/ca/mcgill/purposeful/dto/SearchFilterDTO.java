@@ -13,9 +13,7 @@ public class SearchFilterDTO {
   private List<String> topics;
   private List<String> technologies;
 
-  /**
-   * Default constructor
-   */
+  /** Default constructor */
   public SearchFilterDTO() {}
 
   /**
@@ -33,48 +31,54 @@ public class SearchFilterDTO {
 
   /**
    * Get the domains
+   *
    * @return Domains
    */
   public List<String> getDomains() {
     return domains;
   }
 
-    /**
-     * Set the domains
-     * @param domains Domains
-     */
+  /**
+   * Set the domains
+   *
+   * @param domains Domains
+   */
   public void setDomains(ArrayList<String> domains) {
     this.domains = domains;
   }
 
   /**
    * Get the topics
+   *
    * @return Topics
    */
   public List<String> getTopics() {
     return topics;
   }
 
-    /**
-     * Set the topics
-     * @param topics Topics
-     */
+  /**
+   * Set the topics
+   *
+   * @param topics Topics
+   */
   public void setTopics(ArrayList<String> topics) {
     this.topics = topics;
   }
 
-    /**
-     * Get the technologies
-     * @return Technologies
-     */
+  /**
+   * Get the technologies
+   *
+   * @return Technologies
+   */
   public List<String> getTechnologies() {
     return technologies;
   }
 
-    /**
-     * Set the technologies
-     * @param technologies Technologies
-     */
+  /**
+   * Set the technologies
+   *
+   * @param technologies Technologies
+   */
   public void setTechnologies(ArrayList<String> technologies) {
     this.technologies = technologies;
   }

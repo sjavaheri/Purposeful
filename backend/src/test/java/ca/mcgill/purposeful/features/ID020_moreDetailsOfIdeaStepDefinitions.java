@@ -1,5 +1,8 @@
 package ca.mcgill.purposeful.features;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import ca.mcgill.purposeful.configuration.Authority;
 import ca.mcgill.purposeful.dao.AppUserRepository;
 import ca.mcgill.purposeful.model.AppUser;
@@ -11,15 +14,11 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Step definitions for the ID020_moreDetailsOfIdea.feature file
@@ -28,17 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ID020_moreDetailsOfIdeaStepDefinitions {
 
-  @Autowired
-  private TestRestTemplate client;
+  @Autowired private TestRestTemplate client;
 
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  @Autowired PasswordEncoder passwordEncoder;
 
-  @Autowired
-  private CucumberUtil cucumberUtil;
+  @Autowired private CucumberUtil cucumberUtil;
 
-  @Autowired
-  AppUserRepository appUserRepository;
+  @Autowired AppUserRepository appUserRepository;
 
   private HttpHeaders authHeader;
   private ResponseEntity<?> response;
@@ -92,7 +87,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
     appUserRepository.save(appUser);
 
     HttpEntity<String> request = new HttpEntity<>(cucumberUtil.basicAuthHeader(email, password));
-    ResponseEntity<String> response = client.exchange("/api/login", HttpMethod.POST, request, String.class);
+    ResponseEntity<String> response =
+        client.exchange("/api/login", HttpMethod.POST, request, String.class);
     authHeader = cucumberUtil.bearerAuthHeader(response.getBody());
   }
 
@@ -121,7 +117,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
             domain -> {
               domains.add(domain.asObject().get("name").asString());
             });
-    Set<String> domainsExpected = new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
+    Set<String> domainsExpected =
+        new HashSet<String>(Arrays.asList(dataTable.get("domains").split(", ")));
     assertEquals(domainsExpected, domains);
 
     // topics
@@ -133,7 +130,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
             topic -> {
               topics.add(topic.asObject().get("name").asString());
             });
-    Set<String> topicsExpected = new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
+    Set<String> topicsExpected =
+        new HashSet<String>(Arrays.asList(dataTable.get("topics").split(", ")));
     assertEquals(topicsExpected, topics);
 
     // techs
@@ -145,7 +143,8 @@ public class ID020_moreDetailsOfIdeaStepDefinitions {
             tech -> {
               techs.add(tech.asObject().get("name").asString());
             });
-    Set<String> techsExpected = new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
+    Set<String> techsExpected =
+        new HashSet<String>(Arrays.asList(dataTable.get("techs").split(", ")));
     assertEquals(techsExpected, techs);
 
     assertEquals(Boolean.parseBoolean(dataTable.get("isPaid")), json.get("isPaid").asBoolean());

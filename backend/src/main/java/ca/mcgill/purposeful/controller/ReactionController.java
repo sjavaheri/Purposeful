@@ -21,19 +21,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * API for accessing the endpoints of Reaction
- */
+/** API for accessing the endpoints of Reaction */
 @RestController
 @RequestMapping({"/api/reaction", "/api/reaction/"})
 public class ReactionController {
 
-  @Autowired
-  private ReactionService reactionService;
-  @Autowired
-  private AppUserRepository appUserRepository;
-  @Autowired
-  private RegularUserRepository regularUserRepository;
+  @Autowired private ReactionService reactionService;
+  @Autowired private AppUserRepository appUserRepository;
+  @Autowired private RegularUserRepository regularUserRepository;
 
   /**
    * POST method to react
@@ -68,7 +63,7 @@ public class ReactionController {
     if (appUser == null) {
       throw new GlobalException(HttpStatus.BAD_REQUEST, "User not found");
     }
-    
+
     String app_user_id = appUser.getId();
     String user_id = regularUserRepository.findRegularUserByAppUser_Id(app_user_id).getId();
     // react

@@ -26,9 +26,7 @@ public class Technology {
   // Technology Constructor
   // ------------------------
 
-  /**
-   * Default constructor for the Technology class
-   */
+  /** Default constructor for the Technology class */
   public Technology() {}
 
   // ------------------------
@@ -37,32 +35,36 @@ public class Technology {
 
   /**
    * Get the id of the technology
+   *
    * @return the id of the technology
    */
   public String getId() {
     return id;
   }
 
-    /**
-     * Set the id of the technology
-     * @param id the id of the technology
-     */
+  /**
+   * Set the id of the technology
+   *
+   * @param id the id of the technology
+   */
   public void setId(String id) {
     this.id = id;
   }
 
-    /**
-     * Get the name of the technology
-     * @return the name of the technology
-     */
+  /**
+   * Get the name of the technology
+   *
+   * @return the name of the technology
+   */
   public String getName() {
     return name;
   }
 
-    /**
-     * Set the name of the technology
-     * @param name the name of the technology
-     */
+  /**
+   * Set the name of the technology
+   *
+   * @param name the name of the technology
+   */
   public void setName(String name) {
     this.name = name;
   }

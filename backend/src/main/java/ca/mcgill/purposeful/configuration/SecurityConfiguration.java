@@ -25,9 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-/**
- * Configuration for all Spring Security Settings
- */
+/** Configuration for all Spring Security Settings */
 @EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 public class SecurityConfiguration {

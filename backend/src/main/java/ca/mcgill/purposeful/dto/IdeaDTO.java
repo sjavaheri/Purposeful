@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Data transfer object for the Idea class
- */
+/** Data transfer object for the Idea class */
 public class IdeaDTO {
 
   private String id;
@@ -30,13 +28,12 @@ public class IdeaDTO {
   private List<URLDTO> imgUrls;
   private URLDTO iconUrl;
 
-  /**
-   * Default constructor for IdeaDTO
-   */
+  /** Default constructor for IdeaDTO */
   public IdeaDTO() {}
 
   /**
    * Constructor for IdeaDTO
+   *
    * @param idea The idea to convert to a DTO
    */
   public IdeaDTO(Idea idea) {
@@ -56,22 +53,23 @@ public class IdeaDTO {
     this.iconUrl = new URLDTO(idea.getIconUrl());
   }
 
-    /**
-     * Constructor for IdeaDTO
-     * @param id The id of the idea
-     * @param title The title of the idea
-     * @param purpose The purpose of the idea
-     * @param descriptions The description of the idea
-     * @param date The date of the idea
-     * @param isPaid Whether the idea is paid
-     * @param inProgress Whether the idea is in progress
-     * @param isPrivate Whether the idea is private
-     * @param domains The domains of the idea
-     * @param techs The techs of the idea
-     * @param topics The topics of the idea
-     * @param imgUrls The image urls of the idea
-     * @param iconUrl The icon url of the idea
-     */
+  /**
+   * Constructor for IdeaDTO
+   *
+   * @param id The id of the idea
+   * @param title The title of the idea
+   * @param purpose The purpose of the idea
+   * @param descriptions The description of the idea
+   * @param date The date of the idea
+   * @param isPaid Whether the idea is paid
+   * @param inProgress Whether the idea is in progress
+   * @param isPrivate Whether the idea is private
+   * @param domains The domains of the idea
+   * @param techs The techs of the idea
+   * @param topics The topics of the idea
+   * @param imgUrls The image urls of the idea
+   * @param iconUrl The icon url of the idea
+   */
   public IdeaDTO(
       String id,
       String title,
@@ -103,6 +101,7 @@ public class IdeaDTO {
 
   /**
    * Gets the id of the idea
+   *
    * @return The id of the idea
    */
   public String getId() {
@@ -111,96 +110,108 @@ public class IdeaDTO {
 
   /**
    * Gets the title of the idea
+   *
    * @return The title of the idea
    */
   public String getTitle() {
     return title;
   }
 
-    /**
-     * Gets the purpose of the idea
-     * @return The purpose of the idea
-     */
+  /**
+   * Gets the purpose of the idea
+   *
+   * @return The purpose of the idea
+   */
   public String getPurpose() {
     return purpose;
   }
 
-    /**
-     * Gets the description of the idea
-     * @return The description of the idea
-     */
+  /**
+   * Gets the description of the idea
+   *
+   * @return The description of the idea
+   */
   public String getDescription() {
     return this.description;
   }
 
   /**
    * Gets whether the idea is paid
+   *
    * @return Whether the idea is paid
    */
   public boolean getIsPaid() {
     return isPaid;
   }
 
-    /**
-     * Gets whether the idea is private
-     * @return Whether the idea is private
-     */
+  /**
+   * Gets whether the idea is private
+   *
+   * @return Whether the idea is private
+   */
   public boolean getIsPrivate() {
     return isPrivate;
   }
 
-    /**
-     * Gets whether the idea is in progress
-     * @return Whether the idea is in progress
-     */
+  /**
+   * Gets whether the idea is in progress
+   *
+   * @return Whether the idea is in progress
+   */
   public boolean getInProgress() {
     return inProgress;
   }
 
-    /**
-     * Gets the date of the idea
-     * @return The date of the idea
-     */
+  /**
+   * Gets the date of the idea
+   *
+   * @return The date of the idea
+   */
   public Date getDate() {
     return date;
   }
 
-    /**
-     * Gets the domains of the idea
-     * @return The domains of the idea
-     */
+  /**
+   * Gets the domains of the idea
+   *
+   * @return The domains of the idea
+   */
   public Set<DomainDTO> getDomains() {
     return domains;
   }
 
-    /**
-     * Gets the techs of the idea
-     * @return The techs of the idea
-     */
+  /**
+   * Gets the techs of the idea
+   *
+   * @return The techs of the idea
+   */
   public Set<TechDTO> getTechs() {
     return techs;
   }
 
-    /**
-     * Gets the topics of the idea
-     * @return The topics of the idea
-     */
+  /**
+   * Gets the topics of the idea
+   *
+   * @return The topics of the idea
+   */
   public Set<TopicDTO> getTopics() {
     return topics;
   }
 
-    /**
-     * Gets the image urls of the idea
-     * @return The image urls of the idea
-     */
+  /**
+   * Gets the image urls of the idea
+   *
+   * @return The image urls of the idea
+   */
   public List<URLDTO> getImgUrls() {
     return imgUrls;
   }
 
-    /**
-     * Gets the icon url of the idea
-     * @return The icon url of the idea
-     */
+  /**
+   * Gets the icon url of the idea
+   *
+   * @return The icon url of the idea
+   */
   public URLDTO getIconUrl() {
     return iconUrl;
   }

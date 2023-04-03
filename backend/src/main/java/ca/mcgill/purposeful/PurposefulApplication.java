@@ -18,11 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 /** Main Application */
 @SpringBootApplication
 public class PurposefulApplication {
-    /**
-     * Main method
-     *
-     * @param args the arguments
-     */
+  /**
+   * Main method
+   *
+   * @param args the arguments
+   */
   public static void main(String[] args) {
     SpringApplication.run(PurposefulApplication.class, args);
   }
@@ -35,34 +35,32 @@ public class PurposefulApplication {
    * @param technologyRepository to create the technologies
    * @param domainRepository to create the domains
    * @param topicRepository to create the topics
-   *
    * @return the command line runner
    */
   @Bean
   public CommandLineRunner commandLineRunner(
-      AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, DomainRepository domainRepository,
-      TopicRepository topicRepository, TechnologyRepository technologyRepository) {
+      AppUserRepository appUserRepository,
+      PasswordEncoder passwordEncoder,
+      DomainRepository domainRepository,
+      TopicRepository topicRepository,
+      TechnologyRepository technologyRepository) {
     return args -> {
 
-      /**
-       * OWNER CREATION AT BOOTSTRAP
-       */
+      /** OWNER CREATION AT BOOTSTRAP */
       // create an owner at bootstrap
-      if (appUserRepository.findAppUserByEmail("robert.sabourin@gmail.com") == null) {
+      if (appUserRepository.findAppUserByEmail("robsab@gmail.com") == null) {
         AppUser appUser = new AppUser();
         appUser.setFirstname("Robert");
         appUser.setLastname("Sabourin");
-        appUser.setEmail("robert.sabourin@gmail.com");
+        appUser.setEmail("robsab@gmail.com");
         // encode the password
-        String encoded = passwordEncoder.encode("Bestprof1");
+        String encoded = passwordEncoder.encode("Password01");
         appUser.setPassword(encoded);
         appUser.getAuthorities().add(Authority.Owner);
         appUserRepository.save(appUser);
       }
 
-      /**
-       * TECHNOLOGIES CREATION AT BOOTSTRAP
-       */
+      /** TECHNOLOGIES CREATION AT BOOTSTRAP */
       // create the following techs at bootstrap:
       // Spring boot
       if (technologyRepository.findTechnologyByName("Spring boot") == null) {
@@ -341,9 +339,7 @@ public class PurposefulApplication {
         technologyRepository.save(technology);
       }
 
-      /**
-       * DOMAIN CREATION
-       */
+      /** DOMAIN CREATION */
       // create domains at bootstrap
       if (domainRepository.findDomainByName("Software Engineering") == null) {
         // create a domain at bootstrap
@@ -352,9 +348,7 @@ public class PurposefulApplication {
         domainRepository.save(domain);
       }
 
-      /**
-       * TOPICS CREATION
-       */
+      /** TOPICS CREATION */
       // create the following topics at bootstrap:
       // Software Architecture
       if (topicRepository.findTopicByName("Software Architecture") == null) {

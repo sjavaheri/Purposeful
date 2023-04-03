@@ -12,22 +12,25 @@ public interface CollaborationRequestRepository
 
   /**
    * Find a CollaborationRequest by id
+   *
    * @param id - the id of the CollaborationRequest
    * @return the CollaborationRequest with the given id
    */
   CollaborationRequest findCollaborationRequestById(String id);
 
-    /**
-     * Find a CollaborationRequest by requester and idea
-     * @param requester - the requester of the CollaborationRequest
-     * @param idea - the idea of the CollaborationRequest
-     * @return the CollaborationRequest with the given requester and idea
-     */
+  /**
+   * Find a CollaborationRequest by requester and idea
+   *
+   * @param requester - the requester of the CollaborationRequest
+   * @param idea - the idea of the CollaborationRequest
+   * @return the CollaborationRequest with the given requester and idea
+   */
   List<CollaborationRequest> findCollaborationRequestsByRequesterAndIdea(
       RegularUser requester, Idea idea);
 
   /**
    * Find all CollaborationRequests by Idea
+   *
    * @param idea - the idea of the CollaborationRequest
    * @return a list of all CollaborationRequests
    */
