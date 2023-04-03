@@ -16,6 +16,7 @@ import {
   IconButton,
   Tooltip,
   Icon,
+  Heading,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
@@ -35,6 +36,8 @@ var field_name = "domains";
 var c_domains = [];
 var c_topics = [];
 var c_techs = [];
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
 var domains_sel = <Select id="domains"></Select>;
 var topics_sel = <Select id="topics"></Select>;
@@ -142,7 +145,9 @@ export default function CreateIdea() {
       notification("error", "An error occurred.", response.errorMessages);
     }
 
+    await delay(2000);
     actions.setSubmitting(false);
+    window.location.href = "/";
   }
 
   useEffect(() => {
@@ -204,6 +209,9 @@ export default function CreateIdea() {
   }
   return (
     <Stack width={"75%"}>
+      <Heading textAlign="center" as="h1" size="2xl" padding={"5%"}>
+        Create An Idea. Pursue it with Purpose.
+        </Heading>
       <Box
         //width={"1"}
         rounded={"lg"}
@@ -211,7 +219,6 @@ export default function CreateIdea() {
         boxShadow={"lg"}
         p={8}
       >
-        <Text fontSize={"2em"} textShadow={"2px 2px "+useColorModeValue("rgba(0,0,0,0.1)","rgba(255,255,255,0.1)")}>Create An Idea. Pursue it with Purpose.</Text>
         <Formik
           initialValues={{}}
           onSubmit={(values,actions) => {

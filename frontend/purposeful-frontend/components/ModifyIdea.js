@@ -15,8 +15,19 @@ import {
   Text,
   IconButton,
   Tooltip,
-  Icon,
+  Heading,
 } from "@chakra-ui/react";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverAnchor,
+} from '@chakra-ui/react';
 import { Field, Form, Formik } from "formik";
 import { getDomains, getTechs, getTopics } from "@/utils/idea_tool";
 import ContainerLabel from "./ContainerLabel";
@@ -49,6 +60,7 @@ var rendered_domains = [];
 var rendered_topics = [];
 var rendered_techs = [];
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,oldIconUrl,oldisPaid,oldinProgress,oldisPrivate}) {
   const [render_domains, set_rd] = useState(<Fragment></Fragment>);
@@ -162,7 +174,7 @@ export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,ol
         notification("error", "An error occurred.", response.errorMessages);
       }
     }
-    await setTimeout(3000);
+    await delay(2000);
     actions.setSubmitting(false);
     window.location.href="/myideas";
   }
@@ -226,6 +238,9 @@ export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,ol
   }
   return (
     <Stack width={"75%"}>
+      <Heading textAlign="center" as="h1" size="2xl" padding={"5%"}>
+        Modify your Idea.
+        </Heading>
       <Box
         //width={"1"}
         rounded={"lg"}
@@ -233,7 +248,6 @@ export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,ol
         boxShadow={"lg"}
         p={8}
       >
-        <Text fontSize={"2em"} textShadow={"2px 2px "+useColorModeValue("rgba(0,0,0,0.1)","rgba(255,255,255,0.1)")}>Create An Idea. Pursue it with Purpose.</Text>
         <Formik
           initialValues={{}}
           onSubmit={(values,actions) => {
@@ -547,19 +561,37 @@ export default function ModifyIdea({ideaId,oldTitle,oldDescription,oldPurpose,ol
                   Save Changes
                 </Button>
               </Box>
-              <Button
-                bg={"red.200"}
-                color={"red"}
-                _hover={{
-                  bg: "red.400",
-                }}
-                type="submit"
-                style={{float : 'right'}}
-                onClick={() => {
-                  deleteStatus = 1;
-                }}>
-                <DeleteIcon w={6} h={6} color="red.500" />
-              </Button>
+              <Popover>
+              <PopoverTrigger>
+                <Button
+                float={"right"}
+                  bg={"red.200"}
+                  color={"red"}
+                  _hover={{
+                    bg: "red.400",
+                  }}
+                  onClick={() => {
+                    deleteStatus = 1;
+                  }}>
+                  <DeleteIcon w={6} h={6} color="red.500" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent padding={1}>
+                <PopoverHeader pt={4} fontWeight='bold' border='0'>
+                  Confirmation
+                </PopoverHeader>
+                <PopoverArrow />
+                <PopoverCloseButton />
+                <PopoverBody>
+                  Are you sure that you want to delete your idea? This action cannot be undone.
+                </PopoverBody>
+                <PopoverFooter
+                  pb={4}
+                >
+                <Button colorScheme='green' marginLeft={"30%"} type="submit" onClick={() => function(){ deleteStatus=1; }}>Yes, Delete.</Button>
+                </PopoverFooter>
+              </PopoverContent>
+            </Popover>
             </Form>
           )}
         </Formik>
