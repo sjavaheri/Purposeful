@@ -1,5 +1,6 @@
-# Purposeful - A 2-Sided Marketplace Platform for Sharing Purposeful Project Ideas
-Purposeful is a 2-sided marketplace platform that connects creative minds with companies and individuals who have project ideas they need help completing. The goal of this platform is to inspire purposeful projects that address practical needs in industry or communities.
+# Purposeful
+
+Purposeful is a 2-sided marketplace platform that connects creative minds with companies and individuals who have purposeful project ideas they need help completing. The goal of this platform is to inspire purposeful projects that address practical needs in industry or communities.
 
 ## Features
 - Post purposeful project ideas or problems with optional payment 🧠
